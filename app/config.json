@@ -1,5 +1,5 @@
 {
-  "serviceName": "Service name goes here",
+  "serviceName": "Section 62A - Planning Inspectorate",
   "useServiceNavigation": true,
   "plugins": {
     "@planning-inspectorate/dynamic-forms": {},
