@@ -1,0 +1,26 @@
+
+{# app/views/components/dashboard-box/macro.njk #}
+{% macro dashboardBox(params) %}
+
+  {# base class #}
+  {% set classes = "dashboard-box" %}
+
+  {# width variants: 'one-third' or 'two-thirds' #}
+  {% if params.width == "one-third" %}
+    {% set classes = classes ~ " govuk-grid-column-one-third" %}
+  {% elif params.width == "two-thirds" %}
+    {% set classes = classes ~ " govuk-grid-column-two-thirds" %}
+  {% endif %}
+
+  {# any extra classes from caller #}
+  {% if params.classes %}{% set classes = classes ~ " " ~ params.classes %}{% endif %}
+
+  <div class="{{ classes }}">
+    {% if params.html %}
+      {{ params.html | safe }}
+    {% else %}
+      {{ params.text or "" }}
+    {% endif %}
+  </div>
+
+{% endmacro %}

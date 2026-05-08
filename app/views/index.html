@@ -1,30 +1,107 @@
-{% extends "layouts/main.html" %}
+{% extends "layouts/main.njk" %}
 
-{% set pageName="Home" %}
+{% set pageName = "Home" %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
+  <h1 class="govuk-heading-xl">Section 62A Prototype</h1>
 
-    {% include "govuk-prototype-kit/includes/homepage-top.njk" %}
-
-    <h1 class="govuk-heading-xl">
-      {{ serviceName }}
-    </h1>
-
-    <h2 class="govuk-heading-l">Dynamic forms demo</h2>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        <a href="my-journey/list">Case list</a>
+  <div class="govuk-tabs" data-module="govuk-tabs">
+    <h2 class="govuk-tabs__title">
+      Prototypes
+    </h2>
+    <!--tab headings-->
+    <ul class="govuk-tabs__list">
+      <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+        <a class="govuk-tabs__tab" href="#current-service">Current service</a>
       </li>
-      <li>
-        <a href="my-journey/questions/case-reference">Create a case</a>
+      <li class="govuk-tabs__list-item">
+        <a class="govuk-tabs__tab" href="#features">Upcoming features</a>
+      </li>
+      <li class="govuk-tabs__list-item">
+        <a class="govuk-tabs__tab" href="#feature-archive">Feature archive</a>
+      </li>
+      <li class="govuk-tabs__list-item">
+        <a class="govuk-tabs__tab" href="#user-testing">User testing</a>
       </li>
     </ul>
+    <!--tab content-->
 
-    {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %}
-  </div>
-</div>
+    <!--CURRENT SERVICE-->
+    <div class="govuk-tabs__panel" id="current-service">
+      <h2 class="govuk-heading-l">Current service</h2>
+      <p class="govuk-body">Prototype version of the service: data is not stored and some features may not work.</p>
+      <h3 class="govuk-heading-m">Front office</h3>
+      <h4 class="govuk-heading-s">Main site</h4>
+      <ul class="govuk-list">
+        <li>
+          <a href="/">Add links here</a>
+        </li>
+      </ul>
+      <h4 class="govuk-heading-s">Example heading</h4>
+      <ul class="govuk-list">
+        <li>
+          <a href="/"> Example link</a>
+        </li>
+        <li>
+          <details class="govuk-details govuk-!-margin-0">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Toggle links
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <ol class="govuk-list govuk-list--number">
+                <li>
+                  <a
+                    href="/">Add an ordered link</a>
+                </li>
+              </ol>
+            </div>
+          </details>
+        </li>
+        <li>
+          <a href="/">Add link here</a>
+        </li>
+      </ul>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <h3 class="govuk-heading-m">Back office</h3>
+      <h4 class="govuk-heading-s">Case management</h4>
+      <ul class="govuk-list">
+        <li>
+          <a href="/">Add links here</a>
+        </li>
+      </ul>
+      <h4 class="govuk-heading-s">Example heading</h4>
+      <ul class="govuk-list">
+        <li>
+          <a href="/"> Example link</a>
+        </li>
+        <li>
+          <details class="govuk-details govuk-!-margin-0">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Toggle links
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <ol class="govuk-list govuk-list--number">
+                <li>
+                  <a
+                    href="/">Add an ordered link</a>
+                </li>
+              </ol>
+            </div>
+          </details>
+        </li>
+        <li>
+          <a href="/">Add link here</a>
+        </li>
+      </ul>
+
 
 {% endblock %}

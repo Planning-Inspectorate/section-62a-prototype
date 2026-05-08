@@ -4,5 +4,116 @@
 // 
 
 // Add extra styles here
-@use '../../views/layouts/ui/header/pins-header';
-@use '../../views/layouts/ui/footer/pins-footer';
+
+//
+// For guidance on how to add CSS and SCSS see:
+// https://prototype-kit.service.gov.uk/docs/adding-css-javascript-and-images
+// 
+
+// Add extra styles here
+
+/*Front office*/
+
+* {
+	font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/*Header styles*/
+
+
+/*Sortable table*/
+
+.govuk-table__header.sortable {
+    color: #1d70b8;
+}
+
+.govuk-table__header.sortable::after {
+    content: " ▲▼";
+    font-size: 0.8em;
+    padding-left: 0.3em;
+}
+
+.govuk-results-per-page {
+    margin-top: 1em;
+}
+
+/*Teal homepage banner*/
+
+.full-bleed {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+.cd-banner {
+    background: #10847F;
+    color: #fff;
+    padding: 24px 0;
+    /* vertical padding only */
+}
+
+.cd-banner .govuk-heading-xl,
+.cd-banner .govuk-body,
+.cd-banner a.govuk-link {
+    color: #fff;
+}
+
+.cd-banner a.govuk-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+
+/*  New back office service navigation override */
+/*Components*/
+
+/*Dashboard box*/
+
+.dashboard-box {
+    padding: govuk-spacing(5) govuk-spacing(5) 1px;
+	margin-bottom: govuk-spacing(7);
+	box-shadow:
+		0 2px 0 govuk-colour('mid-grey'),
+		inset 2px 0 0 govuk-colour('mid-grey'),
+		inset -2px 0 0 govuk-colour('mid-grey'),
+		inset 0 4px 0 govuk-colour('blue');
+
+	&--title {
+		margin-bottom: govuk-spacing(4);
+	}
+
+	&--form {
+		position: relative;
+	}
+
+	&--btn {
+		margin-top: govuk-spacing(2);
+		margin-bottom: 2px;
+	}
+}
+
+.row-inline {
+    display: flex;
+    gap: 8px;
+}
+
+/*Filters for manage reps*/
+
+
+.filter-container {
+	background-color: #f3f2f1;
+}
+
+.filter-box {
+	.govuk-checkboxes {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* MoJ nav colour customisation */
+
+.moj-side-navigation__item--active > a {
+  color: black !important;
+  border-left-color: #29A197 !important;
+}
+

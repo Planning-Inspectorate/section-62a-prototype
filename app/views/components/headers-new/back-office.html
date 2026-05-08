@@ -1,0 +1,161 @@
+
+
+<style>
+  .back-office-header {
+    background: #fff;
+    border-bottom: #9f9f9f 0.5px solid;
+  }
+
+  .back-office-header__bottom-line {
+    width: 100%;
+    height: 10px;
+    background-color: #28a197;
+  }
+
+  .back-office-header__container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 24px 0;
+  }
+
+  .back-office-header__logo-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 48px;
+    border-left: 2px solid #28a197;
+    padding-left: 5px;
+  }
+
+  .back-office-header__logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .back-office-header__logo {
+    height: auto;
+    width: auto;
+  }
+
+  .back-office-header__org-name {
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .back-office-header__right {
+    flex: 1;
+    padding-left: 16px;
+    padding: 20px 50px;
+  }
+
+  .back-office-header__service-name {
+    margin: 0;
+    font-weight: bold;
+    padding-bottom: 30px;
+  }
+
+  .back-office-header__nav {
+    margin-top: 16px;
+    display: flex;
+    gap: 32px;
+  }
+
+  .back-office-header__nav a {
+    font-size: 1rem;
+    text-decoration: none;
+    color: #485156;
+  }
+
+  .back-office-header__nav a:hover {
+    text-decoration: underline;
+  }
+
+  .back-office-header {
+    background: #F3F2F0;
+  }
+
+  #logo {
+    width: 40%;
+  }
+
+  .govuk-service-navigation__item--active {
+    border-bottom: black 5px solid;
+  }
+
+  .govuk-service-navigation__item--active {
+    border-bottom: black 5px solid !important;
+  }
+
+  .govuk-service-navigation__wrapper {
+    color: black;
+  }
+
+  .govuk-service-navigation__link {
+    color: black !important;
+  }
+</style>
+
+<header class="back-office-header" role="banner">
+
+  <div class="govuk-width-container back-office-header__container">
+    <div class="back-office-header__logo-wrapper">
+      <img id="logo" src="/public/images/Planning-Inspectorate-logo-landscape.png" alt="Crown logo">
+    </div>
+  </div>
+
+
+  <div class="back-office-header__bottom-line"></div>
+
+
+  <section aria-label="Service information" class="govuk-service-navigation--custom">
+    <div class="govuk-width-container">
+      <div class="govuk-service-navigation__container">
+        <span class="govuk-service-navigation__service-name">
+          Manage Section 62A applications
+        </span>
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle"
+            aria-controls="navigation" hidden>
+            Menu
+          </button>
+          <ul class="govuk-service-navigation__list" id="navigation">
+            <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+              <a class="govuk-service-navigation__link" href="/current-service/back-office/cases/cases.html"
+                aria-current="true">
+                All cases
+              </a>
+            </li>
+            <li class="govuk-service-navigation__item">
+              <a class="govuk-service-navigation__link"
+                href="/current-service/back-office/cases/create-a-case/1-type-of-application.html">
+              Create new case
+              </a>
+            </li>
+            <li class="govuk-service-navigation__item">
+              <a class="govuk-service-navigation__link" href=""
+                aria-current="true">
+              <strong class="govuk-service-navigation__active-fallback">Sign out</strong>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+
+</header>
+
+{% block beforeContent %}
+{{ govukPhaseBanner({
+tag: {
+text: "Prototype",
+classes: "govuk-tag--purple"
+},
+html: 'This is a design mockup: data is not stored and some features may not work. <a class="govuk-link"
+  href="/../">Back to prototype home</a>.'
+}) }}
+{% endblock %}

@@ -1,0 +1,320 @@
+{% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+
+{% block header %}
+<style>
+  * {
+    font-family: Arial, Helvetica, sans-serif !important;
+  }
+
+  .pins-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    /* govuk-colour('white') */
+    background-color: #074745;
+    border-bottom: 10px solid #13a19b;
+    font-family: Arial, Helvetica, sans-serif;
+    /* fallback for govuk-font-family */
+  }
+
+  .pins-header__container {
+    border-bottom: 0;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .pins-header .govuk-header__logo {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  .pins-header__logo {
+    display: block;
+    width: auto;
+    height: 30px;
+  }
+
+  .pins-header .govuk-header__content {
+    align-self: center;
+  }
+
+  .pins-header .govuk-header__service-name {
+    margin-bottom: 0;
+  }
+
+
+  /* Approximation of govuk-width-container() */
+  .pins-width-container {
+    box-sizing: border-box;
+    max-width: 960px;
+    /* matches GOV.UK container width */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    /* small gutters on narrow viewports */
+    padding-right: 15px;
+  }
+
+  /* Align header navigation to the right on desktop (approx GOV.UK desktop ≥769px) */
+  @media (min-width: 769px) {
+    .pins-header__navigation--align-right {
+      float: right;
+    }
+  }
+
+  .pins-header-service-name {
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  /* Header navigation block */
+  nav.govuk-header__navigation.pins-header-navigation {
+    text-align: left;
+    padding: 0;
+  }
+
+  nav.govuk-header__navigation.pins-header-navigation .govuk-header__navigation-list .govuk-header__navigation-item .govuk-header__link {
+    color: #0b0c0c;
+    /* colors.govuk-colour('black') */
+  }
+
+  nav.govuk-header__navigation.pins-header-navigation .govuk-header__navigation-list .govuk-header__navigation-item--active .govuk-header__link {
+    color: #10847e;
+    /* $pins-colours-teal-100 */
+  }
+
+  /* Main header bar */
+  #pins-header {
+    background: #ffffff;
+    color: #0b0c0c;
+    /* colors.govuk-colour('black') */
+    display: inline-block;
+    width: 100%;
+    padding: 1rem 0;
+    border-bottom: 0.5rem solid #13a19b;
+    /* $pins-colours-green-200 */
+  }
+
+  #pins-header .pins-row {
+    width: 100%;
+    display: flex;
+  }
+
+  #pins-header .pins-column--left {
+    height: 5.5rem;
+    border-left: 2px solid #13a19b;
+    /* $pins-colours-green-200 */
+    padding-left: 7px;
+    width: 25%;
+  }
+
+  #pins-header .pins-column--left span {
+    font-size: 1.125rem;
+    display: table-caption;
+    line-height: 1.25;
+  }
+
+  #pins-header .pins-column--central {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  #pins-header .pins-column--right {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  #pins-header .pins-column--right>a {
+    margin-left: 3rem;
+  }
+
+  /* Logo */
+  .pins-header__logo {
+    display: inline-block;
+    height: 32px;
+    width: 39px;
+  }
+
+  .pins-header__logo-crown {
+    display: inherit;
+    background-image: url('/govuk-crest-black.svg');
+    background-size: 100% 100%;
+    width: inherit;
+    height: inherit;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+
+  /* Approximation of govuk-width-container() */
+  .pins-width-container {
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+    padding-left: 15px;
+    /* mobile gutters */
+    padding-right: 15px;
+  }
+
+  @media (min-width: 641px) {
+
+    /* tablet */
+    .pins-width-container {
+      padding-left: 30px;
+      /* GOV.UK tends to use wider gutters from tablet up */
+      padding-right: 30px;
+    }
+  }
+
+  @media (min-width: 769px) {
+
+    /* desktop */
+    .pins-width-container {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+
+  /* Align header navigation to the right from desktop up */
+  @media (min-width: 769px) {
+    .pins-header__navigation--align-right {
+      float: right;
+    }
+  }
+
+  .pins-header-service-name {
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  /* Header navigation */
+  nav.govuk-header__navigation.pins-header-navigation {
+    text-align: left;
+    padding: 0;
+  }
+
+  nav.govuk-header__navigation.pins-header-navigation .govuk-header__navigation-list .govuk-header__navigation-item .govuk-header__link {
+    color: #0b0c0c;
+    /* colors.govuk-colour('black') */
+  }
+
+  nav.govuk-header__navigation.pins-header-navigation .govuk-header__navigation-list .govuk-header__navigation-item--active .govuk-header__link {
+    color: #10847e;
+    /* $pins-colours-teal-100 */
+  }
+
+  /* Main header bar */
+  #pins-header {
+    background: #ffffff;
+    color: #0b0c0c;
+    /* colors.govuk-colour('black') */
+    display: inline-block;
+    width: 100%;
+    padding: 1rem 0;
+    border-bottom: 0.5rem solid #13a19b;
+    /* $pins-colours-green-200 */
+  }
+
+  #pins-header .pins-row {
+    width: 100%;
+    display: flex;
+  }
+
+  #pins-header .pins-column--left {
+    height: 5.5rem;
+    border-left: 2px solid #13a19b;
+    /* $pins-colours-green-200 */
+    padding-left: 7px;
+    width: 25%;
+  }
+
+  #pins-header .pins-column--left span {
+    font-size: 1.125rem;
+    display: table-caption;
+    line-height: 1.25;
+  }
+
+  #pins-header .pins-column--central {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  #pins-header .pins-column--right {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  #pins-header .pins-column--right>a {
+    margin-left: 3rem;
+  }
+
+  /* Logo */
+  .pins-header__logo {
+    display: inline-block;
+    height: 32px;
+    width: 39px;
+  }
+
+  .pins-header__logo-crown {
+    display: inherit;
+    background-image: url('/public/images/govuk-crest-black.svg');
+    background-size: 100% 100%;
+    width: inherit;
+    height: inherit;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+</style>
+
+
+<header class="govuk-header" id="pins-header" role="banner" data-module="govuk-header" data-govuk-header-init="">
+  <div class="pins-width-container">
+    <div class="pins-row">
+      <div class="pins-column--left">
+        <div class="pins-header__logo">
+          <i class="pins-header__logo-crown"> </i>
+        </div>
+        <span>Planning Inspectorate</span>
+      </div>
+      <div class="pins-column--central">
+        <p style="font-weight: 700; font-size: 1.5rem;" class="pins-header-service-name govuk-!-margin-top-1">
+          Manage a Crown Development Application
+        </p>
+        <nav class="govuk-header__navigation pins-header-navigation" aria-label="Menu">
+          <ul class="govuk-header__navigation-list">
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/cases">All cases</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/auth/signout">Sign out</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% endblock %}
+
+
+{% block beforeContent %}
+{{ govukPhaseBanner({
+tag: {
+text: "Prototype",
+classes: "govuk-tag--purple"
+},
+html: 'This is a design mockup: data is not stored and some features may not work. <a class="govuk-link"
+  href="/../">Back to prototype home</a>.'
+}) }}
+{% endblock %}

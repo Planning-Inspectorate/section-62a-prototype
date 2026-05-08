@@ -1,6 +1,5 @@
 {
   "serviceName": "Section 62A - Planning Inspectorate",
-  "useServiceNavigation": true,
   "plugins": {
     "@planning-inspectorate/dynamic-forms": {},
     "govuk-frontend": {

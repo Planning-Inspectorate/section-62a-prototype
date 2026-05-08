@@ -1,0 +1,463 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "CROWN/2025/0000020 - Application information - Find a Crown Development application" %}
+
+{% block content %}
+
+<!--Custom styles for application stage accordion-->
+
+<style>
+    .govuk-task-list__summary-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100% !important;
+    }
+
+    .govuk-task-list__name {
+        margin: 0;
+    }
+
+    .govuk-task-list__accordion {
+        margin-bottom: 0;
+        padding: 0.5em 0;
+        border-bottom: none;
+        /* GOV.UK grey border */
+    }
+
+    .summary-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .govuk-details__summary {
+        width: 96%;
+    }
+
+    .pins-modded-summary-full-width {
+        margin: 10px 0;
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <!--Side nav-->
+    <div class="govuk-grid-column-one-third">
+
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="application-information.html" aria-current="location">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="documents.html">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="have-your-say-on-a-crown-development-application.html">Have your say</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="application-updates.html">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="written-representations.html">Written representations</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+    <!--Main content-->
+
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title"
+            data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                    Important
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+
+                <p class="govuk-notification-banner__heading">
+                    Latest update - 11 May 2021
+
+                </p>
+                <p>
+                    The Secretary of State issued a Correction Order for the Avonvale Government Office Development.
+                    This followed a request from the Applicant’s legal representative on 15 October 2025 to amend the
+                    approved site boundary.
+                </p>
+                <p>
+                    <a href="application-updates">
+                        View all updates
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+        <span class="govuk-caption-xl">CROWN/2025/0000020</span>
+        <h1 class="govuk-heading-xl">Application information</h1>
+
+        <!--About this application-->
+
+        <h2 class="govuk-heading-m">About this application</h2>
+        {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+        {{ govukSummaryList({
+        rows: [
+        {
+        key: { text: "Type of applications" },
+        value: { text: "Planning permission" }
+        },
+        {
+        key: { text: "Local planning authority" },
+        value: { text: "South Avon Council" }
+        },
+        {
+        key: { text: "Applicant name" },
+        value: { html: "Office for National Development (OND)" }
+        },
+        {
+        key: { text: "Site address" },
+        value: { html: "Easting: 654321, Northing: 123456" }
+        },
+        {
+        key: { text: "Description of the proposed development" },
+        value: { text: "Construction of a new government office complex comprising three interconnected buildings with
+        associated parking, landscaping, and secure perimeter fencing. The development will include sustainable design
+        features such as green roofs, solar panels, and rainwater harvesting systems." }
+        },
+        {
+        key: { text: "Stage" },
+        value: { text: "Accepted" }
+        },
+        {
+        key: { text: "Application form" },
+        value: { html: 'To view the full application, go to the <a href="documents" class="govuk-link">Documents
+            section</a>.' }
+        }
+        ]
+        }) }}
+        <!--Important dates-->
+
+        <h2 class="govuk-heading-m">Important dates</h2>
+
+        {{ govukSummaryList({
+        rows: [
+        {
+        key: {
+        text: "Application accepted date"
+        },
+        value: {
+        text: "1 January 2025"
+        }
+        },
+        {
+        key: {
+        text: "Representation period"
+        },
+        value: {
+        text: "3 April 2025 at 12:00am to 30 April 2025 at 11:59pm"
+        }
+        },
+        {
+        key: {
+        text: "Decision date"
+        },
+        value: {
+        html: "1 June 2025"
+        }
+        }
+        ]
+        }) }}
+
+        <!--Procedure details-->
+
+        <h2 class="govuk-heading-m">Procedure details</h2>
+
+        {{ govukSummaryList({
+        rows: [
+        {
+        key: {
+        text: "Procedure type"
+        },
+        value: {
+        text: "Hearing"
+        }
+        },
+        {
+        key: {
+        text: "Hearing date"
+        },
+        value: {
+        text: "1 July 2025"
+        }
+
+        },
+        {
+        key: {
+        text: "Hearing venue"
+        },
+        value: {
+        html: "Chelsea Town Hall"
+        }
+        }
+
+        ]
+        }) }}
+
+        <h2 class="govuk-heading-m">Application decision</h2>
+
+        {{ govukSummaryList({
+        rows: [
+        {
+        key: {
+        text: "Decision date"
+        },
+        value: {
+        text: "1 August 2025"
+        }
+        },
+        {
+        key: {
+        text: "Decision outcome"
+        },
+        value: {
+        text: "-"
+        }
+        }
+        ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
+
+        <!--Have your say-->
+
+        <h2 class="govuk-heading-m">Have your say</h2>
+
+        <p class="govuk-body">Use this service to submit a written representation with your views on this Crown
+            Development application. A written representation includes your comment and any supporting documents.
+            Written representations will be considered by the Planning Inspectors before a decision is made on an
+            application.</p>
+        <p class="govuk-body">Your name and written representation will be published on this website.</p>
+        <p class="govuk-body  govuk-!-margin-0">The representation period is open from:
+        </p><br>
+        <p class="govuk-body">31 January 2025 at 12:00am to 31 March 2025 11:59pm.</p>
+
+        {% from "govuk/components/button/macro.njk" import govukButton %}
+
+        {{ govukButton({
+        text: "Have your say",
+        href: "/start"
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <!-- Application stage -->
+        <h2 class="govuk-heading-m">Application stage</h2>
+        <p class="govuk-body">
+            This application is at the
+            <strong>accepted</strong>
+            stage.
+        </p>
+
+        <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Pre-application</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The pre-application process for Crown Development applications is handled by the Ministry of
+                        Housing, Communities and Local Government (MHCLG).
+                    </p>
+                    <p>Together, the applicant and MHCLG identify any issues there may be with the:</p>
+                    <ul>
+                        <li>development plan</li>
+                        <li>National Planning Policy Framework</li>
+                        <li>planning practice guidance documents</li>
+                        <li>issues raised by pre-application community consultation</li>
+                    </ul>
+                    <p>These will be addressed in the application submission.
+                    </p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+        <div id="project-stage-acceptance">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Accepted</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">The Planning Inspectorate (PINS) checks that the application is complete. For
+                        example, that the right documents and fees have been added.
+                    </p>
+                    <p class="govuk-body">The Secretary of State assesses whether the application is of national
+                        importance. Once this is confirmed, the application is accepted for consideration and is
+                        published.</p>
+
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-pre-examination">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Consultation</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The relevant Local Planning Authority (LPA) publicises the fact that a Crown Development
+                        application has been made. The LPA notifies anyone who has been consulted.
+                    </p>
+                    <p>The Planning Inspectorate (PINS) accepts written representations from statutory consultees and
+                        other interested parties.</p>
+                    <p>The time limit for submitting written representations is no less than 21 days from the date the
+                        application is accepted. Any representations submitted after this date may not be taken into
+                        account.</p>
+
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-pre-examination">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Procedure decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The procedure is the method of decision process the Planning Inspectorate will use to make a
+                        decision about the proposed development.<br>The Planning Inspectorate will keep the procedure
+                        choice, including combined procedures, under review. Subject to any notification and procedural
+                        requirement, the procedure may be changed at any point before the decision is issued.</p>
+                    <p>The planning inspector will determine how the application should proceed. The possible procedures
+                        are:</p>
+                    <ul>
+                        <li>written representations</li>
+                        <li>hearing</li>
+                        <li>inquiry</li>
+                    </ul>
+                    <p>The decision will be communicated to the applicant, relevant Local Planning Authority (LPA) and
+                        anyone who submitted comments during the representations period.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-reporting">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Reporting and decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The inspector uses the evidence to write a decision report about the outcome of the application.
+                    </p>
+                    <p>The Planning Inspectorate (PINS) issues a formal decision notice including a statement with the
+                        reasons for the decision.
+                    </p>
+                    <p>If the application is approved, the decision will also list any necessary conditions.</p>
+
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-post-decision">
+            <details class="govuk-details pins-modded-summary-full-width">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Post-decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>Where permission has been granted on a Crown Development application, the Local Planning
+                        Authority (LPA) is responsible for monitoring the implementation of the permission. The LPA must
+                        ensure that it is carried out in accordance with the plans and any planning conditions.
+                    </p>
+                    <p>To challenge a decision on a Crown Development application, an application must be made to the
+                        High Court. This must be made within 6 weeks of the day the decision is issued.</p>
+
+                </div>
+            </details>
+        </div>
+
+        <br>
+        <p class="govuk-body">Get more
+            <a class="govuk-link" href="https://www.gov.uk/guidance/crown-development-applications">information about
+                Crown Development applications</a>.
+        </p>
+
+        <!-- Contact us -->
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m">Contact Us</h2>
+        <h3 class="govuk-heading-s">Telephone</h3>
+        <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
+        <p class="govuk-body">Telephone: 0303 444 5000</p>
+        <p class="govuk-body">
+            Open Monday to Friday: 9am to 4pm.
+            <br>
+            Closed on weekends and bank holidays.
+        </p>
+
+        <h3 class="govuk-heading-s">Email</h3>
+        <p class="govuk-body">
+            <a class="govuk-link"
+                href="mailto:crownapplications@planninginspectorate.gov.uk">crownapplications@planninginspectorate.gov.uk</a>
+        </p>
+        <p class="govuk-body">When writing an email, quote the application reference in the subject line.</p>
+        <p class="govuk-body">We aim to respond within 10 working days.</p>
+
+        <h3 class="govuk-heading-s">Alternative formats</h3>
+        <p class="govuk-body">Call or email to ask for project documents in alternative formats such as PDF, large
+            print, easy read, audio recording or braille.</p>
+    </div>
+    <div></div>
+
+    {% endblock %}

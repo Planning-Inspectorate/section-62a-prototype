@@ -1,0 +1,95 @@
+<style>
+    .front-office-header {
+        background: #01625E;
+        border-bottom: #11A19A 10px solid;
+    }
+
+    .front-office-header__container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 24px 0;
+    }
+
+    .front-office-header__nav {
+        margin-top: 16px;
+        display: flex;
+        gap: 32px;
+    }
+
+    .front-office-header__nav a {
+        font-size: 1rem;
+        text-decoration: none;
+        color: #485156;
+    }
+
+    .front-office-header__nav a:hover {
+        text-decoration: underline;
+    }
+
+    #logo {
+        width: 30%;
+    }
+
+    .govuk-service-navigation--custom {
+        background-color: #F3F2F1;
+        border-bottom: #9f9f9f 0.5px solid;
+    }
+
+    .govuk-service-navigation__item--active {
+        border-bottom: black 5px solid !important;
+    }
+
+    .govuk-service-navigation__wrapper {
+        color: black;
+    }
+
+    .govuk-service-navigation__link {
+        color: black !important;
+    }
+</style>
+
+{% block header %}
+
+<header class="front-office-header" role="banner">
+
+    <div class="govuk-width-container front-office-header__container">
+        <div class="front-office-header__logo-wrapper">
+            <img id="logo" src="/public/images/Planning-Inspectorate-logo-landscape-white.png" alt="Crown logo">
+        </div>
+    </div>
+
+</header>
+
+<section aria-label="Service information" class="govuk-service-navigation--custom"
+    data-module="govuk-service-navigation">
+    <div class="govuk-width-container">
+        <div class="govuk-service-navigation__container">
+            <span class="govuk-service-navigation__service-name">
+                <a href="#" class="govuk-service-navigation__link">
+                    Find a Crown development application
+                </a>
+            </span>
+            <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+                <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle"
+                    aria-controls="navigation" hidden aria-hidden="true">
+                    Menu
+                </button>
+                <ul class="govuk-service-navigation__list" id="navigation">
+                    <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                        <a class="govuk-service-navigation__link" href="/current-service/front-office/applications.html" aria-current="true">
+                            <strong class="govuk-service-navigation__active-fallback">All applications</strong>
+                        </a>
+                    </li>
+                    <li class="govuk-service-navigation__item">
+                        <a class="govuk-service-navigation__link" href="/current-service/front-office/detailed-information.html">
+                            Detailed information
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
