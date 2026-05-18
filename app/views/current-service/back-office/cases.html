@@ -1,0 +1,130 @@
+{% extends "layouts/new/back-office.html" %}
+{% from "components/dashboard-box/dashboard-box.njk" import dashboardBox %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+
+  <h1 class="govuk-heading-xl">
+    Manage Crown Development applications
+  </h1>
+
+  <div class="govuk-grid-row row-inline">
+
+    {{ dashboardBox({
+    width: "two-thirds",
+    classes: "govuk-!-margin-bottom-6",
+    html: "<h1 class='govuk-label-wrapper'>
+      <label class='govuk-label govuk-label--l' id='search-label' for='search-input'>
+        Search cases
+      </label>
+    </h1>
+    <div id='search-hint' class='govuk-hint'>
+      To find a specific case, search by reference.
+    </div>
+    <div class='row-inline'><input class='govuk-input' id='search-input' value='' name='searchCriteria'
+        type='text'><button type='submit' class='govuk-button govuk-button' data-module='govuk-button'
+        id='search-button' data-govuk-button-init=''>
+        Search
+      </button></div>"
+    }) }}
+
+    {{ dashboardBox({
+    width: "one-third",
+    classes: "govuk-!-margin-bottom-6",
+    html: "<h1 class='govuk-label-wrapper'>Create new case</h1>
+    <h2>
+      <a href='create-a-case/1-type-of-application.html' id='create-case-link' class='govuk-link govuk-link--no-visited-state'>Create a
+        case</a>
+    </h2>"
+    }) }}
+  </div>
+</div>
+
+<table class="govuk-table" data-module="moj-sortable-table" data-moj-sortable-table-init="">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header" aria-sort="descending"><button type="button"
+          data-index="0">Reference<svg width="22" height="22" focusable="false" aria-hidden="true" role="img"
+            viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor"></path>
+          </svg></button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="1">Site
+          location<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+          </svg></button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="2">Local planning
+          authority (LPA)<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+          </svg></button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="3">Application
+          type<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+          </svg></button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="4">Status<svg
+            width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+          </svg></button></th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000073"><a class="govuk-link" href="manage-application">CROWN/2025/0000073</a></td>
+      <td class="govuk-table__cell pins-white-space-pre-wrap">Plot 12, Avonvale Way, Kingsford Road, Southmere, Avonshire, AS4 9LT</td>
+      <td class="govuk-table__cell">System Test Borough Council</td>
+      <td class="govuk-table__cell">Outline planning permission with some matters reserved</td>
+      <td class="govuk-table__cell"><strong class="govuk-tag">
+  New
+</strong>
+</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000070/LBC"><a class="govuk-link"
+          href="manage-application">CROWN/2025/0000070/LBC</a></td>
+      <td class="govuk-table__cell pins-white-space-pre-wrap">Easting: 654321
+        Northing: 123456</td>
+      <td class="govuk-table__cell">System Test Borough Council</td>
+      <td class="govuk-table__cell">Planning permission and listed building consent (LBC) for alterations, extension or
+        demolition of a listed building</td>
+      <td class="govuk-table__cell"><strong class="govuk-tag">
+          New
+        </strong>
+      </td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000070"><a class="govuk-link"
+          href="manage-application">CROWN/2025/0000070</a></td>
+      <td class="govuk-table__cell pins-white-space-pre-wrap">Easting: 654321
+        Northing: 123456</td>
+      <td class="govuk-table__cell">System Test Borough Council</td>
+      <td class="govuk-table__cell">Planning permission and listed building consent (LBC) for alterations, extension or
+        demolition of a listed building</td>
+      <td class="govuk-table__cell"><strong class="govuk-tag">
+          New
+        </strong>
+      </td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000069"><a class="govuk-link"
+          href="manage-application">CROWN/2025/0000069</a></td>
+      <td class="govuk-table__cell pins-white-space-pre-wrap">1 Queens Road (AGENT), Bristol, BS7 9HY</td>
+      <td class="govuk-table__cell">System Test Borough Council</td>
+      <td class="govuk-table__cell">Planning permission</td>
+      <td class="govuk-table__cell"><strong class="govuk-tag">
+          New
+        </strong>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+{%endblock%}
