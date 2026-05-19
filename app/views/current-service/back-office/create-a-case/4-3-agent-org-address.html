@@ -1,0 +1,107 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAgentOrgAddress %}Error: {% endif %}What is the address of the agent organisation?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorAgentOrgAddress %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: errorAgentOrgAddress,
+              href: "#agent-org-address"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/agent-org-address-answer" method="post" novalidate>
+
+{% call govukFieldset({
+  legend: {
+    text: "What is the address of the agent organisation? (optional)",
+    classes: "govuk-fieldset__legend--l",
+    isPageHeading: true
+    }
+
+  }) %}
+
+  {{ govukInput({
+    label: {
+      text: "Address line 1 (optional)"
+    },
+    id: "agent-org-address-line-1",
+    name: "agentOrgAddressLine1",
+    value: data['agentOrgAddressLine1'],
+    autocomplete: "address-line1"
+
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Address line 2 (optional)"
+    },
+    id: "agent-org-address-line-2",
+    name: "agentOrgAddressLine2",
+    value: data['agentOrgAddressLine2'],
+    autocomplete: "address-line2"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Town or city (optional)"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "agent-org-address-town",
+    name: "agentOrgAddressTown",
+    value: data['agentOrgAddressTown'],
+    autocomplete: "address-level2"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "County (optional)"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "agent-org-address-county",
+    name: "agentOrgAddressCounty",
+    value: data['agentOrgAddressCounty']
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Postcode (optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "agent-org-address-postcode",
+    name: "agentOrgAddressPostcode",
+    value: data['agentOrgAddressPostcode'],
+    autocomplete: "postal-code",
+    errorMessage: errorMessage if error else null
+  }) }}
+
+{% endcall %}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

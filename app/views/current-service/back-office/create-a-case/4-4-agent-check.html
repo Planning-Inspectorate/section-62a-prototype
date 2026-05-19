@@ -1,0 +1,98 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Check agent contact details
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Check agent contact details</h1>
+
+    {% set agentContactList = data['agentContactList'] or [] %}
+
+    {# --- DATA TABLE --- #}
+    {% if agentContactList.length > 0 %}
+      <table class="govuk-table" data-module="moj-sortable-table">
+
+        <tbody class="govuk-table__body">
+          {% for item in agentContactList %}
+            <tr class="govuk-table__row">
+
+            {# Contact Numbered List Column #}
+              <td class="govuk-table__cell">Contact {{ loop.index }}</td>
+              
+            {# Details Column #}
+              <td class="govuk-table__cell">
+                {% if item.firstName or item.lastName %}
+                  <div>{{ (item.firstName + " " + item.lastName) | trim }}</div>
+                {% endif %}
+                {% if not item.firstName and not item.lastName %}{% endif %}
+                
+                {% if item.email %}<div>{{ item.email }}</div>{% endif %}
+                {% if item.phone %}<div>{{ item.phone }}</div>{% endif %}
+                {% if not item.phone %}{% endif %}
+                
+              </td>
+              
+              {# Actions #}
+              <td class="govuk-table__cell">
+                <ul class="govuk-summary-list__actions-list">
+                  <li class="govuk-summary-list__actions-list-item">
+                    <a class="govuk-link" href="/current-service/back-office/create-a-case/4-5-agent-contact?ref={{ ref }}&id={{ item.id }}">
+                      Change<span class="govuk-visually-hidden"> agent contact {{ loop.index }}</span>
+                    </a>
+                  </li>
+                  
+                  {# Only show Remove action button if there is more than 1 applicant #}
+                  {% if agentContactList.length > 1 %}
+                    <li class="govuk-summary-list__actions-list-item">
+                      <a class="govuk-link" href="/current-service/back-office/create-a-case/4-6-remove-agent?ref={{ ref }}&id={{ item.id }}">
+                        Remove<span class="govuk-visually-hidden"> agent contact {{ loop.index }}</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="govuk-body">Add one or more agent contacts. No agent contact details have been added yet.</p>
+    {% endif %}
+
+    {# --- BUTTONS --- #}
+    <form action="/current-service/back-office/create-a-case/5-1-applicant-check" method="get">
+      
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Add details",
+          classes: "govuk-button" if agentContactList.length == 0 else "govuk-button--secondary",
+          href: "/current-service/back-office/create-a-case/4-5-agent-contact"
+        }) }}
+      </div>
+
+      {% if agentContactList.length > 0 %}
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue",
+            href: "/current-service/back-office/create-a-case/5-1-applicant-check"
+           }) }}
+        </div>
+        
+      {% endif %}
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

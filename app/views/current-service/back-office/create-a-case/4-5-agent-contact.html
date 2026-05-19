@@ -1,0 +1,63 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList.length > 0 %}Error: {% endif %}Add agent contact details
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "javascript:history.back()" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList and errorList.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/cases/contacts/step-4?ref={{ ref }}&id={{ id }}" novalidate>
+      <h1 class="govuk-heading-l">Add agent contact details</h1>
+
+    {{ govukInput({ 
+        label: { text: "First name" }, 
+        id: "agent-con-fname", 
+        name: "agent-con-fname", 
+        value: fname,
+        errorMessage: errors.fname if errors.fname else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Last name" }, 
+        id: "agent-con-lname", 
+        name: "agent-con-lname", 
+        value: lname,
+        errorMessage: errors.lname if errors.lname else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Email address" }, 
+        id: "agent-con-email", 
+        name: "agent-con-email", 
+        type: "email", 
+        value: email,
+        errorMessage: errors.email if errors.email else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Phone number (optional)" }, 
+        id: "agent-con-phone", 
+        name: "agent-con-phone", 
+        type: "tel", 
+        value: phone,
+        errorMessage: errors.phone if errors.phone else null
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

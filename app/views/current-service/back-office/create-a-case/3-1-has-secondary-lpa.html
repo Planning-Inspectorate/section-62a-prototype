@@ -1,0 +1,48 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorHasSecondaryLpa %}Error: {% endif %}Is there a secondary local planning authority for this application?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorHasSecondaryLpa %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorHasSecondaryLpa, href: "#hasSecondaryLpa" }]
+      }) }}
+
+    {% endif %}
+
+    <form action="/has-secondary-lpa-answer" method="post" novalidate>
+
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "hasSecondaryLpa",
+        name: "hasSecondaryLpa",
+        fieldset: {
+          legend: { text: "Is there a secondary local planning authority for this application?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+        },
+        errorMessage: { text: errorHasSecondaryLpa } if errorHasSecondaryLpa else null,
+        items: [
+          { value: "yes", text: "Yes", checked: data['HasSecondaryLpa'] == 'yes' },
+          { value: "no", text: "No", checked: data['HasSecondaryLpa'] == 'no' }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue" }) }}
+      
+    </form>
+  </div>
+</div>
+{% endblock %}

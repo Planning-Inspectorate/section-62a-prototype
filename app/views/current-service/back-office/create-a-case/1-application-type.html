@@ -1,0 +1,49 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ {% if errorApplicationType %}Error: {% endif %}What type of application is it?
+{% endblock %}
+
+{% block beforeContent %}
+
+  {{ govukBackLink({
+  text: "Back",
+  href: "/manage-cases"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorApplicationType %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorApplicationType, href: "#application-type" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/application-type-answer" method="post" novalidate>
+      {{ govukRadios({
+        name: "application-type",
+        value: data['application-type'],
+        fieldset: {
+          legend: { text: "What type of application is it?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+        },
+        errorMessage: { text: errorApplicationType } if errorApplicationType else null,
+        items: [
+          { value: "Planning permission", text: "Planning permission" },
+          { value: "Outline planning permission with some matters reserved", text: "Outline planning permission with some matters reserved" },
+          { value: "Outline planning permission with all matters reserved", text: "Outline planning permission with all matters reserved" },
+          { value: "Approval of reserved matters following outline approval", text: "Approval of reserved matters following outline approval" },
+          { value: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building", 
+                    text: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building" }
+        ]
+      }) }}
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

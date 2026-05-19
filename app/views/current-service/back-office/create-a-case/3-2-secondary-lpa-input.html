@@ -1,0 +1,86 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorSecondaryLpa %}Error: {% endif %}Select the secondary local planning authority for this application
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorSecondaryLpa %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            { text: errorSecondaryLpa, href: "#secondary-lpa" }
+          ]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/lpa-answer" method="post" novalidate>
+
+        <div class="govuk-form-group {% if errorSecondaryLpa %}govuk-form-group--error{% endif %}">
+          
+          <h1 class="govuk-label-wrapper">
+            <label class="govuk-label govuk-label--l" for="secondary-lpa">
+              Select the secondary local planning authority for this application
+            </label>
+          </h1>
+
+          {% if errorSecondaryLpa %}
+            <p id="secondary-lpa-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{ errorSecondaryLpa }}
+            </p>
+          {% endif %}
+
+          {# --- AUTOCOMPLETE CONTAINER --- #}
+          <div id="secondary-lpa-container"></div>
+
+        </div>
+
+        {{ govukButton({ text: "Continue" }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block pageScripts %}
+<link rel="stylesheet" href="/public/css/accessible-autocomplete.min.css">
+<script src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script>
+  const authorities = [
+    "Bristol City Council",
+    "Camden London Borough Council",
+    "Cornwall Council",
+    "Manchester City Council",
+    "Nottingham City Council",
+    "Sheffield City Council",
+    "Southwark Council",
+    "Wandsworth Borough Council",
+    "Westminster City Council",
+    "York City Council"
+  ];
+
+  accessibleAutocomplete({
+    element: document.querySelector('#secondary-lpa-container'),
+    id: 'secondary-lpa', 
+    name: 'secondary-lpa',
+    source: authorities,
+    defaultValue: "{{ secondaryLpa or data['secondaryLpa'] | default('') }}",
+    showAllValues: false,
+    confirmOnBlur: false, 
+    autoselect: true
+  });
+</script>
+{% endblock %}

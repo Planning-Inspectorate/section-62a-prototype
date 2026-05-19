@@ -1,0 +1,48 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorHasAgent %}Error: {% endif %}Is the applicant using an agent?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorHasAgent %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorHasAgent, href: "#hasAgent" }]
+      }) }}
+
+    {% endif %}
+
+    <form action="/has-agent-answer" method="post" novalidate>
+
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "hasAgent",
+        name: "hasAgent",
+        fieldset: {
+          legend: { text: "Is the applicant using an agent?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+        },
+        errorMessage: { text: errorHasAgent } if errorHasAgent else null,
+        items: [
+          { value: "yes", text: "Yes", checked: data['HasAgent'] == 'yes' },
+          { value: "no", text: "No", checked: data['HasAgent'] == 'no' }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue" }) }}
+      
+    </form>
+  </div>
+</div>
+{% endblock %}
