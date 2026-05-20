@@ -6,9 +6,9 @@ import {
   getCase, 
   addAuditLog, 
   validatePostcode, 
-  validateAndSaveDate, 
-  validateAndSaveDateTime, 
-  validateAndSaveNumber
+  validateDate, 
+  validateDateTime, 
+  validateNumber
 } from './helpers.js';
 
 // Run initialization fixes

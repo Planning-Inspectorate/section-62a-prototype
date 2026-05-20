@@ -93,7 +93,6 @@ router.post('/agent-org-name-answer', function (req, res) {
 });
 
 
-
 // 4-3 - agent organisation address
 router.post('/agent-org-address-answer', function (req, res) {
   const postcode = req.session.data['agent-org-address-postcode'];
@@ -105,6 +104,9 @@ router.post('/agent-org-address-answer', function (req, res) {
   }
   res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
 });
+
+
+
 
 
 export default router;
