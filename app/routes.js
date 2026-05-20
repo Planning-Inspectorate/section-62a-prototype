@@ -5,7 +5,7 @@ import createCaseRouter from './sub-routes/create-a-case.js';
 import { 
   getCase, 
   addAuditLog, 
-  validateAndSaveAddress, 
+  validatePostcode, 
   validateAndSaveDate, 
   validateAndSaveDateTime, 
   validateAndSaveNumber

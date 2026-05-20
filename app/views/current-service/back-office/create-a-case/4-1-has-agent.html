@@ -19,7 +19,7 @@
     {% if errorHasAgent %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorHasAgent, href: "#hasAgent" }]
+        errorList: [{ text: errorHasAgent, href: "#has-agent" }]
       }) }}
 
     {% endif %}
@@ -28,15 +28,15 @@
 
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        idPrefix: "hasAgent",
-        name: "hasAgent",
+        idPrefix: "has-agent",
+        name: "has-agent",
         fieldset: {
           legend: { text: "Is the applicant using an agent?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
         },
         errorMessage: { text: errorHasAgent } if errorHasAgent else null,
         items: [
-          { value: "yes", text: "Yes", checked: data['HasAgent'] == 'yes' },
-          { value: "no", text: "No", checked: data['HasAgent'] == 'no' }
+          { value: "Yes", text: "Yes", checked: data['has-agent'] == 'Yes' },
+          { value: "No", text: "No", checked: data['has-agent'] == 'No' }
         ]
       }) }}
 

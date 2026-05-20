@@ -25,7 +25,7 @@
         }) }}
       {% endif %}
 
-      <form class="form" action="/lpa-answer" method="post" novalidate>
+      <form class="form" action="/secondary-lpa-answer" method="post" novalidate>
 
         <div class="govuk-form-group {% if errorSecondaryLpa %}govuk-form-group--error{% endif %}">
           
@@ -77,7 +77,7 @@
     id: 'secondary-lpa', 
     name: 'secondary-lpa',
     source: authorities,
-    defaultValue: "{{ secondaryLpa or data['secondaryLpa'] | default('') }}",
+    defaultValue: "{{ secondaryLpa or data['secondary-lpa'] | default('') }}",
     showAllValues: false,
     confirmOnBlur: false, 
     autoselect: true

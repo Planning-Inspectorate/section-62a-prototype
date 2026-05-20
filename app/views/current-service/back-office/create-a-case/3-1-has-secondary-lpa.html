@@ -19,7 +19,7 @@
     {% if errorHasSecondaryLpa %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorHasSecondaryLpa, href: "#hasSecondaryLpa" }]
+        errorList: [{ text: errorHasSecondaryLpa, href: "#has-secondary-lpa" }]
       }) }}
 
     {% endif %}
@@ -28,15 +28,15 @@
 
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        idPrefix: "hasSecondaryLpa",
-        name: "hasSecondaryLpa",
+        idPrefix: "has-secondary-lpa",
+        name: "has-secondary-lpa",
         fieldset: {
           legend: { text: "Is there a secondary local planning authority for this application?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
         },
         errorMessage: { text: errorHasSecondaryLpa } if errorHasSecondaryLpa else null,
         items: [
-          { value: "yes", text: "Yes", checked: data['HasSecondaryLpa'] == 'yes' },
-          { value: "no", text: "No", checked: data['HasSecondaryLpa'] == 'no' }
+          { value: "Yes", text: "Yes", checked: data['has-secondary-lpa'] == 'Yes' },
+          { value: "No", text: "No", checked: data['has-secondary-lpa'] == 'No' }
         ]
       }) }}
 

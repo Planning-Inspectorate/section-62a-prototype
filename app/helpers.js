@@ -9,14 +9,16 @@ export const validAuthorities = [
   "Southwark Council", "Wandsworth Borough Council", "Westminster City Council", "York City Council"
 ];
 
+
 // ================================================================================
 // 1. GET CASE HELPER --- helper to find the correct case data
 // ================================================================================ 
 export function getCase(req) {
-  var ref = req.query.ref || req.body.ref || req.params.ref;
-  var cases = req.session.data['cases'] || [];
+  const ref = req.query.ref || req.body.ref || req.params.ref;
+  const cases = req.session.data['cases'] || [];
   return cases.find(c => c.reference === ref);
 }
+
 
 // ================================================================================
 // 2. AUDIT LOG HELPER --- helper to create audit logs when user data is changed
@@ -46,192 +48,136 @@ export function addAuditLog(req, caseRef, details) {
 // ================================================================================
 // 3. ADDRESS VALIDATION -- checking address fields contain a real postcode
 // ================================================================================
-export function validateAndSaveAddress(req, res, fieldName, displayName, storageObj, storageKey) {
-  var line1 = req.body[fieldName + '-line1'];
-  var line2 = req.body[fieldName + '-line2'];
-  var town = req.body[fieldName + '-town'];
-  var county = req.body[fieldName + '-county'];
-  var postcode = req.body[fieldName + '-postcode'];
-  var action = req.body.action;
-
-  if (action === 'remove') {
-    delete storageObj[storageKey];
-    return { status: "REMOVED" };
+export function validatePostcode(postcode) {
+  // 1. If it's completely empty, return no errors (since your design says it's optional)
+  if (!postcode || postcode.trim() === "") {
+    return null; 
   }
 
-  var errorList = [];
-  var errorFields = [];
+  // 2. Clean it up
+  const cleanPostcode = postcode.replace(/\s+/g, '').toUpperCase();
+  const postcodeRegex = /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/;
 
-  if (postcode && postcode.trim() !== "") {
-    var cleanPostcode = postcode.replace(/\s+/g, '').toUpperCase();
-    var postcodeRegex = /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/;
-
-    if (cleanPostcode.length < 5 || cleanPostcode.length > 7) {
-      errorList.push({ text: "Postcode must be between 5 and 7 characters", href: "#" + fieldName + "-postcode" });
-      errorFields.push('postcode');
-    } else if (!postcodeRegex.test(cleanPostcode)) {
-      errorList.push({ text: "Enter a real postcode", href: "#" + fieldName + "-postcode" });
-      errorFields.push('postcode');
-    }
+  // 3. Run the checks and return the specific error string if it fails
+  if (cleanPostcode.length < 5 || cleanPostcode.length > 7) {
+    return "Postcode must be between 5 and 7 characters";
+  } 
+  
+  if (!postcodeRegex.test(cleanPostcode)) {
+    return "Enter a real postcode";
   }
 
-  if (errorList.length > 0) return { status: "ERROR", errorList: errorList, errorFields: errorFields };
-
-  var fullAddress = [line1, line2, town, county, postcode].filter(Boolean).join('<br>');
-  storageObj[storageKey] = { line1: line1, line2: line2, town: town, county: county, postcode: postcode, formatted: fullAddress };
-
-  return { status: "SUCCESS" };
+  // 4. If it passes everything, return null (no errors!)
+  return null;
 }
+
 
 // ================================================================================
 // 4. DATE VALIDATION -- checking fields only contain the correct date
 // ================================================================================
-export function validateAndSaveDate(req, res, fieldName, displayName, storageObj, storageKey) {
-  var day = req.body[fieldName + '-day'];
-  var month = req.body[fieldName + '-month'];
-  var year = req.body[fieldName + '-year'];
-  var action = req.body.action;
-
-  if (action === 'remove') {
-    delete storageObj[storageKey];
-    return { status: "REMOVED" };
-  }
-
-  var errorList = [];
-  var errorFields = [];
-
+export function validateDate(day, month, year, displayName, fieldName) {
+  // 1. Check if completely empty
   if (!day && !month && !year) {
-    errorList.push({ text: "Enter the " + displayName.toLowerCase(), href: "#" + fieldName + "-day" });
-    errorFields = ['day', 'month', 'year'];
-  } else {
-    var missing = [];
-    if (!day) missing.push('day');
-    if (!month) missing.push('month');
-    if (!year) missing.push('year');
-  
-    if (missing.length > 0) {
-      var missingText = missing.length === 2 ? displayName + " must include a " + missing[0] + " and " + missing[1] : displayName + " must include a " + missing[0];
-      errorList.push({ text: missingText, href: "#" + fieldName + "-" + missing[0] });
-      errorFields = errorFields.concat(missing);
-    }
+    return { 
+      text: `Enter the ${displayName.toLowerCase()}`, 
+      href: `#${fieldName}-day`, 
+      errorFields: ['day', 'month', 'year'] 
+    };
   }
 
-  if (day && (Number(day) < 1 || Number(day) > 31 || isNaN(Number(day)))) { errorList.push({ text: displayName + " day must be a real day", href: "#" + fieldName + "-day" }); if (!errorFields.includes('day')) errorFields.push('day'); }
-  if (month && (Number(month) < 1 || Number(month) > 12 || isNaN(Number(month)))) { errorList.push({ text: displayName + " month must be a real month", href: "#" + fieldName + "-month" }); if (!errorFields.includes('month')) errorFields.push('month'); }
-  if (year && (year.length != 4 || isNaN(Number(year)))) { errorList.push({ text: displayName + " year must include 4 numbers", href: "#" + fieldName + "-year" }); if (!errorFields.includes('year')) errorFields.push('year'); }
+  // 2. Check for missing individual fields
+  const missing = [];
+  if (!day) missing.push('day');
+  if (!month) missing.push('month');
+  if (!year) missing.push('year');
 
-  if (day && month && year && errorList.length === 0) {
-     var dateObj = new Date(year, month - 1, day);
-     if ((dateObj.getMonth() + 1 != month) || (dateObj.getDate() != day)) {
-        errorList.push({ text: "Enter a real date", href: "#" + fieldName + "-day" });
-        errorFields = ['day', 'month', 'year'];
-     }
+  if (missing.length > 0) {
+    const missingText = missing.length === 2 
+      ? `${displayName} must include a ${missing[0]} and ${missing[1]}` 
+      : `${displayName} must include a ${missing[0]}`;
+    return { text: missingText, href: `#${fieldName}-${missing[0]}`, errorFields: missing };
   }
 
-  if (errorList.length > 0) return { status: "ERROR", errorList: errorList, errorFields: errorFields };
+  // 3. Check for invalid numbers (e.g., month 13, day 32)
+  const dayNum = Number(day);
+  const monthNum = Number(month);
+  const yearNum = Number(year);
+  const errorFields = [];
 
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var formatted = day + " " + (month ? months[month - 1] : "") + " " + year;
+  if (dayNum < 1 || dayNum > 31 || isNaN(dayNum)) errorFields.push('day');
+  if (monthNum < 1 || monthNum > 12 || isNaN(monthNum)) errorFields.push('month');
+  if (year.length !== 4 || isNaN(yearNum)) errorFields.push('year');
 
-  storageObj[storageKey] = { day: day, month: month, year: year, formatted: formatted };
-  return { status: "SUCCESS" };
+  if (errorFields.length > 0) {
+    let text = `${displayName} must be a real date`;
+    if (errorFields.includes('day')) text = `${displayName} day must be a real day`;
+    else if (errorFields.includes('month')) text = `${displayName} month must be a real month`;
+    else if (errorFields.includes('year')) text = `${displayName} year must include 4 numbers`;
+    
+    return { text, href: `#${fieldName}-${errorFields[0]}`, errorFields };
+  }
+
+  // 4. Check for impossible dates (e.g., February 30th)
+  const dateObj = new Date(yearNum, monthNum - 1, dayNum);
+  if ((dateObj.getMonth() + 1 !== monthNum) || (dateObj.getDate() !== dayNum)) {
+    return { text: "Enter a real date", href: `#${fieldName}-day`, errorFields: ['day', 'month', 'year'] };
+  }
+
+  // 5. Success! No errors.
+  return null;
 }
+
 
 // =================================================================================
 // 5. DATE + TIME VALIDATION -- checking fields contain the correct time and date
 // =================================================================================
-export function validateAndSaveDateTime(req, res, fieldName, displayName, storageObj, storageKey) {
-  var day = req.body[fieldName + '-day']; var month = req.body[fieldName + '-month']; var year = req.body[fieldName + '-year'];
-  var hour = req.body[fieldName + '-hour']; var minute = req.body[fieldName + '-minute']; var ampm = req.body[fieldName + '-ampm'];
-  var action = req.body.action;
+export function validateDateTime(day, month, year, hour, minute, ampm, displayName, fieldName) {
+  // 1. First, run our existing date validation check
+  const dateError = validateDate(day, month, year, displayName, fieldName);
+  if (dateError) return dateError; // If the date is broken, return that error immediately
 
-  if (action === 'remove') {
-    delete storageObj[storageKey];
-    return { status: "REMOVED" };
+  // 2. Date is fine, now check the time
+  const errorFields = [];
+  
+  if (!hour) {
+    return { text: "Enter the hour", href: `#${fieldName}-hour`, errorFields: ['hour'] };
+  } 
+  
+  const h = Number(hour);
+  if (isNaN(h) || h < 1 || h > 12) {
+    return { text: "Hour must be between 1 and 12", href: `#${fieldName}-hour`, errorFields: ['hour'] };
   }
 
-  var errorList = []; var errorFields = [];
-
-  // Date
-  if (!day && !month && !year) {
-    errorList.push({ text: "Enter the date for the " + displayName.toLowerCase(), href: "#" + fieldName + "-day" });
-    errorFields = ['day', 'month', 'year'];
-  } else {
-    var missing = [];
-    if (!day) missing.push('day'); if (!month) missing.push('month'); if (!year) missing.push('year');
-    if (missing.length > 0) {
-      errorList.push({ text: displayName + " must include a " + missing.join(' and '), href: "#" + fieldName + "-" + missing[0] });
-      errorFields = errorFields.concat(missing);
-    } else {
-        var dayNum = Number(day); var monthNum = Number(month); var yearNum = Number(year);
-        if (dayNum < 1 || dayNum > 31 || isNaN(dayNum)) { errorList.push({ text: displayName + " day must be a real day", href: "#" + fieldName + "-day" }); if (!errorFields.includes('day')) errorFields.push('day'); }
-        if (monthNum < 1 || monthNum > 12 || isNaN(monthNum)) { errorList.push({ text: displayName + " month must be a real month", href: "#" + fieldName + "-month" }); if (!errorFields.includes('month')) errorFields.push('month'); }
-        if (year.length != 4 || isNaN(yearNum)) { errorList.push({ text: displayName + " year must include 4 numbers", href: "#" + fieldName + "-year" }); if (!errorFields.includes('year')) errorFields.push('year'); }
-        
-        if (errorList.length === 0) {
-            var dateObj = new Date(yearNum, monthNum - 1, dayNum);
-            if ((dateObj.getMonth() + 1 != monthNum) || (dateObj.getDate() != dayNum)) {
-                errorList.push({ text: "Enter a real date", href: "#" + fieldName + "-day" });
-                errorFields = ['day', 'month', 'year'];
-            }
-        }
+  if (minute) {
+    const m = Number(minute);
+    if (isNaN(m) || m < 0 || m > 59) {
+      return { text: "Minute must be between 0 and 59", href: `#${fieldName}-minute`, errorFields: ['minute'] };
     }
   }
 
-  // Time
-  if (errorList.length === 0) {
-      if (!hour) {
-         errorList.push({ text: "Enter the hour", href: "#" + fieldName + "-hour" }); errorFields.push('hour');
-      } else {
-         var h = Number(hour);
-         if (isNaN(h) || h < 1 || h > 12) { errorList.push({ text: "Hour must be between 1 and 12", href: "#" + fieldName + "-hour" }); errorFields.push('hour'); }
-      }
-      if (!minute) {
-          minute = "00"; 
-      } else {
-          var m = Number(minute);
-          if (isNaN(m) || m < 0 || m > 59) { errorList.push({ text: "Minute must be between 0 and 59", href: "#" + fieldName + "-minute" }); errorFields.push('minute'); }
-          if (minute.length === 1) minute = "0" + minute;
-      }
-      if (!ampm || (ampm !== "am" && ampm !== "pm")) {
-          errorList.push({ text: "Select am or pm", href: "#" + fieldName + "-ampm" }); errorFields.push('ampm');
-      }
+  if (!ampm || (ampm !== "am" && ampm !== "pm")) {
+    return { text: "Select am or pm", href: `#${fieldName}-ampm`, errorFields: ['ampm'] };
   }
 
-  if (errorList.length > 0) return { status: "ERROR", errorList: errorList, errorFields: errorFields };
-  if (!day && !month && !year) { delete storageObj[storageKey]; return { status: "SUCCESS" }; }
-
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var formattedDate = day + " " + months[Number(month) - 1] + " " + year;
-  var formattedTime = (hour && minute && ampm) ? hour + ":" + minute + ampm : "";
-
-  storageObj[storageKey] = { day: day, month: month, year: year, hour: hour, minute: minute, ampm: ampm, formattedDate: formattedDate, formattedTime: formattedTime };
-  return { status: "SUCCESS" };
+  // 3. Success!
+  return null;
 }
+
 
 // ================================================================================
 // 6. NUMBER VALIDATION -- checking fields only contain number inputs
 // ================================================================================
-export function validateAndSaveNumber(req, res, fieldName, displayName, storageObj, storageKey) {
-  var value = req.body[fieldName];
-  var action = req.body.action;
-
-  if (action === 'remove') {
-    delete storageObj[storageKey];
-    return { status: "REMOVED" };
-  }
-
-  var errorList = [];
+export function validateNumber(value, displayName, fieldName) {
+  // 1. Check if empty
   if (!value || value.trim() === "") {
-    errorList.push({ text: "Enter the " + displayName.toLowerCase(), href: "#" + fieldName });
-  } else {
-    if (isNaN(value) || !/^\d+(\.\d+)?$/.test(value)) {
-      errorList.push({ text: displayName + " must only contain numbers", href: "#" + fieldName });
-    }
+    return { text: `Enter the ${displayName.toLowerCase()}`, href: `#${fieldName}` };
+  } 
+  
+  // 2. Check if it contains letters or weird characters
+  if (isNaN(value) || !/^\d+(\.\d+)?$/.test(value)) {
+    return { text: `${displayName} must only contain numbers`, href: `#${fieldName}` };
   }
 
-  if (errorList.length > 0) return { status: "ERROR", errorList: errorList };
-  
-  storageObj[storageKey] = value;
-  return { status: "SUCCESS" };
+  // 3. Success!
+  return null;
 }
