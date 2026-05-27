@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList.length > 0 %}Error: {% endif %}Add agent contact details
+  {% if errorList %}Error: {% endif %}Add agent contact details
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,47 +12,49 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorList and errorList.length > 0 %}
+    {# 1. Pass the entire errorList array directly into the macro #}
+    {% if errorList %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errorList
       }) }}
     {% endif %}
 
-    <form method="post" action="/cases/contacts/step-4?ref={{ ref }}&id={{ id }}" novalidate>
+    <form method="post" action="/agent-contact-answer{% if id %}?id={{ id }}{% endif %}" novalidate>
       <h1 class="govuk-heading-l">Add agent contact details</h1>
 
-    {{ govukInput({ 
+      {# 2. Look for the specific error for this specific field #}
+      {{ govukInput({ 
         label: { text: "First name" }, 
-        id: "agent-con-fname", 
-        name: "agent-con-fname", 
-        value: fname,
-        errorMessage: errors.fname if errors.fname else null
+        id: "agent-contact-first-name", 
+        name: "agent-contact-first-name", 
+        value: data['agent-contact-first-name'],
+        errorMessage: errors.firstName if errors.firstName else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Last name" }, 
-        id: "agent-con-lname", 
-        name: "agent-con-lname", 
-        value: lname,
-        errorMessage: errors.lname if errors.lname else null
+        id: "agent-contact-last-name", 
+        name: "agent-contact-last-name", 
+        value: data['agent-contact-last-name'],
+        errorMessage: errors.lastName if errors.lastName else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Email address" }, 
-        id: "agent-con-email", 
-        name: "agent-con-email", 
+        id: "agent-contact-email", 
+        name: "agent-contact-email", 
         type: "email", 
-        value: email,
+        value: data['agent-contact-email'],
         errorMessage: errors.email if errors.email else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Phone number (optional)" }, 
-        id: "agent-con-phone", 
-        name: "agent-con-phone", 
+        id: "agent-contact-phone", 
+        name: "agent-contact-phone", 
         type: "tel", 
-        value: phone,
+        value: data['agent-contact-phone'],
         errorMessage: errors.phone if errors.phone else null
       }) }}
       

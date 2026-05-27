@@ -1,31 +1,28 @@
 {% extends "layouts/new/back-office.html" %}
 
-{% block pageTitle %}
-Remove agent contact?
-{% endblock %}
+{% block pageTitle %}Remove agent contact?{% endblock %}
 
 {% block beforeContent %}
-    {{ govukBackLink({ text: "Back", href: backUrl }) }}
+    {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/4-4-agent-check" }) }}
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if error %}
+    {% if errorConfirmRemove %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [
-          { text: "Select yes if you want to remove this agent contact", href: "#agentContactRemove" }
-        ]
+        errorList: [{ text: errorConfirmRemove, href: "#agent-contact-remove" }]
       }) }}
     {% endif %}
 
-    <form action="{{ actionUrl }}" method="post" novalidate>
+    <form action="/agent-contact-remove-answer?id={{ id }}" method="post" novalidate>
+      
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        idPrefix: "agentContactRemove",
-        name: "agentContactRemove",
+        idPrefix: "agent-contact-remove",
+        name: "agent-contact-remove",
         fieldset: {
           legend: { 
             text: "Are you sure you want to remove this agent contact?", 
@@ -33,10 +30,10 @@ Remove agent contact?
             classes: "govuk-fieldset__legend--l" 
           }
         },
-        errorMessage: { text: "Select yes if you want to remove this agent contact" } if error else null,
+        errorMessage: { text: errorConfirmRemove } if errorConfirmRemove else null,
         items: [
-          { value: "yes", text: "Yes" },
-          { value: "no", text: "No" }
+          { value: "Yes", text: "Yes" },
+          { value: "No", text: "No" }
         ]
       }) }}
       

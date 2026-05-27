@@ -8,7 +8,9 @@ import {
   validatePostcode, 
   validateDate, 
   validateDateTime, 
-  validateNumber
+  validateNumber,
+  validateEmail,
+  validateOptionalPhone
 } from './helpers.js';
 
 // Run initialization fixes

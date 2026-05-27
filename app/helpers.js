@@ -181,3 +181,41 @@ export function validateNumber(value, displayName, fieldName) {
   // 3. Success!
   return null;
 }
+
+
+// ================================================================================
+// 7. EMAIL VALIDATION
+// ================================================================================
+export function validateEmail(value, displayName, fieldName) {
+  if (!value || value.trim() === "") {
+    return { text: `Enter the ${displayName}`, href: `#${fieldName}` };
+  } 
+  
+  const emailRegex = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(value)) {
+    return { text: "Enter an email address in the correct format, like name@example.com", href: `#${fieldName}` };
+  }
+
+  return null;
+}
+
+
+// ================================================================================
+// 8. OPTIONAL PHONE VALIDATION
+// ================================================================================
+export function validateOptionalPhone(value, fieldName) {
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+  
+  if (value.length > 15) {
+    return { text: "Phone number must be 15 characters or less", href: `#${fieldName}` };
+  } 
+  
+  const cleanPhone = value.replace(/\s+/g, '');
+  if (!/^\d+$/.test(cleanPhone)) {
+    return { text: "Enter a valid phone number", href: `#${fieldName}` };
+  }
+
+  return null;
+}

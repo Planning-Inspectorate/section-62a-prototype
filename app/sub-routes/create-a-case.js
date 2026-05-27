@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import govukPrototypeKit from 'govuk-prototype-kit';
-import { addAuditLog, validAuthorities, validatePostcode } from '../helpers.js';
+import { addAuditLog, validAuthorities, validatePostcode, validateEmail, validateOptionalPhone } from '../helpers.js';
 
 const router = Router();
 
@@ -102,11 +102,141 @@ router.post('/agent-org-address-answer', function (req, res) {
       errorAgentOrgAddress: postcodeError 
     });
   }
-  res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
+  res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
 });
 
 
+// 4-4 - agent check contact details (ATL)
+
+  // --- (1) grab form (edit existing or Add) ---
+  router.get('/edit-agent-contact', function (req, res) {
+    const id = req.query.id;
+    const agentList = req.session.data['agent-contact-list'] || [];
+
+    if (id) {
+      const existingAgent = agentList.find(agent => agent.id === id);
+      if (existingAgent) {
+        req.session.data['agent-contact-first-name'] = existingAgent.firstName;
+        req.session.data['agent-contact-last-name'] = existingAgent.lastName;
+        req.session.data['agent-contact-email'] = existingAgent.email;
+        req.session.data['agent-contact-phone'] = existingAgent.phone;
+      }
+    } else {
+      req.session.data['agent-contact-first-name'] = "";
+      req.session.data['agent-contact-last-name'] = "";
+      req.session.data['agent-contact-email'] = "";
+      req.session.data['agent-contact-phone'] = "";
+    }
+
+    res.render('current-service/back-office/create-a-case/4-5-agent-contact', { id: id });
+  });
 
 
+  // --- (2) save form data ---
+  router.post('/agent-contact-answer', function (req, res) {
+    const id = req.query.id; 
+    const firstName = req.session.data['agent-contact-first-name'];
+    const lastName = req.session.data['agent-contact-last-name'];
+    const email = req.session.data['agent-contact-email'];
+    const phone = req.session.data['agent-contact-phone'];
+
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    // validate name fields
+    if (!firstName) {
+      errors.firstName = { text: "Enter the agent's first name" };
+      errorList.push({ text: "Enter the agent's first name", href: "#agent-contact-first-name" });
+    }
+    
+    if (!lastName) {
+      errors.lastName = { text: "Enter the agent's last name" };
+      errorList.push({ text: "Enter the agent's last name", href: "#agent-contact-last-name" });
+    }
+    
+    // validate email
+    const emailError = validateEmail(email, "agent's email address", "agent-contact-email");
+    if (emailError) {
+      errors.email = { text: emailError.text };
+      errorList.push(emailError);
+    }
+
+    // validate phone
+    const phoneError = validateOptionalPhone(phone, "agent-contact-phone");
+    if (phoneError) {
+      errors.phone = { text: phoneError.text };
+      errorList.push(phoneError);
+    }
+
+    // render errors if any
+    if (errorList.length > 0) {
+      return res.render('current-service/back-office/create-a-case/4-5-agent-contact', { 
+        errors: errors,
+        errorList: errorList, 
+        id: id 
+      });
+    }
+
+    // create new array or hydrate if already exists
+    if (!req.session.data['agent-contact-list']) {
+      req.session.data['agent-contact-list'] = [];
+    }
+
+    if (id) {
+      const index = req.session.data['agent-contact-list'].findIndex(a => a.id === id);
+      if (index > -1) {
+        req.session.data['agent-contact-list'][index] = { id: id, firstName, lastName, email, phone };
+      }
+    } else {
+      const newAgent = { id: 'agent-' + Date.now(), firstName, lastName, email, phone };
+      req.session.data['agent-contact-list'].push(newAgent);
+    }
+
+    req.session.data['agent-contact-first-name'] = "";
+    req.session.data['agent-contact-last-name'] = "";
+    req.session.data['agent-contact-email'] = "";
+    req.session.data['agent-contact-phone'] = "";
+
+    res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
+  });
+
+
+  // --- (3) confirm removal ---
+  router.get('/agent-contact-remove', function (req, res) {
+    // get ID from URL
+    const id = req.query.id;
+    
+    // pass ID directly to form URL to ensure the exact contact is removed
+    res.render('current-service/back-office/create-a-case/4-4-agent-remove', { 
+      id: id 
+    });
+  });
+
+  router.post('/agent-contact-remove-answer', function (req, res) {
+    const confirmRemove = req.session.data['agent-contact-remove'];
+    const id = req.query.id;
+
+    if (!confirmRemove) {
+      return res.render('current-service/back-office/create-a-case/4-4-agent-remove', {
+        id: id,
+        errorConfirmRemove: "Select yes if you want to remove this agent contact"
+      });
+    }
+
+    if (confirmRemove === "Yes") {
+      req.session.data['agent-contact-list'] = req.session.data['agent-contact-list'].filter(agent => agent.id !== id);
+    }
+
+    req.session.data['agent-contact-remove'] = "";
+    res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
+  });
+
+
+
+
+
+
+  
 
 export default router;
