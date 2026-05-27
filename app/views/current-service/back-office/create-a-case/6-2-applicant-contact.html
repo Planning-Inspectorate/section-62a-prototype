@@ -1,0 +1,93 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Add applicant contact details
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "javascript:history.back()" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/applicant-contact-answer" novalidate>
+      <h1 class="govuk-heading-l">Add applicant contact details</h1>
+
+      {{ govukInput({ 
+        label: { text: "First name" }, 
+        id: "applicant-contact-first-name", 
+        name: "applicant-contact-first-name", 
+        value: data['applicant-contact-first-name'],
+        errorMessage: errors.firstName if errors.firstName else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Last name" }, 
+        id: "applicant-contact-last-name", 
+        name: "applicant-contact-last-name", 
+        value: data['applicant-contact-last-name'],
+        errorMessage: errors.lastName if errors.lastName else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Email address" }, 
+        id: "applicant-contact-email", 
+        name: "applicant-contact-email", 
+        type: "email", 
+        value: data['applicant-contact-email'],
+        errorMessage: errors.email if errors.email else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Phone number (optional)" }, 
+        id: "applicant-contact-phone", 
+        name: "applicant-contact-phone", 
+        type: "tel", 
+        value: data['applicant-contact-phone'],
+        errorMessage: errors.phone if errors.phone else null
+      }) }}
+
+      {# --- DYNAMIC ORGANISATION RADIOS --- #}
+      {% set orgList = data['applicant-org-list'] or [] %}
+      
+      {% if orgList.length > 1 %}
+        <div class="govuk-form-group {% if errors.linkedOrg %}govuk-form-group--error{% endif %} govuk-!-margin-top-6">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Which organisation is this contact for?
+            </legend>
+            
+            {% if errors.linkedOrg %}
+              <p class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> {{ errors.linkedOrg.text }}
+              </p>
+            {% endif %}
+            
+            <div class="govuk-radios">
+              {% for org in orgList %}
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="linked-org-{{ loop.index }}" name="applicant-contact-linked-org" type="radio" value="{{ org.id }}" {% if data['applicant-contact-linked-org'] == org.id %}checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="linked-org-{{ loop.index }}">
+                    {{ org.orgName }}
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
+        </div>
+      {% endif %}
+      
+      {{ govukButton({ text: "Continue", classes: "govuk-!-margin-top-4" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

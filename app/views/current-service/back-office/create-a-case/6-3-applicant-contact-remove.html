@@ -1,9 +1,9 @@
 {% extends "layouts/new/back-office.html" %}
 
-{% block pageTitle %}Remove agent contact?{% endblock %}
+{% block pageTitle %}Remove applicant contact?{% endblock %}
 
 {% block beforeContent %}
-    {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/4-4-agent-check" }) }}
+    {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/6-1-applicant-contact-check" }) }}
 {% endblock %}
 
 {% block content %}
@@ -13,19 +13,18 @@
     {% if errorConfirmRemove %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorConfirmRemove, href: "#agent-contact-remove" }]
+        errorList: [{ text: errorConfirmRemove, href: "#applicant-contact-remove" }]
       }) }}
     {% endif %}
 
-    <form action="/agent-contact-remove-answer?" method="post" novalidate>
-      
+    <form action="/applicant-contact-remove-answer" method="post" novalidate>
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        idPrefix: "agent-contact-remove",
-        name: "agent-contact-remove",
+        idPrefix: "applicant-contact-remove",
+        name: "applicant-contact-remove",
         fieldset: {
           legend: { 
-            text: "Are you sure you want to remove this agent contact?", 
+            text: "Are you sure you want to remove this applicant contact?", 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
@@ -36,7 +35,6 @@
           { value: "No", text: "No" }
         ]
       }) }}
-      
       {{ govukButton({ text: "Continue" }) }}
     </form>
   </div>

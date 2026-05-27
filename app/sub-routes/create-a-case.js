@@ -113,6 +113,9 @@ router.post('/agent-org-address-answer', function (req, res) {
     const agentList = req.session.data['agent-contact-list'] || [];
 
     if (id) {
+      // store id to session object
+      req.session.data['edit-agent-id'] = id;
+
       const existingAgent = agentList.find(agent => agent.id === id);
       if (existingAgent) {
         req.session.data['agent-contact-first-name'] = existingAgent.firstName;
@@ -121,17 +124,23 @@ router.post('/agent-org-address-answer', function (req, res) {
         req.session.data['agent-contact-phone'] = existingAgent.phone;
       }
     } else {
+      // wipe id if adding new
+      req.session.data['edit-agent-id'] = "";
       req.session.data['agent-contact-first-name'] = "";
       req.session.data['agent-contact-last-name'] = "";
       req.session.data['agent-contact-email'] = "";
       req.session.data['agent-contact-phone'] = "";
     }
-    res.render('current-service/back-office/create-a-case/4-5-agent-contact', { id: id });
+    
+    // pass whole session data to repopulate form
+    res.render('current-service/back-office/create-a-case/4-5-agent-contact', { 
+    data: req.session.data 
+    });
   });
 
   // --- (2) save form data ---
   router.post('/agent-contact-answer', function (req, res) {
-    const id = req.query.id; 
+    const editId = req.session.data['edit-agent-id']; 
     const firstName = req.session.data['agent-contact-first-name'];
     const lastName = req.session.data['agent-contact-last-name'];
     const email = req.session.data['agent-contact-email'];
@@ -170,8 +179,7 @@ router.post('/agent-org-address-answer', function (req, res) {
     if (errorList.length > 0) {
       return res.render('current-service/back-office/create-a-case/4-5-agent-contact', { 
         errors: errors,
-        errorList: errorList, 
-        id: id 
+        errorList: errorList
       });
     }
 
@@ -180,16 +188,19 @@ router.post('/agent-org-address-answer', function (req, res) {
       req.session.data['agent-contact-list'] = [];
     }
 
-    if (id) {
-      const index = req.session.data['agent-contact-list'].findIndex(a => a.id === id);
+    // check edit id to decide if update or push
+    if (editId) {
+      const index = req.session.data['agent-contact-list'].findIndex(a => a.id === editId);
       if (index > -1) {
-        req.session.data['agent-contact-list'][index] = { id: id, firstName, lastName, email, phone };
+        req.session.data['agent-contact-list'][index] = { id: editId, firstName, lastName, email, phone };
       }
     } else {
       const newAgent = { id: 'agent-' + Date.now(), firstName, lastName, email, phone };
       req.session.data['agent-contact-list'].push(newAgent);
     }
 
+    // wipe id and form fields clean
+    req.session.data['edit-agent-id'] = "";
     req.session.data['agent-contact-first-name'] = "";
     req.session.data['agent-contact-last-name'] = "";
     req.session.data['agent-contact-email'] = "";
@@ -200,30 +211,25 @@ router.post('/agent-org-address-answer', function (req, res) {
 
   // --- (3) confirm removal ---
   router.get('/agent-contact-remove', function (req, res) {
-    // get ID from URL
-    const id = req.query.id;
-    
-    // pass ID directly to form URL to ensure the exact contact is removed
-    res.render('current-service/back-office/create-a-case/4-4-agent-remove', { 
-      id: id 
-    });
+    req.session.data['remove-agent-id'] = req.query.id;
+    res.render('current-service/back-office/create-a-case/4-4-agent-remove');
   });
   
   router.post('/agent-contact-remove-answer', function (req, res) {
     const confirmRemove = req.session.data['agent-contact-remove'];
-    const id = req.query.id;
+    const id = req.session.data['remove-agent-id'];
 
     if (!confirmRemove) {
       return res.render('current-service/back-office/create-a-case/4-4-agent-remove', {
-        id: id,
         errorConfirmRemove: "Select yes if you want to remove this agent contact"
       });
     }
-
     if (confirmRemove === "Yes") {
       req.session.data['agent-contact-list'] = req.session.data['agent-contact-list'].filter(agent => agent.id !== id);
     }
 
+    // wipe id and radio selection clean
+    req.session.data['remove-agent-id'] = "";
     req.session.data['agent-contact-remove'] = "";
     res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
   });
@@ -257,8 +263,9 @@ router.post('/agent-org-address-answer', function (req, res) {
       req.session.data['applicant-org-address-county'] = "";
       req.session.data['applicant-org-address-postcode'] = "";
     }
-
-    res.redirect(`/current-service/back-office/create-a-case/5-2-applicant-org-name${id ? '?id=' + id : ''}`);
+      res.render('current-service/back-office/create-a-case/5-2-applicant-org-name', { 
+        data: req.session.data
+      });
   });
 
   // --- (2) save applicant org name (page 1) ---
@@ -283,19 +290,17 @@ router.post('/agent-org-address-answer', function (req, res) {
 
   // --- (3) save address & finalize array (page 2) ---
   router.post('/applicant-org-address-answer', function (req, res) {
-    const id = req.query.id; 
+    // grab the ID securely from the session's temp object
+    const editId = req.session.data['temp-applicant-org']?.id; 
     const postcode = req.session.data['applicant-org-address-postcode'];
 
-    // validate optional postcode
     const postcodeError = validatePostcode(postcode);
     if (postcodeError) {
       return res.render('current-service/back-office/create-a-case/5-3-applicant-org-address', { 
-        errorApplicantOrgAddress: postcodeError,
-        id: id
+        errorApplicantOrgAddress: postcodeError
       });
     }
 
-    // hydrate address into temp object
     if (!req.session.data['temp-applicant-org']) req.session.data['temp-applicant-org'] = {};
     
     req.session.data['temp-applicant-org'].address = {
@@ -306,18 +311,15 @@ router.post('/agent-org-address-answer', function (req, res) {
       postcode: postcode
     };
 
-    // create new array or hydrate if already exists
     if (!req.session.data['applicant-org-list']) {
       req.session.data['applicant-org-list'] = [];
     }
 
-    if (id) {
-      const index = req.session.data['applicant-org-list'].findIndex(a => a.id === id);
+    // check the editId to decide if we update or push
+    if (editId) {
+      const index = req.session.data['applicant-org-list'].findIndex(a => a.id === editId);
       if (index > -1) {
-        req.session.data['applicant-org-list'][index] = { 
-          id: id, 
-          ...req.session.data['temp-applicant-org'] 
-        };
+        req.session.data['applicant-org-list'][index] = { ...req.session.data['temp-applicant-org'] };
       }
     } else {
       const newOrg = { 
@@ -326,45 +328,216 @@ router.post('/agent-org-address-answer', function (req, res) {
       };
       req.session.data['applicant-org-list'].push(newOrg);
     }
-
-    // wipe temp object
     req.session.data['temp-applicant-org'] = {};
-
     res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
   });
 
   // --- (4) confirm removal ---
   router.get('/applicant-org-remove', function (req, res) {
-    // get ID from URL
-    const id = req.query.id;
-    
-    // pass ID directly to form URL to ensure the exact org is removed
-    res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove', { 
-      id: id 
+      // store id to session object
+      req.session.data['remove-org-id'] = req.query.id;
+      res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove');
     });
-  });
 
   router.post('/applicant-org-remove-answer', function (req, res) {
     const confirmRemove = req.session.data['applicant-org-remove'];
-    const id = req.query.id;
+    const id = req.session.data['remove-org-id'];
 
     if (!confirmRemove) {
       return res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove', {
-        id: id,
         errorConfirmRemove: "Select yes if you want to remove this applicant organisation"
       });
     }
-
     if (confirmRemove === "Yes") {
+      // remove the parent organisation
       req.session.data['applicant-org-list'] = req.session.data['applicant-org-list'].filter(org => org.id !== id);
+      
+      // remove any child contacts linked to this organisation id
+      if (req.session.data['applicant-contact-list']) {
+        req.session.data['applicant-contact-list'] = req.session.data['applicant-contact-list'].filter(contact => contact.linkedOrg !== id);
+      }
     }
 
+    req.session.data['remove-org-id'] = "";
     req.session.data['applicant-org-remove'] = "";
     res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
   });
 
 
+// 6-1 - applicant contact check (ATL)
+  // --- (1) grab form (edit existing or Add) ---
+  router.get('/edit-applicant-contact', function (req, res) {
+    const id = req.query.id;
+    const contactList = req.session.data['applicant-contact-list'] || [];
 
+    if (id) {
+      // STORE THE ID IN THE SESSION WAREHOUSE!
+      req.session.data['edit-contact-id'] = id;
+
+      const existingContact = contactList.find(c => c.id === id);
+      if (existingContact) {
+        req.session.data['applicant-contact-first-name'] = existingContact.firstName;
+        req.session.data['applicant-contact-last-name'] = existingContact.lastName;
+        req.session.data['applicant-contact-email'] = existingContact.email;
+        req.session.data['applicant-contact-phone'] = existingContact.phone;
+        req.session.data['applicant-contact-linked-org'] = existingContact.linkedOrg;
+      }
+    } else {
+      // WIPE THE ID IF ADDING NEW!
+      req.session.data['edit-contact-id'] = "";
+
+      req.session.data['applicant-contact-first-name'] = "";
+      req.session.data['applicant-contact-last-name'] = "";
+      req.session.data['applicant-contact-email'] = "";
+      req.session.data['applicant-contact-phone'] = "";
+      req.session.data['applicant-contact-linked-org'] = "";
+    }
+      res.render('current-service/back-office/create-a-case/6-2-applicant-contact', { 
+        data: req.session.data 
+      });
+  });
+
+  // validate contact list before proceeding to next section
+  router.post('/applicant-contact-check-continue', function (req, res) {
+    const orgList = req.session.data['applicant-org-list'] || [];
+    const contactList = req.session.data['applicant-contact-list'] || [];
+    const errorList = [];
+
+    // cross ref, loop through every organisation
+    orgList.forEach(org => {
+      // check if at least one contact is linked to the org
+      const hasContact = contactList.some(contact => contact.linkedOrg === org.id);
+      
+      // throw error if no contacts linked to org
+      if (!hasContact) {
+        errorList.push({ 
+          text: `You must add a contact for ${org.orgName}`, 
+          href: "#add-another-contact" // This links to the 'Add another' button
+        });
+      }
+    });
+
+    // If any organisation is missing a contact, reload the page and show the errors
+    if (errorList.length > 0) {
+      return res.render('current-service/back-office/create-a-case/6-1-applicant-contact-check', {
+        errorList: errorList
+      });
+    }
+
+    // If all clear, safely proceed to the next section!
+    res.redirect('/current-service/back-office/create-a-case/7-site-address');
+  });
+
+  // --- (2) save form data ---
+  router.post('/applicant-contact-answer', function (req, res) {
+    // grad edit ID securely from session
+    const editId = req.session.data['edit-contact-id']; 
+    
+    const firstName = req.session.data['applicant-contact-first-name'];
+    const lastName = req.session.data['applicant-contact-last-name'];
+    const email = req.session.data['applicant-contact-email'];
+    const phone = req.session.data['applicant-contact-phone'];
+    let linkedOrg = req.session.data['applicant-contact-linked-org'];
+    
+    const orgList = req.session.data['applicant-org-list'] || [];
+
+    const errors = {};
+    const errorList = [];
+
+    // validate fields
+    if (!firstName) {
+      errors.firstName = { text: "Enter the applicant contact's first name" };
+      errorList.push({ text: "Enter the applicant contact's first name", href: "#applicant-contact-first-name" });
+    }
+    if (!lastName) {
+      errors.lastName = { text: "Enter the applicant contact's last name" };
+      errorList.push({ text: "Enter the applicant contact's last name", href: "#applicant-contact-last-name" });
+    }
+    
+    const emailError = validateEmail(email, "applicant contact's email address", "applicant-contact-email");
+    if (emailError) {
+      errors.email = { text: emailError.text };
+      errorList.push(emailError);
+    }
+
+    const phoneError = validateOptionalPhone(phone, "applicant-contact-phone");
+    if (phoneError) {
+      errors.phone = { text: phoneError.text };
+      errorList.push(phoneError);
+    }
+
+    if (orgList.length > 1) {
+      if (!linkedOrg) {
+        errors.linkedOrg = { text: "Select which organisation this contact is for" };
+        errorList.push({ text: "Select which organisation this contact is for", href: "#linked-org-1" });
+      }
+    } else if (orgList.length === 1) {
+      linkedOrg = orgList[0].id;
+    }
+
+    if (errorList.length > 0) {
+      return res.render('current-service/back-office/create-a-case/6-2-applicant-contact', { 
+        errors: errors,
+        errorList: errorList
+      });
+    }
+
+    if (!req.session.data['applicant-contact-list']) {
+      req.session.data['applicant-contact-list'] = [];
+    }
+
+    // check edit ID to decide if update or push
+    if (editId) {
+      const index = req.session.data['applicant-contact-list'].findIndex(c => c.id === editId);
+      if (index > -1) {
+        req.session.data['applicant-contact-list'][index] = { 
+          id: editId, firstName, lastName, email, phone, linkedOrg 
+        };
+      }
+    } else {
+      const newContact = { 
+        id: 'app-con-' + Date.now(), firstName, lastName, email, phone, linkedOrg 
+      };
+      req.session.data['applicant-contact-list'].push(newContact);
+    }
+
+    // wipe temp edit ID and form fields
+    req.session.data['edit-contact-id'] = "";
+    req.session.data['applicant-contact-first-name'] = "";
+    req.session.data['applicant-contact-last-name'] = "";
+    req.session.data['applicant-contact-email'] = "";
+    req.session.data['applicant-contact-phone'] = "";
+    req.session.data['applicant-contact-linked-org'] = "";
+
+    res.redirect('/current-service/back-office/create-a-case/6-1-applicant-contact-check');
+  });
+
+  // --- (3) confirm removal ---
+  router.get('/applicant-contact-remove', function (req, res) {
+    // store id to session object
+    req.session.data['remove-contact-id'] = req.query.id;
+    res.render('current-service/back-office/create-a-case/6-3-applicant-contact-remove');
+  });
+
+  router.post('/applicant-contact-remove-answer', function (req, res) {
+    const confirmRemove = req.session.data['applicant-contact-remove'];
+    const id = req.session.data['remove-contact-id'];
+
+    if (!confirmRemove) {
+      return res.render('current-service/back-office/create-a-case/6-3-applicant-contact-remove', {
+        errorConfirmRemove: "Select yes if you want to remove this applicant contact"
+      });
+    }
+    if (confirmRemove === "Yes") {
+      // Filter the array to instantly delete the person who matches the ID
+      req.session.data['applicant-contact-list'] = req.session.data['applicant-contact-list'].filter(c => c.id !== id);
+    }
+
+    // wipe id and radio selection clean
+    req.session.data['remove-contact-id'] = "";
+    req.session.data['applicant-contact-remove'] = "";
+    res.redirect('/current-service/back-office/create-a-case/6-1-applicant-contact-check');
+  });
 
 
 
