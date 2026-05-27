@@ -107,8 +107,7 @@ router.post('/agent-org-address-answer', function (req, res) {
 
 
 // 4-4 - agent check contact details (ATL)
-
-  // --- (1) grab form (edit existing or Add) ---
+  // --- (1) grab form (edit existing or add) ---
   router.get('/edit-agent-contact', function (req, res) {
     const id = req.query.id;
     const agentList = req.session.data['agent-contact-list'] || [];
@@ -127,10 +126,8 @@ router.post('/agent-org-address-answer', function (req, res) {
       req.session.data['agent-contact-email'] = "";
       req.session.data['agent-contact-phone'] = "";
     }
-
     res.render('current-service/back-office/create-a-case/4-5-agent-contact', { id: id });
   });
-
 
   // --- (2) save form data ---
   router.post('/agent-contact-answer', function (req, res) {
@@ -149,7 +146,7 @@ router.post('/agent-org-address-answer', function (req, res) {
       errors.firstName = { text: "Enter the agent's first name" };
       errorList.push({ text: "Enter the agent's first name", href: "#agent-contact-first-name" });
     }
-    
+
     if (!lastName) {
       errors.lastName = { text: "Enter the agent's last name" };
       errorList.push({ text: "Enter the agent's last name", href: "#agent-contact-last-name" });
@@ -201,7 +198,6 @@ router.post('/agent-org-address-answer', function (req, res) {
     res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
   });
 
-
   // --- (3) confirm removal ---
   router.get('/agent-contact-remove', function (req, res) {
     // get ID from URL
@@ -212,7 +208,7 @@ router.post('/agent-org-address-answer', function (req, res) {
       id: id 
     });
   });
-
+  
   router.post('/agent-contact-remove-answer', function (req, res) {
     const confirmRemove = req.session.data['agent-contact-remove'];
     const id = req.query.id;
@@ -231,6 +227,142 @@ router.post('/agent-org-address-answer', function (req, res) {
     req.session.data['agent-contact-remove'] = "";
     res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
   });
+
+
+// 5-1 - applicant check organisation details (ATL)
+  // --- (1) grab form (edit existing or add) ---
+  router.get('/edit-applicant-org', function (req, res) {
+    const id = req.query.id;
+    const orgList = req.session.data['applicant-org-list'] || [];
+
+    if (id) {
+      const existingOrg = orgList.find(org => org.id === id);
+      if (existingOrg) {
+        req.session.data['temp-applicant-org'] = { ...existingOrg };
+        
+        req.session.data['applicant-org-name'] = existingOrg.orgName;
+        req.session.data['applicant-org-address-line-1'] = existingOrg.address.line1;
+        req.session.data['applicant-org-address-line-2'] = existingOrg.address.line2;
+        req.session.data['applicant-org-address-town'] = existingOrg.address.town;
+        req.session.data['applicant-org-address-county'] = existingOrg.address.county;
+        req.session.data['applicant-org-address-postcode'] = existingOrg.address.postcode;
+      }
+    } else {
+      req.session.data['temp-applicant-org'] = {};
+      
+      req.session.data['applicant-org-name'] = "";
+      req.session.data['applicant-org-address-line-1'] = "";
+      req.session.data['applicant-org-address-line-2'] = "";
+      req.session.data['applicant-org-address-town'] = "";
+      req.session.data['applicant-org-address-county'] = "";
+      req.session.data['applicant-org-address-postcode'] = "";
+    }
+
+    res.redirect(`/current-service/back-office/create-a-case/5-2-applicant-org-name${id ? '?id=' + id : ''}`);
+  });
+
+  // --- (2) save applicant org name (page 1) ---
+  router.post('/applicant-org-name-answer', function (req, res) {
+    const id = req.query.id; 
+    const orgName = req.session.data['applicant-org-name'];
+
+    // validate org name
+    if (!orgName) {
+      return res.render('current-service/back-office/create-a-case/5-2-applicant-org-name', { 
+        errorApplicantOrgName: "Enter the applicant organisation name",
+        id: id
+      });
+    }
+
+    // save to temp object
+    if (!req.session.data['temp-applicant-org']) req.session.data['temp-applicant-org'] = {};
+    req.session.data['temp-applicant-org'].orgName = orgName;
+
+    res.redirect(`/current-service/back-office/create-a-case/5-3-applicant-org-address${id ? '?id=' + id : ''}`);
+  });
+
+  // --- (3) save address & finalize array (page 2) ---
+  router.post('/applicant-org-address-answer', function (req, res) {
+    const id = req.query.id; 
+    const postcode = req.session.data['applicant-org-address-postcode'];
+
+    // validate optional postcode
+    const postcodeError = validatePostcode(postcode);
+    if (postcodeError) {
+      return res.render('current-service/back-office/create-a-case/5-3-applicant-org-address', { 
+        errorApplicantOrgAddress: postcodeError,
+        id: id
+      });
+    }
+
+    // hydrate address into temp object
+    if (!req.session.data['temp-applicant-org']) req.session.data['temp-applicant-org'] = {};
+    
+    req.session.data['temp-applicant-org'].address = {
+      line1: req.session.data['applicant-org-address-line-1'],
+      line2: req.session.data['applicant-org-address-line-2'],
+      town: req.session.data['applicant-org-address-town'],
+      county: req.session.data['applicant-org-address-county'],
+      postcode: postcode
+    };
+
+    // create new array or hydrate if already exists
+    if (!req.session.data['applicant-org-list']) {
+      req.session.data['applicant-org-list'] = [];
+    }
+
+    if (id) {
+      const index = req.session.data['applicant-org-list'].findIndex(a => a.id === id);
+      if (index > -1) {
+        req.session.data['applicant-org-list'][index] = { 
+          id: id, 
+          ...req.session.data['temp-applicant-org'] 
+        };
+      }
+    } else {
+      const newOrg = { 
+        id: 'org-' + Date.now(), 
+        ...req.session.data['temp-applicant-org'] 
+      };
+      req.session.data['applicant-org-list'].push(newOrg);
+    }
+
+    // wipe temp object
+    req.session.data['temp-applicant-org'] = {};
+
+    res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
+  });
+
+  // --- (4) confirm removal ---
+  router.get('/applicant-org-remove', function (req, res) {
+    // get ID from URL
+    const id = req.query.id;
+    
+    // pass ID directly to form URL to ensure the exact org is removed
+    res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove', { 
+      id: id 
+    });
+  });
+
+  router.post('/applicant-org-remove-answer', function (req, res) {
+    const confirmRemove = req.session.data['applicant-org-remove'];
+    const id = req.query.id;
+
+    if (!confirmRemove) {
+      return res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove', {
+        id: id,
+        errorConfirmRemove: "Select yes if you want to remove this applicant organisation"
+      });
+    }
+
+    if (confirmRemove === "Yes") {
+      req.session.data['applicant-org-list'] = req.session.data['applicant-org-list'].filter(org => org.id !== id);
+    }
+
+    req.session.data['applicant-org-remove'] = "";
+    res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
+  });
+
 
 
 

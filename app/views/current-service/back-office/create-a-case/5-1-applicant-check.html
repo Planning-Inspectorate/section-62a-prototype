@@ -1,0 +1,88 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Check applicant organisation details
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/4-4-agent-check" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Check applicant organisation details</h1>
+
+    {% set applicantOrgList = data['applicant-org-list'] or [] %}
+
+    {# --- SUMMARY LIST --- #}
+    {% if applicantOrgList.length > 0 %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {% for item in applicantOrgList %}
+          <div class="govuk-summary-list__row">
+            
+            {# Key Column (Contact 1) #}
+            <dt class="govuk-summary-list__key">
+              Contact {{ loop.index }}
+            </dt>
+            
+            {# Value Column (Name, Address) #}
+            <dd class="govuk-summary-list__value">
+              <div>{{ item.orgName }}</div>
+              {% if item.address.line1 %}<div>{{ item.address.line1 }}</div>{% endif %}
+              {% if item.address.line2 %}<div>{{ item.address.line2 }}</div>{% endif %}
+              {% if item.address.town %}<div>{{ item.address.town }}</div>{% endif %}
+              {% if item.address.county %}<div>{{ item.address.county }}</div>{% endif %}
+              {% if item.address.postcode %}<div>{{ item.address.postcode }}</div>{% endif %}
+            </dd>
+            
+            {# Actions Column (Change | Remove) #}
+            <dd class="govuk-summary-list__actions">
+              <ul class="govuk-summary-list__actions-list">
+                <li class="govuk-summary-list__actions-list-item">
+                  <a class="govuk-link" href="/edit-applicant-org?id={{ item.id }}">
+                    Change<span class="govuk-visually-hidden"> applicant organisation {{ loop.index }}</span>
+                  </a>
+                </li>
+                
+                {% if applicantOrgList.length > 1 %}
+                  <li class="govuk-summary-list__actions-list-item">
+                    <a class="govuk-link" href="/applicant-org-remove?id={{ item.id }}">
+                      Remove<span class="govuk-visually-hidden"> applicant organisation {{ loop.index }}</span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </dd>
+
+          </div>
+        {% endfor %}
+      </dl>
+    {% else %}
+      <p class="govuk-body">Add one or more applicant organisations. No applicant organisation details have been added yet.</p>
+    {% endif %}
+
+    {# --- ADD ANOTHER & CONTINUE BUTTONS --- #}
+    {% if applicantOrgList.length > 0 %}
+      <form action="/current-service/back-office/create-a-case/5-1-applicant-check" method="get">
+        
+        <p class="govuk-body">
+          <a href="/edit-applicant-org" class="govuk-link govuk-!-font-size-19">Add another</a>
+        </p>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </form>
+      
+    {% else %}
+      <form action="/edit-applicant-org" method="get">
+        {{ govukButton({
+          text: "Add details"
+        }) }}
+      </form>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

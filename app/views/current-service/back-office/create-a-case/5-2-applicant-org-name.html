@@ -1,0 +1,54 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorApplicantOrgName %}Error: {% endif %}What is the name of the applicant organisation?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorApplicantOrgName %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorApplicantOrgName, href: "#applicant-org-name" }]
+      }) }}
+
+    {% endif %}
+
+    <form class="form" action="/applicant-org-name-answer{% if id %}?id={{ id }}{% endif %}" method="post" novalidate>
+
+    {{ govukInput({
+    label: {
+        text: "What is the name of the applicant organisation?",
+        classes: "govuk-label--l",
+        isPageHeading: true
+        },
+        id: "applicant-org-name",
+        name: "applicant-org-name",
+        value: data['applicant-org-name'],
+
+        errorMessage: {
+        text: "Enter the applicant organisation name"
+        } 
+        if errorApplicantOrgName else null
+    }) }}
+    
+            {{ govukButton({
+            text: "Continue"
+            }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
