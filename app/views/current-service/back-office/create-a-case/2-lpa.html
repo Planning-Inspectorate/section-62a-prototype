@@ -12,7 +12,6 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -26,25 +25,30 @@
       {% endif %}
 
       <form class="form" action="/lpa-answer" method="post" novalidate>
-
-        <div class="govuk-form-group {% if errorLpa %}govuk-form-group--error{% endif %}">
-          
-          <h1 class="govuk-label-wrapper">
-            <label class="govuk-label govuk-label--l" for="lpa">
-              Select the local planning authority for this application
-            </label>
-          </h1>
-
-          {% if errorLpa %}
-            <p id="lpa-error" class="govuk-error-message">
-              <span class="govuk-visually-hidden">Error:</span> {{ errorLpa }}
-            </p>
-          {% endif %}
-
-          {# --- AUTOCOMPLETE CONTAINER --- #}
-          <div id="lpa-container"></div>
-
-        </div>
+        
+        {{ govukSelect({
+          id: "lpa",
+          name: "lpa",
+          label: {
+            text: "Select the local planning authority for this application",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorLpa } if errorLpa else null,
+          items: [
+            { value: "", text: "Select an authority", selected: true },
+            { value: "Bristol City Council", text: "Bristol City Council", selected: data['lpa'] == 'Bristol City Council' },
+            { value: "Camden London Borough Council", text: "Camden London Borough Council", selected: data['lpa'] == 'Camden London Borough Council' },
+            { value: "Cornwall Council", text: "Cornwall Council", selected: data['lpa'] == 'Cornwall Council' },
+            { value: "Manchester City Council", text: "Manchester City Council", selected: data['lpa'] == 'Manchester City Council' },
+            { value: "Nottingham City Council", text: "Nottingham City Council", selected: data['lpa'] == 'Nottingham City Council' },
+            { value: "Sheffield City Council", text: "Sheffield City Council", selected: data['lpa'] == 'Sheffield City Council' },
+            { value: "Southwark Council", text: "Southwark Council", selected: data['lpa'] == 'Southwark Council' },
+            { value: "Wandsworth Borough Council", text: "Wandsworth Borough Council", selected: data['lpa'] == 'Wandsworth Borough Council' },
+            { value: "Westminster City Council", text: "Westminster City Council", selected: data['lpa'] == 'Westminster City Council' },
+            { value: "York City Council", text: "York City Council", selected: data['lpa'] == 'York City Council' }
+          ]
+        }) }}
 
         {{ govukButton({ text: "Continue" }) }}
 
@@ -52,35 +56,23 @@
 
     </div>
   </div>
-
 {% endblock %}
 
 {% block pageScripts %}
 <link rel="stylesheet" href="/public/css/accessible-autocomplete.min.css">
 <script src="/public/javascripts/accessible-autocomplete.min.js"></script>
 <script>
-  const authorities = [
-    "Bristol City Council",
-    "Camden London Borough Council",
-    "Cornwall Council",
-    "Manchester City Council",
-    "Nottingham City Council",
-    "Sheffield City Council",
-    "Southwark Council",
-    "Wandsworth Borough Council",
-    "Westminster City Council",
-    "York City Council"
-  ];
-
-  accessibleAutocomplete({
-    element: document.querySelector('#lpa-container'),
-    id: 'lpa', 
-    name: 'lpa',
-    source: authorities,
-    defaultValue: "{{ lpa or data['lpa'] | default('') }}",
-    showAllValues: false,
-    confirmOnBlur: false, 
-    autoselect: true
-  });
+  // script finds #lpa dropdown and visually upgrades it into a searchable text box (progressive enhancement pattern)
+  const selectElement = document.querySelector('#lpa');
+  
+  if (selectElement) {
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: selectElement,
+      showAllValues: false,
+      confirmOnBlur: false, 
+      autoselect: true,
+      defaultValue: "" // let the underlying <select> control the default value
+    });
+  }
 </script>
 {% endblock %}

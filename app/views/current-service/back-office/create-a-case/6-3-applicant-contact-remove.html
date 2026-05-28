@@ -1,6 +1,8 @@
 {% extends "layouts/new/back-office.html" %}
 
-{% block pageTitle %}Remove applicant contact?{% endblock %}
+{% block pageTitle %}
+  {% if errorConfirmRemove %}Error: {% endif %}Remove applicant contact?
+{% endblock %}
 
 {% block beforeContent %}
     {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/6-1-applicant-contact-check" }) }}

@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-Check applicant contact details
+  {% if errorList and errorList.length > 0 %}Error: {% endif %}Check applicant contact details
 {% endblock %}
 
 {% block beforeContent %}

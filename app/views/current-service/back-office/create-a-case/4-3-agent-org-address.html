@@ -6,13 +6,12 @@
 
 {% block beforeContent %}
   {{ govukBackLink({
-  text: "Back",
-  href: "javascript:window.history.back()"
-}) }}
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -22,7 +21,7 @@
           errorList: [
             {
               text: errorAgentOrgAddress,
-              href: "#agent-org-address-line-1"
+              href: "#agent-org-address-postcode" 
             }
           ]
         }) }}
@@ -30,69 +29,68 @@
 
       <form class="form" action="/agent-org-address-answer" method="post" novalidate>
 
-{% call govukFieldset({
-  legend: {
-    text: "What is the address of the agent organisation?",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: true
-    }
+        {% call govukFieldset({
+          legend: {
+            text: "What is the address of the agent organisation?",
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+        }) %}
 
-  }) %}
+          {{ govukInput({
+            label: {
+              text: "Address line 1 (optional)"
+            },
+            id: "agent-org-address-line-1",
+            name: "agent-org-address-line-1",
+            value: data['agent-org-address-line-1'],
+            autocomplete: "address-line1"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Address line 1 (optional)"
-    },
-    id: "agent-org-address-line-1",
-    name: "agent-org-address-line-1",
-    value: data['agent-org-address-line-1'],
-    autocomplete: "address-line1"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Address line 2 (optional)"
+            },
+            id: "agent-org-address-line-2",
+            name: "agent-org-address-line-2",
+            value: data['agent-org-address-line-2'],
+            autocomplete: "address-line2"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Address line 2 (optional)"
-    },
-    id: "agent-org-address-line-2",
-    name: "agent-org-address-line-2",
-    value: data['agent-org-address-line-2'],
-    autocomplete: "address-line2"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Town or city (optional)"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "agent-org-address-town",
+            name: "agent-org-address-town",
+            value: data['agent-org-address-town'],
+            autocomplete: "address-level2"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Town or city (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "agent-org-address-town",
-    name: "agent-org-address-town",
-    value: data['agent-org-address-town'],
-    autocomplete: "address-level2"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "County (optional)"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "agent-org-address-county",
+            name: "agent-org-address-county",
+            value: data['agent-org-address-county']
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "County (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "agent-org-address-county",
-    name: "agent-org-address-county",
-    value: data['agent-org-address-county']
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Postcode (optional)"
+            },
+            classes: "govuk-input--width-10",
+            id: "agent-org-address-postcode",
+            name: "agent-org-address-postcode",
+            value: data['agent-org-address-postcode'],
+            autocomplete: "postal-code",
+            errorMessage: { text: errorAgentOrgAddress } if errorAgentOrgAddress else null
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Postcode (optional)"
-    },
-    classes: "govuk-input--width-10",
-    id: "agent-org-address-postcode",
-    name: "agent-org-address-postcode",
-    value: data['agent-org-address-postcode'],
-    autocomplete: "postal-code",
-    errorMessage: { text: errorAgentOrgAddress } if errorAgentOrgAddress else null
-  }) }}
-
-{% endcall %}
+        {% endcall %}
 
         {{ govukButton({
           text: "Continue"
@@ -102,5 +100,4 @@
 
     </div>
   </div>
-
 {% endblock %}

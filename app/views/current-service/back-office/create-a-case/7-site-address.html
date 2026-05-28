@@ -6,13 +6,12 @@
 
 {% block beforeContent %}
   {{ govukBackLink({
-  text: "Back",
-  href: "javascript:window.history.back()"
-}) }}
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -22,77 +21,77 @@
           errorList: [
             {
               text: errorSiteAddress,
-              href: "#site-address-line-1"
+              {# FIX: Point this directly to the postcode input! #}
+              href: "#site-address-postcode" 
             }
           ]
         }) }}
       {% endif %}
 
-    <form class="form" action="/site-address-answer" method="post" novalidate>
+      <form class="form" action="/site-address-answer" method="post" novalidate>
 
-{% call govukFieldset({
-  legend: {
-    text: "What is the site address?",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: true
-    }
+        {% call govukFieldset({
+          legend: {
+            text: "What is the site address?",
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+        }) %}
 
-  }) %}
+          {{ govukInput({
+            label: {
+              text: "Address line 1 (optional)"
+            },
+            id: "site-address-line-1",
+            name: "site-address-line-1",
+            value: data['site-address-line-1'],
+            autocomplete: "address-line1"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Address line 1 (optional)"
-    },
-    id: "site-address-line-1",
-    name: "site-address-line-1",
-    value: data['site-address-line-1'],
-    autocomplete: "address-line1"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Address line 2 (optional)"
+            },
+            id: "site-address-line-2",
+            name: "site-address-line-2",
+            value: data['site-address-line-2'],
+            autocomplete: "address-line2"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Address line 2 (optional)"
-    },
-    id: "site-address-line-2",
-    name: "site-address-line-2",
-    value: data['site-address-line-2'],
-    autocomplete: "address-line2"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Town or city (optional)"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "site-address-town",
+            name: "site-address-town",
+            value: data['site-address-town'],
+            autocomplete: "address-level2"
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Town or city (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "site-address-town",
-    name: "site-address-town",
-    value: data['site-address-town'],
-    autocomplete: "address-level2"
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "County (optional)"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "site-address-county",
+            name: "site-address-county",
+            value: data['site-address-county']
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "County (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "site-address-county",
-    name: "site-address-county",
-    value: data['site-address-county']
-  }) }}
+          {{ govukInput({
+            label: {
+              text: "Postcode (optional)"
+            },
+            classes: "govuk-input--width-10",
+            id: "site-address-postcode",
+            name: "site-address-postcode",
+            value: data['site-address-postcode'],
+            autocomplete: "postal-code",
+            errorMessage: { text: errorSiteAddress } if errorSiteAddress else null
+          }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Postcode (optional)"
-    },
-    classes: "govuk-input--width-10",
-    id: "site-address-postcode",
-    name: "site-address-postcode",
-    value: data['site-address-postcode'],
-    autocomplete: "postal-code",
-    errorMessage: { text: errorSiteAddress } if errorSiteAddress else null
-  }) }}
-
-{% endcall %}
+        {% endcall %}
 
         {{ govukButton({
           text: "Continue"
@@ -102,5 +101,4 @@
 
     </div>
   </div>
-
 {% endblock %}

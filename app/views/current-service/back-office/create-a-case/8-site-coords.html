@@ -25,6 +25,7 @@
       <form class="form" action="/site-coords-answer" method="post" novalidate>
 
         {% call govukFieldset({
+          describedBy: "site-coords-hint", 
           legend: {
             text: "What are the coordinates of the site?",
             classes: "govuk-fieldset__legend--l",
@@ -32,7 +33,7 @@
           }
         }) %}
         
-          <div class="govuk-hint">Optional</div>
+          <div id="site-coords-hint" class="govuk-hint">Optional</div>
 
           {{ govukInput({
             label: { text: "Easting" },

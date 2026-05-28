@@ -12,43 +12,36 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-    {% if errorApplicantOrgName %}
-      {{ govukErrorSummary({
-        titleText: "There is a problem",
-        errorList: [{ text: errorApplicantOrgName, href: "#applicant-org-name" }]
-      }) }}
+      {% if errorApplicantOrgName %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorApplicantOrgName, href: "#applicant-org-name" }]
+        }) }}
+      {% endif %}
 
-    {% endif %}
+      <form class="form" action="/applicant-org-name-answer" method="post" novalidate>
 
-    <form class="form" action="/applicant-org-name-answer" method="post" novalidate>
-
-    {{ govukInput({
-    label: {
-        text: "What is the name of the applicant organisation?",
-        classes: "govuk-label--l",
-        isPageHeading: true
-        },
-        id: "applicant-org-name",
-        name: "applicant-org-name",
-        value: data['applicant-org-name'],
-
-        errorMessage: {
-        text: "Enter the applicant organisation name"
-        } 
-        if errorApplicantOrgName else null
-    }) }}
-    
-            {{ govukButton({
-            text: "Continue"
-            }) }}
+        {{ govukInput({
+          id: "applicant-org-name",
+          name: "applicant-org-name",
+          value: data['applicant-org-name'],
+          label: {
+            text: "What is the name of the applicant organisation?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorApplicantOrgName } if errorApplicantOrgName else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
 
       </form>
 
     </div>
   </div>
-
 {% endblock %}

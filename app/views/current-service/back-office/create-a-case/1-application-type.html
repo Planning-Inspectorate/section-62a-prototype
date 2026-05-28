@@ -26,6 +26,7 @@
 
     <form class="form" action="/application-type-answer" method="post" novalidate>
       {{ govukRadios({
+        idPrefix: "application-type",
         name: "application-type",
         value: data['application-type'],
         fieldset: {
