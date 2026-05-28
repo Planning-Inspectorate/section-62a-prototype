@@ -165,7 +165,7 @@ export function validateDateTime(day, month, year, hour, minute, ampm, displayNa
 
 
 // ================================================================================
-// 6. NUMBER VALIDATION -- checking fields only contain number inputs
+// 6. MANDATORY NUMBER VALIDATION -- checking fields only contain number inputs
 // ================================================================================
 export function validateNumber(value, displayName, fieldName) {
   // 1. Check if empty
@@ -173,7 +173,7 @@ export function validateNumber(value, displayName, fieldName) {
     return { text: `Enter the ${displayName.toLowerCase()}`, href: `#${fieldName}` };
   } 
   
-  // 2. Check if it contains letters or weird characters
+  // 2. Check it contains only numbers (allowing for decimals if needed)
   if (isNaN(value) || !/^\d+(\.\d+)?$/.test(value)) {
     return { text: `${displayName} must only contain numbers`, href: `#${fieldName}` };
   }
@@ -217,5 +217,48 @@ export function validateOptionalPhone(value, fieldName) {
     return { text: "Enter a valid phone number", href: `#${fieldName}` };
   }
 
+  return null;
+}
+
+
+// ================================================================================
+// 9. SITE COORDS GRID REFERENCE VALIDATION
+// ================================================================================
+export function validateOptionalSiteCoords(value, displayName, fieldName) {
+
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+
+  // Check if it contains letters or weird characters
+  if (isNaN(value) || !/^\d+$/.test(value)) {
+    return { text: `${displayName} must only contain numbers`, href: `#${fieldName}` };
+  }
+
+  if (value.length > 6) {
+    return { text: `${displayName} must be 6 characters or less`, href: `#${fieldName}` };
+  } 
+    
+  // 3. Success!
+  return null;
+}
+
+
+
+// ================================================================================
+// 10. OPTIONAL ONLY NUMBER VALIDATION -- check for only numbers
+// ================================================================================
+export function validateOptionalNumber(value, displayName, fieldName) {
+
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+
+  // Check if it contains letters or weird characters
+  if (isNaN(value) || !/^\d+$/.test(value)) {
+    return { text: `${displayName} must only contain numbers`, href: `#${fieldName}` };
+  }
+    
+  // 3. Success!
   return null;
 }

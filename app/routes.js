@@ -10,7 +10,9 @@ import {
   validateDateTime, 
   validateNumber,
   validateEmail,
-  validateOptionalPhone
+  validateOptionalPhone,
+  validateOptionalSiteCoords,
+  validateOptionalNumber
 } from './helpers.js';
 
 // Run initialization fixes

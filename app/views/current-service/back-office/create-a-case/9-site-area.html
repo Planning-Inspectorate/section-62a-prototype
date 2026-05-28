@@ -1,0 +1,54 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorSiteArea %}Error: {% endif %}What is the area of the site in hectares?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorSiteArea %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorSiteArea, href: "#site-area" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/site-area-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "site-area",
+          name: "site-area",
+          value: data['site-area'],
+          classes: "govuk-input--width-5", 
+          label: {
+            text: "What is the area of the site in hectares?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: {
+            text: "Optional"
+          },
+          suffix: {
+            text: "ha"
+          },
+          errorMessage: { text: errorSiteArea } if errorSiteArea else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

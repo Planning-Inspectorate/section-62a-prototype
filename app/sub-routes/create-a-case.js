@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import govukPrototypeKit from 'govuk-prototype-kit';
-import { addAuditLog, validAuthorities, validatePostcode, validateEmail, validateOptionalPhone } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber } from '../helpers.js';
 
 const router = Router();
 
@@ -540,8 +540,66 @@ router.post('/agent-org-address-answer', function (req, res) {
   });
 
 
+// 7 - site address
+router.post('/site-address-answer', function (req, res) {
+  const postcode = req.session.data['site-address-postcode'];
+  const postcodeError = validatePostcode(postcode);
+  if (postcodeError) {
+    return res.render('current-service/back-office/create-a-case/7-site-address', { 
+      errorSiteAddress: postcodeError 
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/8-site-coords');
+});
 
 
-  
+// 8 - site coords
+router.post('/site-coords-answer', function (req, res) {
+  const siteCoordsEasting = req.session.data['site-coords-easting'];
+  const siteCoordsNorthing = req.session.data['site-coords-northing'];
+  // error containers
+  const errors = {};
+  const errorList = [];
+
+  const siteCoordsEastingError = validateOptionalSiteCoords(siteCoordsEasting, "The Easting grid reference", "site-coords-easting");
+  if (siteCoordsEastingError) {
+    errors.siteCoordsEasting = { text: siteCoordsEastingError.text };
+    errorList.push(siteCoordsEastingError);
+  }
+  const siteCoordsNorthingError = validateOptionalSiteCoords(siteCoordsNorthing, "The Northing grid reference", "site-coords-northing");
+  if (siteCoordsNorthingError) {
+    errors.siteCoordsNorthing = { text: siteCoordsNorthingError.text };
+    errorList.push(siteCoordsNorthingError);
+  }
+  // render error if any
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/8-site-coords', { 
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/9-site-area');
+});
+
+
+// 9 - site area
+router.post('/site-area-answer', function (req, res) {
+  const siteArea = req.session.data['site-area'];
+  const siteAreaError = validateOptionalNumber(siteArea, "The area of the site", "site-area");
+  if (siteAreaError) {
+    return res.render('current-service/back-office/create-a-case/9-site-area', { 
+      errorSiteArea: siteAreaError.text
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/10-dev-description');
+});
+
+
+
+
+
+
+
+
 
 export default router;
