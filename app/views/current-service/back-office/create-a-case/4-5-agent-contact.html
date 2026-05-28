@@ -12,7 +12,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {# 1. Pass the entire errorList array directly into the macro #}
     {% if errorList %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
@@ -23,7 +22,6 @@
     <form method="post" action="/agent-contact-answer" novalidate>
       <h1 class="govuk-heading-l">Add agent contact details</h1>
 
-      {# 2. Look for the specific error for this specific field #}
       {{ govukInput({ 
         label: { text: "First name" }, 
         id: "agent-contact-first-name", 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import govukPrototypeKit from 'govuk-prototype-kit';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate } from '../helpers.js';
 
 const router = Router();
 
@@ -593,6 +593,55 @@ router.post('/site-area-answer', function (req, res) {
   }
   res.redirect('/current-service/back-office/create-a-case/10-dev-description');
 });
+
+
+// 10 - dev description
+// add validation here if required
+
+
+// 11 - distressing content
+router.post('/distressing-content-answer', function (req, res) {
+  const distressingContent = req.session.data['distressing-content'];
+  if (!distressingContent) {
+    return res.render('current-service/back-office/create-a-case/11-distressing-content', { errorDisContent: "Select whether this application involves potentially distressing content" });
+  }
+  res.redirect('/current-service/back-office/create-a-case/12-exp-submission-date');
+});
+
+
+// 12 - exp submission date
+router.post('/expected-submission-date-answer', function (req, res) {
+  const day = req.session.data['expected-submission-date-day'];
+  const month = req.session.data['expected-submission-date-month'];
+  const year = req.session.data['expected-submission-date-year'];
+  // error containers
+  const errors = {};
+  const errorList = [];
+  
+  // pass objects to the helper and create error object
+  const dateError = validateDate(day, month, year, "Expected submission date", "expected-submission-date");
+
+  // set error message from helper
+  if (dateError) {
+    errors.expSubDate = { text: dateError.text };
+    
+  // loop array of dateError and create simple flags for the html to add error classes to relevant inputs
+  if (dateError.errorFields) {
+    dateError.errorFields.forEach(field => {
+      errors[field] = true; 
+    });
+  }
+  errorList.push(dateError);
+  }
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/12-exp-submission-date', {
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/13-case-summary');
+});
+
 
 
 

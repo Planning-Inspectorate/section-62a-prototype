@@ -1,0 +1,52 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorDisContent %}Error: {% endif %}Does this application involve potentially distressing content?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorDisContent %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorDisContent, href: "#distressing-content" }]
+      }) }}
+
+    {% endif %}
+
+    <form action="/distressing-content-answer" method="post" novalidate>
+
+      {{ govukRadios({
+        classes: "govuk-radios",
+        idPrefix: "distressing-content",
+        name: "distressing-content",
+        fieldset: {
+          legend: { text: "Does this application involve potentially distressing content?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+        },
+        hint: 
+        {
+          text: "If you select 'Yes', this will trigger a warning on the front office"
+        },
+        errorMessage: { text: errorDisContent } if errorDisContent else null,
+        items: [
+          { value: "Yes", text: "Yes", checked: data['distressing-content'] == 'Yes' },
+          { value: "No", text: "No", checked: data['distressing-content'] == 'No' }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue" }) }}
+      
+    </form>
+  </div>
+</div>
+{% endblock %}
