@@ -10,6 +10,15 @@ router.get('/create-case-start', function (req, res) {
   const savedCases = req.session.data['cases'] || [];
   req.session.data = {};
   req.session.data['cases'] = savedCases;
+  res.redirect('/current-service/back-office/create-a-case/0-application-category');
+});
+
+// 0 - application category
+router.post('/application-category-answer', function (req, res) {
+  const applicationCategory = req.session.data['application-category'];
+  if (!applicationCategory) {
+    return res.render('current-service/back-office/create-a-case/0-application-category', { errorApplicationCategory: "Select the category of application" });
+}
   res.redirect('/current-service/back-office/create-a-case/1-application-type');
 });
 

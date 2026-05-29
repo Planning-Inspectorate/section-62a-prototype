@@ -1,0 +1,57 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ {% if errorApplicationCategory %}Error: {% endif %}Is this a major or non-major application?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/manage-cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorApplicationCategory %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorApplicationCategory, href: "#application-category" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/application-category-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "application-category",
+        name: "application-category",
+        fieldset: {
+          legend: { 
+            text: "Is this a major or non-major application?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorApplicationCategory } if errorApplicationCategory else null,
+        items: [
+          { 
+            value: "Major", 
+            text: "Major", 
+            checked: data['application-category'] == 'Major' 
+          },
+          { 
+            value: "Non-major", 
+            text: "Non-major", 
+            checked: data['application-category'] == 'Non-major' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

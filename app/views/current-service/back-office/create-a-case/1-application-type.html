@@ -5,15 +5,13 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {{ govukBackLink({
-  text: "Back",
-  href: "/manage-cases"
-}) }}
+    text: "Back",
+    href: "/current-service/back-office/create-a-case/0-application-category"
+  }) }}
 {% endblock %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
@@ -28,20 +26,43 @@
       {{ govukRadios({
         idPrefix: "application-type",
         name: "application-type",
-        value: data['application-type'],
         fieldset: {
-          legend: { text: "What type of application is it?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+          legend: { 
+            text: "What type of application is it?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
         },
         errorMessage: { text: errorApplicationType } if errorApplicationType else null,
         items: [
-          { value: "Planning permission", text: "Planning permission" },
-          { value: "Outline planning permission with some matters reserved", text: "Outline planning permission with some matters reserved" },
-          { value: "Outline planning permission with all matters reserved", text: "Outline planning permission with all matters reserved" },
-          { value: "Approval of reserved matters following outline approval", text: "Approval of reserved matters following outline approval" },
-          { value: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building", 
-                    text: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building" }
+          { 
+            value: "Planning permission", 
+            text: "Planning permission",
+            checked: data['application-type'] == 'Planning permission'
+          },
+          { 
+            value: "Outline planning permission with some matters reserved", 
+            text: "Outline planning permission with some matters reserved",
+            checked: data['application-type'] == 'Outline planning permission with some matters reserved'
+          },
+          { 
+            value: "Outline planning permission with all matters reserved", 
+            text: "Outline planning permission with all matters reserved",
+            checked: data['application-type'] == 'Outline planning permission with all matters reserved'
+          },
+          { 
+            value: "Approval of reserved matters following outline approval", 
+            text: "Approval of reserved matters following outline approval",
+            checked: data['application-type'] == 'Approval of reserved matters following outline approval'
+          },
+          { 
+            value: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building", 
+            text: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building",
+            checked: data['application-type'] == 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building'
+          }
         ]
       }) }}
+      
       {{ govukButton({ text: "Continue" }) }}
 
     </form>
