@@ -1,0 +1,265 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Check your Answers - Create a case - Manage Planning Applications prototype
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">Check your answers</h1>
+
+    <br>
+
+    {# ========================================================= #}
+    {# set variables outside list                                #}
+    {# ========================================================= #}
+
+    {# --- Agent Address HTML --- #}
+    {% set agentAddressHtml %}
+      {% if data['agent-org-address-line-1'] %}<div>{{ data['agent-org-address-line-1'] }}</div>{% endif %}
+      {% if data['agent-org-address-line-2'] %}<div>{{ data['agent-org-address-line-2'] }}</div>{% endif %}
+      {% if data['agent-org-address-town'] %}<div>{{ data['agent-org-address-town'] }}</div>{% endif %}
+      {% if data['agent-org-address-county'] %}<div>{{ data['agent-org-address-county'] }}</div>{% endif %}
+      {% if data['agent-org-address-postcode'] %}<div>{{ data['agent-org-address-postcode'] }}</div>{% endif %}
+    {% endset %}
+
+    {# --- Agent Contacts HTML (Bulleted) --- #}
+    {% set agentContactsHtml %}
+      {% set agentContactList = data['agent-contact-list'] or [] %}
+      {% if agentContactList.length > 0 %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for contact in agentContactList %}
+            <li>
+              {{ contact.firstName }} {{ contact.lastName }}<br>
+              {% if contact.email %}{{ contact.email }}<br>{% endif %}
+              {% if contact.phone %}{{ contact.phone }}{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endset %}
+
+    {# --- Applicant Organisations HTML (Bulleted) --- #}
+    {% set applicantsHtml %}
+      {% set applicantOrgList = data['applicant-org-list'] or [] %}
+      {% if applicantOrgList.length > 0 %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for org in applicantOrgList %}
+            <li>
+              {{ org.orgName }}<br>
+              {% if org.address.line1 %}{{ org.address.line1 }}<br>{% endif %}
+              {% if org.address.town %}{{ org.address.town }}<br>{% endif %}
+              {% if org.address.postcode %}{{ org.address.postcode }}{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endset %}
+
+    {# --- Applicant Contacts HTML (Bulleted w/ Linked Org) --- #}
+    {% set applicantContactsHtml %}
+      {% set appContactList = data['applicant-contact-list'] or [] %}
+      {% set appOrgList = data['applicant-org-list'] or [] %}
+      {% if appContactList.length > 0 %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for contact in appContactList %}
+            <li>
+              {{ contact.firstName }} {{ contact.lastName }}<br>
+              {% if contact.email %}{{ contact.email }}<br>{% endif %}
+              {% if contact.linkedOrg %}
+                {% for org in appOrgList %}
+                  {% if org.id == contact.linkedOrg %}{{ org.orgName }}{% endif %}
+                {% endfor %}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endset %}
+
+    {# --- Site Address HTML --- #}
+    {% set siteAddressHtml %}
+      {% if data['site-address-line-1'] %}<div>{{ data['site-address-line-1'] }}</div>{% endif %}
+      {% if data['site-address-line-2'] %}<div>{{ data['site-address-line-2'] }}</div>{% endif %}
+      {% if data['site-address-town'] %}<div>{{ data['site-address-town'] }}</div>{% endif %}
+      {% if data['site-address-county'] %}<div>{{ data['site-address-county'] }}</div>{% endif %}
+      {% if data['site-address-postcode'] %}<div>{{ data['site-address-postcode'] }}</div>{% endif %}
+    {% endset %}
+
+
+    {# ========================================================= #}
+    {# summary list with conditional rows                        #}
+    {# ========================================================= #}
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
+      {# --- 0: Category --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Application category</dt>
+        <dd class="govuk-summary-list__value">{{ data['application-category'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/0-application-category">Change<span class="govuk-visually-hidden"> application category</span></a>
+        </dd>
+      </div>
+
+      {# --- 1: Type --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Application type</dt>
+        <dd class="govuk-summary-list__value">{{ data['application-type'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/1-application-type">Change<span class="govuk-visually-hidden"> application type</span></a>
+        </dd>
+      </div>
+
+      {# --- 2: LPA --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">LPA</dt>
+        <dd class="govuk-summary-list__value">{{ data['lpa'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/2-lpa">Change<span class="govuk-visually-hidden"> LPA</span></a>
+        </dd>
+      </div>
+
+      {# --- 3-1: Has Secondary LPA --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Has secondary LPA</dt>
+        <dd class="govuk-summary-list__value">{{ data['has-secondary-lpa'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/3-1-has-secondary-lpa">Change<span class="govuk-visually-hidden"> whether there is a secondary LPA</span></a>
+        </dd>
+      </div>
+
+      {# --- CONDITIONAL SECONDARY LPA ROW --- #}
+      {% if data['has-secondary-lpa'] == 'Yes' %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Secondary LPA</dt>
+          <dd class="govuk-summary-list__value">{{ data['secondary-lpa'] }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/3-2-secondary-lpa-input">Change<span class="govuk-visually-hidden"> secondary LPA</span></a>
+          </dd>
+        </div>
+      {% endif %}
+
+      {# --- 4-1: Has Agent --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Has agent</dt>
+        <dd class="govuk-summary-list__value">{{ data['has-agent'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/4-1-has-agent">Change<span class="govuk-visually-hidden"> whether applicant has an agent</span></a>
+        </dd>
+      </div>
+
+      {# --- CONDITIONAL AGENT ROWS --- #}
+      {% if data['has-agent'] == 'Yes' %}
+        
+        {# 4-2: Agent Org Name #}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Agent organisation name</dt>
+          <dd class="govuk-summary-list__value">{{ data['agent-org-name'] }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-2-agent-org-name">Change<span class="govuk-visually-hidden"> agent organisation name</span></a>
+          </dd>
+        </div>
+
+        {# 4-3: Agent Address #}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Agent address</dt>
+          <dd class="govuk-summary-list__value">{{ agentAddressHtml | safe }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-3-agent-org-address">Change<span class="govuk-visually-hidden"> agent address</span></a>
+          </dd>
+        </div>
+
+        {# 4-4: Agent Contacts #}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Agent contacts</dt>
+          <dd class="govuk-summary-list__value">{{ agentContactsHtml | safe }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-4-agent-check">Change<span class="govuk-visually-hidden"> agent contacts</span></a>
+          </dd>
+        </div>
+
+      {% endif %}
+      {# --- END CONDITIONAL ROWS --- #}
+
+      {# --- 5: Applicants --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Applicants</dt>
+        <dd class="govuk-summary-list__value">{{ applicantsHtml | safe }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/5-1-applicant-check">Change<span class="govuk-visually-hidden"> applicants</span></a>
+        </dd>
+      </div>
+
+      {# --- 6: Applicant Contacts --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Applicant contacts</dt>
+        <dd class="govuk-summary-list__value">{{ applicantContactsHtml | safe }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/6-1-applicant-contact-check">Change<span class="govuk-visually-hidden"> applicant contacts</span></a>
+        </dd>
+      </div>
+
+      {# --- 7: Site Address --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Site address</dt>
+        <dd class="govuk-summary-list__value">{{ siteAddressHtml | safe }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/7-site-address">Change<span class="govuk-visually-hidden"> site address</span></a>
+        </dd>
+      </div>
+
+      {# --- 8: Site Coordinates --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Site coordinates</dt>
+        <dd class="govuk-summary-list__value">
+          {% if data['site-coords-easting'] %}Easting: {{ data['site-coords-easting'] }}<br>{% endif %}
+          {% if data['site-coords-northing'] %}Northing: {{ data['site-coords-northing'] }}{% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/8-site-coords">Change<span class="govuk-visually-hidden"> site coordinates</span></a>
+        </dd>
+      </div>
+
+      {# --- 9: Site Area --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Site area (ha)</dt>
+        <dd class="govuk-summary-list__value">
+          {% if data['site-area'] %}{{ data['site-area'] }} ha{% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/9-site-area">Change<span class="govuk-visually-hidden"> site area</span></a>
+        </dd>
+      </div>
+
+      {# --- 10: Development Description --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Development description</dt>
+        <dd class="govuk-summary-list__value">{{ data['dev-description'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/10-dev-description">Change<span class="govuk-visually-hidden"> development description</span></a>
+        </dd>
+      </div>
+
+    </dl>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+        Clicking Accept & Submit will send a notification to the applicant / agent
+      </strong>
+    </div>
+
+    <form action="/case-created-confirmation" method="post" novalidate>
+      <input type="hidden" name="answers-checked" value="true">
+      {{ govukButton({
+        text: "Accept & Submit"
+      }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+      
+    {# --- Submission Date HTML --- #}
+    {% set submissionDateHtml %}
+      {% if data['expected-submission-date-day'] %}
+        {{ data['expected-submission-date-day'] }} / {{ data['expected-submission-date-month'] }} / {{ data['expected-submission-date-year'] }}
+      {% endif %}
+    {% endset %}
+      
+      {# --- 11: Distressing Content --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Distressing content</dt>
+        <dd class="govuk-summary-list__value">{{ data['distressing-content'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/11-distressing-content">Change<span class="govuk-visually-hidden"> distressing content flag</span></a>
+        </dd>
+      </div>
+
+      {# --- 12: Expected Submission Date --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Expected submission date</dt>
+        <dd class="govuk-summary-list__value">{{ submissionDateHtml | safe }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/12-exp-submission-date">Change<span class="govuk-visually-hidden"> expected submission date</span></a>
+        </dd>
+      </div>

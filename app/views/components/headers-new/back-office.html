@@ -122,8 +122,8 @@
             Menu
           </button>
           <ul class="govuk-service-navigation__list" id="navigation">
-            <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-              <a class="govuk-service-navigation__link" href="/current-service/back-office/cases/cases.html"
+            <li class="govuk-service-navigation__item {% if activePage == 'all-cases' %}govuk-service-navigation__item--active{% endif %}">
+              <a class="govuk-service-navigation__link" href="/current-service/back-office/cases"
                 aria-current="true">
                 All cases
               </a>

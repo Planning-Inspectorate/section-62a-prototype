@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import govukPrototypeKit from 'govuk-prototype-kit';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog } from '../helpers.js';
 
 const router = Router();
 
@@ -608,53 +608,144 @@ router.post('/site-area-answer', function (req, res) {
 // add validation here if required
 
 
-// 11 - distressing content
-router.post('/distressing-content-answer', function (req, res) {
-  const distressingContent = req.session.data['distressing-content'];
-  if (!distressingContent) {
-    return res.render('current-service/back-office/create-a-case/11-distressing-content', { errorDisContent: "Select whether this application involves potentially distressing content" });
-  }
-  res.redirect('/current-service/back-office/create-a-case/12-exp-submission-date');
-});
+// 11 - distressing content - archived
+//router.post('/distressing-content-answer', function (req, res) {
+  //const distressingContent = req.session.data['distressing-content'];
+  //if (!distressingContent) {
+    //return res.render('current-service/back-office/create-a-case/11-distressing-content', { errorDisContent: "Select whether this application involves potentially distressing content" });
+  //}
+  //res.redirect('/current-service/back-office/create-a-case/12-exp-submission-date');
+//});
 
 
-// 12 - exp submission date
-router.post('/expected-submission-date-answer', function (req, res) {
-  const day = req.session.data['expected-submission-date-day'];
-  const month = req.session.data['expected-submission-date-month'];
-  const year = req.session.data['expected-submission-date-year'];
+// 12 - exp submission date - archived
+//router.post('/expected-submission-date-answer', function (req, res) {
+  //const day = req.session.data['expected-submission-date-day'];
+  //const month = req.session.data['expected-submission-date-month'];
+  //const year = req.session.data['expected-submission-date-year'];
   // error containers
-  const errors = {};
-  const errorList = [];
+  //const errors = {};
+  //const errorList = [];
   
   // pass objects to the helper and create error object
-  const dateError = validateDate(day, month, year, "Expected submission date", "expected-submission-date");
+  //const dateError = validateDate(day, month, year, "Expected submission date", "expected-submission-date");
 
   // set error message from helper
-  if (dateError) {
-    errors.expSubDate = { text: dateError.text };
+  //if (dateError) {
+    //errors.expSubDate = { text: dateError.text };
     
   // loop array of dateError and create simple flags for the html to add error classes to relevant inputs
-  if (dateError.errorFields) {
-    dateError.errorFields.forEach(field => {
-      errors[field] = true; 
-    });
+  //if (dateError.errorFields) {
+    //dateError.errorFields.forEach(field => {
+      //errors[field] = true; 
+    //});
+  //}
+  //errorList.push(dateError);
+  //}
+  //if (errorList.length > 0) {
+    //return res.render('current-service/back-office/create-a-case/12-exp-submission-date', {
+      //errors: errors,
+      //errorList: errorList
+    //});
+  //}
+  //res.redirect('/current-service/back-office/create-a-case/13-case-summary');
+//});
+
+
+// 13 - create the final case object and save to array
+router.post('/case-created-confirmation', function (req, res) {
+  const data = req.session.data;
+
+  // prevent duplicate cases being created if user resubmits form
+  if (!data['application-category']) {
+    return res.redirect('/current-service/back-office/create-a-case/14-case-created-success');
   }
-  errorList.push(dateError);
+
+  // create case array
+  if (!data.cases) { data.cases = []; }
+
+  // generate ref number
+  let nextCaseNumber = 1;
+  if (data.cases.length > 0) {
+    const lastCase = data.cases[data.cases.length - 1];
+    
+    // split "S62A/2026/0000001" by the slashes and grab the last chunk ("0000001")
+    const lastNumberString = lastCase.reference.split('/').pop();
+    
+    // convert string into a real number and add 1
+    nextCaseNumber = parseInt(lastNumberString, 10) + 1;
   }
-  if (errorList.length > 0) {
-    return res.render('current-service/back-office/create-a-case/12-exp-submission-date', {
-      errors: errors,
-      errorList: errorList
-    });
-  }
-  res.redirect('/current-service/back-office/create-a-case/13-case-summary');
+  const counterString = String(nextCaseNumber).padStart(7, '0');
+  const caseReference = `S62A/2026/${counterString}`;
+
+  // map case object
+  const newCase = {
+    reference: caseReference,
+    status: "New case",
+    applicationCategory: data['application-category'],
+    applicationType: data['application-type'],
+    lpa: data['lpa'],
+
+    // conditional - secondary lpa
+    hasSecondaryLpa: data['has-secondary-lpa'],
+    secondaryLpa: data['has-secondary-lpa'] === 'Yes' ? data['secondary-lpa'] : null,
+
+    // conditional - agent details
+    hasAgent: data['has-agent'],
+    agentOrgName: data['has-agent'] === 'Yes' ? data['agent-org-name'] : null,
+    agentAddress: data['has-agent'] === 'Yes' ? {
+      line1: data['agent-org-address-line-1'],
+      line2: data['agent-org-address-line-2'],
+      town: data['agent-org-address-town'],
+      county: data['agent-org-address-county'],
+      postcode: data['agent-org-address-postcode']
+    } : null,
+    agentContacts: data['has-agent'] === 'Yes' ? (data['agent-contact-list'] || []) : [],
+
+    // standard arrays and fields
+    applicantOrgs: data['applicant-org-list'] || [],
+    applicantContacts: data['applicant-contact-list'] || [],
+    
+    siteAddress: {
+      line1: data['site-address-line-1'],
+      line2: data['site-address-line-2'],
+      town: data['site-address-town'],
+      county: data['site-address-county'],
+      postcode: data['site-address-postcode']
+    },
+    siteCoords: {
+      easting: data['site-coords-easting'],
+      northing: data['site-coords-northing']
+    },
+    siteArea: data['site-area'],
+    devDescription: data['dev-description']
+  };
+
+  // save case and add to audit log
+  data.cases.push(newCase);
+  addAuditLog(req, caseReference, 'Case created');
+
+  // wipe data fields for fresh create a case journey
+  const fieldsToClear = [
+    'application-category', 'application-type', 'lpa', 
+    'has-secondary-lpa', 'secondary-lpa', 'has-agent', 
+    'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
+    'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode',
+    'agent-contact-list', 'applicant-org-list', 'applicant-contact-list',
+    'site-address-line-1', 'site-address-line-2', 'site-address-town', 
+    'site-address-county', 'site-address-postcode', 'site-coords-easting', 
+    'site-coords-northing', 'site-area', 'dev-description', 'distressing-content',
+    'expected-submission-date-day', 'expected-submission-date-month', 'expected-submission-date-year'
+  ];
+
+  fieldsToClear.forEach(field => {
+    delete data[field];
+  });
+
+  // pass refererence to success page and redirect
+  data.newlyCreatedReference = caseReference;
+  res.redirect('/current-service/back-office/create-a-case/14-case-created-success');
 });
-
-
-
-
-
 
 
 

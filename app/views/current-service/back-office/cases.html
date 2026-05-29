@@ -1,5 +1,10 @@
 {% extends "layouts/new/back-office.html" %}
 {% from "components/dashboard-box/dashboard-box.njk" import dashboardBox %}
+{% set activePage = "all-cases" %}
+
+{% block pageTitle %}
+  Manage Crown Development applications
+{% endblock %}
 
 {% block content %}
 
@@ -34,7 +39,7 @@
     classes: "govuk-!-margin-bottom-6",
     html: "<h1 class='govuk-label-wrapper'>Create new case</h1>
     <h2>
-      <a href='create-a-case/1-type-of-application.html' id='create-case-link' class='govuk-link govuk-link--no-visited-state'>Create a
+      <a href='/current-service/back-office/create-a-case/0-application-category' id='create-case-link' class='govuk-link govuk-link--no-visited-state'>Create a
         case</a>
     </h2>"
     }) }}
@@ -75,56 +80,60 @@
           </svg></button></th>
     </tr>
   </thead>
+  
   <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000073"><a class="govuk-link" href="manage-application">CROWN/2025/0000073</a></td>
-      <td class="govuk-table__cell pins-white-space-pre-wrap">Plot 12, Avonvale Way, Kingsford Road, Southmere, Avonshire, AS4 9LT</td>
-      <td class="govuk-table__cell">System Test Borough Council</td>
-      <td class="govuk-table__cell">Outline planning permission with some matters reserved</td>
-      <td class="govuk-table__cell"><strong class="govuk-tag">
-  New
-</strong>
-</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000070/LBC"><a class="govuk-link"
-          href="manage-application">CROWN/2025/0000070/LBC</a></td>
-      <td class="govuk-table__cell pins-white-space-pre-wrap">Easting: 654321
-        Northing: 123456</td>
-      <td class="govuk-table__cell">System Test Borough Council</td>
-      <td class="govuk-table__cell">Planning permission and listed building consent (LBC) for alterations, extension or
-        demolition of a listed building</td>
-      <td class="govuk-table__cell"><strong class="govuk-tag">
-          New
-        </strong>
-      </td>
-    </tr>
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000070"><a class="govuk-link"
-          href="manage-application">CROWN/2025/0000070</a></td>
-      <td class="govuk-table__cell pins-white-space-pre-wrap">Easting: 654321
-        Northing: 123456</td>
-      <td class="govuk-table__cell">System Test Borough Council</td>
-      <td class="govuk-table__cell">Planning permission and listed building consent (LBC) for alterations, extension or
-        demolition of a listed building</td>
-      <td class="govuk-table__cell"><strong class="govuk-tag">
-          New
-        </strong>
-      </td>
-    </tr>
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="CROWN/2025/0000069"><a class="govuk-link"
-          href="manage-application">CROWN/2025/0000069</a></td>
-      <td class="govuk-table__cell pins-white-space-pre-wrap">1 Queens Road (AGENT), Bristol, BS7 9HY</td>
-      <td class="govuk-table__cell">System Test Borough Council</td>
-      <td class="govuk-table__cell">Planning permission</td>
-      <td class="govuk-table__cell"><strong class="govuk-tag">
-          New
-        </strong>
-      </td>
-    </tr>
+    
+    {# Grab the cases array from session data. If none exist, use an empty array. #}
+    {% set cases = data['cases'] | default([]) %}
+
+    {% if cases.length > 0 %}
+      {# We use '| reverse' so the newest created case appears at the top of the table #}
+      {% for case in cases | reverse %}
+        <tr class="govuk-table__row">
+          
+          {# REFERENCE LINK #}
+          <td class="govuk-table__cell" data-sort-value="{{ case.reference }}">
+            <a class="govuk-link" href="/case-details?reference={{ case.reference }}">{{ case.reference }}</a>
+          </td>
+          
+          {# SITE LOCATION #}
+          <td class="govuk-table__cell pins-white-space-pre-wrap">
+            {# If line1 exists, render the address #}
+            {% if case.siteAddress.line1 %}
+              {{ case.siteAddress.line1 }}{% if case.siteAddress.line2 %}, {{ case.siteAddress.line2 }}{% endif %}{% if case.siteAddress.town %}, {{ case.siteAddress.town }}{% endif %}{% if case.siteAddress.county %}, {{ case.siteAddress.county }}{% endif %}{% if case.siteAddress.postcode %}, {{ case.siteAddress.postcode }}{% endif %}
+            
+            {# If no line1, but coordinates exist, render coordinates #}
+            {% elseif case.siteCoords.easting and case.siteCoords.northing %}
+              Easting: {{ case.siteCoords.easting }}<br>Northing: {{ case.siteCoords.northing }}
+            
+            {# Fallback if completely blank #}
+            {% else %}
+              Not provided
+            {% endif %}
+          </td>
+          
+          {# LPA #}
+          <td class="govuk-table__cell">{{ case.lpa }}</td>
+          
+          {# APPLICATION TYPE #}
+          <td class="govuk-table__cell">{{ case.applicationType }}</td>
+          
+          {# STATUS TAG #}
+          <td class="govuk-table__cell">
+            <strong class="govuk-tag govuk-tag--blue">{{ case.status }}</strong>
+          </td>
+          
+        </tr>
+      {% endfor %}
+    
+    {% else %}
+      {# EMPTY STATE #}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell" colspan="5">No cases have been created yet.</td>
+      </tr>
+    {% endif %}
 
   </tbody>
 </table>
 
-{%endblock%}
+{% endblock %}

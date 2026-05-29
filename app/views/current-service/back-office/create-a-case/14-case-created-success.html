@@ -1,0 +1,40 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Case created successfully - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {# --- SUCCESS PANEL --- #}
+    {{ govukPanel({
+      titleText: "Case created successfully",
+      html: "Case reference<br><strong>" + (data['newlyCreatedReference'] | default('undefined')) + "</strong>"
+    }) }}
+
+    {# --- NEXT STEPS --- #}
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+    <p class="govuk-body">
+      You can now manage this application from the back-office dashboard. The case status is currently set to <strong>New case</strong>.
+    </p>
+
+    <p class="govuk-body">You can:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        <a href="/current-service/back-office/cases" class="govuk-link govuk-link--no-visited-state">Return to your case list</a>
+      </li>
+      <li>
+        <a href="/case-details?reference={{ data['newlyCreatedReference'] }}" class="govuk-link govuk-link--no-visited-state">View the details for this case</a>
+      </li>
+    </ul>
+
+  </div>
+</div>
+{% endblock %}
