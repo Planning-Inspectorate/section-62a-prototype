@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import govukPrototypeKit from 'govuk-prototype-kit';
 import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate } from '../helpers.js';
 
 const router = Router();

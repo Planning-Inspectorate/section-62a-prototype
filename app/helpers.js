@@ -14,7 +14,15 @@ export const validAuthorities = [
 // 1. GET CASE HELPER --- helper to find the correct case data
 // ================================================================================ 
 export function getCase(req) {
-  const ref = req.query.ref || req.body.ref || req.params.ref;
+  // 1. Look for 'reference' in the URL query, the body, or the session
+  const ref = req.query.reference || req.body.reference || req.session.data['reference'];
+  
+  // 2. Lock it into the session so future sub-pages remember what case we are editing
+  if (ref) {
+    req.session.data['reference'] = ref;
+  }
+
+  // 3. Find and return the case
   const cases = req.session.data['cases'] || [];
   return cases.find(c => c.reference === ref);
 }

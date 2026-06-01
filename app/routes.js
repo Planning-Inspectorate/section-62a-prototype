@@ -2,6 +2,7 @@ import { Router } from 'express';
 import govukPrototypeKit from "govuk-prototype-kit";
 import { applyAzureHostingFix } from "./azure-hosting-fix.js";
 import createCaseRouter from './sub-routes/create-a-case.js';
+import caseDetailsRouter from './sub-routes/case-details.js';
 import { 
   getCase, 
   addAuditLog, 
@@ -23,6 +24,7 @@ const router = govukPrototypeKit.requests.setupRouter();
 
 // Mount sub-routers
 router.use('/', createCaseRouter);
+router.use('/', caseDetailsRouter);
 
 // New routes below this
 
