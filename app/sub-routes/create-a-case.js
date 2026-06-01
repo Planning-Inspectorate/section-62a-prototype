@@ -721,19 +721,27 @@ router.post('/case-created-confirmation', function (req, res) {
   // create case array
   if (!data.cases) { data.cases = []; }
 
-  // generate ref number
+// generate ref number
   let nextCaseNumber = 1;
   if (data.cases.length > 0) {
     const lastCase = data.cases[data.cases.length - 1];
     
-    // split "S62A/2026/0000001" by the slashes and grab the last chunk ("0000001")
+    // split by slashes and grab the last chunk ("0000001")
     const lastNumberString = lastCase.reference.split('/').pop();
     
     // convert string into a real number and add 1
     nextCaseNumber = parseInt(lastNumberString, 10) + 1;
   }
+  
   const counterString = String(nextCaseNumber).padStart(7, '0');
-  const caseReference = `S62A/2026/${counterString}`;
+  
+  // conditionally build the reference string based on application stage
+  let caseReference;
+  if (data['application-stage'] === 'Pre-application') {
+    caseReference = `S62A/PRE/2026/${counterString}`;
+  } else {
+    caseReference = `S62A/2026/${counterString}`;
+  }
 
   // map case object
   const newCase = {
