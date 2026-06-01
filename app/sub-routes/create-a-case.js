@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import govukPrototypeKit from 'govuk-prototype-kit';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate } from '../helpers.js';
 
 const router = Router();
 
@@ -10,8 +10,24 @@ router.get('/create-case-start', function (req, res) {
   const savedCases = req.session.data['cases'] || [];
   req.session.data = {};
   req.session.data['cases'] = savedCases;
-  res.redirect('/current-service/back-office/create-a-case/0-application-category');
+  res.redirect('/current-service/back-office/create-a-case/0-application-stage');
 });
+
+
+// 0 - application stage
+router.post('/application-stage-answer', function (req, res) {
+  const applicationStage = req.session.data['application-stage'];
+  if (!applicationStage) {
+    return res.render('current-service/back-office/create-a-case/0-application-stage', { errorApplicationStage: "Select if this is a pre-application or an application" });
+  }
+  if (applicationStage === "Pre-application") {
+    res.redirect('/current-service/back-office/create-a-case/1-application-type');
+  }
+  else if (applicationStage === "Application") {
+    res.redirect('/current-service/back-office/create-a-case/0-application-category');
+  }
+});
+
 
 // 0 - application category
 router.post('/application-category-answer', function (req, res) {
@@ -605,7 +621,13 @@ router.post('/site-area-answer', function (req, res) {
 
 
 // 10 - dev description
-// add validation here if required
+router.post('/dev-description-answer', function (req, res) {
+  const devDescription = req.session.data['dev-description'];
+  if (!devDescription) {
+    return res.render('current-service/back-office/create-a-case/10-dev-description', { errorDevDescription: "Enter a description of the proposed development" });
+  }
+  res.redirect('/current-service/back-office/create-a-case/11-notification-received-date');
+});
 
 
 // 11 - distressing content - archived
@@ -618,38 +640,73 @@ router.post('/site-area-answer', function (req, res) {
 //});
 
 
-// 12 - exp submission date - archived
-//router.post('/expected-submission-date-answer', function (req, res) {
-  //const day = req.session.data['expected-submission-date-day'];
-  //const month = req.session.data['expected-submission-date-month'];
-  //const year = req.session.data['expected-submission-date-year'];
+// 11 - notification received date
+router.post('/notification-received-date-answer', function (req, res) {
+  const day = req.session.data['notification-received-date-day'];
+  const month = req.session.data['notification-received-date-month'];
+  const year = req.session.data['notification-received-date-year'];
   // error containers
-  //const errors = {};
-  //const errorList = [];
+  const errors = {};
+  const errorList = [];
   
   // pass objects to the helper and create error object
-  //const dateError = validateDate(day, month, year, "Expected submission date", "expected-submission-date");
+  const dateError = validateOptionalDate(day, month, year, "Notification received date", "notification-received-date");
 
   // set error message from helper
-  //if (dateError) {
-    //errors.expSubDate = { text: dateError.text };
+  if (dateError) {
+    errors.notificationReceivedDate = { text: dateError.text };
     
   // loop array of dateError and create simple flags for the html to add error classes to relevant inputs
-  //if (dateError.errorFields) {
-    //dateError.errorFields.forEach(field => {
-      //errors[field] = true; 
-    //});
-  //}
-  //errorList.push(dateError);
-  //}
-  //if (errorList.length > 0) {
-    //return res.render('current-service/back-office/create-a-case/12-exp-submission-date', {
-      //errors: errors,
-      //errorList: errorList
-    //});
-  //}
-  //res.redirect('/current-service/back-office/create-a-case/13-case-summary');
-//});
+  if (dateError.errorFields) {
+    dateError.errorFields.forEach(field => {
+      errors[field] = true; 
+    });
+  }
+  errorList.push(dateError);
+  }
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/11-notification-received-date', {
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/12-exp-submission-date');
+});
+
+
+// 12 - expected submission date
+router.post('/expected-submission-date-answer', function (req, res) {
+  const day = req.session.data['expected-submission-date-day'];
+  const month = req.session.data['expected-submission-date-month'];
+  const year = req.session.data['expected-submission-date-year'];
+  // error containers
+  const errors = {};
+  const errorList = [];
+  
+  // pass objects to the helper and create error object
+  const dateError = validateDate(day, month, year, "Expected submission date", "expected-submission-date");
+
+  // set error message from helper
+  if (dateError) {
+    errors.expectedSubmissionDate = { text: dateError.text };
+    
+  // loop array of dateError and create simple flags for the html to add error classes to relevant inputs
+  if (dateError.errorFields) {
+    dateError.errorFields.forEach(field => {
+      errors[field] = true; 
+    });
+  }
+  errorList.push(dateError);
+  }
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/12-exp-submission-date', {
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  res.redirect('/current-service/back-office/create-a-case/13-check-your-answers');
+});
+
 
 
 // 13 - create the final case object and save to array
@@ -657,7 +714,7 @@ router.post('/case-created-confirmation', function (req, res) {
   const data = req.session.data;
 
   // prevent duplicate cases being created if user resubmits form
-  if (!data['application-category']) {
+  if (!data['application-stage']) {
     return res.redirect('/current-service/back-office/create-a-case/14-case-created-success');
   }
 
@@ -682,6 +739,7 @@ router.post('/case-created-confirmation', function (req, res) {
   const newCase = {
     reference: caseReference,
     status: "New case",
+    applicationStage: data['application-stage'],
     applicationCategory: data['application-category'],
     applicationType: data['application-type'],
     lpa: data['lpa'],
@@ -718,7 +776,17 @@ router.post('/case-created-confirmation', function (req, res) {
       northing: data['site-coords-northing']
     },
     siteArea: data['site-area'],
-    devDescription: data['dev-description']
+    devDescription: data['dev-description'],
+    notificationReceivedDate: {
+      day: data['notification-received-date-day'],
+      month: data['notification-received-date-month'],
+      year: data['notification-received-date-year']
+    },
+    expectedSubmissionDate: {
+      day: data['expected-submission-date-day'],
+      month: data['expected-submission-date-month'],
+      year: data['expected-submission-date-year']
+    }
   };
 
   // save case and add to audit log
@@ -727,7 +795,7 @@ router.post('/case-created-confirmation', function (req, res) {
 
   // wipe data fields for fresh create a case journey
   const fieldsToClear = [
-    'application-category', 'application-type', 'lpa', 
+    'application-stage', 'application-category', 'application-type', 'lpa', 
     'has-secondary-lpa', 'secondary-lpa', 'has-agent', 
     'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
     'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode',
@@ -735,6 +803,8 @@ router.post('/case-created-confirmation', function (req, res) {
     'site-address-line-1', 'site-address-line-2', 'site-address-town', 
     'site-address-county', 'site-address-postcode', 'site-coords-easting', 
     'site-coords-northing', 'site-area', 'dev-description', 'distressing-content',
+    'expected-submission-date-day', 'expected-submission-date-month', 'expected-submission-date-year',
+    'notification-received-date-day', 'notification-received-date-month', 'notification-received-date-year',
     'expected-submission-date-day', 'expected-submission-date-month', 'expected-submission-date-year'
   ];
 
@@ -746,9 +816,6 @@ router.post('/case-created-confirmation', function (req, res) {
   data.newlyCreatedReference = caseReference;
   res.redirect('/current-service/back-office/create-a-case/14-case-created-success');
 });
-
-
-
 
 
 export default router;

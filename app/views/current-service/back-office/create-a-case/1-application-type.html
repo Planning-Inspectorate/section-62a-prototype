@@ -5,10 +5,20 @@
 {% endblock %}
 
 {% block beforeContent %}
+
+  {% if data['application-stage'] == 'Pre-application' %}
+    {% set backLink = "/current-service/back-office/create-a-case/0-application-stage" %}
+
+  {% elif data['application-stage'] == 'Application' %}
+    {% set backLink = "/current-service/back-office/create-a-case/0-application-category" %}
+
+  {% endif %}
+
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/create-a-case/0-application-category"
+    href: backLink
   }) }}
+
 {% endblock %}
 
 {% block content %}

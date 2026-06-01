@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList %}Error: {% endif %}What is the expected submission date for the application?
+  {% if errorList %}Error: {% endif %}When was the notification of intent submitted?
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,14 +20,14 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/expected-submission-date-answer" method="post" novalidate>
+    <form class="form" action="/notification-received-date-answer" method="post" novalidate>
 
       {{ govukDateInput({
-        id: "expected-submission-date",
-        namePrefix: "expected-submission-date",
+        id: "notification-received-date",
+        namePrefix: "notification-received-date",
         fieldset: {
           legend: {
-            text: "What is the expected submission date for the application?",
+            text: "When was the notification of intent submitted?",
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l"
           }
@@ -35,23 +35,23 @@
         hint: {
           text: "For example, 27 3 2007"
         },
-        errorMessage: { text: errors.expSubDate.text } if errors.expSubDate else null,
+        errorMessage: { text: errors.notificationReceivedDate.text } if errors.notificationReceivedDate else null,
         
         items: [
           {
             name: "day",
             classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
-            value: data['expected-submission-date-day']
+            value: data['notification-received-date-day']
           },
           {
             name: "month",
             classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
-            value: data['expected-submission-date-month']
+            value: data['notification-received-date-month']
           },
           {
             name: "year",
             classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
-            value: data['expected-submission-date-year']
+            value: data['notification-received-date-year']
           }
         ]
       }) }}

@@ -15,7 +15,14 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form class="form" action="/current-service/back-office/create-a-case/13-check-your-answers" method="post" novalidate>
+    {% if errorDevDescription %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorDevDescription, href: "#dev-description" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/dev-description-answer" method="post" novalidate>
 
         {{ govukTextarea({
           name: "dev-description",

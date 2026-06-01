@@ -1,0 +1,57 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ {% if errorApplicationStage %}Error: {% endif %}Is this a pre-application or an application?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorApplicationStage %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorApplicationStage, href: "#application-stage" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/application-stage-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "application-stage",
+        name: "application-stage",
+        fieldset: {
+          legend: { 
+            text: "Is this a pre-application or an application?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorApplicationStage } if errorApplicationStage else null,
+        items: [
+          { 
+            value: "Pre-application", 
+            text: "Pre-application", 
+            checked: data['application-stage'] == 'Pre-application' 
+          },
+          { 
+            value: "Application", 
+            text: "Application", 
+            checked: data['application-stage'] == 'Application' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

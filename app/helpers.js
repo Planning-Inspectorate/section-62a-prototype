@@ -128,6 +128,59 @@ export function validateDate(day, month, year, displayName, fieldName) {
 }
 
 
+// ================================================================================
+// 4. OPTIONAL DATE VALIDATION -- date field validation allowing for all empty values
+// ================================================================================
+export function validateOptionalDate(day, month, year, displayName, fieldName) {
+
+  // 0. If ALL fields are empty, pass validation immediately (because it's optional)
+  if (!day && !month && !year) {
+    return null;
+  }
+
+  // 1. Check for missing individual fields (this now only triggers if 1 or 2 fields are missing)
+  const missing = [];
+  if (!day) missing.push('day');
+  if (!month) missing.push('month');
+  if (!year) missing.push('year');
+
+  if (missing.length > 0) {
+    const missingText = missing.length === 2 
+      ? `${displayName} must include a ${missing[0]} and ${missing[1]}` 
+      : `${displayName} must include a ${missing[0]}`;
+    return { text: missingText, href: `#${fieldName}-${missing[0]}`, errorFields: missing };
+  }
+
+  // 2. Check for invalid numbers (e.g., month 13, day 32)
+  const dayNum = Number(day);
+  const monthNum = Number(month);
+  const yearNum = Number(year);
+  const errorFields = [];
+
+  if (dayNum < 1 || dayNum > 31 || isNaN(dayNum)) errorFields.push('day');
+  if (monthNum < 1 || monthNum > 12 || isNaN(monthNum)) errorFields.push('month');
+  if (year.length !== 4 || isNaN(yearNum)) errorFields.push('year');
+
+  if (errorFields.length > 0) {
+    let text = `${displayName} must be a real date`;
+    if (errorFields.includes('day')) text = `${displayName} day must be a real day`;
+    else if (errorFields.includes('month')) text = `${displayName} month must be a real month`;
+    else if (errorFields.includes('year')) text = `${displayName} year must include 4 numbers`;
+    
+    return { text, href: `#${fieldName}-${errorFields[0]}`, errorFields };
+  }
+
+  // 3. Check for impossible dates (e.g., February 30th)
+  const dateObj = new Date(yearNum, monthNum - 1, dayNum);
+  if ((dateObj.getMonth() + 1 !== monthNum) || (dateObj.getDate() !== dayNum)) {
+    return { text: "Enter a real date", href: `#${fieldName}-day`, errorFields: ['day', 'month', 'year'] };
+  }
+
+  // 4. Success! No errors.
+  return null;
+}
+
+
 // =================================================================================
 // 5. DATE + TIME VALIDATION -- checking fields contain the correct time and date
 // =================================================================================
