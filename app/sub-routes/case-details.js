@@ -9,12 +9,12 @@ router.get('/current-service/back-office/case-details', function(req, res) {
   // find the case and lock in session
   const foundCase = getCase(req);
 
-  // Safety bounce: If the case doesn't exist, kick them back to the list
+  // safety bounce: If the case doesn't exist, kick them back to the list
   if (!foundCase) {
     return res.redirect('/current-service/back-office/cases'); 
   }
 
-  // Handle flash messages (green success banners) for edits
+  // handle flash messages (green success banners) for case edits
   const sectionToJumpTo = req.session.data['flashSection'];
   const flashMessage = req.session.data['flashMessage'];
   
