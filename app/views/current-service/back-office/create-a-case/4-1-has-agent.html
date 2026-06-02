@@ -5,9 +5,18 @@
 {% endblock %}
 
 {% block beforeContent %}
+
+  {% if data['has-secondary-lpa'] == 'Yes' %}
+    {% set backLink = "/current-service/back-office/create-a-case/3-2-secondary-lpa-input" %}
+
+  {% elif data['has-secondary-lpa'] == 'No' %}
+    {% set backLink = "/current-service/back-office/create-a-case/3-1-has-secondary-lpa" %}
+
+  {% endif %}
+
   {{ govukBackLink({
     text: "Back",
-    href: "javascript:window.history.back()"
+    href: backLink
   }) }}
 {% endblock %}
 
