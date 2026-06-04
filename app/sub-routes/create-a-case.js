@@ -725,13 +725,15 @@ router.post('/case-created-confirmation', function (req, res) {
   if (data.cases.length > 0) {
     const lastCase = data.cases[data.cases.length - 1];
     
-    // split by slashes and grab the last chunk ("0000001")
-    const lastNumberString = lastCase.reference.split('/').pop();
+    // strip LBC suffix if it exists to get clean 7 last digits
+    const cleanRef = lastCase.reference.replace('/LBC', '');
     
-    // convert string into a real number and add 1
+    // split slashes and use cleaned up last digits from previous step
+    const lastNumberString = cleanRef.split('/').pop();
+    
+    // convert string into number and + 1 for new case
     nextCaseNumber = parseInt(lastNumberString, 10) + 1;
   }
-  
   const counterString = String(nextCaseNumber).padStart(7, '0');
   
   // conditionally build the reference string based on application stage
@@ -796,9 +798,41 @@ router.post('/case-created-confirmation', function (req, res) {
     }
   };
 
-  // save case and add to audit log
-  data.cases.push(newCase);
-  addAuditLog(req, caseReference, 'Case created');
+// check for LBC linked case condition
+  const isLinkedLBC = (
+    data['application-type'] === 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building' && 
+    data['application-stage'] === 'Application'
+  );
+
+  if (isLinkedLBC) {
+    // generate LBC reference
+    const lbcReference = `${caseReference}/LBC`;
+
+    // link both cases so banner can be displayed on case details
+    newCase.applicationSubType = "Planning permission";
+    newCase.linkedCaseReference = lbcReference;
+    newCase.linkedCaseType = "Listed Building Consent (LBC)";
+
+    // clone the case data to create the secondary LBC case
+    const lbcCase = JSON.parse(JSON.stringify(newCase)); 
+    lbcCase.reference = lbcReference;
+    lbcCase.applicationSubType = "Listed building consent (LBC)";
+    lbcCase.linkedCaseReference = caseReference; // link back to the primary case
+    lbcCase.linkedCaseType = "planning permission";
+
+    // save both cases to array
+    data.cases.push(newCase);
+    data.cases.push(lbcCase);
+
+    // add audit logs for both
+    addAuditLog(req, caseReference, 'Case created');
+    addAuditLog(req, lbcReference, 'Case created (Linked LBC)');
+
+  } else {
+    // save logic for singular cases
+    data.cases.push(newCase);
+    addAuditLog(req, caseReference, 'Case created');
+  }
 
   // wipe data fields for fresh create a case journey
   const fieldsToClear = [
@@ -819,8 +853,16 @@ router.post('/case-created-confirmation', function (req, res) {
     delete data[field];
   });
 
-  // pass refererence to success page and redirect
+// pass reference to success page and redirect
   data.newlyCreatedReference = caseReference;
+  
+  if (isLinkedLBC) {
+    data.newlyCreatedLbcReference = `${caseReference}/LBC`;
+  } else {
+    // wipe lbcReference variable to prevent ghosting
+    delete data.newlyCreatedLbcReference; 
+  }
+
   res.redirect('/current-service/back-office/create-a-case/14-case-created-success');
 });
 

@@ -323,3 +323,30 @@ export function validateOptionalNumber(value, displayName, fieldName) {
   // 3. Success!
   return null;
 }
+
+
+// ================================================================================
+// 11. UPDATE CASE HELPER --- Edit fields and synchronise data across linked cases
+// ================================================================================ 
+export function updateCaseData(req, reference, newFields) {
+  const cases = req.session.data['cases'] || [];
+  
+  // 1. Find the case the user is currently editing
+  const currentCase = cases.find(c => c.reference === reference);
+  if (!currentCase) return null;
+
+  // 2. Update this case with the new data
+  Object.assign(currentCase, newFields);
+
+  // 3. If this case has a twin, find it and update it too!
+  if (currentCase.linkedCaseReference) {
+    const linkedCase = cases.find(c => c.reference === currentCase.linkedCaseReference);
+    if (linkedCase) {
+      Object.assign(linkedCase, newFields);
+      // Optional: You could even automatically add an audit log to the linked case here!
+      // addAuditLog(req, linkedCase.reference, "Data updated via linked application");
+    }
+  }
+
+  return currentCase;
+}

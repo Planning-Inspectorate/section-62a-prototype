@@ -300,13 +300,28 @@
 
     </dl>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-visually-hidden">Warning</span>
-        Clicking Accept & Submit will send a notification to the applicant / agent
-      </strong>
-    </div>
+    {# Dynamic warning text if LBC application #}
+    {% if data['application-type'] == 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building' and data['application-stage'] == 'Application' %}
+      
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          Clicking accept & submit will create a second case as part of the connected application
+        </strong>
+      </div>
+
+    {% else %}
+      
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          Clicking Accept & Submit will send a notification to the applicant / agent
+        </strong>
+      </div>
+
+    {% endif %}
 
     <form action="/case-created-confirmation" method="post" novalidate>
       <input type="hidden" name="answers-checked" value="true">

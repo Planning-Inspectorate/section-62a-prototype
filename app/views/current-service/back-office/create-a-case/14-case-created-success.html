@@ -8,13 +8,23 @@
 {% endblock %}
 
 {% block content %}
+
+{# --- CONDITIONAL PANEL FOR LBC --- #}
+    {% set panelHtml %}
+      Case reference<br><strong>{{ data['newlyCreatedReference'] | default('undefined') }}</strong>
+      
+      {% if data['newlyCreatedLbcReference'] %}
+        <br><br>LBC Case reference<br><strong>{{ data['newlyCreatedLbcReference'] }}</strong>
+      {% endif %}
+    {% endset %}
+    
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     {# --- SUCCESS PANEL --- #}
     {{ govukPanel({
       titleText: "Case created successfully",
-      html: "Case reference<br><strong>" + (data['newlyCreatedReference'] | default('undefined')) + "</strong>"
+      html: panelHtml
     }) }}
 
     {# --- NEXT STEPS --- #}

@@ -19,7 +19,8 @@ import {
   validateOptionalPhone,
   validateOptionalSiteCoords,
   validateOptionalNumber,
-  validateOptionalDate
+  validateOptionalDate,
+  updateCaseData
 } from './helpers.js';
 
 // run initialization fixes
