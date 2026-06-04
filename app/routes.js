@@ -35,6 +35,11 @@ router.use('/', caseAuditLogRouter);
 
 // New routes below this
 
+// Fix deployed manifest.json 404 fallback syntax errors
+router.get(['/manifest.json', '*/manifest.json'], function (req, res) {
+  res.json({ "icons": [] });
+});
+
 
 
 
