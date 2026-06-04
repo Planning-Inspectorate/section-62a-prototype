@@ -35,11 +35,6 @@ router.use('/', caseAuditLogRouter);
 
 // New routes below this
 
-// Intercept empty manifest files and serve valid JSON
-router.get(['/manifest.json', '*/manifest.json'], function (req, res) {
-  res.json({}); 
-});
-
 
 
 
