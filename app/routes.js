@@ -35,9 +35,9 @@ router.use('/', caseAuditLogRouter);
 
 // New routes below this
 
-// Fix deployed manifest.json 404 fallback syntax errors
+// Intercept empty manifest files and serve valid JSON
 router.get(['/manifest.json', '*/manifest.json'], function (req, res) {
-  res.json({ "icons": [] });
+  res.json({}); 
 });
 
 
