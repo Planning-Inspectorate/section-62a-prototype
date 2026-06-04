@@ -1,5 +1,19 @@
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
 
+{# --- 1. KILL THE DEFAULT MANIFEST TAG --- #}
+{# This completely empties the default GOV.UK icon block #}
+{% block headIcons %}{% endblock %}
+
+{# --- 2. MANUALLY LOAD THE ICONS --- #}
+{# This injects the direct links exactly as your AI debugger suggested #}
+{% block head %}
+  {{ super() }}
+  <link rel="icon" sizes="48x48" href="/plugin-assets/govuk-frontend/dist/govuk/assets/images/favicon.ico">
+  <link rel="icon" sizes="any" href="/plugin-assets/govuk-frontend/dist/govuk/assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="mask-icon" href="/plugin-assets/govuk-frontend/dist/govuk/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
+  <link rel="apple-touch-icon" href="/plugin-assets/govuk-frontend/dist/govuk/assets/images/govuk-icon-180.png">
+{% endblock %}
+
 {% block header %}
   {% include "components/headers-new/back-office.html" %}  
 {% endblock %}
