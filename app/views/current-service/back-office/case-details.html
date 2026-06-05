@@ -212,11 +212,16 @@
             <dd class="govuk-summary-list__value">{{ currentCase.hasSecondaryLpa | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
+
+          {# CONDITIONAL SECONDARY LPA ROW #}
+          {% if currentCase.hasSecondaryLpa === 'Yes' %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Secondary local planning authority</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.secondaryLpa | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
+          {% endif %}
+
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
             <dd class="govuk-summary-list__value">{{ siteAddressHtml | safe }}</dd>
@@ -283,8 +288,53 @@
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Distressing content</dt>
-            <dd class="govuk-summary-list__value">No</dd>
+            <dt class="govuk-summary-list__key">LPA reference</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.lpaReference | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Nationally important</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.nationallyImportant | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Nationally important confirmation date</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.nationallyImportantConfirmationDate | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Green belt</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.greenBelt | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site is visible from public land</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.visiblePublicLand | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Health and safety issues</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.healthSafetyIssues | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CIL liable</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.cilLiable | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">BNG exempt</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.bngExempt | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Cost application(s)</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.costApplications | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application category</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.detailsApplicationCategory | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
         </dl>

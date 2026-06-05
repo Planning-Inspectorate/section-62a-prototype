@@ -747,7 +747,7 @@ router.post('/case-created-confirmation', function (req, res) {
   // map case object
   const newCase = {
     reference: caseReference,
-    status: "New case",
+    status: "New",
     applicationStage: data['application-stage'],
     applicationCategory: data['application-category'],
     applicationType: data['application-type'],
