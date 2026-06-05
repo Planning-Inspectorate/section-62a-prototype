@@ -812,6 +812,7 @@ router.post('/case-created-confirmation', function (req, res) {
     newCase.applicationSubType = "Planning permission";
     newCase.linkedCaseReference = lbcReference;
     newCase.linkedCaseType = "Listed Building Consent (LBC)";
+    newCase.connectedApplication = lbcReference;
 
     // clone the case data to create the secondary LBC case
     const lbcCase = JSON.parse(JSON.stringify(newCase)); 
@@ -819,6 +820,7 @@ router.post('/case-created-confirmation', function (req, res) {
     lbcCase.applicationSubType = "Listed building consent (LBC)";
     lbcCase.linkedCaseReference = caseReference; // link back to the primary case
     lbcCase.linkedCaseType = "planning permission";
+    lbcCase.connectedApplication = caseReference;
 
     // save both cases to array
     data.cases.push(newCase);
