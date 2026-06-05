@@ -26,11 +26,15 @@ import {
   validateDateTime, 
   validateNumber,
   validateEmail,
+  validatePhone,
+  validateOptionalEmail,
   validateOptionalPhone,
   validateOptionalSiteCoords,
   validateOptionalNumber,
   validateOptionalDate,
-  updateCaseData
+  updateCaseData,
+  validateName,
+  validateOptionalName
 } from './helpers.js';
 
 // run initialization fixes

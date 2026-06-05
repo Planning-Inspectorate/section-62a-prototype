@@ -350,3 +350,82 @@ export function updateCaseData(req, reference, newFields) {
 
   return currentCase;
 }
+
+
+// ================================================================================
+// 12. NAME VALIDATION
+// ================================================================================
+export function validateName(value, displayName, fieldName) {
+  if (!value || value.trim() === "") {
+    return { text: `Enter the ${displayName}`, href: `#${fieldName}` };
+  } 
+
+  // \p{L} allows all standard letters including accented characters
+  const nameRegex = /^[\p{L}0-9\s\-',\(\)&]+$/u;
+  
+  if (!nameRegex.test(value)) {
+    return { 
+      text: `${displayName} must only include letters, spaces, hyphens, apostrophes, commas, brackets, ampersands or numbers`, 
+      href: `#${fieldName}` 
+    };
+  }
+
+  return null;
+}
+
+// ================================================================================
+// 13. OPTIONAL NAME VALIDATION
+// ================================================================================
+export function validateOptionalName(value, displayName, fieldName) {
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+
+  const nameRegex = /^[\p{L}0-9\s\-',\(\)&]+$/u;
+  
+  if (!nameRegex.test(value)) {
+    return { 
+      text: `${displayName} must only include letters, spaces, hyphens, apostrophes, commas, brackets, ampersands or numbers`, 
+      href: `#${fieldName}` 
+    };
+  }
+
+  return null;
+}
+
+// ================================================================================
+// 14. OPTIONAL EMAIL VALIDATION
+// ================================================================================
+export function validateOptionalEmail(value, displayName, fieldName) {
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+  
+  const emailRegex = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(value)) {
+    return { text: "Enter an email address in the correct format, like name@example.com", href: `#${fieldName}` };
+  }
+
+  return null;
+}
+
+
+// ================================================================================
+// 15. PHONE VALIDATION
+// ================================================================================
+export function validatePhone(value, displayName, fieldName) {
+  if (!value || value.trim() === "") {
+    return { text: `Enter the ${displayName}`, href: `#${fieldName}` };
+  } 
+  
+  if (value.length > 15) {
+    return { text: "Telephone number must be 15 characters or less", href: `#${fieldName}` };
+  } 
+  
+  const cleanPhone = value.replace(/\s+/g, '');
+  if (!/^\d+$/.test(cleanPhone)) {
+    return { text: "Enter a valid telephone number", href: `#${fieldName}` };
+  }
+
+  return null;
+}

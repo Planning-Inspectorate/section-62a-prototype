@@ -72,6 +72,21 @@
   {% endset %}
 {% endif %}
 
+{% set applicantOverviewContactsHtml = "-" %}
+{% if currentCase.applicantOverviewContacts and currentCase.applicantOverviewContacts.length > 0 %}
+  {% set applicantOverviewContactsHtml %}
+    <ul class="govuk-list govuk-!-margin-bottom-0">
+      {% for contact in currentCase.applicantOverviewContacts %}
+        <li>
+          {{ contact.orgName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
 {% set applicantContactsHtml = "-" %}
 {% if currentCase.applicantContacts.length > 0 %}
   {% set applicantContactsHtml %}
@@ -179,8 +194,8 @@
           </div>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant contact</dt>
-            <dd class="govuk-summary-list__value">{{ applicantContactsHtml | safe }}</dd>
-            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
+            <dd class="govuk-summary-list__value">{{ applicantOverviewContactsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="/current-service/back-office/edit-case/overview/applicant-overview-contact?reference={{ currentCase.reference }}">Edit</a></dd>
           </div>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Development description</dt>

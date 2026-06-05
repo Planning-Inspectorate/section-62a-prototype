@@ -1,0 +1,58 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}What are the applicant contact details?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/current-service/back-office/case-details?reference=" + currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/applicant-overview-contact-answer" novalidate>
+      <h1 class="govuk-heading-l">What are the applicant contact details?</h1>
+
+      {{ govukInput({ 
+        label: { text: "Organisation name" }, 
+        id: "applicant-overview-contact-org-name", 
+        name: "applicant-overview-contact-org-name", 
+        value: data['applicant-overview-contact-org-name'],
+        errorMessage: errors.orgName if errors.orgName else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Email address" }, 
+        id: "applicant-overview-contact-email", 
+        name: "applicant-overview-contact-email", 
+        type: "email", 
+        value: data['applicant-overview-contact-email'],
+        errorMessage: errors.email if errors.email else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Telephone number" }, 
+        id: "applicant-overview-contact-phone", 
+        name: "applicant-overview-contact-phone", 
+        type: "tel", 
+        value: data['applicant-overview-contact-phone'],
+        errorMessage: errors.phone if errors.phone else null
+      }) }}
+      
+      {{ govukButton({ text: "Save" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}
