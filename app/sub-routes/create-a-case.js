@@ -17,7 +17,7 @@ router.get('/create-case-start', function (req, res) {
 router.post('/application-stage-answer', function (req, res) {
   const applicationStage = req.session.data['application-stage'];
   if (!applicationStage) {
-    return res.render('current-service/back-office/create-a-case/0-application-stage', { errorApplicationStage: "Select if this is a pre-application or an application" });
+    return res.render('current-service/back-office/create-a-case/0-application-stage', { errorApplicationStage: "Select what type of application this is" });
   }
   if (applicationStage === "Pre-application") {
     res.redirect('/current-service/back-office/create-a-case/1-application-type');
@@ -32,7 +32,7 @@ router.post('/application-stage-answer', function (req, res) {
 router.post('/application-category-answer', function (req, res) {
   const applicationCategory = req.session.data['application-category'];
   if (!applicationCategory) {
-    return res.render('current-service/back-office/create-a-case/0-application-category', { errorApplicationCategory: "Select the category of application" });
+    return res.render('current-service/back-office/create-a-case/0-application-category', { errorApplicationCategory: "Select whether this is a major or non-major application" });
 }
   res.redirect('/current-service/back-office/create-a-case/1-application-type');
 });
@@ -52,10 +52,10 @@ router.post('/application-type-answer', function (req, res) {
 router.post('/lpa-answer', function(req, res) {
   const lpa = req.session.data['lpa'];
   if (!lpa) {
-    return res.render('current-service/back-office/create-a-case/2-lpa', { errorLpa: "Enter the name of the local planning authority" });
+    return res.render('current-service/back-office/create-a-case/2-lpa', { errorLpa: "Enter the local planning authority" });
   }
   if (!validAuthorities.includes(lpa)) {
-    return res.render('current-service/back-office/create-a-case/2-lpa', { lpa: lpa, errorLpa: "Select a Local Planning Authority from the list" });
+    return res.render('current-service/back-office/create-a-case/2-lpa', { lpa: lpa, errorLpa: "Select a local planning authority from the list" });
   }
   res.redirect('/current-service/back-office/create-a-case/3-1-has-secondary-lpa');
 });
@@ -65,7 +65,7 @@ router.post('/lpa-answer', function(req, res) {
 router.post('/has-secondary-lpa-answer', function (req, res) {
   const hasSecondaryLpa = req.session.data['has-secondary-lpa'];
   if (!hasSecondaryLpa) {
-    return res.render('current-service/back-office/create-a-case/3-1-has-secondary-lpa', { errorHasSecondaryLpa: "Select if the applicant is using a secondary local planning authority" });
+    return res.render('current-service/back-office/create-a-case/3-1-has-secondary-lpa', { errorHasSecondaryLpa: "Select yes if there is a secondary local planning authority" });
   }
   if (hasSecondaryLpa === "Yes") {
     res.redirect('/current-service/back-office/create-a-case/3-2-secondary-lpa-input');
@@ -80,10 +80,10 @@ router.post('/has-secondary-lpa-answer', function (req, res) {
 router.post('/secondary-lpa-answer', function (req, res) {
   const secondaryLpa = req.session.data['secondary-lpa'];
   if (!secondaryLpa) {
-    return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { errorSecondaryLpa: "Enter the name of the secondary local planning authority" });
+    return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { errorSecondaryLpa: "Enter the secondary local planning authority" });
   }
   if (!validAuthorities.includes(secondaryLpa)) {
-    return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { secondaryLpa: secondaryLpa, errorSecondaryLpa: "Select a Local Planning Authority from the list" });
+    return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { secondaryLpa: secondaryLpa, errorSecondaryLpa: "Select a local planning authority from the list" });
   }
   if (secondaryLpa === req.session.data['lpa']) {
     return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { secondaryLpa: secondaryLpa, errorSecondaryLpa: "Secondary local planning authority cannot be the same as the local planning authority" });
@@ -96,7 +96,7 @@ router.post('/secondary-lpa-answer', function (req, res) {
 router.post('/has-agent-answer', function (req, res) {
   const hasAgent = req.session.data['has-agent'];
   if (!hasAgent) {
-    return res.render('current-service/back-office/create-a-case/4-1-has-agent', { errorHasAgent: "Select if the applicant is using an agent" });
+    return res.render('current-service/back-office/create-a-case/4-1-has-agent', { errorHasAgent: "Select yes if the applicant is using an agent" });
   }
   if (hasAgent === "Yes") {
     res.redirect('/current-service/back-office/create-a-case/4-2-agent-org-name');

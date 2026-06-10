@@ -1,7 +1,16 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorHasSecondaryLpa %}Error: {% endif %}Is there a secondary local planning authority for this application?
+
+    {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "Does this pre-application advice have a secondary local planning authority?" %}
+
+    {% elif data['application-stage'] == 'Application' %}
+      {% set questionHeading = "Does this application have a secondary local planning authority?" %}
+
+    {% endif %}
+
+  {% if errorHasSecondaryLpa %}Error: {% endif %} {{ questionHeading }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -24,6 +33,14 @@
 
     {% endif %}
 
+    {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "Does this pre-application advice have a secondary local planning authority?" %}
+
+    {% elif data['application-stage'] == 'Application' %}
+      {% set questionHeading = "Does this application have a secondary local planning authority?" %}
+
+    {% endif %}
+
     <form action="/has-secondary-lpa-answer" method="post" novalidate>
 
       {{ govukRadios({
@@ -31,7 +48,7 @@
         idPrefix: "has-secondary-lpa",
         name: "has-secondary-lpa",
         fieldset: {
-          legend: { text: "Is there a secondary local planning authority for this application?", isPageHeading: true, classes: "govuk-fieldset__legend--l" }
+          legend: { text: questionHeading, isPageHeading: true, classes: "govuk-fieldset__legend--l" }
         },
         errorMessage: { text: errorHasSecondaryLpa } if errorHasSecondaryLpa else null,
         items: [

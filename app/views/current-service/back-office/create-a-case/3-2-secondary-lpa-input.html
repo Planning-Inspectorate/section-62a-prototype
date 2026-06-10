@@ -1,7 +1,16 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorSecondaryLpa %}Error: {% endif %}Select the secondary local planning authority for this application
+
+    {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "Which is the secondary local planning authority for this pre-application advice?" %}
+
+    {% elif data['application-stage'] == 'Application' %}
+      {% set questionHeading = "Which is the secondary local planning authority for this application?" %}
+
+    {% endif %}
+
+  {% if errorSecondaryLpa %}Error: {% endif %} {{ questionHeading }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -24,15 +33,27 @@
         }) }}
       {% endif %}
 
+    {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "Which is the secondary local planning authority for this pre-application advice?" %}
+
+    {% elif data['application-stage'] == 'Application' %}
+      {% set questionHeading = "Which is the secondary local planning authority for this application?" %}
+
+    {% endif %}
+
+
       <form class="form" action="/secondary-lpa-answer" method="post" novalidate>
 
         {{ govukSelect({
           id: "secondary-lpa",
           name: "secondary-lpa",
           label: {
-            text: "Select the secondary local planning authority for this application",
+            text: questionHeading,
             classes: "govuk-label--l",
             isPageHeading: true
+          },
+          hint: {
+            text: "Start typing the name of the council and choose from the list"
           },
           errorMessage: { text: errorSecondaryLpa } if errorSecondaryLpa else null,
           items: [

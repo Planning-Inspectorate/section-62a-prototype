@@ -1,7 +1,16 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorLpa %}Error: {% endif %}Select the local planning authority for this application
+
+      {% if data['application-stage'] == 'Pre-application' %}
+        {% set questionHeading = "Which local planning authority is this pre-application advice for?" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set questionHeading = "Which local planning authority is this application for?" %}
+
+      {% endif %}
+
+  {% if errorLpa %}Error: {% endif %} {{ questionHeading }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -24,15 +33,28 @@
         }) }}
       {% endif %}
 
+
+      {% if data['application-stage'] == 'Pre-application' %}
+        {% set questionHeading = "Which local planning authority is this pre-application advice for?" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set questionHeading = "Which local planning authority is this application for?" %}
+
+      {% endif %}
+
+
       <form class="form" action="/lpa-answer" method="post" novalidate>
         
         {{ govukSelect({
           id: "lpa",
           name: "lpa",
           label: {
-            text: "Select the local planning authority for this application",
+            text: questionHeading,
             classes: "govuk-label--l",
             isPageHeading: true
+          },
+          hint: {
+            text: "Start typing the name of the council and choose from the list"
           },
           errorMessage: { text: errorLpa } if errorLpa else null,
           items: [
