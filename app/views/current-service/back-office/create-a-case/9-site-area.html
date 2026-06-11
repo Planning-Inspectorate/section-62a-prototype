@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorSiteArea %}Error: {% endif %}What is the area of the site in hectares?
+  {% if errorList %}Error: {% endif %}What is the area of the site?
 {% endblock %}
 
 {% block beforeContent %}
@@ -15,33 +15,58 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% if errorSiteArea %}
+      {% if errorList %}
         {{ govukErrorSummary({
           titleText: "There is a problem",
-          errorList: [{ text: errorSiteArea, href: "#site-area" }]
+          errorList: errorList
         }) }}
       {% endif %}
 
       <form class="form" action="/site-area-answer" method="post" novalidate>
 
-        {{ govukInput({
-          id: "site-area",
-          name: "site-area",
-          value: data['site-area'],
-          classes: "govuk-input--width-5", 
-          label: {
-            text: "What is the area of the site in hectares?",
-            classes: "govuk-label--l",
+        {% call govukFieldset({
+          legend: {
+            text: "What is the area of the site?",
+            classes: "govuk-fieldset__legend--l",
             isPageHeading: true
-          },
-          hint: {
-            text: "Optional"
-          },
-          suffix: {
-            text: "ha"
-          },
-          errorMessage: { text: errorSiteArea } if errorSiteArea else null
-        }) }}
+          }
+        }) %}
+
+          <div id="site-area-hint" class="govuk-hint">
+            You can enter the site area in either hectares or square metres. Use numbers, for example 10.4 or 5.
+          </div>
+
+          {{ govukInput({
+            id: "site-area-hectares",
+            name: "site-area-hectares",
+            value: data['site-area-hectares'],
+            classes: "govuk-input--width-5",
+            label: {
+              text: "Site area in hectares"
+            },
+            suffix: {
+              text: "ha"
+            },
+            errorMessage: errors.siteAreaHectares if errors.siteAreaHectares else null
+          }) }}
+
+          <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-4">or</p>
+
+          {{ govukInput({
+            id: "site-area-sq-metres",
+            name: "site-area-sq-metres",
+            value: data['site-area-sq-metres'],
+            classes: "govuk-input--width-5",
+            label: {
+              text: "Site area in square metres"
+            },
+            suffix: {
+              text: "m²"
+            },
+            errorMessage: errors.siteAreaSqMetres if errors.siteAreaSqMetres else null
+          }) }}
+
+        {% endcall %}
         
         {{ govukButton({
           text: "Continue"

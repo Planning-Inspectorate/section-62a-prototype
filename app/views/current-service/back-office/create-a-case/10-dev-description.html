@@ -22,6 +22,15 @@
         }) }}
       {% endif %}
 
+
+      {% if data['application-stage'] == 'Pre-application' %}
+        {% set hintText = "" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set hintText = "This will be published on the website." %}
+
+      {% endif %}
+
       <form class="form" action="/dev-description-answer" method="post" novalidate>
 
         {{ govukTextarea({
@@ -34,7 +43,7 @@
               isPageHeading: true
           },
           hint: {
-              text: "This will be published on the website."
+              text: hintText
           }
         }) }}
         

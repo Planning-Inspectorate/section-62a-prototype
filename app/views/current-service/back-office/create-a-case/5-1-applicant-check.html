@@ -6,15 +6,7 @@ Check applicant organisation details
 
 {% block beforeContent %}
 
-  {% if data['has-agent'] == 'Yes' %}
-    {% set backLink = "/current-service/back-office/create-a-case/4-4-agent-check" %}
-
-  {% elif data['has-agent'] == 'No' %}
-    {% set backLink = "/current-service/back-office/create-a-case/4-1-has-agent" %}
-
-  {% endif %}
-
-  {{ govukBackLink({ text: "Back", href: backLink }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/5-0-applicant-type" }) }}
 
 {% endblock %}
 

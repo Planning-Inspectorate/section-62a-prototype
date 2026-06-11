@@ -429,3 +429,26 @@ export function validatePhone(value, displayName, fieldName) {
 
   return null;
 }
+
+// ================================================================================
+// 16. OPTIONAL ONLY NUMBER + DECIMAL VALIDATION -- check for only numbers with decimals
+// ================================================================================
+export function validateOptionalDecimalNumber(value, displayName, fieldName) {
+
+  if (!value || value.trim() === "") {
+    return null; // Passes validation automatically if left blank
+  } 
+
+  // Clean any accidental spaces from the beginning or end
+  const cleanValue = value.trim();
+
+  // Regex breakdown:
+  // ^\d+       : Must start with at least one digit
+  // (\.\d+)?$  : Optionally allows a single decimal point followed by at least one digit at the end
+  if (isNaN(cleanValue) || !/^\d+(\.\d+)?$/.test(cleanValue)) {
+    return { text: `${displayName} must only contain numbers`, href: `#${fieldName}` };
+  }
+    
+  // 3. Success!
+  return null;
+}

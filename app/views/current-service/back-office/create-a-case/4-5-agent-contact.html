@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList %}Error: {% endif %}Add agent contact details
+  {% if errorList %}Error: {% endif %}What are the agent's contact details?
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,7 +20,7 @@
     {% endif %}
 
     <form method="post" action="/agent-contact-answer" novalidate>
-      <h1 class="govuk-heading-l">Add agent contact details</h1>
+      <h1 class="govuk-heading-l">What are the agent's contact details?</h1>
 
       {{ govukInput({ 
         label: { text: "First name" }, 

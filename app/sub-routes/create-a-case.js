@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber } from '../helpers.js';
 
 const router = Router();
 
@@ -259,6 +259,20 @@ router.post('/agent-org-address-answer', function (req, res) {
   });
 
 
+// 5-0 - applicant type
+router.post('/applicant-type-answer', function (req, res) {
+  const applicantType = req.session.data['applicant-type'];
+  if (!applicantType) {
+    return res.render('current-service/back-office/create-a-case/5-0-applicant-type', { errorApplicantType: "Select whether the applicant is an organisation or an individual" });
+  }
+  if (applicantType === "Organisation") {
+    res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
+  } 
+  else if (applicantType === "Individual") {
+    res.redirect('/current-service/back-office/create-a-case/6-1-applicant-contact-check');
+  }
+});
+
 // 5-1 - applicant check organisation details (ATL)
   // --- (1) grab form (edit existing or add) ---
   router.get('/edit-applicant-org', function (req, res) {
@@ -300,7 +314,7 @@ router.post('/agent-org-address-answer', function (req, res) {
     // validate org name
     if (!orgName) {
       return res.render('current-service/back-office/create-a-case/5-2-applicant-org-name', { 
-        errorApplicantOrgName: "Enter the applicant organisation name",
+        errorApplicantOrgName: "Enter the name of the applicant organisation name",
         id: id
       });
     }
@@ -585,12 +599,20 @@ router.post('/site-coords-answer', function (req, res) {
   const errors = {};
   const errorList = [];
 
-  const siteCoordsEastingError = validateOptionalSiteCoords(siteCoordsEasting, "The Easting grid reference", "site-coords-easting");
+  if (siteCoordsEasting && !siteCoordsNorthing) {
+    errors.siteCoords = { text: "Enter both Easting and Northing" };
+    errorList.push({ text: "Enter both Easting and Northing", href: "#site-coords-northing" });
+  }
+  if (!siteCoordsEasting && siteCoordsNorthing) {
+    errors.siteCoords = { text: "Enter both Easting and Northing" };
+    errorList.push({ text: "Enter both Easting and Northing", href: "#site-coords-easting" });
+  }
+  const siteCoordsEastingError = validateOptionalSiteCoords(siteCoordsEasting, "Easting", "site-coords-easting");
   if (siteCoordsEastingError) {
     errors.siteCoordsEasting = { text: siteCoordsEastingError.text };
     errorList.push(siteCoordsEastingError);
   }
-  const siteCoordsNorthingError = validateOptionalSiteCoords(siteCoordsNorthing, "The Northing grid reference", "site-coords-northing");
+  const siteCoordsNorthingError = validateOptionalSiteCoords(siteCoordsNorthing, "Northing", "site-coords-northing");
   if (siteCoordsNorthingError) {
     errors.siteCoordsNorthing = { text: siteCoordsNorthingError.text };
     errorList.push(siteCoordsNorthingError);
@@ -608,11 +630,58 @@ router.post('/site-coords-answer', function (req, res) {
 
 // 9 - site area
 router.post('/site-area-answer', function (req, res) {
-  const siteArea = req.session.data['site-area'];
-  const siteAreaError = validateOptionalNumber(siteArea, "The area of the site", "site-area");
-  if (siteAreaError) {
+  const data = req.session.data;
+  
+  const siteAreaHectares = data['site-area-hectares'];
+  const siteAreaSqMetres = data['site-area-sq-metres'];
+  // error containers
+  let errors = {};
+  let errorList = [];
+  // trim extra spaces
+  const hasHectares = siteAreaHectares && siteAreaHectares.trim() !== '';
+  const hasSqMetres = siteAreaSqMetres && siteAreaSqMetres.trim() !== '';
+
+  // if both is filled in, error
+  if (hasHectares && hasSqMetres) {
+    errors.siteAreaHectares = { text: "Enter the site area in either hectares or square metres, not both" };
+    errors.siteAreaSqMetres = { text: "Enter the site area in either hectares or square metres, not both" };
+    
+    errorList.push({ 
+      text: "Enter the site area in either hectares or square metres, not both", 
+      href: "#site-area-hectares" 
+    });
+  } 
+  // validation for hectares if only its filled in
+  else if (hasHectares) {
+    const numError = validateOptionalDecimalNumber(siteAreaHectares, "Site area in hectares", "site-area-hectares");
+    if (numError) {
+      errors.siteAreaHectares = { text: numError.text };
+      errorList.push(numError);
+    } 
+    else if (Number(siteAreaHectares) <= 0) {
+      errors.siteAreaHectares = { text: "Site area in hectares must be greater than 0" };
+      errorList.push({ text: "Site area in hectares must be greater than 0", href: "#site-area-hectares" });
+    }
+  } 
+  // validation for square metres if only its filled in
+  else if (hasSqMetres) {
+    const numError = validateOptionalDecimalNumber(siteAreaSqMetres, "Site area in square metres", "site-area-sq-metres");
+    if (numError) {
+      errors.siteAreaSqMetres = { text: numError.text };
+      errorList.push(numError);
+    } 
+    else if (Number(siteAreaSqMetres) <= 0) {
+      errors.siteAreaSqMetres = { text: "Site area in square metres must be greater than 0" };
+      errorList.push({ text: "Site area in square metres must be greater than 0", href: "#site-area-sq-metres" });
+    }
+  }
+
+  // render errors if any
+  if (errorList.length > 0) {
     return res.render('current-service/back-office/create-a-case/9-site-area', { 
-      errorSiteArea: siteAreaError.text
+      data: data,
+      errors: errors,
+      errorList: errorList
     });
   }
   res.redirect('/current-service/back-office/create-a-case/10-dev-description');
@@ -623,7 +692,7 @@ router.post('/site-area-answer', function (req, res) {
 router.post('/dev-description-answer', function (req, res) {
   const devDescription = req.session.data['dev-description'];
   if (!devDescription) {
-    return res.render('current-service/back-office/create-a-case/10-dev-description', { errorDevDescription: "Enter a description of the proposed development" });
+    return res.render('current-service/back-office/create-a-case/10-dev-description', { errorDevDescription: "Enter a description of the development" });
   }
   res.redirect('/current-service/back-office/create-a-case/11-notification-received-date');
 });
@@ -744,6 +813,15 @@ router.post('/case-created-confirmation', function (req, res) {
     caseReference = `S62A/2026/${counterString}`;
   }
 
+  // build site area field based on hectares or square metres
+  let finalSiteArea = "";
+
+  if (data['site-area-hectares'] && data['site-area-hectares'].trim() !== '') {
+    finalSiteArea = data['site-area-hectares'] + " ha";
+  } else if (data['site-area-sq-metres'] && data['site-area-sq-metres'].trim() !== '') {
+    finalSiteArea = data['site-area-sq-metres'] + " m²";
+  }
+
   // map case object
   const newCase = {
     reference: caseReference,
@@ -784,7 +862,7 @@ router.post('/case-created-confirmation', function (req, res) {
       easting: data['site-coords-easting'],
       northing: data['site-coords-northing']
     },
-    siteArea: data['site-area'],
+    siteArea: finalSiteArea,
     devDescription: data['dev-description'],
     notificationReceivedDate: {
       day: data['notification-received-date-day'],

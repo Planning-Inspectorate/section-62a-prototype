@@ -34,7 +34,8 @@ import {
   validateOptionalDate,
   updateCaseData,
   validateName,
-  validateOptionalName
+  validateOptionalName,
+  validateOptionalDecimalNumber
 } from './helpers.js';
 
 // run initialization fixes

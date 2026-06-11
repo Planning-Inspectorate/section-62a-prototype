@@ -1,0 +1,63 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ {% if errorApplicationType %}Error: {% endif %}Is the applicant an organisation or an individual?
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% if data['has-agent'] == 'Yes' %}
+    {% set backLink = "/current-service/back-office/create-a-case/4-4-agent-check" %}
+
+  {% elif data['has-agent'] == 'No' %}
+    {% set backLink = "/current-service/back-office/create-a-case/4-1-has-agent" %}
+
+  {% endif %}
+
+  {{ govukBackLink({ text: "Back", href: backLink }) }}
+
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorApplicantType %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorApplicantType, href: "#applicant-type" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/applicant-type-answer" method="post" novalidate>
+      {{ govukRadios({
+        idPrefix: "applicant-type",
+        name: "applicant-type",
+        fieldset: {
+          legend: { 
+            text: "Is the applicant an organisation or an individual?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorApplicantType } if errorApplicantType else null,
+        items: [
+          { 
+            value: "Organisation", 
+            text: "Organisation",
+            checked: data['applicant-type'] == 'Organisation'
+          },
+          { 
+            value: "Individual", 
+            text: "Individual",
+            checked: data['applicant-type'] == 'Individual'
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

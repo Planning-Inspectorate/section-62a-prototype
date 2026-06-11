@@ -262,12 +262,18 @@
 
       {# --- 9: Site Area --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Site area (ha)</dt>
+        <dt class="govuk-summary-list__key">Site area</dt>
         <dd class="govuk-summary-list__value">
-          {% if data['site-area'] %}{{ data['site-area'] }} ha{% endif %}
+          {% if data['site-area-hectares'] %}
+            {{ data['site-area-hectares'] }} ha
+          {% elif data['site-area-sq-metres'] %}
+            {{ data['site-area-sq-metres'] }} m²
+          {% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/9-site-area">Change<span class="govuk-visually-hidden"> site area</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/9-site-area">
+            Change<span class="govuk-visually-hidden"> site area</span>
+          </a>
         </dd>
       </div>
 

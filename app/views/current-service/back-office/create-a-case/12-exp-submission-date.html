@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList %}Error: {% endif %}What is the expected submission date for the application?
+  {% if errorList %}Error: {% endif %}When is the application expected to be submitted?
 {% endblock %}
 
 {% block beforeContent %}
@@ -27,7 +27,7 @@
         namePrefix: "expected-submission-date",
         fieldset: {
           legend: {
-            text: "What is the expected submission date for the application?",
+            text: "When is the application expected to be submitted?",
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l"
           }
