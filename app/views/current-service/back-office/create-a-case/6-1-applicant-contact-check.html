@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/5-1-applicant-check" }) }}
+  {% if data['applicant-type'] == 'Organisation' %}
+    {% set backLink = "/current-service/back-office/create-a-case/5-1-applicant-check" %}
+
+  {% elif data['applicant-type'] == 'Individual' %}
+    {% set backLink = "/current-service/back-office/create-a-case/5-0-applicant-type" %}
+
+  {% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+
 {% endblock %}
 
 {% block content %}
@@ -19,7 +31,14 @@
       }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Check applicant contact details</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details</h1>
+
+    {# --- DYNAMIC HINT TEXT --- #}
+    {% if data['has-agent'] == 'Yes' %}
+      <div id="applicant-contact-hint" class="govuk-hint">
+        You can skip adding applicant contact details if you have an agent.
+      </div>
+    {% endif %}
 
     {% set contactList = data['applicant-contact-list'] or [] %}
     {% set orgList = data['applicant-org-list'] or [] %}
@@ -70,23 +89,47 @@
         {% endfor %}
       </dl>
     {% else %}
-      <p class="govuk-body">No applicant contacts found</p>
+      <br><br>
+      <p class="govuk-body">No applicant contacts found.</p>
       <br>
     {% endif %}
 
-{# --- BUTTONS --- #}
+    {# --- BUTTONS --- #}
     {% if contactList.length > 0 %}
+      {# If there are items, they can always add more or continue #}
       <form action="/applicant-contact-check-continue" method="post" novalidate>
         <p class="govuk-body">
           <a href="/edit-applicant-contact" id="add-another-contact" class="govuk-link govuk-!-font-size-19">Add another</a>
         </p>
         {{ govukButton({ text: "Continue" }) }}
       </form>
+
     {% else %}
-      <form action="/edit-applicant-contact" method="get">
-        {{ govukButton({ text: "Add details" }) }}
-      </form>
+      {# If the list is empty, evaluate the conditional logic #}
+      {% if data['has-agent'] == 'Yes' %}
+        {# Optional path: Give them the choice to skip #}
+        <form action="/applicant-contact-check-continue" method="post" novalidate>
+          <div class="govuk-button-group">
+            {# Notice how this uses an href, making it a semantic link #}
+            {{ govukButton({ 
+              text: "Add details", 
+              href: "/edit-applicant-contact",
+              classes: "govuk-button--secondary" 
+            }) }}
+            {{ govukButton({ text: "Continue" }) }}
+          </div>
+        </form>
+      {% else %}
+        {# Mandatory path: Remove the <form> wrapper entirely and use an href #}
+        {{ govukButton({ 
+          text: "Add details", 
+          href: "/edit-applicant-contact",
+          id: "add-another-contact" 
+        }) }}
+      {% endif %}
+
     {% endif %}
+
   </div>
 </div>
 {% endblock %}

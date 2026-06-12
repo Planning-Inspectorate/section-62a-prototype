@@ -65,7 +65,8 @@
       {# --- DYNAMIC ORGANISATION RADIOS --- #}
       {% set orgList = data['applicant-org-list'] or [] %}
       
-      {% if orgList.length > 1 %}
+      {# ADDED: Explicitly check that they are an Organisation to prevent ghost data issues #}
+      {% if data['applicant-type'] == 'Organisation' and orgList.length > 1 %}
         <div class="govuk-form-group {% if errors.linkedOrg %}govuk-form-group--error{% endif %} govuk-!-margin-top-6">
           
           <fieldset class="govuk-fieldset" {% if errors.linkedOrg %}aria-describedby="linked-org-error"{% endif %}>

@@ -100,6 +100,7 @@
     {% set applicantContactsHtml %}
       {% set appContactList = data['applicant-contact-list'] or [] %}
       {% set appOrgList = data['applicant-org-list'] or [] %}
+      
       {% if appContactList.length > 0 %}
         <ul class="govuk-list {% if appContactList.length > 1 %}govuk-list--bullet{% endif %}">
           {% for contact in appContactList %}
@@ -114,6 +115,8 @@
             </li>
           {% endfor %}
         </ul>
+      {% else %}
+        None provided
       {% endif %}
     {% endset %}
 
@@ -259,14 +262,25 @@
       {% endif %}
       {# --- END CONDITIONAL ROWS --- #}
 
-      {# --- 5: Applicants --- #}
+      {# --- 5-0: Applicant Type --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Applicants</dt>
-        <dd class="govuk-summary-list__value">{{ applicantsHtml | safe }}</dd>
+        <dt class="govuk-summary-list__key">Applicant type</dt>
+        <dd class="govuk-summary-list__value">{{ data['applicant-type'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/5-1-applicant-check">Change<span class="govuk-visually-hidden"> applicants</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/5-0-applicant-type">Change<span class="govuk-visually-hidden"> applicant type</span></a>
         </dd>
       </div>
+
+      {# --- 5: Applicant Organisations (Conditional) --- #}
+      {% if data['applicant-type'] == 'Organisation' %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Applicant organisations</dt>
+          <dd class="govuk-summary-list__value">{{ applicantsHtml | safe }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/5-1-applicant-check">Change<span class="govuk-visually-hidden"> applicant organisations</span></a>
+          </dd>
+        </div>
+      {% endif %}
 
       {# --- 6: Applicant Contacts --- #}
       <div class="govuk-summary-list__row">

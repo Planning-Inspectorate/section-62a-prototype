@@ -208,7 +208,7 @@ router.post('/has-agent-answer', function (req, res) {
     res.redirect('/current-service/back-office/create-a-case/4-2-agent-org-name');
   } 
   else if (hasAgent === "No") {
-    res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
+    res.redirect('/current-service/back-office/create-a-case/5-0-applicant-type');
   }
 });
 
@@ -543,39 +543,66 @@ router.post('/applicant-type-answer', function (req, res) {
 
   // validate contact list before proceeding to next section
   router.post('/applicant-contact-check-continue', function (req, res) {
+    const applicantType = req.session.data['applicant-type']; // "Individual" or "Organisation"
+    const hasAgent = req.session.data['has-agent'];           // "Yes" or "No"
+    
     const orgList = req.session.data['applicant-org-list'] || [];
     const contactList = req.session.data['applicant-contact-list'] || [];
     const errorList = [];
 
-    // cross ref, loop through every organisation
-    orgList.forEach(org => {
-      // check if at least one contact is linked to the org
-      const hasContact = contactList.some(contact => contact.linkedOrg === org.id);
+    // =========================================================
+    // MANDATORY / OPTIONAL LOGIC
+    // =========================================================
+    // If they have an agent, the applicant contact list is entirely optional.
+    // We only run these mandatory checks if there is NO agent.
+    if (hasAgent === 'No') {
       
-      // throw error if no contacts linked to org
-      if (!hasContact) {
-        errorList.push({ 
-          text: `You must add a contact for ${org.orgName}`, 
-          href: "#add-another-contact" // This links to the 'Add another' button
-        });
+      if (applicantType === 'Individual') {
+        // Rule: Individual + No Agent = Must have at least 1 contact
+        if (contactList.length === 0) {
+          errorList.push({ 
+            text: "You must add applicant contact details", 
+            href: "#add-another-contact" 
+          });
+        }
+      } 
+      else {
+        // Rule: Organisation + No Agent = Every org must have a linked contact
+        if (orgList.length === 0 && contactList.length === 0) {
+          // Edge case fallback
+          errorList.push({ 
+            text: "You must add applicant contact details", 
+            href: "#add-another-contact" 
+          });
+        } else {
+          orgList.forEach(org => {
+            const hasContact = contactList.some(contact => contact.linkedOrg === org.id);
+            if (!hasContact) {
+              errorList.push({ 
+                text: `You must add a contact for ${org.orgName}`, 
+                href: "#add-another-contact" 
+              });
+            }
+          });
+        }
       }
-    });
+    }
 
-    // If any organisation is missing a contact, reload the page and show the errors
+    // If any errors were caught, reload the page
     if (errorList.length > 0) {
       return res.render('current-service/back-office/create-a-case/6-1-applicant-contact-check', {
         errorList: errorList
       });
     }
 
-    // If all clear, safely proceed to the next section!
+    // If all clear (or if hasAgent === 'Yes'), safely proceed!
     res.redirect('/current-service/back-office/create-a-case/7-site-address');
   });
 
-  // --- (2) save form data ---
+// --- (2) save form data ---
   router.post('/applicant-contact-answer', function (req, res) {
-    // grad edit ID securely from session
     const editId = req.session.data['edit-contact-id']; 
+    const applicantType = req.session.data['applicant-type']; // Grab the applicant type
     
     const firstName = req.session.data['applicant-contact-first-name'];
     const lastName = req.session.data['applicant-contact-last-name'];
@@ -588,14 +615,17 @@ router.post('/applicant-type-answer', function (req, res) {
     const errors = {};
     const errorList = [];
 
-    // validate fields
-    if (!firstName) {
-      errors.firstName = { text: "Enter the applicant contact's first name" };
-      errorList.push({ text: "Enter the applicant contact's first name", href: "#applicant-contact-first-name" });
+    // validate standard fields using your helpers
+    const firstNameError = validateName(firstName, "applicant contact's first name", "applicant-contact-first-name");
+    if (firstNameError) {
+      errors.firstName = { text: firstNameError.text };
+      errorList.push(firstNameError);
     }
-    if (!lastName) {
-      errors.lastName = { text: "Enter the applicant contact's last name" };
-      errorList.push({ text: "Enter the applicant contact's last name", href: "#applicant-contact-last-name" });
+
+    const lastNameError = validateName(lastName, "applicant contact's last name", "applicant-contact-last-name");
+    if (lastNameError) {
+      errors.lastName = { text: lastNameError.text };
+      errorList.push(lastNameError);
     }
     
     const emailError = validateEmail(email, "applicant contact's email address", "applicant-contact-email");
@@ -610,15 +640,25 @@ router.post('/applicant-type-answer', function (req, res) {
       errorList.push(phoneError);
     }
 
-    if (orgList.length > 1) {
-      if (!linkedOrg) {
-        errors.linkedOrg = { text: "Select which organisation this contact is for" };
-        errorList.push({ text: "Select which organisation this contact is for", href: "#linked-org-1" });
+    // =========================================================
+    // DYNAMIC RADIO PROTECTION
+    // =========================================================
+    if (applicantType === "Individual") {
+      // Forcefully wipe linkedOrg if they are an Individual so no stray data gets saved
+      linkedOrg = ""; 
+    } else {
+      // ONLY validate linked organisations if the applicant is an Organisation
+      if (orgList.length > 1) {
+        if (!linkedOrg) {
+          errors.linkedOrg = { text: "Select which organisation this contact is for" };
+          errorList.push({ text: "Select which organisation this contact is for", href: "#linked-org-1" });
+        }
+      } else if (orgList.length === 1) {
+        linkedOrg = orgList[0].id; // Auto-assign if there is only 1 org
       }
-    } else if (orgList.length === 1) {
-      linkedOrg = orgList[0].id;
     }
 
+    // Bounce back if errors exist
     if (errorList.length > 0) {
       return res.render('current-service/back-office/create-a-case/6-2-applicant-contact', { 
         errors: errors,
