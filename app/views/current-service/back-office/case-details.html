@@ -23,6 +23,55 @@
 {# Date Formatter #}
 {% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
 
+{# --- Primary LPA Contact HTML --- #}
+{% set lpaContactsHtml = "-" %}
+{% if currentCase.lpa or currentCase.lpaContact %}
+  {% set lpaContactsHtml %}
+    {% if currentCase.lpa %}
+      {{ currentCase.lpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.lpaContact %}
+      {% if currentCase.lpaContact.firstName or currentCase.lpaContact.lastName %}
+        {{ currentCase.lpaContact.firstName }} {{ currentCase.lpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.email %}
+        {{ currentCase.lpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.phone %}
+        {{ currentCase.lpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{# --- Secondary LPA Contact HTML --- #}
+{% set secondaryLpaContactsHtml = "No" %}
+
+{% if currentCase.hasSecondaryLpa === 'Yes' %}
+  {% set secondaryLpaContactsHtml %}
+    {% if currentCase.secondaryLpa %}
+    {{ currentCase.secondaryLpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.secondaryLpaContact %}
+      {% if currentCase.secondaryLpaContact.firstName or currentCase.secondaryLpaContact.lastName %}
+        {{ currentCase.secondaryLpaContact.firstName }} {{ currentCase.secondaryLpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.email %}
+        {{ currentCase.secondaryLpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.phone %}
+        {{ currentCase.secondaryLpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
 {% set expectedSubmissionDateHtml = "-" %}
 {% if currentCase.expectedSubmissionDate.year and currentCase.expectedSubmissionDate.month and currentCase.expectedSubmissionDate.day %}
   {% set day = currentCase.expectedSubmissionDate.day | int %}
@@ -225,7 +274,7 @@
 
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Local planning authority</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.lpa | default('-') }}</dd>
+            <dd class="govuk-summary-list__value">{{ lpaContactsHtml| safe }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -238,7 +287,7 @@
           {% if currentCase.hasSecondaryLpa === 'Yes' %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Secondary local planning authority</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.secondaryLpa | default('-') }}</dd>
+            <dd class="govuk-summary-list__value">{{ secondaryLpaContactsHtml | safe }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
           {% endif %}

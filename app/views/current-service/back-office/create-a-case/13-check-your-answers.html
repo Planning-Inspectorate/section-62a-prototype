@@ -16,6 +16,44 @@
     {# set variables outside list                                #}
     {# ========================================================= #}
 
+    {# --- LPA Contact HTML --- #}
+    {% set lpaContactsHtml %}
+      {% if data['lpa'] %}
+        <strong>{{ data['lpa'] }}</strong><br>
+      {% endif %}
+      
+      {% if data['lpa-contact-first-name'] or data['lpa-contact-last-name'] %}
+        {{ data['lpa-contact-first-name'] }} {{ data['lpa-contact-last-name'] }}<br>
+      {% endif %}
+      
+      {% if data['lpa-contact-email'] %}
+        {{ data['lpa-contact-email'] }}<br>
+      {% endif %}
+      
+      {% if data['lpa-contact-phone'] %}
+        {{ data['lpa-contact-phone'] }}
+      {% endif %}
+    {% endset %}
+
+    {# --- Secondary LPA Contact HTML --- #}
+    {% set secondaryLpaContactsHtml %}
+      {% if data['secondary-lpa'] %}
+        <strong>{{ data['secondary-lpa'] }}</strong><br>
+      {% endif %}
+      
+      {% if data['secondary-lpa-contact-first-name'] or data['secondary-lpa-contact-last-name'] %}
+        {{ data['secondary-lpa-contact-first-name'] }} {{ data['secondary-lpa-contact-last-name'] }}<br>
+      {% endif %}
+      
+      {% if data['secondary-lpa-contact-email'] %}
+        {{ data['secondary-lpa-contact-email'] }}<br>
+      {% endif %}
+      
+      {% if data['secondary-lpa-contact-phone'] %}
+        {{ data['secondary-lpa-contact-phone'] }}
+      {% endif %}
+    {% endset %}
+
     {# --- Agent Address HTML --- #}
     {% set agentAddressHtml %}
       {% if data['agent-org-address-line-1'] %}<div>{{ data['agent-org-address-line-1'] }}</div>{% endif %}
@@ -25,11 +63,11 @@
       {% if data['agent-org-address-postcode'] %}<div>{{ data['agent-org-address-postcode'] }}</div>{% endif %}
     {% endset %}
 
-    {# --- Agent Contacts HTML (Bulleted) --- #}
+    {# --- Agent Contacts HTML (Conditionally Bulleted) --- #}
     {% set agentContactsHtml %}
       {% set agentContactList = data['agent-contact-list'] or [] %}
       {% if agentContactList.length > 0 %}
-        <ul class="govuk-list govuk-list--bullet">
+        <ul class="govuk-list {% if agentContactList.length > 1 %}govuk-list--bullet{% endif %}">
           {% for contact in agentContactList %}
             <li>
               {{ contact.firstName }} {{ contact.lastName }}<br>
@@ -41,11 +79,11 @@
       {% endif %}
     {% endset %}
 
-    {# --- Applicant Organisations HTML (Bulleted) --- #}
+    {# --- Applicant Organisations HTML (Conditionally Bulleted) --- #}
     {% set applicantsHtml %}
       {% set applicantOrgList = data['applicant-org-list'] or [] %}
       {% if applicantOrgList.length > 0 %}
-        <ul class="govuk-list govuk-list--bullet">
+        <ul class="govuk-list {% if applicantOrgList.length > 1 %}govuk-list--bullet{% endif %}">
           {% for org in applicantOrgList %}
             <li>
               {{ org.orgName }}<br>
@@ -58,12 +96,12 @@
       {% endif %}
     {% endset %}
 
-    {# --- Applicant Contacts HTML (Bulleted w/ Linked Org) --- #}
+    {# --- Applicant Contacts HTML (Conditionally Bulleted) --- #}
     {% set applicantContactsHtml %}
       {% set appContactList = data['applicant-contact-list'] or [] %}
       {% set appOrgList = data['applicant-org-list'] or [] %}
       {% if appContactList.length > 0 %}
-        <ul class="govuk-list govuk-list--bullet">
+        <ul class="govuk-list {% if appContactList.length > 1 %}govuk-list--bullet{% endif %}">
           {% for contact in appContactList %}
             <li>
               {{ contact.firstName }} {{ contact.lastName }}<br>
@@ -153,9 +191,9 @@
       {# --- 2: LPA --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">LPA</dt>
-        <dd class="govuk-summary-list__value">{{ data['lpa'] }}</dd>
+        <dd class="govuk-summary-list__value">{{  lpaContactsHtml | safe  }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/2-lpa">Change<span class="govuk-visually-hidden"> LPA</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/2-1-lpa">Change<span class="govuk-visually-hidden"> LPA</span></a>
         </dd>
       </div>
 
@@ -172,7 +210,7 @@
       {% if data['has-secondary-lpa'] == 'Yes' %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Secondary LPA</dt>
-          <dd class="govuk-summary-list__value">{{ data['secondary-lpa'] }}</dd>
+          <dd class="govuk-summary-list__value">{{  secondaryLpaContactsHtml | safe  }}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/current-service/back-office/create-a-case/3-2-secondary-lpa-input">Change<span class="govuk-visually-hidden"> secondary LPA</span></a>
           </dd>
@@ -313,7 +351,7 @@
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
           <span class="govuk-visually-hidden">Warning</span>
-          Clicking accept & submit will create a second case as part of the connected application
+          This will create a second case as part of the connected application.
         </strong>
       </div>
 
@@ -323,7 +361,7 @@
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
           <span class="govuk-visually-hidden">Warning</span>
-          Clicking Accept & Submit will send a notification to the applicant / agent
+          This will send a notification to the applicant or agent.
         </strong>
       </div>
 
@@ -332,7 +370,7 @@
     <form action="/case-created-confirmation" method="post" novalidate>
       <input type="hidden" name="answers-checked" value="true">
       {{ govukButton({
-        text: "Accept & Submit"
+        text: "Accept and submit"
       }) }}
     </form>
 

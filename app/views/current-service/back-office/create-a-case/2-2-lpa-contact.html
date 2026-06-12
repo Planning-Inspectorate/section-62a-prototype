@@ -1,0 +1,63 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}What are the LPA's contact details?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/2-1-lpa" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/lpa-contact-answer" novalidate>
+      <h1 class="govuk-heading-l">What are the LPA's contact details?</h1>
+
+      {{ govukInput({ 
+        label: { text: "First name" }, 
+        id: "lpa-contact-first-name", 
+        name: "lpa-contact-first-name", 
+        value: data['lpa-contact-first-name'],
+        errorMessage: errors.firstName if errors.firstName else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Last name" }, 
+        id: "lpa-contact-last-name", 
+        name: "lpa-contact-last-name", 
+        value: data['lpa-contact-last-name'],
+        errorMessage: errors.lastName if errors.lastName else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Email address" }, 
+        id: "lpa-contact-email", 
+        name: "lpa-contact-email", 
+        type: "email", 
+        value: data['lpa-contact-email'],
+        errorMessage: errors.email if errors.email else null
+      }) }}
+      
+      {{ govukInput({ 
+        label: { text: "Phone number (optional)" }, 
+        id: "lpa-contact-phone", 
+        name: "lpa-contact-phone", 
+        type: "tel", 
+        value: data['lpa-contact-phone'],
+        errorMessage: errors.phone if errors.phone else null
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

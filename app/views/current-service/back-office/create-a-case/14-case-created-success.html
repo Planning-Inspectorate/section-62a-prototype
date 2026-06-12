@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  Case created successfully - Manage Planning Applications
+  Case created - Manage Section 62A Applications
 {% endblock %}
 
 {% block beforeContent %}
@@ -11,10 +11,10 @@
 
 {# --- CONDITIONAL PANEL FOR LBC --- #}
     {% set panelHtml %}
-      Case reference<br><strong>{{ data['newlyCreatedReference'] | default('undefined') }}</strong>
+      Case reference number<br><strong>{{ data['newlyCreatedReference'] | default('undefined') }}</strong>
       
       {% if data['newlyCreatedLbcReference'] %}
-        <br><br>LBC Case reference<br><strong>{{ data['newlyCreatedLbcReference'] }}</strong>
+        <br><br>LBC Case reference number<br><strong>{{ data['newlyCreatedLbcReference'] }}</strong>
       {% endif %}
     {% endset %}
     
@@ -23,7 +23,7 @@
 
     {# --- SUCCESS PANEL --- #}
     {{ govukPanel({
-      titleText: "Case created successfully",
+      titleText: "Case created",
       html: panelHtml
     }) }}
 
@@ -31,10 +31,8 @@
     <h2 class="govuk-heading-m">What happens next</h2>
 
     <p class="govuk-body">
-      You can now manage this application from the back-office dashboard. The case status is currently set to <strong>New</strong>.
+      You can now manage this application in your case list. Its status is <strong>New</strong>.
     </p>
-
-    <p class="govuk-body">You can:</p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>

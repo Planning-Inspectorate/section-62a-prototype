@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName } from '../helpers.js';
 
 const router = Router();
 
@@ -44,24 +44,77 @@ router.post('/application-type-answer', function (req, res) {
   if (!applicationType) {
     return res.render('current-service/back-office/create-a-case/1-application-type', { errorApplicationType: "Select the type of application" });
 }
-  res.redirect('/current-service/back-office/create-a-case/2-lpa');
+  res.redirect('/current-service/back-office/create-a-case/2-1-lpa');
 });
 
 
-// 2 - primary lpa input
+// 2-1 - primary lpa input
 router.post('/lpa-answer', function(req, res) {
   const lpa = req.session.data['lpa'];
   if (!lpa) {
-    return res.render('current-service/back-office/create-a-case/2-lpa', { errorLpa: "Enter the local planning authority" });
+    return res.render('current-service/back-office/create-a-case/2-1-lpa', { errorLpa: "Enter the local planning authority" });
   }
   if (!validAuthorities.includes(lpa)) {
-    return res.render('current-service/back-office/create-a-case/2-lpa', { lpa: lpa, errorLpa: "Select a local planning authority from the list" });
+    return res.render('current-service/back-office/create-a-case/2-1-lpa', { lpa: lpa, errorLpa: "Select a local planning authority from the list" });
   }
+  res.redirect('/current-service/back-office/create-a-case/2-2-lpa-contact');
+});
+
+
+// 2-2 - primary lpa contact details
+router.post('/lpa-contact-answer', function (req, res) {
+  const data = req.session.data;
+  
+  const lpaContactFirstName = data['lpa-contact-first-name'];
+  const lpaContactLastName = data['lpa-contact-last-name'];
+  const lpaContactEmail = data['lpa-contact-email'];
+  const lpaContactPhone = data['lpa-contact-phone'];
+
+  const errors = {};
+  const errorList = [];
+
+  // validate first name
+  const firstNameError = validateName(lpaContactFirstName, "LPA contact's first name", "lpa-contact-first-name");
+  if (firstNameError) {
+    errors.firstName = { text: firstNameError.text };
+    errorList.push(firstNameError);
+  }
+
+  // validate last name
+  const lastNameError = validateName(lpaContactLastName, "LPA contact's last name", "lpa-contact-last-name");
+  if (lastNameError) {
+    errors.lastName = { text: lastNameError.text };
+    errorList.push(lastNameError);
+  }
+
+  // validate email
+  const emailError = validateEmail(lpaContactEmail, "LPA contact's email address", "lpa-contact-email");
+  if (emailError) {
+    errors.email = { text: emailError.text };
+    errorList.push(emailError);
+  }
+
+  // validate optional phone
+  const phoneError = validateOptionalPhone(lpaContactPhone, "lpa-contact-phone");
+  if (phoneError) {
+    errors.phone = { text: phoneError.text };
+    errorList.push(phoneError);
+  }
+
+  // render errors if any
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/2-2-lpa-contact', {
+      data: data,
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  
   res.redirect('/current-service/back-office/create-a-case/3-1-has-secondary-lpa');
 });
 
 
-// 3 - has secondary lpa
+// 3-1 - has secondary lpa
 router.post('/has-secondary-lpa-answer', function (req, res) {
   const hasSecondaryLpa = req.session.data['has-secondary-lpa'];
   if (!hasSecondaryLpa) {
@@ -88,9 +141,62 @@ router.post('/secondary-lpa-answer', function (req, res) {
   if (secondaryLpa === req.session.data['lpa']) {
     return res.render('current-service/back-office/create-a-case/3-2-secondary-lpa-input', { secondaryLpa: secondaryLpa, errorSecondaryLpa: "Secondary local planning authority cannot be the same as the local planning authority" });
   }
-  res.redirect('/current-service/back-office/create-a-case/4-1-has-agent');
+  res.redirect('/current-service/back-office/create-a-case/3-3-secondary-lpa-contact');
 });
 
+
+// 3-3 - secondary lpa contact details
+router.post('/secondary-lpa-contact-answer', function (req, res) {
+  const data = req.session.data;
+  
+  const secondaryLpaContactFirstName = data['secondary-lpa-contact-first-name'];
+  const secondaryLpaContactLastName = data['secondary-lpa-contact-last-name'];
+  const secondaryLpaContactEmail = data['secondary-lpa-contact-email'];
+  const secondaryLpaContactPhone = data['secondary-lpa-contact-phone'];
+
+  const errors = {};
+  const errorList = [];
+
+  // validate first name
+  const firstNameError = validateName(secondaryLpaContactFirstName, "Secondary LPA contact's first name", "secondary-lpa-contact-first-name");
+  if (firstNameError) {
+    errors.firstName = { text: firstNameError.text };
+    errorList.push(firstNameError);
+  }
+
+  // validate last name
+  const lastNameError = validateName(secondaryLpaContactLastName, "Secondary LPA contact's last name", "secondary-lpa-contact-last-name");
+  if (lastNameError) {
+    errors.lastName = { text: lastNameError.text };
+    errorList.push(lastNameError);
+  }
+
+  // validate email
+  const emailError = validateEmail(secondaryLpaContactEmail, "Secondary LPA contact's email address", "secondary-lpa-contact-email");
+  if (emailError) {
+    errors.email = { text: emailError.text };
+    errorList.push(emailError);
+  }
+
+  // validate optional phone
+  const phoneError = validateOptionalPhone(secondaryLpaContactPhone, "secondary-lpa-contact-phone");
+  if (phoneError) {
+    errors.phone = { text: phoneError.text };
+    errorList.push(phoneError);
+  }
+
+  // render errors if any
+  if (errorList.length > 0) {
+    return res.render('current-service/back-office/create-a-case/3-3-secondary-lpa-contact', {
+      data: data,
+      errors: errors,
+      errorList: errorList
+    });
+  }
+  
+  res.redirect('/current-service/back-office/create-a-case/4-1-has-agent');
+});
+  
 
 // 4-1 - has agent
 router.post('/has-agent-answer', function (req, res) {
@@ -829,11 +935,27 @@ router.post('/case-created-confirmation', function (req, res) {
     applicationStage: data['application-stage'],
     applicationCategory: data['application-category'],
     applicationType: data['application-type'],
+
+   // lpa details
     lpa: data['lpa'],
+    lpaContact: {
+      firstName: data['lpa-contact-first-name'],
+      lastName: data['lpa-contact-last-name'],
+      email: data['lpa-contact-email'],
+      phone: data['lpa-contact-phone']
+    },
 
     // conditional - secondary lpa
     hasSecondaryLpa: data['has-secondary-lpa'],
     secondaryLpa: data['has-secondary-lpa'] === 'Yes' ? data['secondary-lpa'] : null,
+    
+    // secondary lpa contact details saved only if secondary lpa is yes
+    secondaryLpaContact: data['has-secondary-lpa'] === 'Yes' ? {
+      firstName: data['secondary-lpa-contact-first-name'],
+      lastName: data['secondary-lpa-contact-last-name'],
+      email: data['secondary-lpa-contact-email'],
+      phone: data['secondary-lpa-contact-phone']
+    } : null,
 
     // conditional - agent details
     hasAgent: data['has-agent'],
@@ -917,16 +1039,21 @@ router.post('/case-created-confirmation', function (req, res) {
   // wipe data fields for fresh create a case journey
   const fieldsToClear = [
     'application-stage', 'application-category', 'application-type', 'lpa', 
-    'has-secondary-lpa', 'secondary-lpa', 'has-agent', 
-    'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
-    'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode',
-    'agent-contact-list', 'applicant-org-list', 'applicant-contact-list',
+    'lpa-contact-first-name', 'lpa-contact-last-name', 'lpa-contact-email', 'lpa-contact-phone',
+    'has-secondary-lpa', 'secondary-lpa', 
+    'secondary-lpa-contact-first-name', 'secondary-lpa-contact-last-name', 'secondary-lpa-contact-email', 'secondary-lpa-contact-phone', // <-- New Secondary LPA fields
+    'has-agent', 'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
+    'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode', 'agent-contact-list',
+    
+    // applicant-type is not saved as it's only purpose is to direct user down the correct path, so it's cleared to reset the journey
+    'applicant-type', 
+    'applicant-org-list', 'applicant-contact-list', 
     'site-address-line-1', 'site-address-line-2', 'site-address-town', 
     'site-address-county', 'site-address-postcode', 'site-coords-easting', 
-    'site-coords-northing', 'site-area', 'dev-description', 'distressing-content',
+    'site-coords-northing', 'site-area', 'site-area-hectares', 'site-area-sq-metres', 
+    'dev-description', 'distressing-content',
     'expected-submission-date-day', 'expected-submission-date-month', 'expected-submission-date-year',
-    'notification-received-date-day', 'notification-received-date-month', 'notification-received-date-year',
-    'expected-submission-date-day', 'expected-submission-date-month', 'expected-submission-date-year'
+    'notification-received-date-day', 'notification-received-date-month', 'notification-received-date-year'
   ];
 
   fieldsToClear.forEach(field => {
