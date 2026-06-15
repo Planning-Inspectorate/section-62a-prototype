@@ -420,7 +420,7 @@ router.post('/applicant-type-answer', function (req, res) {
     // validate org name
     if (!orgName) {
       return res.render('current-service/back-office/create-a-case/5-2-applicant-org-name', { 
-        errorApplicantOrgName: "Enter the name of the applicant organisation name",
+        errorApplicantOrgName: "Enter the name of the applicant organisation",
         id: id
       });
     }
@@ -550,11 +550,10 @@ router.post('/applicant-type-answer', function (req, res) {
     const contactList = req.session.data['applicant-contact-list'] || [];
     const errorList = [];
 
-    // =========================================================
+
     // MANDATORY / OPTIONAL LOGIC
-    // =========================================================
-    // If they have an agent, the applicant contact list is entirely optional.
-    // We only run these mandatory checks if there is NO agent.
+    // if agent, then applicant contact is optional for both organisations and individuals.
+    // run mandatory checks only if agent == no.
     if (hasAgent === 'No') {
       
       if (applicantType === 'Individual') {
@@ -602,7 +601,7 @@ router.post('/applicant-type-answer', function (req, res) {
 // --- (2) save form data ---
   router.post('/applicant-contact-answer', function (req, res) {
     const editId = req.session.data['edit-contact-id']; 
-    const applicantType = req.session.data['applicant-type']; // Grab the applicant type
+    const applicantType = req.session.data['applicant-type']; // grab the applicant type
     
     const firstName = req.session.data['applicant-contact-first-name'];
     const lastName = req.session.data['applicant-contact-last-name'];
