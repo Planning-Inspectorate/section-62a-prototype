@@ -1,5 +1,4 @@
 {% extends "layouts/new/back-office.html" %}
-{% from "components/dashboard-box/dashboard-box.njk" import dashboardBox %}
 {% set activePage = "all-cases" %}
 
 {% block pageTitle %}
@@ -7,133 +6,153 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="govuk-grid-row">
-
-  <h1 class="govuk-heading-xl">
-    Manage Section 62A Applications
-  </h1>
-
-  <div class="govuk-grid-row row-inline">
-
-    {{ dashboardBox({
-    width: "two-thirds",
-    classes: "govuk-!-margin-bottom-6",
-    html: "<h1 class='govuk-label-wrapper'>
-      <label class='govuk-label govuk-label--l' id='search-label' for='search-input'>
-        Search cases
-      </label>
-    </h1>
-    <div id='search-hint' class='govuk-hint'>
-      To find a specific case, search by reference.
+  <div class="govuk-grid-row">
+    
+    {# --- 1. PAGE TITLE (FULL WIDTH) --- #}
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">
+        Manage Section 62A Applications
+      </h1>
     </div>
-    <div class='row-inline'><input class='govuk-input' id='search-input' value='' name='searchCriteria'
-        type='text'><button type='submit' class='govuk-button govuk-button' data-module='govuk-button'
-        id='search-button'>
-        Search
-      </button></div>"
-    }) }}
 
-    {{ dashboardBox({
-    width: "one-third",
-    classes: "govuk-!-margin-bottom-6",
-    html: "<h1 class='govuk-label-wrapper'>Create new case</h1>
-    <h2>
-      <a href='/create-case-start' id='create-case-link' class='govuk-link govuk-link--no-visited-state'>Create a
-        case</a>
-    </h2>"
-    }) }}
   </div>
-</div>
 
-<table class="govuk-table" data-module="moj-sortable-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header" aria-sort="descending"><button type="button"
-          data-index="0">Reference<svg width="22" height="22" focusable="false" aria-hidden="true" role="img"
-            viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor"></path>
-          </svg></button></th>
-      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="1">Site
-          location<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
-            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
-          </svg></button></th>
-      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="2">Local planning
-          authority (LPA)<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
-            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
-          </svg></button></th>
-      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="3">Application
-          type<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
-            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
-          </svg></button></th>
-      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="4">Status<svg
-            width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
-            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
-          </svg></button></th>
-    </tr>
-  </thead>
-  
-  <tbody class="govuk-table__body">
+  <div class="govuk-grid-row">
     
-    {# Grab the cases array from session data. If none exist, use an empty array. #}
-    {% set cases = data['cases'] | default([]) %}
+    {# --- 2. SEARCH SECTION (TWO-THIRDS WIDTH) --- #}
+    <div class="govuk-grid-column-two-thirds">
+      
+      <form action="/search-cases" method="get" class="govuk-!-margin-bottom-6">
+        <div class="govuk-form-group">
+          
+          <h2 class="govuk-label-wrapper">
+            <label class="govuk-label govuk-label--l" for="search-input">
+              Search cases
+            </label>
+          </h2>
+          
+          <div id="search-hint" class="govuk-hint">
+            To find a specific case, search by reference.
+          </div>
+          
+          <div style="display: flex; gap: 10px;">
+            <input class="govuk-input" id="search-input" name="searchCriteria" type="text" aria-describedby="search-hint">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+              Search
+            </button>
+          </div>
+          
+        </div>
+      </form>
 
-    {% if cases.length > 0 %}
-      {# We use '| reverse' so the newest created case appears at the top of the table #}
-      {% for case in cases | reverse %}
-        <tr class="govuk-table__row">
-          
-          {# REFERENCE LINK #}
-          <td class="govuk-table__cell" data-sort-value="{{ case.reference }}">
-            <a class="govuk-link" href="/current-service/back-office/case-details?reference={{ case.reference }}">{{ case.reference }}</a>
-          </td>
-          
-          {# SITE LOCATION #}
-          <td class="govuk-table__cell pins-white-space-pre-wrap">
-            {# If line1 exists, render the address #}
-            {% if case.siteAddress.line1 %}
-              {{ case.siteAddress.line1 }}{% if case.siteAddress.line2 %}, {{ case.siteAddress.line2 }}{% endif %}{% if case.siteAddress.town %}, {{ case.siteAddress.town }}{% endif %}{% if case.siteAddress.county %}, {{ case.siteAddress.county }}{% endif %}{% if case.siteAddress.postcode %}, {{ case.siteAddress.postcode }}{% endif %}
-            
-            {# If no line1, but coordinates exist, render coordinates #}
-            {% elseif case.siteCoords.easting and case.siteCoords.northing %}
-              Easting: {{ case.siteCoords.easting }}<br>Northing: {{ case.siteCoords.northing }}
-            
-            {# Fallback if completely blank #}
-            {% else %}
-              Not provided
-            {% endif %}
-          </td>
-          
-          {# LPA #}
-          <td class="govuk-table__cell">{{ case.lpa }}</td>
-          
-          {# APPLICATION TYPE #}
-          <td class="govuk-table__cell">{{ case.applicationType }}</td>
-          
-          {# STATUS TAG #}
-          <td class="govuk-table__cell">
-            <strong class="govuk-tag govuk-tag--blue">{{ case.status }}</strong>
-          </td>
-          
-        </tr>
-      {% endfor %}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
     
-    {% else %}
-      {# EMPTY STATE #}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell" colspan="5">No cases have been created yet.</td>
-      </tr>
-    {% endif %}
+    {# --- 3. DATA TABLE (FULL WIDTH) --- #}
+    <div class="govuk-grid-column-full">
+      
+      <table class="govuk-table" data-module="moj-sortable-table">
+        
+        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
+          List of Section 62A Application cases
+        </caption>
+        
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header" aria-sort="descending">
+              <button type="button" data-index="0">Reference
+                <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor"></path>
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">
+              <button type="button" data-index="1">Site location
+                <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                  <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">
+              <button type="button" data-index="2">Local planning authority (LPA)
+                <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                  <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">
+              <button type="button" data-index="3">Application type
+                <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                  <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">
+              <button type="button" data-index="4">Status
+                <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                  <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                </svg>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        
+        <tbody class="govuk-table__body">
+          
+          {# Grab the cases array from session data. If none exist, use an empty array. #}
+          {% set cases = data['cases'] | default([]) %}
 
-  </tbody>
-</table>
+          {% if cases.length > 0 %}
+            {# We use '| reverse' so the newest created case appears at the top of the table #}
+            {% for case in cases | reverse %}
+              <tr class="govuk-table__row">
+                
+                {# REFERENCE LINK #}
+                <td class="govuk-table__cell" data-sort-value="{{ case.reference }}">
+                  <a class="govuk-link" href="/current-service/back-office/case-details?reference={{ case.reference }}">{{ case.reference }}</a>
+                </td>
+                
+                {# SITE LOCATION #}
+                <td class="govuk-table__cell pins-white-space-pre-wrap">
+                  {% if case.siteAddress.line1 %}
+                    {{ case.siteAddress.line1 }}{% if case.siteAddress.line2 %}, {{ case.siteAddress.line2 }}{% endif %}{% if case.siteAddress.town %}, {{ case.siteAddress.town }}{% endif %}{% if case.siteAddress.county %}, {{ case.siteAddress.county }}{% endif %}{% if case.siteAddress.postcode %}, {{ case.siteAddress.postcode }}{% endif %}
+                  {% elseif case.siteCoords.easting and case.siteCoords.northing %}
+                    Easting: {{ case.siteCoords.easting }}<br>Northing: {{ case.siteCoords.northing }}
+                  {% else %}
+                    Not provided
+                  {% endif %}
+                </td>
+                
+                {# LPA #}
+                <td class="govuk-table__cell">{{ case.lpa }}</td>
+                
+                {# APPLICATION TYPE #}
+                <td class="govuk-table__cell">{{ case.applicationType }}</td>
+                
+                {# STATUS TAG #}
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--blue">{{ case.status }}</strong>
+                </td>
+                
+              </tr>
+            {% endfor %}
+          
+          {% else %}
+            {# EMPTY STATE #}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="5">No cases have been created yet.</td>
+            </tr>
+          {% endif %}
 
+        </tbody>
+      </table>
+
+    </div>
+  </div>
 {% endblock %}
