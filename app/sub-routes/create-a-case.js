@@ -17,7 +17,7 @@ router.get('/create-case-start', function (req, res) {
 router.post('/application-stage-answer', function (req, res) {
   const applicationStage = req.session.data['application-stage'];
   if (!applicationStage) {
-    return res.render('current-service/back-office/create-a-case/0-application-stage', { errorApplicationStage: "Select what type of application this is" });
+    return res.render('current-service/back-office/create-a-case/0-application-stage', { errorApplicationStage: "Select whether this is a pre-application or application" });
   }
   if (applicationStage === "Pre-application") {
     res.redirect('/current-service/back-office/create-a-case/1-application-type');

@@ -34,10 +34,10 @@
       {% endif %}
 
     {% if data['application-stage'] == 'Pre-application' %}
-      {% set questionHeading = "Which is the secondary local planning authority for this pre-application advice?" %}
+      {% set questionHeading = "Which secondary local planning authority is this pre-application advice related to? " %}
 
     {% elif data['application-stage'] == 'Application' %}
-      {% set questionHeading = "Which is the secondary local planning authority for this application?" %}
+      {% set questionHeading = "Which secondary local planning authority is this application related to?" %}
 
     {% endif %}
 
