@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorConfirmRemove %}Error: {% endif %}Remove agent contact?
+  Remove agent contact?
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,34 +12,49 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorConfirmRemove %}
-      {{ govukErrorSummary({
-        titleText: "There is a problem",
-        errorList: [{ text: errorConfirmRemove, href: "#agent-contact-remove" }]
-      }) }}
-    {% endif %}
+    <h1 class="govuk-heading-l">Remove contact</h1>
+    
+    <p class="govuk-body">Do you want to remove this agent contact?</p>
 
+    {# --- FIND AND DISPLAY THE TARGET CONTACT --- #}
+    {% set removeId = data['id'] or data['remove-contact-id'] %}
+    {% set contactList = data['agent-contact-list'] or [] %}
+    
+    {% for contact in contactList %}
+      {% if (contact.id | string) == (removeId | string) %}
+        
+        {% set insetTextHtml %}
+          {{ contact.firstName }} {{ contact.lastName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        {% endset %}
+
+        {{ govukInsetText({
+          html: insetTextHtml
+        }) }}
+
+      {% endif %}
+    {% endfor %}
+
+    {# --- FORM WITH WARNING & CANCEL BUTTONS --- #}
     <form action="/agent-contact-remove-answer" method="post" novalidate>
       
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "agent-contact-remove",
-        name: "agent-contact-remove",
-        fieldset: {
-          legend: { 
-            text: "Do you want to remove this agent contact?", 
-            isPageHeading: true, 
-            classes: "govuk-fieldset__legend--l" 
-          }
-        },
-        errorMessage: { text: errorConfirmRemove } if errorConfirmRemove else null,
-        items: [
-          { value: "Yes", text: "Yes" },
-          { value: "No", text: "No" }
-        ]
-      }) }}
+      <input type="hidden" name="agent-contact-remove" value="Yes">
+      <input type="hidden" name="remove-contact-id" value="{{ removeId }}">
       
-      {{ govukButton({ text: "Continue" }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ 
+          text: "Remove contact",
+          classes: "govuk-button--warning" 
+        }) }}
+
+        {{ govukButton({ 
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/current-service/back-office/create-a-case/4-4-agent-check"
+        }) }}
+      </div>
+
     </form>
   </div>
 </div>

@@ -20,6 +20,14 @@
       }) }}
     {% endif %}
 
+      {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "When is the pre-application advice expected to be submitted?" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set questionHeading = "When is the application expected to be submitted?" %}
+
+      {% endif %}
+
     <form class="form" action="/expected-submission-date-answer" method="post" novalidate>
 
       {{ govukDateInput({
@@ -27,7 +35,7 @@
         namePrefix: "expected-submission-date",
         fieldset: {
           legend: {
-            text: "When is the application expected to be submitted?",
+            text: questionHeading,
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l"
           }

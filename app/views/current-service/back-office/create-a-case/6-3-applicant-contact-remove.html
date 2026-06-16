@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorConfirmRemove %}Error: {% endif %}Remove applicant contact?
+  Remove applicant contact?
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,32 +12,60 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorConfirmRemove %}
-      {{ govukErrorSummary({
-        titleText: "There is a problem",
-        errorList: [{ text: errorConfirmRemove, href: "#applicant-contact-remove" }]
-      }) }}
-    {% endif %}
+    <h1 class="govuk-heading-l">Remove contact</h1>
+    
+    <p class="govuk-body">Do you want to remove this applicant contact?</p>
 
+    {# --- FIND AND DISPLAY THE TARGET CONTACT --- #}
+    {% set removeId = data['id'] or data['remove-contact-id'] %}
+    {% set contactList = data['applicant-contact-list'] or [] %}
+    
+    {# ADDED: Pull in the org list so we can find the name #}
+    {% set orgList = data['applicant-org-list'] or [] %}
+    
+    {% for contact in contactList %}
+      {% if (contact.id | string) == (removeId | string) %}
+        
+        {% set insetTextHtml %}
+          {{ contact.firstName }} {{ contact.lastName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}<br>{% endif %}
+          
+          {% if contact.linkedOrg %}
+            {% for org in orgList %}
+              {% if org.id == contact.linkedOrg %}
+                <span class="govuk-body">{{ org.orgName }}</span>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endset %}
+
+        {{ govukInsetText({
+          html: insetTextHtml
+        }) }}
+
+      {% endif %}
+    {% endfor %}
+
+    {# --- FORM WITH WARNING & CANCEL BUTTONS --- #}
     <form action="/applicant-contact-remove-answer" method="post" novalidate>
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "applicant-contact-remove",
-        name: "applicant-contact-remove",
-        fieldset: {
-          legend: { 
-            text: "Do you want to remove this applicant contact?", 
-            isPageHeading: true, 
-            classes: "govuk-fieldset__legend--l" 
-          }
-        },
-        errorMessage: { text: errorConfirmRemove } if errorConfirmRemove else null,
-        items: [
-          { value: "Yes", text: "Yes" },
-          { value: "No", text: "No" }
-        ]
-      }) }}
-      {{ govukButton({ text: "Continue" }) }}
+      
+      <input type="hidden" name="applicant-contact-remove" value="Yes">
+      <input type="hidden" name="remove-contact-id" value="{{ removeId }}">
+      
+      <div class="govuk-button-group">
+        {{ govukButton({ 
+          text: "Remove contact",
+          classes: "govuk-button--warning" 
+        }) }}
+
+        {{ govukButton({ 
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/current-service/back-office/create-a-case/6-1-applicant-contact-check"
+        }) }}
+      </div>
+
     </form>
   </div>
 </div>

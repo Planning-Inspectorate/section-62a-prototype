@@ -346,21 +346,17 @@ router.post('/agent-org-address-answer', function (req, res) {
   });
   
   router.post('/agent-contact-remove-answer', function (req, res) {
-    const confirmRemove = req.session.data['agent-contact-remove'];
     const id = req.session.data['remove-agent-id'];
 
-    if (!confirmRemove) {
-      return res.render('current-service/back-office/create-a-case/4-4-agent-remove', {
-        errorConfirmRemove: "Select yes if you want to remove this agent contact"
-      });
-    }
-    if (confirmRemove === "Yes") {
+    // instantly filter the array to delete the contact
+    if (id) {
       req.session.data['agent-contact-list'] = req.session.data['agent-contact-list'].filter(agent => agent.id !== id);
     }
 
-    // wipe id and radio selection clean
+    // Wipe the ID and radio selection clean so it doesn't ghost
     req.session.data['remove-agent-id'] = "";
-    req.session.data['agent-contact-remove'] = "";
+    req.session.data['agent-contact-remove'] = ""; 
+    
     res.redirect('/current-service/back-office/create-a-case/4-4-agent-check');
   });
 
@@ -478,35 +474,33 @@ router.post('/applicant-type-answer', function (req, res) {
 
   // --- (4) confirm removal ---
   router.get('/applicant-org-remove', function (req, res) {
-      // store id to session object
-      req.session.data['remove-org-id'] = req.query.id;
-      res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove');
-    });
+    // store id to session object
+    req.session.data['remove-org-id'] = req.query.id;
+    res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove');
+  });
 
   router.post('/applicant-org-remove-answer', function (req, res) {
-    const confirmRemove = req.session.data['applicant-org-remove'];
     const id = req.session.data['remove-org-id'];
 
-    if (!confirmRemove) {
-      return res.render('current-service/back-office/create-a-case/5-4-applicant-org-remove', {
-        errorConfirmRemove: "Select yes if you want to remove this applicant organisation"
-      });
-    }
-    if (confirmRemove === "Yes") {
+    // if an ID exists, delete
+    if (id) {
       // remove the parent organisation
-      req.session.data['applicant-org-list'] = req.session.data['applicant-org-list'].filter(org => org.id !== id);
+      if (req.session.data['applicant-org-list']) {
+        req.session.data['applicant-org-list'] = req.session.data['applicant-org-list'].filter(org => org.id !== id);
+      }
       
-      // remove any child contacts linked to this organisation id
+      // remove any child contacts linked to this organisation ID
       if (req.session.data['applicant-contact-list']) {
         req.session.data['applicant-contact-list'] = req.session.data['applicant-contact-list'].filter(contact => contact.linkedOrg !== id);
       }
     }
 
+    // wipe the ID and temporary radio selection clean
     req.session.data['remove-org-id'] = "";
     req.session.data['applicant-org-remove'] = "";
+    
     res.redirect('/current-service/back-office/create-a-case/5-1-applicant-check');
   });
-
 
 // 6-1 - applicant contact check (ATL)
   // --- (1) grab form (edit existing or Add) ---
@@ -550,14 +544,21 @@ router.post('/applicant-type-answer', function (req, res) {
     const contactList = req.session.data['applicant-contact-list'] || [];
     const errorList = [];
 
-
+    // =========================================================
     // MANDATORY / OPTIONAL LOGIC
-    // if agent, then applicant contact is optional for both organisations and individuals.
-    // run mandatory checks only if agent == no.
-    if (hasAgent === 'No') {
+    // =========================================================
+    
+    // RULE 1: Completely Optional State
+    // If they have an agent AND they haven't added any contacts, they can skip.
+    if (hasAgent === 'Yes' && contactList.length === 0) {
+      // Do nothing! They are allowed to proceed with an empty list.
+    } 
+    // RULE 2: Strict Validation State
+    // If they have NO agent, OR if they started adding contacts, we enforce the rules.
+    else {
       
       if (applicantType === 'Individual') {
-        // Rule: Individual + No Agent = Must have at least 1 contact
+        // Individual Rule: Must have at least 1 contact
         if (contactList.length === 0) {
           errorList.push({ 
             text: "You must add applicant contact details", 
@@ -566,7 +567,7 @@ router.post('/applicant-type-answer', function (req, res) {
         }
       } 
       else {
-        // Rule: Organisation + No Agent = Every org must have a linked contact
+        // Organisation Rule: Every single org must have a linked contact
         if (orgList.length === 0 && contactList.length === 0) {
           // Edge case fallback
           errorList.push({ 
@@ -587,18 +588,17 @@ router.post('/applicant-type-answer', function (req, res) {
       }
     }
 
-    // If any errors were caught, reload the page
+    // if any errors were caught, reload the page
     if (errorList.length > 0) {
       return res.render('current-service/back-office/create-a-case/6-1-applicant-contact-check', {
         errorList: errorList
       });
     }
 
-    // If all clear (or if hasAgent === 'Yes'), safely proceed!
     res.redirect('/current-service/back-office/create-a-case/7-site-address');
   });
 
-// --- (2) save form data ---
+  // --- (2) save form data ---
   router.post('/applicant-contact-answer', function (req, res) {
     const editId = req.session.data['edit-contact-id']; 
     const applicantType = req.session.data['applicant-type']; // grab the applicant type
@@ -703,22 +703,17 @@ router.post('/applicant-type-answer', function (req, res) {
   });
 
   router.post('/applicant-contact-remove-answer', function (req, res) {
-    const confirmRemove = req.session.data['applicant-contact-remove'];
     const id = req.session.data['remove-contact-id'];
 
-    if (!confirmRemove) {
-      return res.render('current-service/back-office/create-a-case/6-3-applicant-contact-remove', {
-        errorConfirmRemove: "Select yes if you want to remove this applicant contact"
-      });
-    }
-    if (confirmRemove === "Yes") {
-      // Filter the array to instantly delete the person who matches the ID
+    // instantly filter the array to delete the contact who matches the ID
+    if (id) {
       req.session.data['applicant-contact-list'] = req.session.data['applicant-contact-list'].filter(c => c.id !== id);
     }
 
-    // wipe id and radio selection clean
+    // wipe id and temporary removal value clean
     req.session.data['remove-contact-id'] = "";
     req.session.data['applicant-contact-remove'] = "";
+
     res.redirect('/current-service/back-office/create-a-case/6-1-applicant-contact-check');
   });
 

@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorConfirmRemove %}Error: {% endif %}Remove applicant organisation?
+  Remove applicant organisation?
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,34 +12,50 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorConfirmRemove %}
-      {{ govukErrorSummary({
-        titleText: "There is a problem",
-        errorList: [{ text: errorConfirmRemove, href: "#applicant-org-remove" }]
-      }) }}
-    {% endif %}
+    <h1 class="govuk-heading-l">Remove organisation</h1>
+    
+    <p class="govuk-body">Do you want to remove this applicant organisation?</p>
 
+    {# --- FIND AND DISPLAY THE TARGET ORG --- #}
+    {% set removeId =  data['id'] or data['remove-org-id'] %}
+    {% set orgList = data['applicant-org-list'] or [] %}
+    
+    {% for org in orgList %}
+      {% if (org.id | string) == (removeId | string) %}
+        
+        {% set insetTextHtml %}
+          {{ org.orgName }}<br>
+          {% if org.address.line1 %}{{ org.address.line1 }}<br>{% endif %}
+          {% if org.address.town %}{{ org.address.town }}<br>{% endif %}
+          {% if org.address.postcode %}{{ org.address.postcode }}<br>{% endif %}
+        {% endset %}
+
+        {{ govukInsetText({
+          html: insetTextHtml
+        }) }}
+
+      {% endif %}
+    {% endfor %}
+
+    {# --- FORM WITH WARNING & CANCEL BUTTONS --- #}
     <form action="/applicant-org-remove-answer" method="post" novalidate>
       
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "applicant-org-remove",
-        name: "applicant-org-remove",
-        fieldset: {
-          legend: { 
-            text: "Do you want to remove this applicant organisation?", 
-            isPageHeading: true, 
-            classes: "govuk-fieldset__legend--l" 
-          }
-        },
-        errorMessage: { text: errorConfirmRemove } if errorConfirmRemove else null,
-        items: [
-          { value: "Yes", text: "Yes" },
-          { value: "No", text: "No" }
-        ]
-      }) }}
+      <input type="hidden" name="applicant-org-remove" value="Yes">
+      <input type="hidden" name="remove-org-id" value="{{ removeId }}">
       
-      {{ govukButton({ text: "Continue" }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ 
+          text: "Remove organisation",
+          classes: "govuk-button--warning" 
+        }) }}
+
+        {{ govukButton({ 
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/current-service/back-office/create-a-case/5-1-applicant-check"
+        }) }}
+      </div>
+
     </form>
   </div>
 </div>

@@ -76,13 +76,16 @@
                     Change<span class="govuk-visually-hidden"> applicant contact {{ loop.index }}</span>
                   </a>
                 </li>
-                {% if contactList.length > 1 %}
+                
+                {# Show remove if there is more than 1 contact, OR if having an agent makes this section optional #}
+                {% if contactList.length > 1 or data['has-agent'] == 'Yes' %}
                   <li class="govuk-summary-list__actions-list-item">
                     <a class="govuk-link" href="/applicant-contact-remove?id={{ item.id }}">
                       Remove<span class="govuk-visually-hidden"> applicant contact {{ loop.index }}</span>
                     </a>
                   </li>
                 {% endif %}
+                
               </ul>
             </dd>
           </div>
