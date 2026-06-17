@@ -32,13 +32,21 @@
       }) }}
     {% endif %}
 
+      {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "What type of application is this pre-application advice for?" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set questionHeading = "What type of application is it?" %}
+
+      {% endif %}
+
     <form class="form" action="/application-type-answer" method="post" novalidate>
       {{ govukRadios({
         idPrefix: "application-type",
         name: "application-type",
         fieldset: {
           legend: { 
-            text: "What type of application is it?", 
+            text: questionHeading, 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
