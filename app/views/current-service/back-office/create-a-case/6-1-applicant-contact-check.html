@@ -31,7 +31,13 @@
       }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details</h1>
+
+    {% if data['has-agent'] == 'Yes' %}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details (optional)</h1>
+    {% else %}
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details</h1>
+    {% endif %}
+
 
     {# --- DYNAMIC HINT TEXT --- #}
     {% if data['has-agent'] == 'Yes' %}
