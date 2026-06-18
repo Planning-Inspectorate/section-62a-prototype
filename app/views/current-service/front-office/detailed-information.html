@@ -1,0 +1,101 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set activePage = "detailed-information" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Not provided') }} - Application information - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  <style>
+    .cd-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    .cd-card-divider {
+      border: 0;
+      border-top: 1px solid #b1b4b6;
+      margin: 0 0 16px 0;
+    }
+
+    .cd-card-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .cd-card-chevron {
+      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .cd-card-chevron svg {
+      display: block;
+    }
+  </style>
+
+  <div class="full-bleed cd-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">Detailed information</h1>
+      <p class="govuk-body">
+        Find further legislation and guidance resources. Information on this page may be useful for those applying to use the service and the general public.
+      </p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="cd-cards-grid">
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures/procedural-guidance-for-section-62a-authorities-in-special-measures">Procedural guidance</a>
+          <span aria-hidden="true" class="cd-card-chevron">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4l8 8-8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">The roles and responsibilities of each party in the Section 62A process.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures">Application documents</a>
+          <span aria-hidden="true" class="cd-card-chevron">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4l8 8-8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">Resources for submitting a planning application under Section 62A.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.legislation.gov.uk/uksi/2021/746/contents/made">Legislation information</a>
+          <span aria-hidden="true" class="cd-card-chevron">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4l8 8-8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">View The Town and Country Planning Order 2021 to understand our legal duties.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -12,6 +12,7 @@ router.get('/current-service/front-office/all-applications', function (req, res)
 
   // 2. Filter using standard JavaScript. 
   // We only keep the cases where applicationStage is strictly "Application"
+  // Add filter for LBC or Planning permission here as well
   const publishedCases = allCases.filter(c => c.applicationStage === "Application");
 
   // 3. Render the page and pass the clean array directly into Nunjucks
