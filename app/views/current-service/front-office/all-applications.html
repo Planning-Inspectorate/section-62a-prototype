@@ -137,8 +137,9 @@
         }
     </style>
 
-
-    {% set totalCases = publishedCases | length %}
+    {# Calculate total cases: dynamic cases + 3 static examples #}
+    {% set dynamicCasesCount = publishedCases | length %}
+    {% set totalCases = dynamicCasesCount + 3 %}
 
     <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
@@ -149,7 +150,7 @@
                 
                 <p class="govuk-body">
                     Showing
-                    <strong>{% if totalCases > 0 %}1{% else %}0{% endif %}</strong>
+                    <strong>1</strong>
                     to
                     <strong>{{ totalCases }}</strong>
                     of
@@ -169,14 +170,14 @@
                         </caption>
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header" style="width: 10%;">Application reference</th>
-                                <th scope="col" class="govuk-table__header" style="width: 70%;">Applicant name</th>
-                                <th scope="col" class="govuk-table__header" style="width: 20%;">Local planning authority</th>
+                                <th scope="col" class="govuk-table__header" style="width: 15%;">Application reference</th>
+                                <th scope="col" class="govuk-table__header" style="width: 60%;">Applicant name</th>
+                                <th scope="col" class="govuk-table__header" style="width: 25%;">Local planning authority</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                            
-                            {% if publishedCases.length > 0 %}
+
+                            {% if dynamicCasesCount > 0 %}
                                 {% for case in publishedCases | reverse %}
                                 
                                     {% set displayApplicantName = "Not provided" %}
@@ -208,11 +209,37 @@
                                     </tr>
                                     
                                 {% endfor %}
-                            {% else %}
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell" colspan="3">No applications found.</td>
-                                </tr>
                             {% endif %}
+                            
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2025-0138/app-info">
+                                        S62A/2025/0138
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Bristol Design Properties Ltd</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+                            
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2024-0048/app-info">
+                                        S62A/2024/0048
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Colin Franzmann</td>
+                                <td class="govuk-table__cell">St Albans City and District Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2024-0057/app-info">
+                                        S62A/2024/0057
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Chase New Homes</td>
+                                <td class="govuk-table__cell">Uttlesford District Council</td>
+                            </tr>
 
                         </tbody>
                     </table>

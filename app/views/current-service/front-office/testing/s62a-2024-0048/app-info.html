@@ -1,45 +1,10 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  {{ currentCase.reference | default('Not provided') }} - Application information - Find a Section 62A application
+  S62A/2024/0048 - Application information - Find a Section 62A application
 {% endblock %}
 
 {% block content %}
-
-{# ========================================================= #}
-{# DYNAMIC DATA LOGIC USING 'currentCase' OBJECT             #}
-{# ========================================================= #}
-
-{% set displayApplicantName = "Not provided" %}
-
-    {# Rule A: If using an agent, state the agent organisation (fallback to contact name) #}
-    {% if currentCase.hasAgent == "Yes" %}
-    {% if currentCase.agentOrgName %}
-        {% set displayApplicantName = currentCase.agentOrgName %}
-    {% elif currentCase.agentContacts and currentCase.agentContacts.length > 0 %}
-        {% set displayApplicantName = currentCase.agentContacts[0].firstName + " " + currentCase.agentContacts[0].lastName %}
-    {% endif %}
-
-    {# Rule B: If applicant is an organisation, list in comma fashion #}
-    {% elif currentCase.applicantOrgs and currentCase.applicantOrgs.length > 0 %}
-    {% set displayApplicantName %}
-        {%- for org in currentCase.applicantOrgs -%}
-        {{ org.orgName }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-    {% endset %}
-
-    {# Rule C: If individual applicant, list first and last name #}
-    {% elif currentCase.applicantContacts and currentCase.applicantContacts.length > 0 %}
-    {% set displayApplicantName = currentCase.applicantContacts[0].firstName + " " + currentCase.applicantContacts[0].lastName %}
-    {% endif %}
-
-{% set displaySiteAddress %}
-  {% if currentCase.siteAddress.line1 %}
-    {{ currentCase.siteAddress.line1 }}{% if currentCase.siteAddress.line2 %}, {{ currentCase.siteAddress.line2 }}{% endif %}{% if currentCase.siteAddress.town %}, {{ currentCase.siteAddress.town }}{% endif %}{% if currentCase.siteAddress.county %}, {{ currentCase.siteAddress.county }}{% endif %}{% if currentCase.siteAddress.postcode %}, {{ currentCase.siteAddress.postcode }}{% endif %}
-  {% else %}
-    Not provided
-  {% endif %}
-{% endset %}
 
 {# ========================================================= #}
 {# CUSTOM STYLES                                             #}
@@ -82,28 +47,27 @@
     /* MOJ SIDE NAVIGATION OVERRIDES                             */
     /* ========================================================= */
     
-    /* 1. Make the text 19px and add generous padding */
     .moj-side-navigation__item a {
-        font-size: 19px; /* Equivalent to 19px */
+        font-size: 19px;
         padding-top: 15px;
         padding-bottom: 15px;
     }
 
-    /* 2. Space the items out vertically a bit more */
     .moj-side-navigation__item {
         margin-bottom: 15px; 
     }
 
-    /* application stage status tag styling */
-   /* 1. Make the summary itself a flex container */
+    /* ========================================================= */
+    /* APPLICATION STAGE STATUS TAG STYLING                      */
+    /* ========================================================= */
+    
     .pins-modded-summary-full-width .govuk-details__summary {
         display: flex;
         align-items: center;
         width: 100%;
-        padding-right: 0; /* Remove default right padding */
+        padding-right: 0; 
     }
 
-    /* 2. Force the text wrapper to take up all remaining space */
     .pins-modded-summary-full-width .govuk-details__summary-text {
         display: block;
         flex-grow: 1;
@@ -121,19 +85,19 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="application-information?reference={{ currentCase.reference }}" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/testing/s62a-2024-0048/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="documents?reference={{ currentCase.reference }}">Documents</a>
+                    <a href="/current-service/front-office/testing/s62a-2024-0048/documents">Documents</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="have-your-say?reference={{ currentCase.reference }}">Have your say</a>
+                    <a href="/current-service/front-office/testing/s62a-2024-0048/hys">Have your say</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="application-updates?reference={{ currentCase.reference }}">Application updates</a>
+                    <a href="#">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="written-representations?reference={{ currentCase.reference }}">Written representations</a>
+                    <a href="#">Written representations</a>
                 </li>
             </ul>
         </nav>
@@ -141,7 +105,7 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        <span class="govuk-caption-xl">{{ currentCase.reference | default('Not provided') }}</span>
+        <span class="govuk-caption-xl">S62A/2024/0048</span>
         <h1 class="govuk-heading-xl">Application information</h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
@@ -149,45 +113,38 @@
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Type of application</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.applicationType | default('Planning permission') }}</dd>
+            <dd class="govuk-summary-list__value">Outline planning permission with some matters reserved</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Local planning authority</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.lpa | default('Not provided') }}</dd>
+            <dd class="govuk-summary-list__value">Cherwell LPA</dd>
           </div>
-
-          {% if currentCase.secondaryLpa %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Secondary local planning authority</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.secondaryLpa }}</dd>
-          </div>
-          {% endif %}
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant name</dt>
-            <dd class="govuk-summary-list__value">{{ displayApplicantName | safe }}</dd>
+            <dd class="govuk-summary-list__value">Home Office</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
-            <dd class="govuk-summary-list__value">{{ displaySiteAddress }}</dd>
+            <dd class="govuk-summary-list__value">Campsfield Immigration Removal Centre (IRC), Evenlode Crescent, Kiddlington, OX5 1RE</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Description of the proposed development</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.devDescription | default('This case has not loaded correctly or has been deleted from the session memory due to inactivity. Create a new case or refersh the page if that helps.') }}</dd>
+            <dd class="govuk-summary-list__value">Outline Planning Application with all matters reserved (except for access) for the expansion of Campsfield IRC comprising the development of new accommodation blocks and ancillary supporting accommodation, the conversion of existing site infrastructure, demolition of existing structures, creation of additional car parking...</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Stage</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.stage | default('Not loaded') }}</dd>
+            <dd class="govuk-summary-list__value">Accepted</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Application form</dt>
             <dd class="govuk-summary-list__value">
-              To view the full application, go to the <a href="documents" class="govuk-link">Documents section</a>.
+              To view the full application, go to the <a href="documents-static" class="govuk-link">Documents section</a>.
             </dd>
           </div>
         </dl>
@@ -198,9 +155,9 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Application accepted date" }, value: { text: "1 January 2025" } },
-            { key: { text: "Representation period" }, value: { text: "3 April 2025 at 12:00am to 30 April 2025 at 11:59pm" } },
-            { key: { text: "Decision date" }, value: { html: "1 June 2025" } }
+            { key: { text: "Application accepted date" }, value: { text: "1 January 2026" } },
+            { key: { text: "Representation period" }, value: { text: "3 April 2026 at 12:00am to 30 April 2026 at 11:59pm" } },
+            { key: { text: "Decision date" }, value: { html: "1 June 2026" } }
           ]
         }) }}
 
@@ -209,7 +166,7 @@
         {{ govukSummaryList({
           rows: [
             { key: { text: "Procedure type" }, value: { text: "Hearing" } },
-            { key: { text: "Hearing date" }, value: { text: "1 July 2025" } },
+            { key: { text: "Hearing date" }, value: { text: "1 July 2026" } },
             { key: { text: "Hearing venue" }, value: { html: "Chelsea Town Hall" } }
           ]
         }) }}
@@ -218,7 +175,7 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Decision date" }, value: { text: "1 August 2025" } },
+            { key: { text: "Decision date" }, value: { text: "1 August 2026" } },
             { key: { text: "Decision outcome" }, value: { text: "-" } }
           ]
         }) }}
@@ -234,7 +191,7 @@
         <p class="govuk-body">Your name and written representation will be published on this website.</p>
         <p class="govuk-body govuk-!-margin-0">The representation period is open from:</p>
         <br>
-        <p class="govuk-body">31 January 2025 at 12:00am to 31 March 2025 11:59pm.</p>
+        <p class="govuk-body">31 January 2026 at 12:00am to 31 March 2026 11:59pm.</p>
 
         {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -419,7 +376,7 @@
 
         <h3 class="govuk-heading-s">Email</h3>
         <p class="govuk-body">
-            <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
+            <a class="govuk-link" href="mailto:section62anonmajor@planninginspectorate.go.uk">section62anonmajor@planninginspectorate.go.uk</a>
         </p>
         <p class="govuk-body">When writing an email, quote the application reference in the subject line.</p>
         <p class="govuk-body">We aim to respond within 10 working days.</p>

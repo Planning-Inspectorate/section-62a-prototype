@@ -1,0 +1,489 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2025/0138 - Documents - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+<style>
+    .document-list li,
+    .govuk-\!-padding-bottom-5 {
+        padding-bottom: 15px !important;
+    }
+
+    .document-list li {
+        border-top: 1px solid #b1b4b6;
+    }
+
+    .document-list__meta-data {
+        color: #505a5f;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .document-list,
+    .govuk-list {
+        color: #0b0c0c;
+    }
+
+    .document-list,
+    .govuk-list {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .document-list,
+    .govuk-list {
+        padding-left: 0;
+        list-style-type: none;
+    }
+
+    .document-list .document-list,
+    .document-list .govuk-list,
+    .govuk-list .document-list,
+    .govuk-list .govuk-list {
+        margin-top: 10px;
+    }
+
+    .document-list>li,
+    .govuk-list>li {
+        margin-bottom: 5px;
+    }
+
+    .document-list+.govuk-heading-l,
+    .govuk-body+.govuk-heading-l,
+    .govuk-body-m+.govuk-heading-l,
+    .govuk-body-s+.govuk-heading-l,
+    .govuk-list+.govuk-heading-l {
+        padding-top: 15px;
+    }
+
+    @media(min-width: 40.0625em) {
+
+        .document-list+.govuk-heading-l,
+        .govuk-body+.govuk-heading-l,
+        .govuk_body-m+.govuk-heading-l,
+        .govuk-body-s+.govuk-heading-l,
+        .govuk-list+.govuk-heading-l {
+            padding-top: 20px;
+        }
+    }
+
+    .document-list+.filter-accordion__title,
+    .document-list+.govuk-heading-m,
+    .document-list+.govuk-heading-s,
+    .govuk-body+.filter-accordion__title,
+    .govuk-body+.govuk-heading-m,
+    .govuk-body+.govuk-heading-s,
+    .govuk-body-m+.filter-accordion__title,
+    .govuk-body-m+.govuk-heading-m,
+    .govuk-body-m+.govuk-heading-s,
+    .govuk-body-s+.filter-accordion__title,
+    .govuk-body-s+.govuk-heading-m,
+    .govuk-body-s+.govuk-heading-s,
+    .govuk-list+.filter-accordion__title,
+    .govuk-list+.govuk-heading-m,
+    .govuk-list+.govuk-heading-s {
+        padding-top: 5px;
+    }
+
+    @media(min-width: 40.0625em) {
+
+        .document-list+.filter-accordion__title,
+        .document-list+.govuk-heading-m,
+        .document-list+.govuk-heading-s,
+        .govuk-body+.filter-accordion__title,
+        .govuk-body+.govuk-heading-m,
+        .govuk-body+.govuk-heading-s,
+        .govuk-body-m+.filter-accordion__title,
+        .govuk-body-m+.govuk-heading-m,
+        .govuk-body-m+.govuk-heading-s,
+        .govuk-body-s+.filter-accordion__title,
+        .govuk-body-s+.govuk-heading-m,
+        .govuk-body-s+.govuk-heading-s,
+        .govuk-list+.filter-accordion__title,
+        .govuk-list+.govuk-heading-m,
+        .govuk-list+.govuk-heading-s {
+            padding-top: 10px;
+        }
+    }
+
+    .document-list,
+    .document-list li,
+    .govuk-\!-margin-0 {
+        margin: 0 !important;
+    }
+
+    .document-list li,
+    .govuk-\!-padding-top-2 {
+        padding-top: 10px !important;
+    }
+
+    .document-list li,
+    .govuk-\!-padding-bottom-5 {
+        padding-bottom: 15px !important;
+    }
+
+    .document-list__meta-data {
+        color: #505a5f;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2025-0138/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2025-0138/documents" aria-current="location">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2025-0138/hys">Have your say</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="#">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="#">Written representations</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">S62A/2025/0138</span>
+        <h1 class="govuk-heading-l">Documents</h1>
+        <div>
+            <div id="search-hint" class="govuk-hint">
+                Search by document name</div>
+            <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center">
+                <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
+                    style="width:100%;">
+                <button class="govuk-button" id="keyword-search-button" type="submit"
+                    style="margin-bottom:0px;">Search</button>
+            </form>
+
+        </div>
+        <div id="pagination" class="govuk-body">
+            <p class="govuk-body">
+                Showing
+                <strong>1</strong>
+                to
+                <strong>25</strong>
+                of
+                <strong>51</strong>
+                documents, newest first.
+            </p>
+
+            <span>
+                <strong>Results per page</strong>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <span class="govuk-body">25</span>
+
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a class="govuk-link--no-visited-state" href="?itemsPerPage=50" data-pagination="50">50</a>
+
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a class="govuk-link--no-visited-state" href="?itemsPerPage=100" data-pagination="100">100</a>
+
+            <div style="margin-top:20px">
+
+                <ul class="govuk-list document-list">
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub Opening Statement – Applicant – 2 Dec
+                            25 – FINAL.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>226 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub ABC Opening Statement – Final.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>204 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub SWFPC &amp; MPC Opening Statement –
+                            01.12.2025.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>51 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub Statement – Councillor Jane
+                            Smith.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>60 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Draft CIL Compliance Review – Dept for Transport
+                            – Gateway Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>187 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub – SoCG with KCC – Highways
+                            011225.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>2 Dec 2025</div>
+                            <div>PDF</div>
+                            <div>157 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">National Highways Update Letter – Gateway
+                            Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>26 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>264 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">Draft SoCG with KCC – Highways 251125 – Gateway
+                            Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>26 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>107 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – Hub Noise Records – Oct
+                            2024.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>5 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">CPRE Kent – Statement of Matters – Responses
+                            &amp; Comments – Gateway Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>104 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – Parish Council Commentary on
+                            Gateway Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>113 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – SWFPC Presentation to Hub
+                            Consultation Team – Nov’24_Redacted.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>3 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – SWFPC Survey Results –
+                            Gateway Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>4 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix G – Traffic &amp; Litter
+                            Supporting Info – Gateway Hub.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>2 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix F – Post Excavation Assessment
+                            May 2022_Part 1.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>20 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix F – Post Excavation Assessment
+                            May 2022_Part 2.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>13 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Masterplan Sheet 1 – PL
+                            12_004 Rev C.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>3 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Footpaths &amp; Drainage –
+                            Supporting Info.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>2 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Illustrative Landscape
+                            Masterplan Coloured Sheet 2 – PL 12_005 C.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>2 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix D – Lighting – Supporting
+                            Info.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>569 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Illustrative
+                            Landscape Masterplan Coloured Sheet 2 – PL 12_005 C.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>2 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Masterplan
+                            Sheet 1 – PL 12_004 Rev C.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>3 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Supporting
+                            Info.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>1 MB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – Refrigerated Transport –
+                            Noise.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>526 KB</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – SDO 2020
+                            Appendix-J-Noise-Impact-Assessment.pdf</a>
+                        <div class="document-list__meta-data">
+                            <div>25 Nov 2025</div>
+                            <div>PDF</div>
+                            <div>2 MB</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <nav class="govuk-pagination" aria-label="Pagination">
+            <ul class="govuk-pagination__list">
+                <li class="govuk-pagination__item govuk-pagination__item--current">
+                    <a class="govuk-link govuk-pagination__link" href="?page=1" aria-label="Page 1" aria-current="page">
+                        1
+                    </a>
+                </li>
+                <li class="govuk-pagination__item">
+                    <a class="govuk-link govuk-pagination__link" href="?page=2" aria-label="Page 2">
+                        2
+                    </a>
+                </li>
+                <li class="govuk-pagination__item govuk-pagination__item--ellipsis">
+                    ⋯
+                </li>
+                <li class="govuk-pagination__item">
+                    <a class="govuk-link govuk-pagination__link" href="?page=11" aria-label="Page 11">
+                        11
+                    </a>
+                </li>
+            </ul>
+            <div class="govuk-pagination__next">
+                <a class="govuk-link govuk-pagination__link" href="?page=2" rel="next">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden">
+                            page</span>
+                    </span>
+                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg"
+                        height="13" width="15" aria-hidden="true" focusable="false" viewbox="0 0 15 13">
+                        <path
+                            d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+
+{% endblock %}
