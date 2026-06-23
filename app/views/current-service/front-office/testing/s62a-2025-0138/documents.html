@@ -129,7 +129,22 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
     }
+        /* Force override of the GOV.UK default details icon */
+    details.govuk-details .govuk-details__summary::before {
+        
+        border: none !important;
+        clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%) !important;
+        
+        width: 16px !important;
+        height: 16px !important;
+        
+        background-color: #000000 !important; /* Matches GOV.UK link blue, change to black if preferred */
+    }
 
+    /* Force override for the open state */
+    details.govuk-details[open] > .govuk-details__summary::before {
+        clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%) !important;
+    }
     /* ========================================================= */
     /* MOJ SIDE NAVIGATION OVERRIDES                             */
     /* ========================================================= */
@@ -157,9 +172,6 @@
                     <a href="/current-service/front-office/testing/s62a-2025-0138/documents" aria-current="location">Documents</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/hys">Have your say</a>
-                </li>
-                <li class="moj-side-navigation__item">
                     <a href="/current-service/front-office/testing/s62a-2025-0138/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
@@ -167,6 +179,152 @@
                 </li>
             </ul>
         </nav>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+            <h3 class="govuk-heading-m">Filters</h3>
+            <div style="padding-bottom:10px;">
+                <a href="" class="govuk-link">
+                    Show all filters</a>
+            </div>
+            <details class="govuk-details govuk-!-margin-bottom-0" id="filter-panel">
+                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
+                    <a class="govuk-link govuk-link--no-underline">
+                        Category
+                    </a>
+                </summary>
+                <div style="padding-left:30px;">
+                    <form class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <div class="govuk-grid-row">
+                                <div class="">
+                                    <fieldset class="govuk-fieldset" aria-describedby="type-of-application-hint">
+                                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                    Application Plans and Documents (11)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                    Questionnaire and supporting documents (16)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                    Planning Inspectorate Correspondence (1)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                    Applicant Correspondence (0)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                    Decision (1)
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+
+            <details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-padding-0" id="filter-panel">
+                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
+                    <a class="govuk-link govuk-link--no-underline">Date submitted</a>
+                </summary>
+                <div style="padding-left:30px;">
+                    <form class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                <h4 class="govuk-fieldset__heading">
+                                    From
+                                </h4>
+                            </legend>
+                            <div id="passport-issued-hint" class="govuk-hint">
+                                For example, 5 7 2022
+                            </div>
+                            <div class="govuk-date-input" id="passport-issued">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+                                            Day
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+                                            Month
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+                                            Year
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                            </div>
+                            <legend style="margin-top:20px" class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                <h4 class="govuk-fieldset__heading">
+                                    To
+                                </h4>
+                            </legend>
+                            <div id="passport-issued-hint" class="govuk-hint">
+                                For example, 27 3 2023
+                            </div>
+                            <div class="govuk-date-input" id="passport-issued">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+                                            Day
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+                                            Month
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+                                            Year
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+            </details>
+            <a href="written-reps-selected" class="govuk-button" style="margin-bottom:0px;">
+                Apply filters
+            </a>
 
     </div>
 
@@ -192,7 +350,7 @@
                 to
                 <strong>25</strong>
                 of
-                <strong>51</strong>
+                <strong>27</strong>
                 documents, newest first.
             </p>
 
@@ -212,227 +370,203 @@
 
                 <ul class="govuk-list document-list">
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub Opening Statement – Applicant – 2 Dec
-                            25 – FINAL.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">Decision Notice and Statement of Reasons</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>14 Jan 2026</div>
                             <div>PDF</div>
-                            <div>226 KB</div>
+                            <div>271 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub ABC Opening Statement – Final.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">4451.PL1.03 Existing Plans Elevations Rev A</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>12 Jan 2026</div>
                             <div>PDF</div>
-                            <div>204 KB</div>
+                            <div>336 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub SWFPC &amp; MPC Opening Statement –
-                            01.12.2025.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">4451.PL1.04 Proposed Plans Elevations Rev A</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>10 Jan 2026</div>
                             <div>PDF</div>
-                            <div>51 KB</div>
+                            <div>342 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub Statement – Councillor Jane
-                            Smith.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">251028 cover letter PR002866 FINAL</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>8 Jan 2026</div>
                             <div>PDF</div>
-                            <div>60 KB</div>
+                            <div>1.11 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Draft CIL Compliance Review – Dept for Transport
-                            – Gateway Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">application form</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>6 Jan 2026</div>
                             <div>PDF</div>
-                            <div>187 KB</div>
+                            <div>208 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Gateway Hub – SoCG with KCC – Highways
-                            011225.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BNG exemption form</a>
                         <div class="document-list__meta-data">
-                            <div>2 Dec 2025</div>
+                            <div>4 Jan 2026</div>
                             <div>PDF</div>
-                            <div>157 KB</div>
+                            <div>927 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">National Highways Update Letter – Gateway
-                            Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">cil questions</a>
                         <div class="document-list__meta-data">
-                            <div>26 Nov 2025</div>
+                            <div>2 Jan 2026</div>
                             <div>PDF</div>
-                            <div>264 KB</div>
+                            <div>387 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Draft SoCG with KCC – Highways 251125 – Gateway
-                            Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">4451.PL1.01 Site Location Plan Rev A</a>
                         <div class="document-list__meta-data">
-                            <div>26 Nov 2025</div>
+                            <div>31 Dec 2025</div>
                             <div>PDF</div>
-                            <div>107 KB</div>
+                            <div>151 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – Hub Noise Records – Oct
-                            2024.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS15 - Sustainable Design and Construction</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>29 Dec 2025</div>
                             <div>PDF</div>
-                            <div>5 MB</div>
+                            <div>807 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">CPRE Kent – Statement of Matters – Responses
-                            &amp; Comments – Gateway Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS16 - Flood Risk and Water Management</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>27 Dec 2025</div>
                             <div>PDF</div>
-                            <div>104 KB</div>
+                            <div>269 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – Parish Council Commentary on
-                            Gateway Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS18 - Housing Type</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>25 Dec 2025</div>
                             <div>PDF</div>
-                            <div>113 KB</div>
+                            <div>80.8 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – SWFPC Presentation to Hub
-                            Consultation Team – Nov’24_Redacted.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS21 - Quality Urban Design</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>23 Dec 2025</div>
                             <div>PDF</div>
-                            <div>3 MB</div>
+                            <div>1.27 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix H – SWFPC Survey Results –
-                            Gateway Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">Bristol City Council - NOT liable for CIL</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>21 Dec 2025</div>
                             <div>PDF</div>
-                            <div>4 MB</div>
+                            <div>33.2 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix G – Traffic &amp; Litter
-                            Supporting Info – Gateway Hub.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM2 - Residential Sub-divisions, Shared and Specialist Housing</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>19 Dec 2025</div>
                             <div>PDF</div>
-                            <div>2 MB</div>
+                            <div>1.21 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix F – Post Excavation Assessment
-                            May 2022_Part 1.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM23</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>17 Dec 2025</div>
                             <div>PDF</div>
-                            <div>20 MB</div>
+                            <div>902 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix F – Post Excavation Assessment
-                            May 2022_Part 2.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM26 - Local Character and Distinctiveness 2</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>15 Dec 2025</div>
                             <div>PDF</div>
-                            <div>13 MB</div>
+                            <div>378 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Masterplan Sheet 1 – PL
-                            12_004 Rev C.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM30 - Alterations to Existing Buildings</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>13 Dec 2025</div>
                             <div>PDF</div>
-                            <div>3 MB</div>
+                            <div>225 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Footpaths &amp; Drainage –
-                            Supporting Info.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM32 - Recycling and Refuse</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>11 Dec 2025</div>
                             <div>PDF</div>
-                            <div>2 MB</div>
+                            <div>370 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix E – Illustrative Landscape
-                            Masterplan Coloured Sheet 2 – PL 12_005 C.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">DM35 - Noise Mitigation</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>9 Dec 2025</div>
                             <div>PDF</div>
-                            <div>2 MB</div>
+                            <div>219 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix D – Lighting – Supporting
-                            Info.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">FINAL Art 4 Direction SOUTH</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>7 Dec 2025</div>
                             <div>PDF</div>
-                            <div>569 KB</div>
+                            <div>1.76 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Illustrative
-                            Landscape Masterplan Coloured Sheet 2 – PL 12_005 C.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">HMO SPD - Adopted - Final - Nov 2020.</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>5 Dec 2025</div>
                             <div>PDF</div>
-                            <div>2 MB</div>
+                            <div>3.1 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Masterplan
-                            Sheet 1 – PL 12_004 Rev C.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">S62A Questionnaire (application)</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>3 Dec 2025</div>
                             <div>PDF</div>
-                            <div>3 MB</div>
+                            <div>163 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix C – Landscaping – Supporting
-                            Info.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS10 - Transport and Access Improvements</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>1 Dec 2025</div>
                             <div>PDF</div>
-                            <div>1 MB</div>
+                            <div>1.14 MB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – Refrigerated Transport –
-                            Noise.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS14</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>29 Nov 2025</div>
                             <div>PDF</div>
-                            <div>526 KB</div>
+                            <div>399 KB</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">SWFPC – Appendix B – SDO 2020
-                            Appendix-J-Noise-Impact-Assessment.pdf</a>
+                        <a class="govuk-link" href="" rel="noreferrer">BCS9 - Green Infrastructure</a>
                         <div class="document-list__meta-data">
-                            <div>25 Nov 2025</div>
+                            <div>27 Nov 2025</div>
                             <div>PDF</div>
-                            <div>2 MB</div>
+                            <div>512 KB</div>
                         </div>
                     </li>
                 </ul>
@@ -449,14 +583,6 @@
                 <li class="govuk-pagination__item">
                     <a class="govuk-link govuk-pagination__link" href="?page=2" aria-label="Page 2">
                         2
-                    </a>
-                </li>
-                <li class="govuk-pagination__item govuk-pagination__item--ellipsis">
-                    ⋯
-                </li>
-                <li class="govuk-pagination__item">
-                    <a class="govuk-link govuk-pagination__link" href="?page=11" aria-label="Page 11">
-                        11
                     </a>
                 </li>
             </ul>
