@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2024/0048 - Application information - Find a Section 62A application
+  S62A/2026/0048 - Application information - Find a Section 62A application
 {% endblock %}
 
 {% block content %}
@@ -41,6 +41,9 @@
 
     .pins-modded-summary-full-width {
         margin: 10px 0;
+    }
+    .govuk-list .govuk-list--bullet {
+        text-indent: 50px;
     }
 
     /* ========================================================= */
@@ -85,19 +88,19 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/app-info" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/documents">Documents</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/documents">Documents</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/hys">Have your say</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/hys">Have your say</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/application-updates">Application updates</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/written-representations">Written representations</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/written-representations">Written representations</a>
                 </li>
             </ul>
         </nav>
@@ -115,14 +118,14 @@
             <div class="govuk-notification-banner__content">
 
                 <p class="govuk-notification-banner__heading">
-                    Latest update — 9 Oct 2024
+                    Latest update — 23 June 2026
 
                 </p>
                 <p>
-                    Decision issued - available to view under the application information tab
+                    St Albans City and District Council added as a consultee - available to view under the written representations tab
                 </p>
                 <p>
-                    <a href="/current-service/front-office/testing/s62a-2024-0048/application-updates">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">
                         View all updates
                     </a>
                 </p>
@@ -130,7 +133,7 @@
             </div>
         </div>
 
-        <span class="govuk-caption-xl">S62A/2024/0048</span>
+        <span class="govuk-caption-xl">S62A/2026/0048</span>
         <h1 class="govuk-heading-xl">Application information</h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
@@ -175,21 +178,13 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Date application valid" }, value: { text: "6 August 2024" } },
-            { key: { text: "Date by when representations must be made" }, value: { text: "11 September 2024" } },
+            { key: { text: "Date application valid" }, value: { text: "10 Jun 2026" } },
+            { key: { text: "Date by when representations must be made" }, value: { text: "1 July 2026" } },
             { key: { text: "Hearing date and venue" }, value: { text: "TBC" } },
-            { key: { text: "Target decision" }, value: { text: "1 October 2024" } },
-            { key: { text: "Decision date" }, value: { text: "9 October 2024" } }
+            { key: { text: "Target decision" }, value: { text: "9 August 2026" } },
+            { key: { text: "Decision date" }, value: { text: "TBC" } }
           ]
         }) }}
-
-         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
-
-        <h2 class="govuk-heading-m">Decision</h2>
-
-        <ul class="govuk-list govuk-list--bullet">
-                 <li><a class="govuk-link" href="#">Decision Notice and Statement of Reasons</a> (PDF, 149 KB, 10 pages)</li>
-        </ul>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
@@ -201,13 +196,13 @@
         <p class="govuk-body">Your name and written representation will be published on this website.</p>
         <p class="govuk-body govuk-!-margin-0">The date representations must be made is by: </p>
         <br>
-        <p class="govuk-body">11 September 2024 at 11:59pm.</p>
+        <p class="govuk-body">1 July 2026 at 11:59pm.</p>
 
         {% from "govuk/components/button/macro.njk" import govukButton %}
 
         {{ govukButton({
           text: "Have your say",
-          href: "/current-service/front-office/testing/s62a-2024-0048/hys"
+          href: "/current-service/front-office/testing/s62a-2026-0048/hys"
         }) }}
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
@@ -217,7 +212,7 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
         <h2 class="govuk-heading-m">Application stage</h2>
-        <p class="govuk-body">This application is at the <strong>post decision</strong> stage.</p>
+        <p class="govuk-body">This application is at the <strong>consultation</strong> stage.</p>
 
         <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
             <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
@@ -234,7 +229,7 @@
                 <div class="govuk-details__text">
                     <p>The pre-application process for Section 62A applications is handled by the Planning Inspectorate.</p>
                     <p>The applicant sends the notice of intent to PINS with information on:</p>
-                    <ul class="govuk-list govuk-list--bullet">
+                    <ul>
                         <li>who the applicant is</li>
                         <li>the site address</li>
                         <li>the size of the development</li>
@@ -269,25 +264,27 @@
         </div>
 
         <div id="project-stage-consultation">
-            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Consultation</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In progress</strong>
                             </div>
                         </div>
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The relevant Local Planning Authority (LPA) publicises the fact that a Section 62A application
-                        application has been made. The LPA notifies anyone who has been consulted.</p>
-                    <p>The Planning Inspectorate (PINS) accepts written representations from statutory consultees and
-                        other interested parties.</p>
-                    <p>The time limit for submitting written representations is no less than 21 days from the date the
-                        application is accepted. Any representations submitted after this date may not be taken into
-                        account.</p>
+                    <p>The Planning Inspectorate:</p>
+                <ul>
+                    <li>publishes the application documents on a dedicated web page</li>
+                    <li>carries out any required consultations</li>
+                    <li>may place a press notice</li>
+                </ul>
+                    <p>The relevant local planning authority displays a site notice and notifies any adjoining owner or occupier if needed.</p>
+                    <p>Statutory consultees and other interested parties can send written representations to the Planning Inspectorate.</p>
+                    <p>Written representations must be sent no less than 21 days from the date the application is accepted. Written representations submitted after this date may not be considered.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -300,7 +297,7 @@
                         <div class="summary-content">
                             <span>Procedure decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
                             </div>
                         </div>
                     </div>
@@ -313,7 +310,7 @@
                         at any point before the decision is issued.</p>
                     <p>The planning inspector will determine how the application should proceed. The possible procedures
                         are:</p>
-                    <ul class="govuk-list govuk-list--bullet">
+                    <ul>
                         <li>written representations</li>
                         <li>hearing</li>
                     </ul>
@@ -331,7 +328,7 @@
                         <div class="summary-content">
                             <span>Reporting and decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
                             </div>
                         </div>
                     </div>
@@ -353,7 +350,7 @@
                         <div class="summary-content">
                             <span>Post-decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
                             </div>
                         </div>
                     </div>
@@ -385,7 +382,7 @@
         <details class="govuk-details">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                    There are other ways to make a representation
+                    Ways to contact us
                 </span>
             </summary>
             
@@ -401,15 +398,11 @@
                 </p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
-                <p class="govuk-body">When writing an email, quote the application reference number S62A/2024/0048 in the subject line.</p>
+                <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
                 <p class="govuk-body">
                     <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
                 </p>
                 <p class="govuk-body">We aim to respond within 10 working days.</p>
-                <p class="govuk-body">Please base your comments on planning matters.</p>
-                <p class="govuk-body">Please avoid the use of inflammatory, discriminatory or abusive comments.</p>
-                <p class="govuk-body">All representations made in connection with the development proposal will be made publicly available on the website shortly after the end of the representation period.  The name of the individual author or organisation will be published however addresses, signatures and contact details will not be published.  We advise you not to include any other personal information about yourself or others.</p>
-                <p class="govuk-body">Our <a class="govuk-link" href="#">Customer Privacy Notice</a> sets out how we handle personal data in accordance with the law.</p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
                 <p class="govuk-body">
