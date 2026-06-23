@@ -91,19 +91,41 @@
                     <a href="/current-service/front-office/testing/s62a-2024-0057/documents">Documents</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2024-0057/hys">Have your say</a>
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="#">Application updates</a>
-                </li>
-                <li class="moj-side-navigation__item">
-                    <a href="#">Written representations</a>
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/written-representations">Written representations</a>
                 </li>
             </ul>
         </nav>
     </div>
 
     <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title"
+            data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                    Important
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+
+                <p class="govuk-notification-banner__heading">
+                    Latest update — 1 Nov 2024
+
+                </p>
+                <p>
+                    Decision issued - available to view under the application information tab
+                </p>
+                <p>
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/application-updates">
+                        View all updates
+                    </a>
+                </p>
+
+            </div>
+        </div>
 
         <span class="govuk-caption-xl">S62A/2024/0057</span>
         <h1 class="govuk-heading-xl">Application information</h1>
@@ -113,100 +135,77 @@
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Type of application</dt>
-            <dd class="govuk-summary-list__value">Outline planning permission with some matters reserved</dd>
-          </div>
-          
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Local planning authority</dt>
-            <dd class="govuk-summary-list__value">Cherwell LPA</dd>
+            <dd class="govuk-summary-list__value">Full Planning Application</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant name</dt>
-            <dd class="govuk-summary-list__value">Home Office</dd>
+            <dd class="govuk-summary-list__value">Chase New Homes</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
-            <dd class="govuk-summary-list__value">Campsfield Immigration Removal Centre (IRC), Evenlode Crescent, Kiddlington, OX5 1RE</dd>
+            <dd class="govuk-summary-list__value">Former Friends School Field, Mount Pleasant Road, Saffron Walden, CB11 3EB</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Description of the proposed development</dt>
-            <dd class="govuk-summary-list__value">Outline Planning Application with all matters reserved (except for access) for the expansion of Campsfield IRC comprising the development of new accommodation blocks and ancillary supporting accommodation, the conversion of existing site infrastructure, demolition of existing structures, creation of additional car parking...</dd>
+            <dd class="govuk-summary-list__value">Erection of 91no. dwellings with associated infrastructure and landscaping. Provision of playing field and associated clubhouse.</dd>
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Stage</dt>
-            <dd class="govuk-summary-list__value">Accepted</dd>
+            <dt class="govuk-summary-list__key">Case officer</dt>
+            <dd class="govuk-summary-list__value">Section 62A Applications Team</dd>
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Application form</dt>
-            <dd class="govuk-summary-list__value">
-              To view the full application, go to the <a href="documents-static" class="govuk-link">Documents section</a>.
-            </dd>
+            <dt class="govuk-summary-list__key">Procedure</dt>
+            <dd class="govuk-summary-list__value">Written Representations</dd>
           </div>
         </dl>
 
-        <h2 class="govuk-heading-m">Important dates</h2>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+
+        <h2 class="govuk-heading-m">Key dates</h2>
 
         {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Application accepted date" }, value: { text: "1 January 2026" } },
-            { key: { text: "Representation period" }, value: { text: "3 April 2026 at 12:00am to 30 April 2026 at 11:59pm" } },
-            { key: { text: "Decision date" }, value: { html: "1 June 2026" } }
+            { key: { text: "Date application valid" }, value: { text: "5 August 2024" } },
+            { key: { text: "Date by when representations must be made" }, value: { text: "20 September 2024" } },
+            { key: { text: "Hearing date and venue" }, value: { text: "TBC" } },
+            { key: { text: "Target decision" }, value: { text: "4 November 2024" } },
+            { key: { text: "Decision date" }, value: { text: "1 November 2024" } }
           ]
         }) }}
 
-        <h2 class="govuk-heading-m">Procedure details</h2>
+         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
-        {{ govukSummaryList({
-          rows: [
-            { key: { text: "Procedure type" }, value: { text: "Hearing" } },
-            { key: { text: "Hearing date" }, value: { text: "1 July 2026" } },
-            { key: { text: "Hearing venue" }, value: { html: "Chelsea Town Hall" } }
-          ]
-        }) }}
+        <h2 class="govuk-heading-m">Decision</h2>
 
-        <h2 class="govuk-heading-m">Application decision</h2>
-
-        {{ govukSummaryList({
-          rows: [
-            { key: { text: "Decision date" }, value: { text: "1 August 2026" } },
-            { key: { text: "Decision outcome" }, value: { text: "-" } }
-          ]
-        }) }}
+        <ul class="govuk-list govuk-list--bullet">
+                 <li><a class="govuk-link" href="#">Decision Notice and Statement of Reasons</a> (PDF, 211 KB, 19 pages)</li>
+        </ul>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
-        <h2 class="govuk-heading-m">Have your say</h2>
+        <h2 class="govuk-heading-m">Make a representation</h2>
 
-        <p class="govuk-body">Use this service to submit a written representation with your views on this Crown
-            Development application. A written representation includes your comment and any supporting documents.
-            Written representations will be considered by the Planning Inspectors before a decision is made on an
-            application.</p>
-        <p class="govuk-body">Your name and written representation will be published on this website.</p>
-        <p class="govuk-body govuk-!-margin-0">The representation period is open from:</p>
-        <br>
-        <p class="govuk-body">31 January 2026 at 12:00am to 31 March 2026 11:59pm.</p>
+        <p class="govuk-body">The written representations period has ended.</p>
+        <p class="govuk-body">You can <a href="/current-service/front-office/testing/s62a-2024-0057/written-representations">view the written representations </a>for this application.</p>
 
-        {% from "govuk/components/button/macro.njk" import govukButton %}
-
-        {{ govukButton({
-          text: "Have your say",
-          href: "/start"
-        }) }}
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
+
         <h2 class="govuk-heading-m">Application stage</h2>
-        <p class="govuk-body">This application is at the <strong>accepted</strong> stage.</p>
+        <p class="govuk-body">This application is at the <strong>post decision</strong> stage.</p>
 
         <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
@@ -218,14 +217,15 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The pre-application process for Crown Development applications is handled by the Ministry of
-                        Housing, Communities and Local Government (MHCLG).</p>
-                    <p>Together, the applicant and MHCLG identify any issues there may be with the:</p>
+                    <p>The pre-application process for Section 62A applications is handled by the Planning Inspectorate.</p>
+                    <p>The applicant sends the notice of intent to PINS with information on:</p>
                     <ul class="govuk-list govuk-list--bullet">
-                        <li>development plan</li>
-                        <li>National Planning Policy Framework</li>
-                        <li>planning practice guidance documents</li>
-                        <li>issues raised by pre-application community consultation</li>
+                        <li>who the applicant is</li>
+                        <li>the site address</li>
+                        <li>the size of the development</li>
+                        <li>expected submission date</li>
+                        <li>Listed Building Consent status</li>
+                        <li>and any likely issues with the development</li>
                     </ul>
                     <p>These will be addressed in the application submission.</p>
                 </div>
@@ -234,13 +234,13 @@
         </div>
 
         <div id="project-stage-acceptance">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Accepted</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -248,28 +248,25 @@
                 <div class="govuk-details__text">
                     <p class="govuk-body">The Planning Inspectorate (PINS) checks that the application is complete. For
                         example, that the right documents and fees have been added.</p>
-                    <p class="govuk-body">The Secretary of State assesses whether the application is of national
-                        importance. Once this is confirmed, the application is accepted for consideration and is
-                        published.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
         </div>
 
         <div id="project-stage-consultation">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Consultation</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The relevant Local Planning Authority (LPA) publicises the fact that a Crown Development
+                    <p>The relevant Local Planning Authority (LPA) publicises the fact that a Section 62A application
                         application has been made. The LPA notifies anyone who has been consulted.</p>
                     <p>The Planning Inspectorate (PINS) accepts written representations from statutory consultees and
                         other interested parties.</p>
@@ -282,28 +279,28 @@
         </div>
 
         <div id="project-stage-procedure-decision">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Procedure decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
                 </summary>
                 <div class="govuk-details__text">
                     <p>The procedure is the method of decision process the Planning Inspectorate will use to make a
-                        decision about the proposed development.<br>The Planning Inspectorate will keep the procedure
-                        choice, including combined procedures, under review. Subject to any notification and procedural
-                        requirement, the procedure may be changed at any point before the decision is issued.</p>
+                        decision about the proposed development.</p>
+                    <p>The Planning Inspectorate will keep the procedure choice, including combined procedures, 
+                        under review. Subject to any notification and procedural requirement, the procedure may be changed 
+                        at any point before the decision is issued.</p>
                     <p>The planning inspector will determine how the application should proceed. The possible procedures
                         are:</p>
                     <ul class="govuk-list govuk-list--bullet">
                         <li>written representations</li>
                         <li>hearing</li>
-                        <li>inquiry</li>
                     </ul>
                     <p>The decision will be communicated to the applicant, relevant Local Planning Authority (LPA) and
                         anyone who submitted comments during the representations period.</p>
@@ -313,13 +310,13 @@
         </div>
 
         <div id="project-stage-reporting">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Reporting and decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -335,22 +332,22 @@
         </div>
 
         <div id="project-stage-post-decision">
-            <details class="govuk-details pins-modded-summary-full-width">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Post-decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>Where permission has been granted on a Crown Development application, the Local Planning
+                    <p>Where permission has been granted on a Section 62A application, the Local Planning
                         Authority (LPA) is responsible for monitoring the implementation of the permission. The LPA must
                         ensure that it is carried out in accordance with the plans and any planning conditions.</p>
-                    <p>To challenge a decision on a Crown Development application, an application must be made to the
+                    <p>To challenge a decision on a Section 62A application, an application must be made to the
                         High Court. This must be made within 6 weeks of the day the decision is issued.</p>
                 </div>
             </details>
@@ -361,32 +358,64 @@
             <a class="govuk-link" href="https://www.gov.uk/guidance/planning-applications-s62a">information about
                 Section 62A applications</a>.
         </p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m">Contact Us</h2>
-        <h3 class="govuk-heading-s">Telephone</h3>
-        <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
-        <p class="govuk-body">Telephone: 0303 444 5000</p>
-        <p class="govuk-body">
-            Open Monday to Friday: 9am to 4pm.
-            <br>
-            Closed on weekends and bank holidays.
-        </p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
-        <h3 class="govuk-heading-s">Email</h3>
-        <p class="govuk-body">
-            <a class="govuk-link" href="mailto:section62anonmajor@planninginspectorate.go.uk">section62anonmajor@planninginspectorate.go.uk</a>
-        </p>
-        <p class="govuk-body">When writing an email, quote the application reference in the subject line.</p>
-        <p class="govuk-body">We aim to respond within 10 working days.</p>
+        <h2 class="govuk-heading-m">Contact us</h2>
+
+        <details class="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    There are other ways to make a representation
+                </span>
+            </summary>
+            
+            <div class="govuk-details__text">
+                
+                <h3 class="govuk-heading-s">Telephone</h3>
+                <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
+                <p class="govuk-body">Telephone: 0303 444 5000</p>
+                <p class="govuk-body">
+                    Open Monday to Friday: 9am to 4pm.
+                    <br>
+                    Closed on weekends and bank holidays.
+                </p>
+
+                <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
+                <p class="govuk-body">When writing an email, quote the application reference number S62A/2024/0048 in the subject line.</p>
+                <p class="govuk-body">
+                    <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
+                </p>
+                <p class="govuk-body">We aim to respond within 10 working days.</p>
+                <p class="govuk-body">Please base your comments on planning matters.</p>
+                <p class="govuk-body">Please avoid the use of inflammatory, discriminatory or abusive comments.</p>
+                <p class="govuk-body">All representations made in connection with the development proposal will be made publicly available on the website shortly after the end of the representation period.  The name of the individual author or organisation will be published however addresses, signatures and contact details will not be published.  We advise you not to include any other personal information about yourself or others.</p>
+                <p class="govuk-body">Our <a class="govuk-link" href="#">Customer Privacy Notice</a> sets out how we handle personal data in accordance with the law.</p>
+
+                <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
+                <p class="govuk-body">
+                    Section 62A Applications Team,
+                    <br>
+                    The Planning Inspectorate,
+                    <br>
+                    3rd Floor,
+                    <br>
+                    Temple Quay House,
+                    <br>
+                    2 The Square, Temple Quay,
+                    <br>
+                    Bristol, BS1 6PN
+                </p>
+
+            </div> 
+        </details>
 
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">Call or email to ask for project documents in alternative formats such as PDF, large
             print, easy read, audio recording or braille. 
-            <br>
-            <br>
-            For letters, write to Section 62A Applications Team, Planning Inspectorate, c/o QUADIENT, 69 Buckingham Avenue, Slough, SL1 4PN.</p>
     </div>
 </div>
 
