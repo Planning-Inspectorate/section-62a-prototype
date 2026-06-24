@@ -338,8 +338,8 @@
             <dd class="govuk-summary-list__value">{{ currentCase.lastModified | default('-') }}</dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Category</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.applicationCategory | default('-') }}</dd>
+            <dt class="govuk-summary-list__key">Classification</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicationClassification | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -403,8 +403,8 @@
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Application category</dt>
-            <dd class="govuk-summary-list__value">{{ currentCase.detailsApplicationCategory | default('-') }}</dd>
+            <dt class="govuk-summary-list__key">Application classification</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.detailsApplicationClassification | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Edit</a></dd>
           </div>
         </dl>

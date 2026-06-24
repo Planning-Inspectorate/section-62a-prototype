@@ -174,10 +174,10 @@
 
       {# --- 0: Category --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Application category</dt>
-        <dd class="govuk-summary-list__value">{{ data['application-category'] }}</dd>
+        <dt class="govuk-summary-list__key">Application classification</dt>
+        <dd class="govuk-summary-list__value">{{ data['application-classification'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/0-application-category">Change<span class="govuk-visually-hidden"> application category</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/0-application-classification">Change<span class="govuk-visually-hidden"> application classification</span></a>
         </dd>
       </div>
       {% endif %}
@@ -202,7 +202,7 @@
 
       {# --- 3-1: Has Secondary LPA --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Has secondary LPA</dt>
+        <dt class="govuk-summary-list__key">Secondary LPA?</dt>
         <dd class="govuk-summary-list__value">{{ data['has-secondary-lpa'] }}</dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="/current-service/back-office/create-a-case/3-1-has-secondary-lpa">Change<span class="govuk-visually-hidden"> whether there is a secondary LPA</span></a>
@@ -212,7 +212,7 @@
       {# --- CONDITIONAL SECONDARY LPA ROW --- #}
       {% if data['has-secondary-lpa'] == 'Yes' %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Secondary LPA</dt>
+          <dt class="govuk-summary-list__key">Secondary LPA name</dt>
           <dd class="govuk-summary-list__value">{{  secondaryLpaContactsHtml | safe  }}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/current-service/back-office/create-a-case/3-2-secondary-lpa-input">Change<span class="govuk-visually-hidden"> secondary LPA</span></a>
@@ -222,7 +222,7 @@
 
       {# --- 4-1: Has Agent --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Has agent</dt>
+        <dt class="govuk-summary-list__key">Agent?</dt>
         <dd class="govuk-summary-list__value">{{ data['has-agent'] }}</dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="/current-service/back-office/create-a-case/4-1-has-agent">Change<span class="govuk-visually-hidden"> whether applicant has an agent</span></a>

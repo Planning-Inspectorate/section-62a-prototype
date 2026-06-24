@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
- {% if errorApplicationCategory %}Error: {% endif %}Is this a major or non-major application?
+ {% if errorApplicationClassification %}Error: {% endif %}Is this a major or non-major application?
 {% endblock %}
 
 {% block beforeContent %}
@@ -15,18 +15,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorApplicationCategory %}
+    {% if errorApplicationClassification %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorApplicationCategory, href: "#application-category" }]
+        errorList: [{ text: errorApplicationClassification, href: "#application-classification" }]
       }) }}
     {% endif %}
 
-    <form class="form" action="/application-category-answer" method="post" novalidate>
+    <form class="form" action="/application-classification-answer" method="post" novalidate>
       
       {{ govukRadios({
-        idPrefix: "application-category",
-        name: "application-category",
+        idPrefix: "application-classification",
+        name: "application-classification",
         fieldset: {
           legend: { 
             text: "Is this a major or non-major application?", 
@@ -34,17 +34,17 @@
             classes: "govuk-fieldset__legend--l" 
           }
         },
-        errorMessage: { text: errorApplicationCategory } if errorApplicationCategory else null,
+        errorMessage: { text: errorApplicationClassification } if errorApplicationClassification else null,
         items: [
           { 
             value: "Major", 
             text: "Major", 
-            checked: data['application-category'] == 'Major' 
+            checked: data['application-classification'] == 'Major' 
           },
           { 
             value: "Non-major", 
             text: "Non-major", 
-            checked: data['application-category'] == 'Non-major' 
+            checked: data['application-classification'] == 'Non-major' 
           }
         ]
       }) }}

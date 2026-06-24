@@ -23,16 +23,16 @@ router.post('/application-stage-answer', function (req, res) {
     res.redirect('/current-service/back-office/create-a-case/1-application-type');
   }
   else if (applicationStage === "Application") {
-    res.redirect('/current-service/back-office/create-a-case/0-application-category');
+    res.redirect('/current-service/back-office/create-a-case/0-application-classification');
   }
 });
 
 
 // 0 - application category
-router.post('/application-category-answer', function (req, res) {
-  const applicationCategory = req.session.data['application-category'];
-  if (!applicationCategory) {
-    return res.render('current-service/back-office/create-a-case/0-application-category', { errorApplicationCategory: "Select whether this is a major or non-major application" });
+router.post('/application-classification-answer', function (req, res) {
+  const applicationClassification = req.session.data['application-classification'];
+  if (!applicationClassification) {
+    return res.render('current-service/back-office/create-a-case/0-application-classification', { errorApplicationClassification: "Select whether this is a major or non-major application" });
 }
   res.redirect('/current-service/back-office/create-a-case/1-application-type');
 });
@@ -967,7 +967,7 @@ router.post('/case-created-confirmation', function (req, res) {
     reference: caseReference,
     status: "New",
     applicationStage: data['application-stage'],
-    applicationCategory: data['application-category'],
+    applicationClassification: data['application-classification'],
     applicationType: data['application-type'],
 
    // lpa details
@@ -1072,7 +1072,7 @@ router.post('/case-created-confirmation', function (req, res) {
 
   // wipe data fields for fresh create a case journey
   const fieldsToClear = [
-    'application-stage', 'application-category', 'application-type', 'lpa', 
+    'application-stage', 'application-classification', 'application-type', 'lpa', 
     'lpa-contact-first-name', 'lpa-contact-last-name', 'lpa-contact-email', 'lpa-contact-phone',
     'has-secondary-lpa', 'secondary-lpa', 
     'secondary-lpa-contact-first-name', 'secondary-lpa-contact-last-name', 'secondary-lpa-contact-email', 'secondary-lpa-contact-phone', // <-- New Secondary LPA fields
