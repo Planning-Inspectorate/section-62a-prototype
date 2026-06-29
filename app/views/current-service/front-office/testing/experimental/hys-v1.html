@@ -1,0 +1,178 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Have your say on a section 62A application - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/" aria-current="location">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/">Have your say</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/">Written representations</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    {% set details %}
+        <p> At the Planning Inspectorate, we value your privacy. This statement outlines how we process your personal
+            data.</p>
+
+        <p>
+            When you submit a written representation on a Section 62A application, we’ll ask for your
+            name and email address.
+
+        </p>
+
+        <p>Your name and written representation will be published on the <a
+                href="#">Find a Section 62A
+                application service</a>. We will only use your email address to communicate with you about your
+            submission and will not use your data for any other, unrelated purpose. </p>
+
+        <p>We’ll process all of your data in line with our legal obligation under The Town and Country Planning (Crown
+            Development Applications) (Procedure and Written Representations) Order 2025</a>.
+
+        <p> You can read full details of how we process your data in our <a
+                href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice">GOV.UK
+                Customer Privacy Notice</a></p>
+
+
+        <p>You have the right to access and correct your data. To do this, contact the Planning Inspectorate Senior Data
+            Protection Manager at <a
+                href="#">dataprotection@planninginspectorate.gov.uk.</a>
+        </p>
+
+
+        {% endset %}
+
+
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">S62A/2024/0000001</span>
+         <h1 class="govuk-heading-l">
+            Have your say on a Section 62A application
+        </h1>
+
+        <p> Use this service to submit a written representation with your views on the proposed development. A written
+            representation includes your comment and any supporting documents.
+        <p>You can:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>make a comment as an individual, organisation or agent</li>
+
+            <li>upload supporting documents (optional)</li>
+        </ul>
+
+        <p>Your comment and any supporting documents will be:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>published on this website along with your name, and the name of your organisation where applicable</li>
+
+            <li>considered by the Planning Inspectors before a decision is made on the application</li>
+        </ul>
+
+        <p>You must submit your comment and any supporting documents by 11:59pm on 12 December 2027.</p>
+
+                <h2 class="govuk-heading-m">
+            Before you start
+        </h2>
+
+        <p><strong>We’ll ask for your:</strong></p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>name</li>
+            <li>email address</li>
+            <li>comment on the proposed development</li>
+            <li>supporting documents (optional)</li>
+        </ul>
+
+        <p><strong>If you’re commenting for an organisation you work or volunteer for, we’ll also ask for:</strong></p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the name of the charity or organisation you work for</li>
+            <li>your job title or volunteer role</li>
+        </ul>
+
+        <p><strong>If you’re commenting on behalf of another person or organisation, we’ll also ask for:</strong></p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the name of the charity or organisation you work for</li>
+            <li>the name of the person or organisation you are representing</li>
+        </ul>
+
+        {% from "govuk/components/button/macro.njk" import govukButton %}
+
+        <a href="#" class="govuk-button govuk-button--start">Start now<svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+  </svg></a>
+
+
+        {% set details %}
+        <p> At the Planning Inspectorate, we value your privacy. This statement outlines how we process your personal
+            data.</p>
+
+        <p>
+            When you submit a written representation on a Section 62A application, we’ll ask for your
+            name and email address.
+
+        </p>
+
+        <p>Your name and written representation will be published on the <a
+                href="#">Find a Section 62A
+                application service</a>. We will only use your email address to communicate with you about your
+            submission and will not use your data for any other, unrelated purpose. </p>
+
+        <p>We’ll process all of your data in line with our legal obligation under The Town and Country Planning (Crown
+            Development Applications) (Procedure and Written Representations) Order 2025</a>.
+
+        <p> You can read full details of how we process your data in our <a
+                href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice">GOV.UK
+                Customer Privacy Notice</a></p>
+
+
+        <p>You have the right to access and correct your data. To do this, contact the Planning Inspectorate Senior Data
+            Protection Manager at <a
+                href="#">dataprotection@planninginspectorate.gov.uk.</a>
+        </p>
+
+
+        {% endset %}
+
+        {{ govukDetails({
+        summaryText: "How we process your data",
+        html: details
+        }) }}
+
+
+
+
+    </div>
+</div>
+{% endblock %}
