@@ -25,7 +25,7 @@ Check applicant organisation details
             
             {# Key Column (Contact 1) #}
             <dt class="govuk-summary-list__key">
-              Applicant {{ loop.index }}
+              Applicant organisation{{ loop.index }}
             </dt>
             
             {# Value Column (Name, Address) #}
@@ -61,7 +61,7 @@ Check applicant organisation details
         {% endfor %}
       </dl>
     {% else %}
-      <p class="govuk-body">No applicants found</p>
+      <p class="govuk-body">No applicant organisations found</p>
       <br>
     {% endif %}
 
