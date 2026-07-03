@@ -1,14 +1,12 @@
 <style>
     .front-office-header {
-        background: #01625E;
-        border-bottom: #11A19A 10px solid;
-    }
-
-    .front-office-header__container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        padding: 24px 0;
+    min-height: 60px;
+    padding-top: 24px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: #00625e;
+    border-bottom: 10px solid #13A19B;
+    font-family: Helvetica Neue, Arial, sans-serif;
     }
 
     .front-office-header__nav {
@@ -29,6 +27,12 @@
 
     #logo {
         width: 30%;
+    }
+    /* 2. The mobile override */
+    @media (max-width: 40.0625em) {
+        #logo {
+            width: 100%; /* Bumps the size up so it spans most of the mobile screen */
+        }
     }
 
     .govuk-service-navigation--custom {

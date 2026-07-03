@@ -1,0 +1,58 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Who are you submitting a representation for? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorIndividualOrBehalf %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorIndividualOrBehalf, href: "#individual-or-behalf" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/current-service/front-office/testing/experimental/hys-flow/1-who" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "individual-or-behalf",
+        name: "individual-or-behalf",
+        fieldset: {
+          legend: { 
+            text: "Who are you submitting a representation for?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorIndiviudalOrBehalf } if errorIndividualOrBehalf else null,
+        items: [
+          { 
+            value: "Myself", 
+            text: "Myself", 
+            checked: data['individual-or-behalf'] == 'Myself' 
+          },
+          { 
+            value: "On behalf of another person or an organisation", 
+            text: "On behalf of another person or an organisation", 
+            checked: data['individual-or-behalf'] == 'On behalf of another person or an organisation' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

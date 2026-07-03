@@ -1,0 +1,87 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Which AI tool did you use? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/experimental/hys-flow/ai-1"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorIndividualOrBehalf %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorIndividualOrBehalf, href: "#individual-or-behalf" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/current-service/front-office/testing/experimental/hys-flow/1-who" method="post" novalidate>
+      
+            {% set otherHtml %}
+        {{ govukInput({
+        id: "contact-by-email",
+        name: "contactByEmail",
+        type: "email",
+        autocomplete: "email",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        label: {
+            text: "Enter the other AI tool"
+        }
+        }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+        name: "contact",
+        fieldset: {
+            legend: {
+            text: "Which AI tool did you use?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+        },
+        hint: {
+            text: "Select one option"
+        },
+        items: [
+            {
+            value: "chatgpt",
+            text: "ChatGPT"
+            },
+            {
+            value: "gemini",
+            text: "Google Gemini"
+            },
+            {
+            value: "copilot",
+            text: "Microsoft Copilot"
+            },
+            {
+            value: "claude",
+            text: "Claude"
+            },
+            {
+            value: "other",
+            text: "Other AI tool",
+            checked: true,
+            conditional: {
+                html: otherHtml
+            }
+            }
+        ]
+        }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

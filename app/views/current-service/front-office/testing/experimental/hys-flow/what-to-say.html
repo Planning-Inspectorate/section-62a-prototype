@@ -1,0 +1,105 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "What do you want to say about this application?" %}
+
+{% block content %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <form action="" method="post" novalidate="">
+            <input type="hidden" name="_csrf" value="">
+            <h1 class="govuk-heading-l">
+                What do you want to say about this application?
+            </h1>
+            <p class="govuk-body">Your comment can support, object or provide general feedback on the proposed
+                development.</p>
+            <p class="govuk-body">Make sure you include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>how the proposed development may affect you and/or your business and community</li>
+                <li>relevant detail to support your views</li>
+            </ul>
+            <p class="govuk-body">You should focus on planning-related matters. These can include, but are not limited
+                to, the environment, local economy, transport links, access to services and quality of life factors such
+                as noise, lighting and general living conditions.</p>
+            <p class="govuk-inset-text">If you want to add any supporting documents to your comment, you can do this on the
+                next page.</p>
+            <p class="govuk-body">
+
+                You can use artificial intelligence (AI) tools to help draft or translate your written representation.
+                You must check that everything is accurate and reflects your own views.</p>
+            <p class="govuk-body">Your comment will be published on this website along with your name, and the name of
+                your organisation where applicable.</p>
+
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-visually-hidden">Warning</span>
+                    Do not include in your comment any personal information that could identify you or another person.
+                </strong>
+            </div>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        Guidance on what not to include
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">Do not include:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>personal data such as names, addresses, contact details, signatures and photos that could
+                            identify you or anyone else
+                        </li>
+                        <li>links to third party websites, except GOV.UK or chartered professional websites</li>
+                        <li>sensitive information</li>
+                    </ul>
+                    <p class="govuk-body">Sensitive information refers to information that:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>could identify a child</li>
+                        <li>relates to health</li>
+                        <li>relates to crime&nbsp;</li>
+                    </ul>
+                    <p class="govuk-body">It also means any information relating to an individual's:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>race or ethnic origin</li>
+                        <li>political or religious beliefs</li>
+                        <li>trade union membership</li>
+                        <li>genetic or biometric data</li>
+                        <li>physical characteristics</li>
+                        <li>mental health or sexual health</li>
+                        <li>sexual orientation and sex life</li>
+                    </ul>
+                    <p class="govuk-body">If you include any personal data, third party links or sensitive data in your
+                        comment or supporting documents, this will be redacted and will not be taken into account by the
+                        Planning Inspectors.</p>
+                    <p class="govuk-body">If you include any racist, inflammatory or abusive language, your written
+                        representation will be rejected.</p>
+
+                </div>
+            </details>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-!-font-weight-bold" for="submitterComment">
+                    Enter your comment
+                </label>
+                <div id="submitterComment-hint" class="govuk-hint">
+                    You must tell us in your comment if you’d like to attend a hearing in the event that one is
+                    scheduled.
+                </div>
+                <textarea class="govuk-textarea" id="submitterComment" name="submitterComment" rows="5"
+                    aria-describedby="submitterComment-hint"></textarea>
+            </div>
+
+
+
+            <a href="14-do-you-want-to-include-any-supporting-documents-with-your-comment.html" class="govuk-button">
+                Continue
+            </a>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

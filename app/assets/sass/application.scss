@@ -117,3 +117,9 @@
   border-left-color: #29A197 !important;
 }
 
+
+/* Force long links inside details components to wrap on mobile */
+    .govuk-details__text a{
+        overflow-wrap: break-word;
+        word-break: break-all; /* Fallback for older browsers */
+    }

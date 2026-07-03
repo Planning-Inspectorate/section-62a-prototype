@@ -33,17 +33,18 @@
 
 
     {% if data['has-agent'] == 'Yes' %}
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details (optional)</h1>
+    <h1 class="govuk-heading-l">Check applicant contact details</h1>
     {% else %}
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Check applicant contact details</h1>
+      <h1 class="govuk-heading-l">Check applicant contact details</h1>
     {% endif %}
 
 
     {# --- DYNAMIC HINT TEXT --- #}
     {% if data['has-agent'] == 'Yes' %}
-      <div id="applicant-contact-hint" class="govuk-hint">
+      <div id="applicant-contact-body" class="govuk-body">
         You can skip adding applicant contact details if you have an agent.
       </div>
+      <br>
     {% endif %}
 
     {% set contactList = data['applicant-contact-list'] or [] %}
@@ -98,7 +99,6 @@
         {% endfor %}
       </dl>
     {% else %}
-      <br><br>
       <p class="govuk-body">No applicant contacts found.</p>
       <br>
     {% endif %}

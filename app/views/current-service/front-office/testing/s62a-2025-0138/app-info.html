@@ -57,21 +57,73 @@
         margin-bottom: 15px; 
     }
 
+    /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 97%;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 97%;
+            margin-bottom: 15px !important; /* Preserves your custom spacing */
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 97%;
+            padding: 15px !important; /* Preserves your custom padding */
+            font-size: 19px !important; /* Preserves your custom font size */
+            color: #1d70b8 !important; /* Standard GOV.UK blue for inactive links */
+            box-shadow: none !important; /* Clears any legacy bottom lines */
+            border: none !important;
+        }
+
+        /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; /* Teal line on the left */
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; /* Grey line on the left */
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+    }
+
     /* ========================================================= */
     /* APPLICATION STAGE STATUS TAG STYLING                      */
     /* ========================================================= */
     
+   /* 1. Make the summary container span the full width */
     .pins-modded-summary-full-width .govuk-details__summary {
         display: flex;
+        justify-content: space-between; /* Pushes the tag to the far right */
         align-items: center;
-        width: 100%;
+        width: 100%; 
+        box-sizing: border-box; /* Ensures padding doesn't break the 100% width */
         padding-right: 0; 
     }
 
+    /* 2. Allow the text to take up the remaining space without forcing a width */
     .pins-modded-summary-full-width .govuk-details__summary-text {
         display: block;
-        flex-grow: 1;
-        width: 100%;
+        flex-grow: 1; 
+        /* Remove the width: 93% from here completely */
     }
 </style>
 

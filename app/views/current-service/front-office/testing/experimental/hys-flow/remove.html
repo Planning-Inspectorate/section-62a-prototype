@@ -1,0 +1,42 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Remove applicant organisation?
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Remove person</h1>
+    
+    <p class="govuk-body">Do you want to remove this person?</p>
+
+        {{ govukInsetText({
+          text: "Samantha Turner"
+        }) }}
+
+
+    {# --- FORM WITH WARNING & CANCEL BUTTONS --- #}
+    <form action="/applicant-org-remove-answer" method="post" novalidate>
+      
+      <input type="hidden" name="applicant-org-remove" value="Yes">
+      <input type="hidden" name="remove-org-id" value="{{ removeId }}">
+      
+      <div class="govuk-button-group">
+        {{ govukButton({ 
+          text: "Remove person",
+          classes: "govuk-button--warning" 
+        }) }}
+
+        {{ govukButton({ 
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/current-service/back-office/create-a-case/5-1-applicant-check"
+        }) }}
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
