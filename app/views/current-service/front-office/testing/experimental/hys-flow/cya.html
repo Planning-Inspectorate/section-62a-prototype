@@ -1,0 +1,191 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "Check your answers" %}
+
+{% block content %}
+
+    <style nonce="">
+        .app-task-list {
+            padding-left: 0;
+        }
+        .app-task-list > li {
+            position: relative;
+            list-style-type: none;
+
+        }
+        .app-task-list__section .govuk-tag {
+            position: absolute;
+            top: 3px;
+            right: 0;
+        }
+        .app-task-list .govuk-summary-list {
+            border-top: 1px solid #b1b4b6;
+        }
+    </style>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+            <h1 class="govuk-heading-l">
+                Check your answers
+            </h1>
+
+            <h2 class="govuk-heading-s">Personal details</h2>
+
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Who you are submitting for?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Another person, household, or neighbour group
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Who are you submitting a representation for?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Are you acting as an agent on behalf of a client?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        No
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Are you acting as an agent on behalf of a client?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Your full name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Jonathan Morgan<br>
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">What is your name?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Email address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        jonathan.morgan@horizonplanning.co.uk
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">What is your email address?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Are you representing a group or an individual?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Group
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Are you representing a group or an individual?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Group representees
+                    </dt>
+                    <ul class="govuk-summary-list__value govuk-list govuk-list--bullet">
+                        <li>Jean Smith</li>
+                        <li>David Browning</li>
+                        <li>Samantha Turner</li>
+                    </ul>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Group representees</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Tell us about application
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        We support the proposed development in principle but request additional measures to address local traffic congestion and biodiversity impacts.
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">What do you want to say about your application?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Attachments uploaded?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Yes
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Do you want to include supporting documents with your comment?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Attachments
+                    </dt>
+                    <ol class="govuk-summary-list__value govuk-list govuk-list--number">
+                        <li><a href="/">DM26 - Local Character and Distinctiveness 2 </a></li>
+                        <li><a href="/">DM2 - Residential Sub-divisions, Shared and Specialist Housing</a></li>
+                    </ol>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">uploaded documents</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Did you use AI for this written representation?
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Yes
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Did you use AI for this written representation?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        AI tool used
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Google Gemini
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">Which AI tool did you use?</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        How the AI tool was used
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Used to help proofread and generate a mockup of the site development
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a href="#" class="govuk-link">Change
+                            <span class="govuk-visually-hidden">How did you use this AI tool?</span></a>
+                    </dd>
+                </div>
+            </dl>
+
+            <a href="17-declaration.html" role="button" draggable="false" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">Continue</a>
+
+        </div>
+
+    </div>
+
+{% endblock %}

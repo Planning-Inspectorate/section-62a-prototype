@@ -29,12 +29,9 @@
           name: "agent-org-name",
           value: data['agent-org-name'],
           label: {
-            text: "What are the names of the people you are representing?",
+            text: "What is the full name of the organisation, charity or local community group you are representing?",
             classes: "govuk-label--l",
             isPageHeading: true
-          },
-          hint: {
-            text: "You will be able to add multiple names"
           },
           errorMessage: { text: errorAgentOrgName } if errorAgentOrgName else null
         }) }}

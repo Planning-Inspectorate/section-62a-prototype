@@ -1,0 +1,116 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Task List - Find a Section 62A application
+{% endblock %}
+
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Have your say on a Section 62A application</h1>
+
+      <h2 class="govuk-heading-m">Check before you start</h2>
+
+      {{ govukTaskList({
+        idPrefix: "before-you-start",
+        items: [
+          {
+            title: {
+              text: "Who you represent"
+            },
+            href: "#",
+            status: {
+              tag: {
+                text: "Incomplete",
+                classes: "govuk-tag--blue"
+              }
+            }
+          },
+          {
+            title: {
+              text: "Your contact details"
+            },
+            href: "#",
+            status: {
+              tag: {
+                text: "Incomplete",
+                classes: "govuk-tag--blue"
+              }
+            }
+          },
+          {
+            title: {
+              text: "Additional information on your representation"
+            },
+            href: "#",
+            status: {
+              text: "Not yet started"
+            }
+          }
+        ]
+      }) }}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-5">Write representation</h2>
+
+      {{ govukTaskList({
+        idPrefix: "prepare-application",
+        items: [
+          {
+            title: {
+              text: "Tell us about your application"
+            },
+            href: "#",
+            status: {
+              text: "Not yet started"
+            }
+          },
+          {
+            title: {
+              text: "Upload documents"
+            },
+            href: "#",
+            status: {
+              text: "Not yet started"
+            }
+          }
+        ]
+      }) }}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-5">Submit declaration</h2>
+
+      {{ govukTaskList({
+        idPrefix: "prepare-application",
+        items: [
+          {
+            title: {
+              text: "Give information on AI usage"
+            },
+            href: "#",
+            status: {
+              text: "Not yet started"
+            }
+          },
+          {
+            title: {
+              text: "Read declaration"
+            },
+            href: "#",
+            status: {
+              text: "Not yet started"
+            }
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Submit representation"
+        }) }}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

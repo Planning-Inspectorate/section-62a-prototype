@@ -1,0 +1,60 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Who are you submitting a representation for? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorIndividualOrBehalf %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorIndividualOrBehalf, href: "#individual-or-behalf" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/current-service/front-office/testing/experimental/hys-flow/1-who" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "individual-or-behalf",
+        name: "individual-or-behalf",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: { 
+            text: "Do you want to make a representation with multiple people?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: {text:"You can add multiple names to this representation if you are representing a group of individuals such as a local community group."},
+        errorMessage: { text: errorIndiviudalOrBehalf } if errorIndividualOrBehalf else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['individual-or-behalf'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['individual-or-behalf'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}
