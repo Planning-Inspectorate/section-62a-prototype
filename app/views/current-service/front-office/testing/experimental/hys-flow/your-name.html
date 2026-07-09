@@ -1,0 +1,46 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "What is your name?" %}
+
+{% block content %}
+    <a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate="">
+
+                <fieldset class="govuk-fieldset" aria-describedby="multi-field-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            What is your name?
+                        </h1>
+                    </legend>
+                    <div id="multi-field-hint" class="govuk-hint">
+                        We’ll publish your name on the website along with your written representation.
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-label" for="myselfFirstName">
+                            First Name
+                        </label>
+                        <input class="govuk-input govuk-input-!-width-three-quarters" id="myselfFirstName" name="myselfFirstName" type="text">
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-label" for="myselfLastName">
+                            Last Name
+                        </label>
+                        <input class="govuk-input govuk-input-!-width-three-quarters" id="myselfLastName" name="myselfLastName" type="text">
+                    </div>
+
+                </fieldset>
+
+               <a href="05-what-is-your-email-address.html" class="govuk-button">
+                    Continue
+                </a>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "What is your job title or volunteer role?" %}
+
+{% block content %}
+    <a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate="">
+
+                <div class="govuk-form-group">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" for="orgRoleName">
+                            What is your job title or volunteer role?
+                        </label>
+                    </h1>
+                    <input class="govuk-input" id="orgRoleName" name="orgRoleName" type="text" value="">
+                </div>
+
+               <a href="09-what-is-the-name-of-the-organisation-you-work-for.html" class="govuk-button">
+                    Continue
+                </a>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

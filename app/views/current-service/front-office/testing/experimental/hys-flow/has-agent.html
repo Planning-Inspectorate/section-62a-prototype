@@ -1,0 +1,47 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "Are you acting as an agent on behalf of a client?" %}
+
+{% block content %}
+    <a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate="">
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset" aria-describedby="isAgent-hint">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading">
+                                Are you acting as an agent on behalf of a client?
+                            </h1>
+                        </legend>
+                        <div id="isAgent-hint" class="govuk-hint">
+                            For example, your organisation has been hired to represent a client on planning matters.
+                        </div>
+                        <div class="govuk-radios govuk-radios" data-module="govuk-radios" data-govuk-radios-init="">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="isAgent" name="isAgent" type="radio" value="yes" data-cy="answer-yes">
+                                <label class="govuk-label govuk-radios__label" for="isAgent">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="isAgent-2" name="isAgent" type="radio" value="no" data-cy="answer-no">
+                                <label class="govuk-label govuk-radios__label" for="isAgent-2">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+               <a href="08-what-is-your-job-title-or-volunteer-role.html" class="govuk-button">
+                    Continue
+                </a>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "What is the name of the person you are representing?" %}
+
+{% block content %}
+    <a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate="">
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            What is the name of the person you are representing?
+                        </h1>
+                    </legend>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-label" for="representedFirstName">
+                            First Name
+                        </label>
+                        <input class="govuk-input govuk-input-!-width-three-quarters" id="representedFirstName" name="representedFirstName" type="text">
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-label" for="representedLastName">
+                            Last Name
+                        </label>
+                        <input class="govuk-input govuk-input-!-width-three-quarters" id="representedLastName" name="representedLastName" type="text">
+                    </div>
+
+                </fieldset>
+
+               <a href="12-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing.html" class="govuk-button">
+                    Continue
+                </a>
+
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

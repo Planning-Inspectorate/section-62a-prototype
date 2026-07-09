@@ -11,8 +11,6 @@
   }) }}
 {% endblock %}
 
-{# Make sure you have this import at the top of your file with the others #}
-{% from "govuk/components/hint/macro.njk" import govukHint %}
 
 {% block content %}
   <div class="govuk-grid-row">
@@ -21,19 +19,12 @@
       <form action="/next-page-url" method="post" novalidate>
         
         {% call govukFieldset({
-          describedBy: "representation-hint", 
           legend: {
-            text: "What is the name of the first person you are representing?",
+            text: "What is the name of the next person you are representing?",
             classes: "govuk-fieldset__legend--l",
             isPageHeading: true
           }
         }) %}
-
-          {# Render the hint manually inside the fieldset #}
-          {{ govukHint({
-            id: "representation-hint",
-            text: "You will be able to add more people on the next page."
-          }) }}
 
           {{ govukInput({
             label: {

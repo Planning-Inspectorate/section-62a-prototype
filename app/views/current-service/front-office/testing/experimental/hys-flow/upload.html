@@ -21,18 +21,11 @@
 
             <p class="govuk-body">Note that:</p>
             <ul class="govuk-list govuk-list--bullet">
-                <li>files must not be compressed (ZIP files will not be accepted)</li>
-                <li>each file must be under 20MB</li>
-                <li>only 3 files can be uploaded at a time</li>
+                <li>attachments must not be compressed (ZIP attachments will not be accepted)</li>
+                <li>each attachment must be under 25MB</li>
+                <li>only 3 attachments can be uploaded at a time</li>
                 <li>total upload size must be under 1GB</li>
             </ul>
-
-            <p class="govuk-body">You can use artificial intelligence (AI) tools to help draft or generate content related to your comment.
-                You must check automated content does not introduce false or misleading factual evidence.</p>
-
-            {% from "components/multi-file-upload.njk" import uploadArea %}
-
-            {{ uploadArea() }}
 
             <details class="govuk-details">
                 <summary class="govuk-details__summary">
@@ -69,6 +62,15 @@
 
                 </div>
             </details>
+
+            <p class="govuk-body">You can use artificial intelligence (AI) tools to help draft or generate content related to your comment.
+                You must check automated content does not introduce false or misleading factual evidence.</p>
+
+            {% from "components/multi-file-upload.njk" import uploadArea %}
+
+            {{ uploadArea() }}
+
+        
 
             <form action="" method="post" novalidate="">
                 <input type="hidden" name="_csrf" value="">

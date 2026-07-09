@@ -1,0 +1,33 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "What is your email address?" %}
+
+{% block content %}
+    <a href="javascript:history.back()" class="govuk-back-link">Back</a>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate="">
+
+                <div class="govuk-form-group">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" for="submitterEmail">
+                            What is your email address?
+                        </label>
+                    </h1>
+                    <div id="submitterEmail-hint" class="govuk-hint">
+                        We’ll use this email address to send you information about the application. We will not publish your email address.
+                    </div>
+                    <input class="govuk-input" id="submitterEmail" name="submitterEmail" type="text" value="" aria-describedby="submitterEmail-hint" autocomplete="email">
+                </div>
+
+               <a href="06-what-is-the-name-of-your-organisation-or-charity.html" class="govuk-button">
+                    Continue
+                </a>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

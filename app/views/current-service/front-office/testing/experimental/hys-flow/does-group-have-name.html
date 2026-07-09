@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  Who are you representing? - Find a Section 62A application
+  Who are you submitting a representation for? - Find a Section 62A application
 {% endblock %}
 
 
@@ -26,36 +26,28 @@
     <form class="form" action="/current-service/front-office/testing/experimental/hys-flow/1-who" method="post" novalidate>
       
       {{ govukRadios({
-        idPrefix: "who",
-        name: "who",
+        idPrefix: "individual-or-behalf",
+        name: "individual-or-behalf",
+        classes: "govuk-radios--inline",
         fieldset: {
           legend: { 
-            text: "Who are you representing?", 
+            text: "Does the group have a name?", 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
         },
+        hint: {text:"For example, a residents' association or a local community group."},
         errorMessage: { text: errorIndiviudalOrBehalf } if errorIndividualOrBehalf else null,
         items: [
           { 
-            value: "A person", 
-            text: "A person", 
-            checked: data['individual-or-behalf'] == 'A person' 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['individual-or-behalf'] == 'Yes' 
           },
           { 
-            value: "An organisation or charity that I work or volunteer for", 
-            text: "An organisation or charity that I work or volunteer for", 
-            checked: data['individual-or-behalf'] == 'An organisation or charity that I work or volunteer for' 
-          },
-          { 
-            value: "An organisation or charity that I do not work for", 
-            text: "An organisation or charity that I do not work for", 
-            checked: data['individual-or-behalf'] == 'An organisation or charity that I do not work for' 
-          },
-          { 
-            value: "A group of people", 
-            text: "A group of people", 
-            checked: data['individual-or-behalf'] == 'A group of people' 
+            value: "No", 
+            text: "No", 
+            checked: data['individual-or-behalf'] == 'No' 
           }
         ]
       }) }}

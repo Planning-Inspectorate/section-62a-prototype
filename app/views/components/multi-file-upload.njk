@@ -3,15 +3,15 @@
   {# Set up component parameters with sensible defaults #}
   {% set id = params.id or "documents" %}
   {% set name = params.name or "documents" %}
-  {% set label = params.label or "Upload a file" %}
-  {% set hint = params.hint or "The file must be a DOC, DOCX, PDF, TIF, JPG, PNG, XLS or XLSX and be smaller than 25MB" %}
+  {% set label = params.label or "Upload an attachment" %}
+  {% set hint = params.hint or "The attachment must be a DOC, DOCX, PDF, TIF, JPG, PNG, XLS or XLSX and be smaller than 25MB" %}
   {% set allowedExtensions = params.allowedExtensions or ["doc", "docx", "pdf", "tif", "tiff", "jpg", "jpeg", "png"] %}
   {% set accept = params.accept or ("." + (allowedExtensions | join(",."))) %}
   {% set maxFileSizeMB = params.maxFileSizeMB or 25 %}
 
   {% set dataKey = params.dataKey or "uploadedFiles" %}
   {% set errorMessage = params.errorMessage
-    or "The file must be a DOC, DOCX, PDF, TIF, JPG, PNG, XLS or XLSX and be smaller than 25MB" %}
+    or "The attachment must be a DOC, DOCX, PDF, TIF, JPG, PNG, XLS or XLSX and be smaller than 25MB" %}
 
 
   <div class="govuk-form-group" id="{{ id }}-upload-group">
@@ -24,17 +24,17 @@
       class="multi-file-dropzone"
       tabindex="0"
       role="button"
-      aria-label="Upload area. Press Enter or Space to choose files, or drag and drop files here."
+      aria-label="Upload area. Press Enter or Space to choose attachments, or drag and drop attachments here."
       data-upload-key="{{ dataKey }}"
       style="border: 2px dashed #b1b4b6; padding: 60px 0 60px 16px; align-items: center; background-color: #fff; margin-bottom: 15px; display: flex; cursor: pointer;"
     >
       <div class="govuk-form-group" style="margin-bottom: 0; display: flex; align-items: center;">
         <label class="govuk-button govuk-button--secondary" for="{{ id }}" style="margin-bottom: 0;">
-          Choose files
+          Choose attachments
         </label>
 
         <p class="govuk-body" style="margin: 0 0 0 10px;">
-          or drop files
+          or drop attachments
         </p>
 
         <input
@@ -59,12 +59,12 @@
 
   <div class="govuk-form-group" id="{{ id }}-files-group" style="display: none;">
     <label class="govuk-label govuk-label--m" id="{{ id }}-files-label" for="{{ id }}-files-table" style="display: none;">
-      Files added
+      Attachments added
     </label>
 
     <p class="govuk-error-message" id="{{ id }}-files-error" style="display: none;">
       <span class="govuk-visually-hidden">Error:</span>
-      Wait for all files to finish uploading
+      Wait for all attachments to finish uploading
     </p>
 
     <table class="govuk-table" id="{{ id }}-files-table" style="table-layout: fixed; width: 100%; margin-bottom: 0;">
