@@ -1,9 +1,11 @@
-{% extends "layouts/new/front-office.html" %}
+{% extends "layouts/new/back-office.html" %}
+
+{# Make sure you import the fieldset macro at the top of your file if you haven't already! #}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% block pageTitle %}
-  Which AI tool did you use? - Find a Section 62A application
+  What is the total capacity of the void? - Find a Section 62A application
 {% endblock %}
-
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -24,62 +26,99 @@
     {% endif %}
 
     <form class="form" action="/current-service/front-office/testing/experimental/hys-flow/1-who" method="post" novalidate>
-      
-            {% set otherHtml %}
-        {{ govukInput({
-        id: "contact-by-email",
-        name: "contactByEmail",
-        type: "email",
-        autocomplete: "email",
-        spellcheck: false,
-        classes: "govuk-!-width-one-half",
-        label: {
-            text: "Enter the other AI tool"
-        }
-        }) }}
-        {% endset -%}
 
-        {{ govukRadios({
-        name: "contact",
-        fieldset: {
-            legend: {
-            text: "Which AI tool did you use?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-            }
-        },
-        hint: {
-            text: "Select one option"
-        },
-        items: [
-            {
-            value: "chatgpt",
-            text: "ChatGPT"
-            },
-            {
-            value: "gemini",
-            text: "Google Gemini"
-            },
-            {
-            value: "copilot",
-            text: "Microsoft Copilot"
-            },
-            {
-            value: "claude",
-            text: "Claude"
-            },
-            {
-            value: "other",
-            text: "Other AI tool",
-            checked: true,
-            conditional: {
-                html: otherHtml
-            }
-            }
-        ]
+      {% set cubicHtml %}
+        {{ govukInput({
+          id: "capacity-cubic",
+          name: "capacityCubic",
+          type: "number",
+          spellcheck: false,
+          classes: "govuk-!-width-one-quarter",
+          label: {
+            text: ""
+          },
+          suffix: {
+            text: "m³"
+          }
         }) }}
-      
-      {{ govukButton({ text: "Continue" }) }}
+      {% endset -%}
+
+      {% set litresHtml %}
+        {{ govukInput({
+          id: "capacity-litres",
+          name: "capacityLitres",
+          type: "number",
+          classes: "govuk-!-width-one-quarter",
+          label: {
+            text: ""
+          },
+          suffix: {
+            text: "l"
+          }
+        }) }}
+      {% endset -%}
+
+      {% set tonnesHtml %}
+        {{ govukInput({
+          id: "capacity-tonnes",
+          name: "capacityTonnes",
+          type: "number",
+          classes: "govuk-!-width-one-quarter",
+          label: {
+            text: ""
+          },
+          suffix: {
+            text: "t"
+          }
+        }) }}
+      {% endset -%}
+
+      {# 1. Start the Fieldset call block #}
+      {% call govukFieldset({
+        legend: {
+          text: "What is the total capacity of the void?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      }) %}
+
+        {# 2. Drop your standard body text right here! #}
+        <p class="govuk-body">This includes engineering surcharge and making no allowance for cover or restoration material in cubic metres. For solid waste use tonnes or litres for liquid waste.</p>
+
+        {# 3. Render the radios (without a legend/fieldset attached) #}
+        {{ govukRadios({
+          name: "capacityType",
+          items: [
+            {
+              value: "cubic-metres",
+              text: "Cubic metres",
+              checked: true,
+              conditional: {
+                html: cubicHtml
+              }
+            },
+            {
+              value: "litres",
+              text: "Litres for liquid waste",
+              conditional: {
+                html: litresHtml
+              }
+            },
+            {
+              value: "tonnes",
+              text: "Tonnes for solid waste",
+              conditional: {
+                html: tonnesHtml
+              }
+            }
+          ]
+        }) }}
+
+      {% endcall %}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
 
     </form>
   </div>
