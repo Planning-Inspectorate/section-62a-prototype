@@ -1,0 +1,62 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorDoesTheGroupHaveAName %}Error: {% endif %}Does the group have a name? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorDoesTheGroupHaveAName %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorDoesTheGroupHaveAName, href: "#does-the-group-have-a-name" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/does-the-group-have-a-name-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "does-the-group-have-a-name",
+        name: "does-the-group-have-a-name",
+        fieldset: {
+          legend: { 
+            text: "Does the group have a name?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "For example, a resident's association or a local community group." 
+        },
+        errorMessage: { text: errorDoesTheGroupHaveAName } if errorDoesTheGroupHaveAName else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['does-the-group-have-a-name'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['does-the-group-have-a-name'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

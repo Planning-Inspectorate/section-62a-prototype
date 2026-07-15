@@ -1,0 +1,65 @@
+{% extends "layouts/new/front-office.html" %}
+
+{# --- DYNAMIC HEADING LOGIC --- #}
+{% set isEditing = data['edit-group-id'] %}
+{% set headingText = "Change the person's name" if isEditing else "What is the name of the next person you are representing?" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}{{ headingText }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/14-check-group-name-details"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/name-of-next-person-answer" novalidate>
+    
+      {% call govukFieldset({
+          legend: {
+              text: headingText,
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+          }
+      }) %}
+
+        {{ govukInput({ 
+          label: { text: "First name" }, 
+          id: "next-person-first-name", 
+          name: "next-person-first-name", 
+          value: data['next-person-first-name'],
+          autocomplete: "given-name",
+          spellcheck: false,
+          errorMessage: errors.firstName if errors.firstName else null
+        }) }}
+        
+        {{ govukInput({ 
+          label: { text: "Last name" }, 
+          id: "next-person-last-name", 
+          name: "next-person-last-name", 
+          value: data['next-person-last-name'],
+          autocomplete: "family-name",
+          spellcheck: false,
+          errorMessage: errors.lastName if errors.lastName else null
+        }) }}
+
+      {% endcall %}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

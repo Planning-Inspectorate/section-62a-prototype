@@ -21,6 +21,7 @@ import editCaseRepsPeriodRouter from './bo-routes/edit-case/reps-period.js';
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
 import allApplicationsRouter from './fo-routes/all-applications.js';
+import haveYourSayUrRouter from './fo-routes/have-your-say-ur.js';
 
 // import helpers
 import { 
@@ -67,6 +68,7 @@ router.use('/', editCaseRepsPeriodRouter);
 // mount fo-routers
 router.use('/', applicationInformationRouter);
 router.use('/', allApplicationsRouter);
+router.use('/', haveYourSayUrRouter);
 
 // New routes below this
 

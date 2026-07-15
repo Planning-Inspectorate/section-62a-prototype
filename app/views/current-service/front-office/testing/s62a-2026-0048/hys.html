@@ -45,40 +45,7 @@
             </ul>
         </nav>
     </div>
-
-    <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">S62A/2026/0048</span>
-        <h1 class="govuk-heading-l">
-            Have your say on a Section 62A application
-        </h1>
-
-        <p> Use this service to submit a written representation with your views on the proposed development. A written
-            representation includes your comment and any supporting documents.
-        <p>You can:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>make a comment as an individual, organisation or agent</li>
-
-            <li>upload supporting documents (optional)</li>
-        </ul>
-
-        <p>Your comment and any supporting documents will be:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-            <li>published on this website along with your name, and the name of your organisation where applicable</li>
-
-            <li>considered by the Planning Inspectors before a decision is made on the application</li>
-        </ul>
-
-        <p>You must submit your comment and any supporting documents by 11:59pm on 1 July 2026.</p>
-
-        {% from "govuk/components/button/macro.njk" import govukButton %}
-
-        <a href="#" class="govuk-button govuk-button--start">Start now<svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-    <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-  </svg></a>
-
-
-        {% set details %}
+   {% set details %}
         <p> At the Planning Inspectorate, we value your privacy. This statement outlines how we process your personal
             data.</p>
 
@@ -93,8 +60,8 @@
                 application service</a>. We will only use your email address to communicate with you about your
             submission and will not use your data for any other, unrelated purpose. </p>
 
-        <p>We’ll process all of your data in line with our legal obligation under The Town and Country Planning (Crown
-            Development Applications) (Procedure and Written Representations) Order 2025</a>.
+        <p>We’ll process all of your data in line with our legal obligation under The Town and Country Planning (Section 62A
+            Applications) (Procedure and Written Representations) Order 2025</a>.
 
         <p> You can read full details of how we process your data in our <a
                 href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice">GOV.UK
@@ -109,37 +76,49 @@
 
         {% endset %}
 
+
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">S62A/2024/0048</span>
+        <h1 class="govuk-heading-l">
+            Have your say on this development
+        </h1>
+
+        <p> Use this service to submit a written representation with your views on the proposed development at 1 Wheatfield Road, Harpenden, AL5 2NY.</p>
+            
+        <p>A written representation includes your comment and any supporting attachments.</p>
+        <p>Your comment and any supporting attachments will be:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>published on this website along with your name (and the name of your organisation if applicable)</li>
+
+            <li>considered by the Planning Inspectors before a decision is made on the application</li>
+        </ul>
+
+        <p> You must complete this service in one session as you will not be able to come back later and continue.</p>
+        <h2 class="govuk-heading-m">
+            Use of automated or generative tools 
+        </h2>
+
+        <p class="govuk-body">
+            You may use drafting tools or software to help prepare your text and supporting attachments. However, as the submitter, you remain responsible for the integrity of all submitted evidence.
+        </p>
+
+
         {{ govukDetails({
         summaryText: "How we process your data",
         html: details
         }) }}
 
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
+        {% from "govuk/components/button/macro.njk" import govukButton %}
 
-        <h2 class="govuk-heading-m">
-            Before you start
-        </h2>
+         {{ govukInsetText({
+            text: "You must submit your comment and any supporting attachments by 11:59pm on 1 July 2027."
+        }) }}
 
-        <p><strong>We’ll ask for your:</strong></p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>name</li>
-            <li>email address</li>
-            <li>comment on the proposed development</li>
-            <li>supporting documents (optional)</li>
-        </ul>
+        <a href="/have-your-say-start-ur" class="govuk-button govuk-button--start">Start now<svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+  </svg></a>
 
-        <p><strong>If you’re commenting for an organisation you work or volunteer for, we’ll also ask for:</strong></p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>the name of the charity or organisation you work for</li>
-            <li>your job title or volunteer role</li>
-        </ul>
-
-        <p><strong>If you’re commenting on behalf of another person or organisation, we’ll also ask for:</strong></p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>the name of the charity or organisation you work for</li>
-            <li>the name of the person or organisation you are representing</li>
-        </ul>
 
     </div>
 </div>

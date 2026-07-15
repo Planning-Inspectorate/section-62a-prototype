@@ -1,0 +1,62 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}What is the name of the person you are representing?
+{% endblock %}
+
+{% block beforeContent %}
+
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/person-you-are-representing-answer" novalidate>
+    
+      {% call govukFieldset({
+          legend: {
+              text: "What is the name of the person you are representing?",
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+          }
+      }) %}
+
+        {{ govukInput({ 
+          label: { text: "First name" }, 
+          id: "person-you-are-representing-first-name", 
+          name: "person-you-are-representing-first-name", 
+          value: data['person-you-are-representing-first-name'],
+          autocomplete: "given-name",
+          spellcheck: false,
+          errorMessage: errors.firstName if errors.firstName else null
+        }) }}
+        
+        {{ govukInput({ 
+          label: { text: "Last name" }, 
+          id: "person-you-are-representing-last-name", 
+          name: "person-you-are-representing-last-name", 
+          value: data['person-you-are-representing-last-name'],
+          autocomplete: "family-name",
+          spellcheck: false,
+          errorMessage: errors.lastName if errors.lastName else null
+        }) }}
+
+      {% endcall %}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

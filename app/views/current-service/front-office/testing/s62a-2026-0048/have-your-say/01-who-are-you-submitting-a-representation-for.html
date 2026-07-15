@@ -1,0 +1,58 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorWhoSubmitRep %}Error: {% endif %}Who are you submitting a representation for? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/hys"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorWhoSubmitRep %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorWhoSubmitRep, href: "#individual-or-behalf" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/who-submit-rep-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "who-submit-rep",
+        name: "who-submit-rep",
+        fieldset: {
+          legend: { 
+            text: "Who are you submitting a representation for?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorWhoSubmitRep } if errorWhoSubmitRep else null,
+        items: [
+          { 
+            value: "Myself", 
+            text: "Myself", 
+            checked: data['who-submit-rep'] == 'Myself' 
+          },
+          { 
+            value: "On behalf of another person, an organisation or group of people", 
+            text: "On behalf of another person, an organisation or group of people", 
+            checked: data['who-submit-rep'] == 'On behalf of another person, an organisation or group of people' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}
