@@ -1,0 +1,101 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Declaration - Have your say on a development - Find a Section 62A application prototype
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/21-check-your-answers"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+        {% if errorList %}
+          {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+          }) }}
+        {% endif %}
+
+        <h1 class="govuk-heading-l">
+            Declaration
+        </h1>
+        
+        <p class="govuk-body">By submitting this form, you are making a written representation on a Section 62A development application. Your comment will be considered by the Planning Inspectors before they make a decision on the application.</p>
+        
+        <p class="govuk-body">Before you submit this representation, you must confirm that the information provided is accurate and true to the best of your knowledge.</p>
+
+        <br>
+
+
+        <form action="/written-rep-submitted" method="post" novalidate>
+            
+            {% set itemConsentPublish = {
+                value: "consent-publish",
+                text: "I consent to my name, comment and supporting documents being published on this website",
+                checked: checked("declaration", "consent-publish")
+            } %}
+            
+            {% set itemConsentContact = {
+                value: "consent-contact",
+                text: "The Planning Inspectorate may contact me by email about my comment and supporting documents",
+                checked: checked("declaration", "consent-contact")
+            } %}
+            
+            {% set itemAiAccurate = {
+                value: "ai-accurate",
+                text: "If I used artificial intelligence (AI) tools in my written representation, I have checked that all data is accurate and reflects my views",
+                checked: checked("declaration", "ai-accurate")
+            } %}
+            
+            {% set itemAiFalseEvidence = {
+                value: "ai-no-false-evidence",
+                text: "If I used artificial intelligence, no automated content has been included that introduces false or misleading factual evidence",
+                checked: checked("declaration", "ai-no-false-evidence")
+            } %}
+            
+            {% set itemPrivacy = {
+                value: "privacy-notice",
+                html: 'I have read and understood the <a href="#" class="govuk-link">Customer Privacy Notice</a>',
+                checked: checked("declaration", "privacy-notice")
+            } %}
+
+            {% if data['did-you-use-ai'] == 'Yes' %}
+                {% set declarationList = [
+                    itemConsentPublish, 
+                    itemConsentContact, 
+                    itemAiAccurate, 
+                    itemAiFalseEvidence, 
+                    itemPrivacy
+                ] %}
+            {% else %}
+                {% set declarationList = [
+                    itemConsentPublish, 
+                    itemConsentContact, 
+                    itemPrivacy
+                ] %}
+            {% endif %}
+
+            {{ govukCheckboxes({
+                name: "declaration",
+                hint: {
+                    text: "Select each statement to confirm that you agree."
+                },
+                errorMessage: errors.declaration if errors.declaration else null,
+                items: declarationList
+            }) }}
+
+            {{ govukButton({
+                text: "Accept and submit"
+            }) }}
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

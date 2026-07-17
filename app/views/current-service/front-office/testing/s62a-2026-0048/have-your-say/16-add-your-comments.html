@@ -1,0 +1,68 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAddYourComments %}Error: {% endif %}What is the name of the group?
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['who-submit-rep'] == 'Myself' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address" %}
+
+{% elif data['who-are-you-representing'] == 'A person' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/07-what-is-the-name-of-the-person-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/09-what-is-your-job-title-or-volunteer-role" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I do not work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'A group of people' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/14-check-group-name-details" %}
+
+{% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorAddYourComments %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorAddYourComments, href: "#add-your-comments" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/add-your-comments-answer" method="post" novalidate>
+
+        {{ govukTextarea({
+            name: "add-your-comments",
+            id: "add-your-comments",
+            value: data['add-your-comments'],
+            label: {
+                text: "Add your comments",
+                classes: "govuk-label--l",
+                isPageHeading: true
+            },
+            hint: {
+                text: "Do not include personal or financial information, like your National Insurance number or credit card details"
+            },
+            errorMessage: { text: errorAddYourComments } if errorAddYourComments else null
+            }) }}
+                    
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

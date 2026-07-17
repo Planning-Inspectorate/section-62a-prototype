@@ -1,0 +1,50 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorHowDidYouUseAi %}Error: {% endif %}How did you use artificial intelligence?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-did-you-use-artificial-intelligence-for-this-written-representation"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorHowDidYouUseAi %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorHowDidYouUseAi, href: "#how-did-you-use-ai" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/how-did-you-use-ai-answer" method="post" novalidate>
+
+        {{ govukTextarea({
+            name: "how-did-you-use-ai",
+            id: "how-did-you-use-ai",
+            value: data['how-did-you-use-ai'],
+            label: {
+                text: "How did you use artificial intelligence (AI)?",
+                classes: "govuk-label--l",
+                isPageHeading: true
+            },
+            hint: {
+                text: "For example, to proofread or translate your written representation."
+            },
+            errorMessage: { text: errorHowDidYouUseAi } if errorHowDidYouUseAi else null
+            }) }}
+                    
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

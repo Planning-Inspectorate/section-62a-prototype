@@ -1,0 +1,71 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorDidYouUseAi %}Error: {% endif %}Did you use artificial intelligence for this written representation? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+
+{% if data['include-attachments'] == 'Yes' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments" %}
+
+{% elif data['include-attachments'] == 'No' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-do-you-want-to-include-any-supporting-attachments-with-your-comment" %}
+
+{% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorDidYouUseAi %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorDidYouUseAi, href: "#did-you-use-ai" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/did-you-use-ai-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "did-you-use-ai",
+        name: "did-you-use-ai",
+        fieldset: {
+          legend: { 
+            text: "Did you use artificial intelligence (AI) for this written representation?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "You can use AI to tools to help draft or translate your written representation. You must check that everything is accurate and reflects your own views." 
+        },
+        errorMessage: { text: errorDidYouUseAi } if errorDidYouUseAi else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['did-you-use-ai'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['did-you-use-ai'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

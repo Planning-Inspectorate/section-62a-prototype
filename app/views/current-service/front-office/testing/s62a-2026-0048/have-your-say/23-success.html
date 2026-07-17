@@ -1,0 +1,54 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set pageName = "Written representation submitted" %}
+
+{% block pageTitle %}
+  {{ pageName }} - Have your say on a development - Find a Section 62A application prototype
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        
+        {# Dynamic Success Panel Macro #}
+        {{ govukPanel({
+            titleText: "Written representation submitted",
+            html: "Your reference number<br><strong>" + data['submittedRepReference'] + "</strong>"
+        }) }}
+
+        <p class="govuk-body">We’ve received your written representation.</p>
+        <p class="govuk-body">We’ve sent your reference number by email and will contact you if we need more information about your comment or supporting documents.</p>
+
+        <h2 class="govuk-heading-m">What happens next</h2>
+        <p class="govuk-body">At the end of this representations period, we’ll update the website with the procedure that the application will follow.</p>
+        <p class="govuk-body">The Planning Inspectors will decide on one of the following procedures:</p>
+
+        <h3 class="govuk-heading-s">Written representations</h3>
+        <p class="govuk-body">If this procedure is chosen, Planning Inspectors will make their decision based on written submissions only.</p>
+
+        <h3 class="govuk-heading-s">Hearing</h3>
+        <p class="govuk-body">If you’ve requested in your comment to attend the hearing, we’ll contact you with details of the hearing date and location.</p>
+        
+        <p class="govuk-body govuk-!-margin-top-6">
+            <a href="#" class="govuk-link">Back to the application information page</a>
+        </p>
+
+    </div>
+</div>
+
+{# ========================================================= #}
+{# 🛠 Debug: View the saved representations array             #}
+{# ========================================================= #}
+<div class="govuk-!-margin-top-9">
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">🛠 Debug: View Saved Representations</span>
+    </summary>
+    <div class="govuk-details__text">
+      <pre style="background: #f3f2f1; padding: 15px; overflow-x: auto;"><code>{{ data.representations | dump(2) }}</code></pre>
+    </div>
+  </details>
+</div>
+
+{% endblock %}

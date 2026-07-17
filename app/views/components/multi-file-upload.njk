@@ -4,7 +4,7 @@
   {% set id = params.id or "documents" %}
   {% set name = params.name or "documents" %}
   {% set label = params.label or "Upload an attachment" %}
-  {% set hint = params.hint or "The attachment must be a DOC, DOCX, PDF, TIF, JPG, PNG, XLS or XLSX and be smaller than 25MB" %}
+  {% set hint = params.hint or "" %}
   {% set allowedExtensions = params.allowedExtensions or ["doc", "docx", "pdf", "tif", "tiff", "jpg", "jpeg", "png"] %}
   {% set accept = params.accept or ("." + (allowedExtensions | join(",."))) %}
   {% set maxFileSizeMB = params.maxFileSizeMB or 25 %}
@@ -19,6 +19,15 @@
       {{ label }}
     </label>
    <p class="govuk-hint">{{ hint }}</p>
+
+   <div id="{{ id }}-existing-data" style="display: none;">{{ params.existingFiles | default("") }}</div>
+
+   {% if params.serverError %}
+      <p class="govuk-error-message" id="{{ id }}-server-error">
+        <span class="govuk-visually-hidden">Error:</span>
+        {{ params.serverError.text }}
+      </p>
+    {% endif %}
 
     <div
       class="multi-file-dropzone"
@@ -103,6 +112,47 @@
       const maxFileSizeBytes = {{ maxFileSizeMB }} * 1024 * 1024;
       let failedFileNames = [];  {# Track files that failed validation #}
       let showUploadingWarning = false;  {# Flag to control uploading error state #}
+      let hasServerError = {% if params.serverError %}true{% else %}false{% endif %};
+      const serverErrorElement = document.getElementById('{{ id }}-server-error');
+
+      {# --- HYDRATE EXISTING FILES --- #}
+      
+      {# 1. Safely grab the unified string from the hidden HTML div #}
+      const dataElement = document.getElementById('{{ id }}-existing-data');
+      const rawExistingFiles = dataElement ? dataElement.textContent.trim() : '';
+      
+      {# 2. Split the string back apart using our || divider #}
+      const existingFilesList = rawExistingFiles ? rawExistingFiles.split('||') : [];
+
+      {# 3. If there are files, add them to the Set and draw the table rows #}
+      if (existingFilesList.length > 0) {
+        
+        {# Wipe the table clean first so the browser's Back button doesn't double-draw rows #}
+        tableBody.innerHTML = ''; 
+
+        existingFilesList.forEach(fileName => {
+          if (!fileName) return;
+          
+          uploadedFiles.add(fileName);
+          
+          const row = document.createElement('tr');
+          row.className = 'govuk-table__row';
+          row.dataset.file = fileName;
+          row.innerHTML = `
+            <td class="govuk-table__cell" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word;">
+              <a href="#" class="govuk-link" style="overflow-wrap: anywhere; word-break: break-word;">${fileName}</a>
+            </td>
+            <td class="govuk-table__cell">
+              <strong class="govuk-tag govuk-tag--green">Uploaded</strong>
+            </td>
+            <td class="govuk-table__cell">
+              <a href="#" class="govuk-link remove-link">Remove</a>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+      {# --- END OF NEW BLOCK --- #}
 
 
       {# ===== UI States ===== #}
@@ -238,7 +288,7 @@
 
       {# Update UI when file type validation errors occur #}
       function updateFileTypeErrorUi(scrollToTop) {
-        const hasErrors = hasFailedFiles();
+        const hasErrors = hasFailedFiles() || hasServerError;
         uploadGroup.classList.toggle('govuk-form-group--error', hasErrors);
         setValidationErrorVisibility(false);
         renderFailedFileNames();
@@ -324,6 +374,9 @@
           return;
         }
 
+        hasServerError = false;
+        if (serverErrorElement) serverErrorElement.style.display = 'none';
+
         const validFiles = files.filter(isAllowedFile);
         failedFileNames = files.filter(file => !isAllowedFile(file)).map(file => file.name);
 
@@ -401,6 +454,9 @@
         if (files.length === 0) {
           return;
         }
+
+        hasServerError = false;
+        if (serverErrorElement) serverErrorElement.style.display = 'none';
 
         const validFiles = files.filter(isAllowedFile);
         failedFileNames = files.filter(file => !isAllowedFile(file)).map(file => file.name);
@@ -507,13 +563,23 @@
 
           hideUploadingError();
 
-          uploadedFiles.forEach((fileName) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = '{{ dataKey }}';
-            input.value = fileName;
-            form.appendChild(input);
-          });
+          {# 1. Destroy any ghost hidden inputs left over from clicking the 'Back' button #}
+          const leftoverInputs = form.querySelectorAll('input[name="{{ dataKey }}"][type="hidden"]');
+          leftoverInputs.forEach(input => input.remove());
+
+          {# 2. THE FIX: Create ONE hidden input to rule them all #}
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = '{{ dataKey }}';
+          
+          if (uploadedFiles.size === 0) {
+            input.value = '';
+          } else {
+            {# Glue all uploaded file names together with a double-pipe #}
+            input.value = Array.from(uploadedFiles).join('||');
+          }
+          
+          form.appendChild(input);
         });
       }
     })();

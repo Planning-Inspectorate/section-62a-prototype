@@ -6,9 +6,9 @@ const router = Router();
 // --- ROUTES ---
 
 router.get('/have-your-say-start-ur', function (req, res) {
-  const savedRep = req.session.data['reps'] || [];
+  const savedRepresentations = req.session.data.representations || [];
   req.session.data = {};
-  req.session.data['reps'] = savedRep;
+  req.session.data.representations = savedRepresentations;
   res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/01-who-are-you-submitting-a-representation-for');
 });
 
@@ -39,7 +39,7 @@ router.post('/who-are-you-representing-answer', function (req, res) {
     else if (whoAreYouRepresenting === "An organisation or charity that I work or volunteer for") {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/05-what-is-your-name');
     }
-    else if (whoAreYouRepresenting === "An organisation or charity that I do not work for") {
+    else if (whoAreYouRepresenting === "An organisation or charity that I do not work or volunteer for") {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/03-are-you-acting-as-an-agent-on-behalf-of-a-client');
     }
     else if (whoAreYouRepresenting === "A group of people") {
@@ -122,7 +122,7 @@ router.post('/your-email-address-answer', function (req, res) {
     else if ( whoAreYouRepresenting === "An organisation or charity that I work or volunteer for" ) {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/08-what-is-the-name-of-your-organisation-or-charity');
     }
-    else if ( whoAreYouRepresenting === "An organisation or charity that I do not work for" ) {
+    else if ( whoAreYouRepresenting === "An organisation or charity that I do not work or volunteer for" ) {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing');
     }
     else if ( whoAreYouRepresenting === "A group of people" ) {
@@ -288,7 +288,7 @@ router.get('/setup-next-person', function(req, res) {
 });
 
 
-// --- POST: Save Data from Page 15 ---
+// --- (2) POST: Save Data from Page 15 ---
 router.post('/name-of-next-person-answer', function(req, res) {
     const editId = req.session.data['edit-group-id'];
     const firstName = req.session.data['next-person-first-name'];
@@ -376,8 +376,235 @@ router.get('/remove-group-person', function(req, res) {
 });
 
 
+// 16 - add your comments
+router.post('/add-your-comments-answer', function (req, res) {
+    const addYourComments = req.session.data['add-your-comments'];
+    if (!addYourComments) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments', { errorAddYourComments: "Enter what you want to tell us about this proposed application" });
+    }
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-do-you-want-to-include-any-supporting-attachments-with-your-comment');
+});
 
 
+
+// 17 - do you want to include any supporting attachments with your comment?
+router.post('/include-attachments-answer', function (req, res) {
+    const includeAttachments = req.session.data['include-attachments'];
+    if (!includeAttachments) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/17-do-you-want-to-include-any-supporting-attachments-with-your-comment', { errorIncludeAttachments: "Select yes if you want to include any supporting attachments with your comment" });
+    }
+    if (includeAttachments === "Yes") {
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments');
+    }
+    else if (includeAttachments === "No") {
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-did-you-use-artificial-intelligence-for-this-written-representation');
+    }
+});
+
+
+// 18 - upload supporting attachments
+router.post('/upload-supporting-attachments-answer', function(req, res) {
+    const uploadedFiles = req.session.data['uploadedFiles'];
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    if (!uploadedFiles || uploadedFiles.length === 0) {
+        errors.uploadedFiles = { text: "Upload an attachment" };
+    
+        errorList.push({ text: "Upload an attachment", href: "#documents" });
+    }
+
+    // If there is an error, re-render the page
+    if (errorList.length > 0) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments', {
+            errors: errors,
+            errorList: errorList
+        });
+    }
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-did-you-use-artificial-intelligence-for-this-written-representation');
+});
+
+
+// 19 - did you use artificial intelligence for this written representation?
+router.post('/did-you-use-ai-answer', function (req, res) {
+    const didYouUseAi = req.session.data['did-you-use-ai'];
+    if (!didYouUseAi) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/19-did-you-use-artificial-intelligence-for-this-written-representation', { errorDidYouUseAi: "Select yes if you used artificial intelligence (AI) for this written representation" });
+    }
+    if (didYouUseAi === "Yes") {
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/20-how-did-you-use-artificial-intelligence');
+    }
+    else if (didYouUseAi === "No") {
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/21-check-your-answers');
+    }
+});
+
+
+// 20 - how did you use artificial intelligence?
+router.post('/how-did-you-use-ai-answer', function (req, res) {
+    const howDidYouUseAi = req.session.data['how-did-you-use-ai'];
+    if (!howDidYouUseAi) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/20-how-did-you-use-artificial-intelligence', { errorHowDidYouUseAi: "Enter how you used artificial intelligence (AI)" });
+    }
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/21-check-your-answers');
+});
+
+
+// 22 - declaration + ref generation + save logic
+router.post('/written-rep-submitted', function(req, res) {
+    const data = req.session.data;
+
+    if (!data['who-submit-rep']) {
+            return res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/23-success');
+        }
+
+  // checkbox validation
+    const declaration = req.session.data['declaration'];
+    const usedAi = req.session.data['did-you-use-ai'] === 'Yes';
+    // how many boxes were used for declaration page
+    const requiredBoxesCount = usedAi ? 5 : 3;
+
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    // check if array exists and matches required amount of boxes checked
+    if (!declaration || declaration.length < requiredBoxesCount) {
+        errors.declaration = {
+            text: "You must agree to all statements to submit your comment"
+        };
+        
+        errorList.push({
+            text: "You must agree to all statements to submit your comment",
+            href: "#declaration"
+        });
+    }
+    // render the page with errors if any
+    if (errorList.length > 0) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/22-declaration', {
+            errors: errors,
+            errorList: errorList
+        });
+    }
+
+  // ref generation
+    // Generate first 3 random numbers (100 to 999)
+    const firstThreeDigits = Math.floor(100 + Math.random() * 900); 
+    
+    // Generate 2 random uppercase letters
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letter1 = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    const letter2 = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    
+    // Generate last 4 random numbers (1000 to 9999)
+    const lastFourDigits = Math.floor(1000 + Math.random() * 9000); 
+
+    // Combine them all
+    const repReference = `${firstThreeDigits}${letter1}${letter2}-${lastFourDigits}`;
+
+    // map representation object
+    const isBehalf = data['who-submit-rep'] === 'On behalf of another person, an organisation or group of people';
+
+    // define agent specific rule
+    const asksAgentQuestions = isBehalf && [
+    'A person', 
+    'An organisation or charity that I do not work or volunteer for', 
+    'A group of people'
+    ].includes(data['who-are-you-representing']);
+
+    const newRep = {
+        reference: repReference,
+        status: "Received",
+        submissionDate: new Date().toISOString(),
+        
+        // Submitter Details
+        submitterType: data['who-submit-rep'],
+        submitterName: `${data['your-first-name']} ${data['your-last-name']}`,
+        submitterEmail: data['your-email-address'],
+
+        // Conditional: Who are they representing?
+        representing: isBehalf ? data['who-are-you-representing'] : 'Myself',
+
+        // Conditional: Agent Details
+        isAgent: asksAgentQuestions ? data['is-agent'] : null,
+        agentOrgName: (asksAgentQuestions && data['is-agent'] === 'Yes') ? data['agent-organisation-name'] : null,
+
+        // Conditional: Represented Person
+        representedPerson: (isBehalf && data['who-are-you-representing'] === 'A person') ? {
+        firstName: data['person-you-are-representing-first-name'],
+        lastName: data['person-you-are-representing-last-name']
+        } : null,
+
+        // Conditional: Represented Org (Work for)
+        representedOrgWorkFor: (isBehalf && data['who-are-you-representing'] === 'An organisation or charity that I work or volunteer for') ? {
+        name: data['your-org-or-charity-name'],
+        role: data['your-job-title-or-volunteer-role']
+        } : null,
+
+        // Conditional: Represented Org (Do not work for)
+        representedOrgOther: (isBehalf && data['who-are-you-representing'] === 'An organisation or charity that I do not work or volunteer for') ? data['org-or-charity-you-are-representing'] : null,
+
+        // Conditional: Represented Group
+        representedGroup: (isBehalf && data['who-are-you-representing'] === 'A group of people') ? {
+        hasName: data['does-the-group-have-a-name'],
+        name: data['does-the-group-have-a-name'] === 'Yes' ? data['name-of-the-group'] : null,
+        members: data['group-name-list'] || []
+        } : null,
+
+        // Representation Content
+        comment: data['add-your-comments'],
+        
+        // Attachments (Split back into an array for easy use in Back Office)
+        hasAttachments: data['include-attachments'],
+        attachments: data['include-attachments'] === 'Yes' && data['uploadedFiles'] ? data['uploadedFiles'].split('||') : [],
+
+        // AI Declarations
+        usedAi: data['did-you-use-ai'],
+        howUsedAi: data['did-you-use-ai'] === 'Yes' ? data['how-did-you-use-ai'] : null,
+
+        // Legal Declarations Array
+        declarationsAgreed: data['declaration']
+    };
+
+    // save to array
+    if (!data.representations) { data.representations = []; }
+    data.representations.push(newRep);
+
+    // wipe fields for fresh form
+    const fieldsToClear = [
+        'who-submit-rep',
+        'who-are-you-representing',
+        'is-agent',
+        'agent-organisation-name',
+        'your-first-name',
+        'your-last-name',
+        'your-email-address',
+        'person-you-are-representing-first-name',
+        'person-you-are-representing-last-name',
+        'your-org-or-charity-name',
+        'your-job-title-or-volunteer-role',
+        'org-or-charity-you-are-representing',
+        'does-the-group-have-a-name',
+        'name-of-the-group',
+        'group-name-list',
+        'add-your-comments',
+        'include-attachments',
+        'uploadedFiles',
+        'did-you-use-ai',
+        'how-did-you-use-ai',
+        'declaration'
+    ];
+
+    fieldsToClear.forEach(field => {
+        delete data[field];
+    });
+
+    // pass reference to success page
+    data.submittedRepReference = repReference;
+
+  res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/23-success');
+});
 
 
 export default router;
