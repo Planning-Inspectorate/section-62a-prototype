@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  {% if errorAddYourComments %}Error: {% endif %}What is the name of the group?
+  {% if errorAddYourComments %}Error: {% endif %}Add your comments - Have your say on a development - Find a Section 62A application prototype
 {% endblock %}
 
 {% block beforeContent %}
@@ -42,20 +42,73 @@
 
       <form class="form" action="/add-your-comments-answer" method="post" novalidate>
 
+        <h1 class="govuk-heading-l">Add your comments</h1>
+
+        <p class="govuk-body">Your comment can support, object or provide general feedback on the proposed development.</p>
+
+        <p class="govuk-body">Once we have reviewed your comment we will publish it on the website with your name, and your organisation's name, if you have added it.</p>
+
+        <h2 class="govuk-heading-m">What to include in your comment</h2>
+        <p class="govuk-body">You should focus on planning-related matters. You can write relevant detail on how the development affects:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>you, your business or the local community</li>
+            <li>the environment and local economy</li>
+            <li>transport links and access to services</li>
+            <li>quality of life, such as noise, lighting and living conditions</li>
+        </ul>
+        <p class="govuk-body">You must tell us in your comment if you’d like to attend a hearing if one takes place.</p>
+
+        {{ govukInsetText({
+          text: "If you want to add any supporting documents to your comment, you can do this on the next page."
+        }) }}
+        
+        <h2 class="govuk-heading-m">What not to include in your comment</h2>
+
+        <p class="govuk-body">Your comment should not include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>personal data such as names, addresses, contact details, signatures and photos that could identify you or anyone else</li>
+            <li>links to third party websites, except GOV.UK or chartered professional websites</li>
+            <li>sensitive information</li>
+        </ul>
+
+        {% set sensitiveHtml %}
+          <p class="govuk-body">Sensitive information refers to:</p>
+          <ul class="govuk-list govuk-list--bullet">
+              <li>comments from children</li>
+              <li>information relating to children</li>
+              <li>information relating to health</li>
+              <li>information relating to crime</li>
+          </ul>
+          <p class="govuk-body">It also includes any information relating to an individual's:</p>    
+          <ul class="govuk-list govuk-list--bullet">
+              <li>race or ethnic origin</li>
+              <li>political or religious beliefs</li>
+              <li>trade union membership</li>
+              <li>genetic or biometric data</li>
+              <li>physical characteristics</li>
+              <li>mental health or sexual health</li>
+              <li>sexual orientation and sex life</li>
+          </ul>
+          <p class="govuk-body">If you include any personal data, third party links or sensitive data in your comment or supporting attachments, this will be redacted and will not be taken into account by the Planning Inspectors.</p>
+          <p class="govuk-body">If you include any racist, inflammatory or abusive language, your written representation will be rejected.</p>
+        {% endset %}
+
+        {{ govukDetails({
+          summaryText: "What is sensitive information?",
+          html: sensitiveHtml
+        }) }}
+
         {{ govukTextarea({
             name: "add-your-comments",
             id: "add-your-comments",
             value: data['add-your-comments'],
+            rows: 5,
             label: {
-                text: "Add your comments",
-                classes: "govuk-label--l",
-                isPageHeading: true
-            },
-            hint: {
-                text: "Do not include personal or financial information, like your National Insurance number or credit card details"
+                text: "Enter your comment",
+                classes: "govuk-label--s"
             },
             errorMessage: { text: errorAddYourComments } if errorAddYourComments else null
-            }) }}
+        }) }}
                     
         {{ govukButton({
           text: "Continue"
