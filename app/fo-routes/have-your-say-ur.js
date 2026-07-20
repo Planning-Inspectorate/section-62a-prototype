@@ -109,9 +109,18 @@ router.post('/your-email-address-answer', function (req, res) {
     const yourEmailAddress = req.session.data['your-email-address'];
     const whoSubmitRep = req.session.data['who-submit-rep'];
     const whoAreYouRepresenting = req.session.data['who-are-you-representing'];
+    // email format validation
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
 
     if (!yourEmailAddress) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address', { errorYourEmailAddress: "Enter your email address" });
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address', { 
+            errorYourEmailAddress: "Enter your email address" 
+        });
+    }
+    if (!emailRegex.test(yourEmailAddress)) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address', { 
+            errorYourEmailAddress: "Enter your email address in the correct format, like name@example.com" 
+        });
     }
     if ( whoSubmitRep === "Myself" ) {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments');
