@@ -160,30 +160,21 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title"
-            data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
-            <div class="govuk-notification-banner__header">
-                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                    Important
-                </h2>
-            </div>
-            <div class="govuk-notification-banner__content">
+        {% set bannerHtml %}
+        <p class="govuk-notification-banner__heading">
+            Latest update — 23 June 2026
+        </p>
+        <p>
+            St Albans City and District Council added as a consultee - available to view under the written representations tab
+        </p>
+        <p>
+            <a class="govuk-notification-banner__link" href="/current-service/front-office/testing/s62a-2026-0048/application-updates">View all updates</a>
+        </p>
+        {% endset %}
 
-                <p class="govuk-notification-banner__heading">
-                    Latest update — 23 June 2026
-
-                </p>
-                <p>
-                    St Albans City and District Council added as a consultee - available to view under the written representations tab
-                </p>
-                <p>
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">
-                        View all updates
-                    </a>
-                </p>
-
-            </div>
-        </div>
+        {{ govukNotificationBanner({
+        html: bannerHtml
+        }) }}
 
         <span class="govuk-caption-xl">S62A/2026/0048</span>
         <h1 class="govuk-heading-xl">Application information</h1>
