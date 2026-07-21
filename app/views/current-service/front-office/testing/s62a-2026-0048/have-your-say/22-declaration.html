@@ -61,7 +61,7 @@
             
             {% set itemPrivacy = {
                 value: "privacy-notice",
-                html: 'I have read and understood the <a href="#" class="govuk-link">Customer Privacy Notice</a>',
+                html: 'I have read and understood the <a href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice" class="govuk-link"  target="_blank" rel="noreferrer noopener">Customer Privacy Notice (opens in a new tab).</a>',
                 checked: checked("declaration", "privacy-notice")
             } %}
 
@@ -83,6 +83,12 @@
 
             {{ govukCheckboxes({
                 name: "declaration",
+                fieldset: {
+                    legend: {
+                        text: "Confirm your declarations",
+                        classes: "govuk-visually-hidden"
+                    }
+                },
                 hint: {
                     text: "Select each statement to confirm that you agree."
                 },

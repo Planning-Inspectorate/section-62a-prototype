@@ -118,3 +118,40 @@
 }
 
 
+// Header Accessibility CSS
+// size link not image correctly
+.front-office-header__logo-wrapper a.govuk-header__link {
+    display: inline-block;
+    width: 30%; // for desktop
+    padding: 5px; 
+    box-sizing: border-box;
+}
+
+// mobile override
+@media (max-width: 40.0625em) {
+    .front-office-header__logo-wrapper a.govuk-header__link {
+        width: 100%;
+    }
+}
+
+// force image to fill container
+#logo {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+// convert white pixels to black
+.front-office-header__logo-wrapper a.govuk-header__link:focus img {
+    filter: brightness(0);
+}
+
+/* Add the official GDS header navigation underline to the image link */
+.front-office-header__logo-wrapper a.govuk-header__link:hover {
+    /* GDS standard header links use a 1px solid white border on hover */
+    border-bottom: 3px solid #ffffff; 
+}
+
+/* Ensure the border disappears when the yellow focus state activates */
+.front-office-header__logo-wrapper a.govuk-header__link:focus:hover {
+    border-bottom: none;
+}

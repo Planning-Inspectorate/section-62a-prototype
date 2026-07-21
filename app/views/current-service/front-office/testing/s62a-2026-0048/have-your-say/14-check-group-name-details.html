@@ -18,11 +18,13 @@ Check group name details
 
     {# --- SUMMARY TABLE --- #}
       <table class="govuk-table govuk-!-margin-bottom-9">
+
+        <caption class="govuk-table__caption govuk-visually-hidden">People added to the group</caption>
         
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Name</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
+            <th scope="col" class="govuk-table__header govuk-!-text-align-right">Actions</th>
           </tr>
         </thead>
         
@@ -36,7 +38,7 @@ Check group name details
               </td>
               
               {# Actions Column (Change | Remove) #}
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell govuk-!-text-align-right">
                 <ul class="govuk-summary-list__actions-list">
                   <li class="govuk-summary-list__actions-list-item">
                     <a class="govuk-link" href="/setup-next-person?id={{ item.id }}">

@@ -324,16 +324,23 @@
           row.className = 'govuk-table__row uploading-row';
           row.dataset.file = file.name;
 
-          {# Initial row with filename, size, and progress indicator #}
+          {# 
+            ACCESSIBILITY UPDATES: 
+            1. Added aria-live polite region to announce upload start 
+            2. Added aria-hidden true to the rapidly changing numbers 
+            3. Added visually hidden file name to Cancel link 
+            4. Added 'cancel-link' class for JS targeting
+          #}
           row.innerHTML = `
             <td class="govuk-table__cell" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word;">
               ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)
             </td>
             <td class="govuk-table__cell">
-              Uploading: <span class="progress-percent">0%</span>
+              <span class="govuk-visually-hidden" aria-live="polite">Uploading ${file.name}</span>
+              <span aria-hidden="true">Uploading: <span class="progress-percent">0%</span></span>
             </td>
             <td class="govuk-table__cell">
-              <a href="#" class="govuk-link">Cancel</a>
+              <a href="#" class="govuk-link cancel-link">Cancel<span class="govuk-visually-hidden"> upload of ${file.name}</span></a>
             </td>
           `;
 
@@ -470,45 +477,47 @@
         updateFileTypeErrorUi(failedFileNames.length > 0);
       });
 
-      {# ===== Upload Animation Function ===== #}
+    {# ===== Upload Animation Function ===== #}
       
       {# Simulate file upload progress and transition row to completed state #}
       function animateUpload(row, index) {
         let percent = 0;
         const progressEl = row.querySelector('.progress-percent');
 
-        {# Increment progress by 1% every 40-60ms (varies based on file index) #}
         const interval = setInterval(() => {
           percent++;
           progressEl.textContent = percent + '%';
 
-          {# When upload reaches 100%, update row to show completed state #}
           if (percent >= 100) {
             clearInterval(interval);
 
             const fileName = row.dataset.file;
             uploadedFiles.add(fileName);
 
+            {# 
+              ACCESSIBILITY UPDATES: 
+              1. Updated aria-live region to announce completion
+              2. Added visually hidden file name to Remove link
+            #}
             row.innerHTML = `
               <td class="govuk-table__cell" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word;">
                 <a href="#" class="govuk-link" style="overflow-wrap: anywhere; word-break: break-word;">${fileName}</a>
               </td>
               <td class="govuk-table__cell">
-                <strong class="govuk-tag govuk-tag--green">Uploaded</strong>
+                <span class="govuk-visually-hidden" aria-live="polite">${fileName} uploaded successfully</span>
+                <strong class="govuk-tag govuk-tag--green" aria-hidden="true">Uploaded</strong>
               </td>
               <td class="govuk-table__cell">
-                <a href="#" class="govuk-link remove-link">Remove</a>
+                <a href="#" class="govuk-link remove-link">Remove<span class="govuk-visually-hidden"> ${fileName}</span></a>
               </td>
             `;
 
-            {# Check if all uploads are complete #}
             const uploadingRows = tableBody.querySelectorAll('.uploading-row');
             const stillUploading = Array.from(uploadingRows).some(r => {
               const currentProgress = r.querySelector('.progress-percent');
               return currentProgress && parseInt(currentProgress.textContent, 10) < 100;
             });
 
-            {# Hide uploading error once all files finish #}
             if (!stillUploading) {
               hideUploadingError();
             }
@@ -516,15 +525,19 @@
         }, 40 + index * 20);
       }
 
-      {# ===== File Removal Functions ===== #}
+     {# ===== File Removal Functions ===== #}
       
       {# Handle Cancel and Remove link clicks #}
       document.addEventListener('click', function (e) {
         const link = e.target.closest('.govuk-link');
         if (!link || !tableBody.contains(link)) return;
 
-        const text = link.textContent.trim();
-        if (text === 'Cancel' || text === 'Remove') {
+        {# 
+          ACCESSIBILITY UPDATE: 
+          Instead of matching textContent, we check class names since the text content 
+          now includes visually hidden dynamic file names. 
+        #}
+        if (link.classList.contains('cancel-link') || link.classList.contains('remove-link')) {
           e.preventDefault();
 
           const row = link.closest('.govuk-table__row');
