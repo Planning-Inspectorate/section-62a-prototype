@@ -1,0 +1,346 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "details" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{# --- Primary LPA Contact HTML --- #}
+{% set lpaContactsHtml = "-" %}
+{% if currentCase.lpa or currentCase.lpaContact %}
+  {% set lpaContactsHtml %}
+    {% if currentCase.lpa %}
+      {{ currentCase.lpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.lpaContact %}
+      {% if currentCase.lpaContact.firstName or currentCase.lpaContact.lastName %}
+        {{ currentCase.lpaContact.firstName }} {{ currentCase.lpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.email %}
+        {{ currentCase.lpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.phone %}
+        {{ currentCase.lpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{# --- Secondary LPA Contact HTML --- #}
+{% set secondaryLpaContactsHtml = "No" %}
+
+{% if currentCase.hasSecondaryLpa === 'Yes' %}
+  {% set secondaryLpaContactsHtml %}
+    {% if currentCase.secondaryLpa %}
+    {{ currentCase.secondaryLpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.secondaryLpaContact %}
+      {% if currentCase.secondaryLpaContact.firstName or currentCase.secondaryLpaContact.lastName %}
+        {{ currentCase.secondaryLpaContact.firstName }} {{ currentCase.secondaryLpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.email %}
+        {{ currentCase.secondaryLpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.phone %}
+        {{ currentCase.secondaryLpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{% set expectedSubmissionDateHtml = "-" %}
+{% if currentCase.expectedSubmissionDate.year and currentCase.expectedSubmissionDate.month and currentCase.expectedSubmissionDate.day %}
+  {% set day = currentCase.expectedSubmissionDate.day | int %}
+  {% set monthIndex = currentCase.expectedSubmissionDate.month | int %}
+  {% set year = currentCase.expectedSubmissionDate.year %}
+  {% set expectedSubmissionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set siteAddressHtml = "-" %}
+{% if currentCase.siteAddress.line1 %}
+  {% set siteAddressHtml %}
+    {{ currentCase.siteAddress.line1 }}<br>
+    {% if currentCase.siteAddress.line2 %}{{ currentCase.siteAddress.line2 }}<br>{% endif %}
+    {% if currentCase.siteAddress.town %}{{ currentCase.siteAddress.town }}<br>{% endif %}
+    {% if currentCase.siteAddress.county %}{{ currentCase.siteAddress.county }}<br>{% endif %}
+    {% if currentCase.siteAddress.postcode %}{{ currentCase.siteAddress.postcode }}{% endif %}
+  {% endset %}
+{% endif %}
+
+{% set siteCoordsHtml = "-" %}
+{% if currentCase.siteCoords.easting and currentCase.siteCoords.northing %}
+  {% set siteCoordsHtml %}
+    Easting: {{ currentCase.siteCoords.easting }}<br>
+    Northing: {{ currentCase.siteCoords.northing }}
+  {% endset %}
+{% endif %}
+
+{% set agentAddressHtml = "-" %}
+{% if currentCase.agentAddress and currentCase.agentAddress.line1 %}
+  {% set agentAddressHtml %}
+    {{ currentCase.agentAddress.line1 }}<br>
+    {% if currentCase.agentAddress.line2 %}{{ currentCase.agentAddress.line2 }}<br>{% endif %}
+    {% if currentCase.agentAddress.town %}{{ currentCase.agentAddress.town }}<br>{% endif %}
+    {% if currentCase.agentAddress.county %}{{ currentCase.agentAddress.county }}<br>{% endif %}
+    {% if currentCase.agentAddress.postcode %}{{ currentCase.agentAddress.postcode }}{% endif %}
+  {% endset %}
+{% endif %}
+
+{% set applicantsHtml = "-" %}
+{% if currentCase.applicantOrgs.length > 0 %}
+  {% set applicantsHtml %}
+    <ul class="govuk-list">
+      {% for org in currentCase.applicantOrgs %}
+        <li>{{ org.orgName }}</li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{% set applicantOverviewContactsHtml = "-" %}
+{% if currentCase.applicantOverviewContacts and currentCase.applicantOverviewContacts.length > 0 %}
+  {% set applicantOverviewContactsHtml %}
+    <ul class="govuk-list govuk-!-margin-bottom-0">
+      {% for contact in currentCase.applicantOverviewContacts %}
+        <li>
+          {{ contact.orgName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{% set applicantContactsHtml = "-" %}
+{% if currentCase.applicantContacts.length > 0 %}
+  {% set applicantContactsHtml %}
+    <ul class="govuk-list">
+      {% for contact in currentCase.applicantContacts %}
+        <li>
+          {{ contact.firstName }} {{ contact.lastName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{% set agentContactsHtml = "-" %}
+{% if currentCase.agentContacts.length > 0 %}
+  {% set agentContactsHtml %}
+    <ul class="govuk-list">
+      {% for contact in currentCase.agentContacts %}
+        <li>
+          {{ contact.firstName }} {{ contact.lastName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{# audit log for created date #}
+{% if currentCase and currentCase.auditLog and currentCase.auditLog.length > 0 %}
+  {% set creationLog = currentCase.auditLog | last %}
+  {% set formattedDate = creationLog.date | replace("<br>", " at ") %}
+{% else %}
+  {% set formattedDate = "Not recorded" %}
+{% endif %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+{% if currentCase.applicationStage == "Application" %}
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Last updated</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.lastModified | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Created date</dt>
+            <dd class="govuk-summary-list__value">{{ formattedDate | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Category</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.category | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.category %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Procedure</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.procedure | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.procedure %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.status | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Stage</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.progressStage | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.progressStage %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">LPA reference</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.lpaReference | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.lpaReference %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Green belt</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.greenBelt | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.greenBelt %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Health and safety issues</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.healthSafetyIssues | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.healthSafetyIssues %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Community Infrastructure Levy (CIL) liable</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.cilLiable | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.cilLiable %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CIL amount</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.cilAmount | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.cilAmount %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Biodiversity net gain (BNG) exempt</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.bngExempt | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.bngExempt %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+{% else %}
+
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Last updated</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.lastModified | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Created date</dt>
+            <dd class="govuk-summary-list__value">{{ formattedDate | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.status | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+           <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Green belt</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.greenBelt | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.greenBelt %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Health and safety issues</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.healthSafetyIssues | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.healthSafetyIssues %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+{% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

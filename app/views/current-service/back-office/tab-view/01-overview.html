@@ -1,0 +1,276 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "overview" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{# --- Primary LPA Contact HTML --- #}
+{% set lpaContactsHtml = "-" %}
+{% if currentCase.lpa or currentCase.lpaContact %}
+  {% set lpaContactsHtml %}
+    {% if currentCase.lpa %}
+      {{ currentCase.lpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.lpaContact %}
+      {% if currentCase.lpaContact.firstName or currentCase.lpaContact.lastName %}
+        {{ currentCase.lpaContact.firstName }} {{ currentCase.lpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.email %}
+        {{ currentCase.lpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.phone %}
+        {{ currentCase.lpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{# --- Secondary LPA Contact HTML --- #}
+{% set secondaryLpaContactsHtml = "No" %}
+
+{% if currentCase.hasSecondaryLpa === 'Yes' %}
+  {% set secondaryLpaContactsHtml %}
+    {% if currentCase.secondaryLpa %}
+    {{ currentCase.secondaryLpa }}<br>
+    {% endif %}
+    
+    {% if currentCase.secondaryLpaContact %}
+      {% if currentCase.secondaryLpaContact.firstName or currentCase.secondaryLpaContact.lastName %}
+        {{ currentCase.secondaryLpaContact.firstName }} {{ currentCase.secondaryLpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.email %}
+        {{ currentCase.secondaryLpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.phone %}
+        {{ currentCase.secondaryLpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{% set expectedSubmissionDateHtml = "-" %}
+{% if currentCase.expectedSubmissionDate.year and currentCase.expectedSubmissionDate.month and currentCase.expectedSubmissionDate.day %}
+  {% set day = currentCase.expectedSubmissionDate.day | int %}
+  {% set monthIndex = currentCase.expectedSubmissionDate.month | int %}
+  {% set year = currentCase.expectedSubmissionDate.year %}
+  {% set expectedSubmissionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set siteAddressHtml = "-" %}
+{% if currentCase.siteAddress.line1 %}
+  {% set siteAddressHtml %}
+    {{ currentCase.siteAddress.line1 }}<br>
+    {% if currentCase.siteAddress.line2 %}{{ currentCase.siteAddress.line2 }}<br>{% endif %}
+    {% if currentCase.siteAddress.town %}{{ currentCase.siteAddress.town }}<br>{% endif %}
+    {% if currentCase.siteAddress.county %}{{ currentCase.siteAddress.county }}<br>{% endif %}
+    {% if currentCase.siteAddress.postcode %}{{ currentCase.siteAddress.postcode }}{% endif %}
+  {% endset %}
+{% endif %}
+
+{% set siteCoordsHtml = "-" %}
+{% if currentCase.siteCoords.easting and currentCase.siteCoords.northing %}
+  {% set siteCoordsHtml %}
+    Easting: {{ currentCase.siteCoords.easting }}<br>
+    Northing: {{ currentCase.siteCoords.northing }}
+  {% endset %}
+{% endif %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    {# OVERVIEW CARD #}
+
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Case reference</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.reference }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Development description</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.devDescription | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Likely issues</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.likelyIssues | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.likelyIssues %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicationType | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          {# CONDITIONAL SUB-TYPE ROW FOR LINKED CASES #}
+          {% if currentCase.applicationSubType %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application Sub Type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicationSubType }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Connected Application</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.connectedApplication }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
+          </div>
+          {% endif %}
+
+          {# CONDITIONAL SUB-TYPE ROW FOR APPLICATION CASES #}
+          {% if currentCase.applicationStage == "Application" %} 
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application classification</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicationClassification | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+          {% endif %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Pre-application or application</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicationStage | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Specialism</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.specialism | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.specialism %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Inspector Band</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.inspectorBand | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.inspectorBand %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Local planning authority</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.lpa | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Has secondary LPA</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.hasSecondaryLpa | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          {# CONDITIONAL SECONDARY LPA ROW #}
+          {% if currentCase.hasSecondaryLpa === 'Yes' %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Secondary local planning authority</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.secondaryLpa | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.secondaryLpa %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+          {% endif %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site address</dt>
+            <dd class="govuk-summary-list__value">{{ siteAddressHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteAddress.line1 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site coordinates</dt>
+            <dd class="govuk-summary-list__value">{{ siteCoordsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteCoords.easting and currentCase.siteCoords.northing %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site area</dt>
+            <dd class="govuk-summary-list__value">{% if currentCase.siteArea %}{{ currentCase.siteArea }}{% else %}-{% endif %}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteArea %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Expected submission date</dt>
+            <dd class="govuk-summary-list__value">{{ expectedSubmissionDateHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+        </dl>
+
+  </div>
+</div>
+
+{% endblock %}

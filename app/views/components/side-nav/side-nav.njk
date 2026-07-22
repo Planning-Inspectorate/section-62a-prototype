@@ -1,0 +1,136 @@
+<style>
+    .external::after {}
+
+    .moj-sub-navigation__item--active .moj-sub-navigation__link {
+        font-weight: bold;
+        border-bottom: #11A19A 5px solid;
+    }
+
+    .moj-sub-navigation__link[aria-current=page]::before {
+        background-color: #ffffff;
+    }
+</style>
+
+{% if currentCase.applicationStage == "Application" %}
+
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+    <ul class="moj-sub-navigation__list">
+         <li class="moj-sub-navigation__item {% if currentPage == 'overview' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/01-overview" {% if currentPage == 'overview' %} aria-current="page" {% endif %}>Overview</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'details' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/02-details" {% if currentPage == 'details' %} aria-current="page" {% endif %}>Details</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'updates' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/03-updates" {% if currentPage == 'updates' %} aria-current="page" {% endif %}>Updates</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'contacts' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/04-contacts" {% if currentPage == 'contacts' %} aria-current="page" {% endif %}>Contacts</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'dates' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/05-dates" {% if currentPage == 'dates' %} aria-current="page" {% endif %}>Dates</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'representations' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/06-representations" {% if currentPage == 'representations' %} aria-current="page" {% endif %}>Representations</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-team' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/07-case-team" {% if currentPage == 'case-team' %} aria-current="page" {% endif %}>Case team</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'event' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/08-event" {% if currentPage == 'event' %} aria-current="page" {% endif %}>Event</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'outcome' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/09-outcome" {% if currentPage == 'outcome' %} aria-current="page" {% endif %}>Outcome</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'eia' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/10-eia" {% if currentPage == 'eia' %} aria-current="page" {% endif %}>EIA</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'fee' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/11-fee" {% if currentPage == 'fee' %} aria-current="page" {% endif %}>Fee</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'press-notice' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/12-press-notice" {% if currentPage == 'press-notice' %} aria-current="page" {% endif %}>Press notice</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'residential' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/13-residential" {% if currentPage == 'residential' %} aria-current="page" {% endif %}>Residential</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'non-residential' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/14-non-residential" {% if currentPage == 'non-residential' %} aria-current="page" {% endif %}>Non-residential</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'vehicle-parking' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/15-vehicle-parking" {% if currentPage == 'vehicle-parking' %} aria-current="page" {% endif %}>Vehicle parking</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'waste' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/16-waste" {% if currentPage == 'waste' %} aria-current="page" {% endif %}>Waste</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/17-pre-application" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
+        </li>
+
+        {% if currentPage == 'hearing' %}
+        <li class="moj-sub-navigation__item {% if currentPage == 'hearing' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/features/bo-redesign/v3/back-office/manage/hearing" {% if currentPage == 'hearing' %} aria-current="page" {% endif %}>Hearing</a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% else %}
+
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+    <ul class="moj-sub-navigation__list">
+         <li class="moj-sub-navigation__item {% if currentPage == 'overview' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/01-overview" {% if currentPage == 'overview' %} aria-current="page" {% endif %}>Overview</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'details' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/02-details" {% if currentPage == 'details' %} aria-current="page" {% endif %}>Details</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'updates' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/03-updates" {% if currentPage == 'updates' %} aria-current="page" {% endif %}>Updates</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'contacts' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/04-contacts" {% if currentPage == 'contacts' %} aria-current="page" {% endif %}>Contacts</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'dates' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/05-dates" {% if currentPage == 'dates' %} aria-current="page" {% endif %}>Dates</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/17-pre-application" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-team' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/07-case-team" {% if currentPage == 'case-team' %} aria-current="page" {% endif %}>Case team</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'fee' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/11-fee" {% if currentPage == 'fee' %} aria-current="page" {% endif %}>Fee</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+{% endif %}
