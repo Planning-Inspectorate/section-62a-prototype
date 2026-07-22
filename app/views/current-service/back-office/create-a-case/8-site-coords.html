@@ -33,10 +33,10 @@
           }
         }) %}
         
-          <div id="site-coords-hint" class="govuk-hint">Optional</div>
+          <div id="site-coords-hint" class="govuk-hint">Enter both an easting and a northing when using coordinates</div>
 
           {{ govukInput({
-            label: { text: "Easting" },
+            label: { text: "Easting (optional)" },
             id: "site-coords-easting",
             name: "site-coords-easting",
             value: data['site-coords-easting'],
@@ -44,7 +44,7 @@
           }) }}
 
           {{ govukInput({
-            label: { text: "Northing" },
+            label: { text: "Northing (optional)" },
             id: "site-coords-northing",
             name: "site-coords-northing",
             value: data['site-coords-northing'],

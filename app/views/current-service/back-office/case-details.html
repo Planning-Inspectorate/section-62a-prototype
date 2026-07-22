@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  Case Details - Manage Planning Applications
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
 {% endblock %}
 
 {% block content %}
