@@ -446,6 +446,8 @@
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.turnedAwayDate.day %}Change{% else %}Add{% endif %}</a></dd>
           </div>
 
+        </dl>
+
 {% else %}
 
         <dl class="govuk-summary-list">
@@ -479,6 +481,8 @@
             <dd class="govuk-summary-list__value">{{ withdrawnDateHtml | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.withdrawnDate.day %}Change{% else %}Add{% endif %}</a></dd>
           </div>
+
+        </dl>
 
 {% endif %}
 

@@ -312,6 +312,8 @@
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.bngExempt %}Change{% else %}Add{% endif %}</a></dd>
           </div>
 
+        </dl>
+
 {% else %}
 
         <dl class="govuk-summary-list">
@@ -343,6 +345,8 @@
             <dd class="govuk-summary-list__value">{{ currentCase.healthSafetyIssues | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.healthSafetyIssues %}Change{% else %}Add{% endif %}</a></dd>
           </div>
+
+        </dl>
 
 {% endif %}
 

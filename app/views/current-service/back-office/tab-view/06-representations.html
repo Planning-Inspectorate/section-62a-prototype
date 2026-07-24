@@ -1,0 +1,158 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "representations" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{# Reps Period Formatting #}
+    {% set startPeriod = null %}
+    {% if currentCase.repsPeriodStart.year and currentCase.repsPeriodStart.month and currentCase.repsPeriodStart.day %}
+    {% set day = currentCase.repsPeriodStart.day | int %}
+    {% set monthIndex = currentCase.repsPeriodStart.month | int %}
+    {% set year = currentCase.repsPeriodStart.year %}
+    {% set startPeriod = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+    {% endif %}
+
+    {% set endPeriod = null %}
+    {% if currentCase.repsPeriodEnd.year and currentCase.repsPeriodEnd.month and currentCase.repsPeriodEnd.day %}
+    {% set day = currentCase.repsPeriodEnd.day | int %}
+    {% set monthIndex = currentCase.repsPeriodEnd.month | int %}
+    {% set year = currentCase.repsPeriodEnd.year %}
+    {% set endPeriod = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+    {% endif %}
+
+    {% set formattedRepsPeriodHtml = "-" %}
+
+    {% if startPeriod or endPeriod %}
+    {% set formattedStart = "Start: midnight, " ~ (startPeriod if startPeriod else "-") %}
+    {% set formattedEnd = "End: 11:59pm, " ~ (endPeriod if endPeriod else "-") %}
+    
+    {% set formattedRepsPeriodHtml = formattedStart ~ "<br>" ~ formattedEnd %}
+    {% endif %}
+
+{% set repsPublishDateHtml = "-" %}
+{% if currentCase.repsPublishDate.year and currentCase.repsPublishDate.month and currentCase.repsPublishDate.day %}
+  {% set day = currentCase.repsPublishDate.day | int %}
+  {% set monthIndex = currentCase.repsPublishDate.month | int %}
+  {% set year = currentCase.repsPublishDate.year %}
+  {% set repsPublishDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Representations period</dt>
+            <dd class="govuk-summary-list__value">{{ formattedRepsPeriodHtml | safe }} </dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if startValue and endValue %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Representations publish date</dt>
+            <dd class="govuk-summary-list__value">{{ RepsPublishDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.RepsPublishDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+        </dl>
+
+        <hr class="govuk-section-break govuk-section-break--m">
+
+        <h1 class="govuk-heading-m">
+            Manage representations
+        </h1>
+
+        <ul class="govuk-list govuk-list--spaced">
+            <li>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">Manage representations</a>
+            </li>
+            <li>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">Add new representation</a>
+            </li>
+        </ul>
+
+  </div>
+</div>
+
+{% endblock %}
