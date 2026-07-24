@@ -1,0 +1,488 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "dates" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{% set expectedSubmissionDateHtml = "-" %}
+{% if currentCase.expectedSubmissionDate.year and currentCase.expectedSubmissionDate.month and currentCase.expectedSubmissionDate.day %}
+  {% set day = currentCase.expectedSubmissionDate.day | int %}
+  {% set monthIndex = currentCase.expectedSubmissionDate.month | int %}
+  {% set year = currentCase.expectedSubmissionDate.year %}
+  {% set expectedSubmissionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set notificationReceivedDateHtml = "-" %}
+{% if currentCase.notificationReceivedDate.year and currentCase.notificationReceivedDate.month and currentCase.notificationReceivedDate.day %}
+  {% set day = currentCase.notificationReceivedDate.day | int %}
+  {% set monthIndex = currentCase.notificationReceivedDate.month | int %}
+  {% set year = currentCase.notificationReceivedDate.year | int %}
+  {% set notificationReceivedDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set applicationAcknowledgedHtml = "-" %}
+{% if currentCase.applicationAcknowledged.year and currentCase.applicationAcknowledged.month and currentCase.applicationAcknowledged.day %}
+  {% set day = currentCase.applicationAcknowledged.day | int %}
+  {% set monthIndex = currentCase.applicationAcknowledged.month | int %}
+  {% set year = currentCase.applicationAcknowledged.year | int %}
+  {% set applicationAcknowledgedHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set furtherInfoRequestedHtml = "-" %}
+{% if currentCase.furtherInfoRequested.year and currentCase.furtherInfoRequested.month and currentCase.furtherInfoRequested.day %}
+  {% set day = currentCase.furtherInfoRequested.day | int %}
+  {% set monthIndex = currentCase.furtherInfoRequested.month | int %}
+  {% set year = currentCase.furtherInfoRequested.year | int %}
+  {% set furtherInfoRequestedHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set additionalInfoAgreedHtml = "-" %}
+{% if currentCase.additionalInfoAgreed.year and currentCase.additionalInfoAgreed.month and currentCase.additionalInfoAgreed.day %}
+  {% set day = currentCase.additionalInfoAgreed.day | int %}
+  {% set monthIndex = currentCase.additionalInfoAgreed.month | int %}
+  {% set year = currentCase.additionalInfoAgreed.year | int %}
+  {% set additionalInfoAgreedHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set applicationValidDateHtml = "-" %}
+{% if currentCase.applicationValidDate.year and currentCase.applicationValidDate.month and currentCase.applicationValidDate.day %}
+  {% set day = currentCase.applicationValidDate.day | int %}
+  {% set monthIndex = currentCase.applicationValidDate.month | int %}
+  {% set year = currentCase.applicationValidDate.year | int %}
+  {% set applicationValidDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set validLettersSentHtml = "-" %}
+{% if currentCase.validLettersSent.year and currentCase.validLettersSent.month and currentCase.validLettersSent.day %}
+  {% set day = currentCase.validLettersSent.day | int %}
+  {% set monthIndex = currentCase.validLettersSent.month | int %}
+  {% set year = currentCase.validLettersSent.year | int %}
+  {% set validLettersSentHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set lpaQueSentDateHtml = "-" %}
+{% if currentCase.lpaQueSentDate.year and currentCase.lpaQueSentDate.month and currentCase.lpaQueSentDate.day %}
+  {% set day = currentCase.lpaQueSentDate.day | int %}
+  {% set monthIndex = currentCase.lpaQueSentDate.month | int %}
+  {% set year = currentCase.lpaQueSentDate.year | int %}
+  {% set lpaQueSentDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set lpaQueReceivedDateHtml = "-" %}
+{% if currentCase.lpaQueReceivedDate.year and currentCase.lpaQueReceivedDate.month and currentCase.lpaQueReceivedDate.day %}
+  {% set day = currentCase.lpaQueReceivedDate.day | int %}
+  {% set monthIndex = currentCase.lpaQueReceivedDate.month | int %}
+  {% set year = currentCase.lpaQueReceivedDate.year | int %}
+  {% set lpaQueReceivedDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set targetPublishDateHtml = "-" %}
+{% if currentCase.targetPublishDate.year and currentCase.targetPublishDate.month and currentCase.targetPublishDate.day %}
+  {% set day = currentCase.targetPublishDate.day | int %}
+  {% set monthIndex = currentCase.targetPublishDate.month | int %}
+  {% set year = currentCase.targetPublishDate.year | int %}
+  {% set targetPublishDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set publishDateHtml = "-" %}
+{% if currentCase.publishDate.year and currentCase.publishDate.month and currentCase.publishDate.day %}
+  {% set day = currentCase.publishDate.day | int %}
+  {% set monthIndex = currentCase.publishDate.month | int %}
+  {% set year = currentCase.publishDate.year | int %}
+  {% set publishDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set pressNoticeDateHtml = "-" %}
+{% if currentCase.pressNoticeDate.year and currentCase.pressNoticeDate.month and currentCase.pressNoticeDate.day %}
+  {% set day = currentCase.pressNoticeDate.day | int %}
+  {% set monthIndex = currentCase.pressNoticeDate.month | int %}
+  {% set year = currentCase.pressNoticeDate.year | int %}
+  {% set pressNoticeDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set neighboursNotifiedDateHtml = "-" %}
+{% if currentCase.neighboursNotifiedDate.year and currentCase.neighboursNotifiedDate.month and currentCase.neighboursNotifiedDate.day %}
+  {% set day = currentCase.neighboursNotifiedDate.day | int %}
+  {% set monthIndex = currentCase.neighboursNotifiedDate.month | int %}
+  {% set year = currentCase.neighboursNotifiedDate.year | int %}
+  {% set neighboursNotifiedDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set interestedPartiesDeadlineHtml = "-" %}
+{% if currentCase.interestedPartiesDeadline.year and currentCase.interestedPartiesDeadline.month and currentCase.interestedPartiesDeadline.day %}
+  {% set day = currentCase.interestedPartiesDeadline.day | int %}
+  {% set monthIndex = currentCase.interestedPartiesDeadline.month | int %}
+  {% set year = currentCase.interestedPartiesDeadline.year | int %}
+  {% set interestedPartiesDeadlineHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set siteNoticeLpaHtml = "-" %}
+{% if currentCase.siteNoticeLpa.year and currentCase.siteNoticeLpa.month and currentCase.siteNoticeLpa.day %}
+  {% set day = currentCase.siteNoticeLpa.day | int %}
+  {% set monthIndex = currentCase.siteNoticeLpa.month | int %}
+  {% set year = currentCase.siteNoticeLpa.year | int %}
+  {% set siteNoticeLpaHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set interestedPartiesPressNoticeHtml = "-" %}
+{% if currentCase.interestedPartiesPressNotice.year and currentCase.interestedPartiesPressNotice.month and currentCase.interestedPartiesPressNotice.day %}
+  {% set day = currentCase.interestedPartiesPressNotice.day | int %}
+  {% set monthIndex = currentCase.interestedPartiesPressNotice.month | int %}
+  {% set year = currentCase.interestedPartiesPressNotice.year | int %}
+  {% set interestedPartiesPressNoticeHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set mineralApplicationsHtml = "-" %}
+{% if currentCase.mineralApplications.year and currentCase.mineralApplications.month and currentCase.mineralApplications.day %}
+  {% set day = currentCase.mineralApplications.day | int %}
+  {% set monthIndex = currentCase.mineralApplications.month | int %}
+  {% set year = currentCase.mineralApplications.year | int %}
+  {% set mineralApplicationsHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set interimFindingsDateHtml = "-" %}
+{% if currentCase.interimFindingsDate.year and currentCase.interimFindingsDate.month and currentCase.interimFindingsDate.day %}
+  {% set day = currentCase.interimFindingsDate.day | int %}
+  {% set monthIndex = currentCase.interimFindingsDate.month | int %}
+  {% set year = currentCase.interimFindingsDate.year | int %}
+  {% set interimFindingsDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set reconsultationDetailsHtml = "-" %}
+{% if currentCase.reconsultationDetails.year and currentCase.reconsultationDetails.month and currentCase.reconsultationDetails.day %}
+  {% set day = currentCase.reconsultationDetails.day | int %}
+  {% set monthIndex = currentCase.reconsultationDetails.month | int %}
+  {% set year = currentCase.reconsultationDetails.year | int %}
+  {% set reconsultationDetailsHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set s106SubmittedDateHtml = "-" %}
+{% if currentCase.s106SubmittedDate.year and currentCase.s106SubmittedDate.month and currentCase.s106SubmittedDate.day %}
+  {% set day = currentCase.s106SubmittedDate.day | int %}
+  {% set monthIndex = currentCase.s106SubmittedDate.month | int %}
+  {% set year = currentCase.s106SubmittedDate.year | int %}
+  {% set s106SubmittedDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set targetDecisionDateHtml = "-" %}
+{% if currentCase.targetDecisionDate.year and currentCase.targetDecisionDate.month and currentCase.targetDecisionDate.day %}
+  {% set day = currentCase.targetDecisionDate.day | int %}
+  {% set monthIndex = currentCase.targetDecisionDate.month | int %}
+  {% set year = currentCase.targetDecisionDate.year | int %}
+  {% set targetDecisionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set ExtTargetDecisionDateHtml = "-" %}
+{% if currentCase.ExtTargetDecisionDate.year and currentCase.ExtTargetDecisionDate.month and currentCase.ExtTargetDecisionDate.day %}
+  {% set day = currentCase.ExtTargetDecisionDate.day | int %}
+  {% set monthIndex = currentCase.ExtTargetDecisionDate.month | int %}
+  {% set year = currentCase.ExtTargetDecisionDate.year | int %}
+  {% set ExtTargetDecisionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set recoveredDateHtml = "-" %}
+{% if currentCase.recoveredDate.year and currentCase.recoveredDate.month and currentCase.recoveredDate.day %}
+  {% set day = currentCase.recoveredDate.day | int %}
+  {% set monthIndex = currentCase.recoveredDate.month | int %}
+  {% set year = currentCase.recoveredDate.year | int %}
+  {% set recoveredDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set withdrawnDateHtml = "-" %}
+{% if currentCase.withdrawnDate.year and currentCase.withdrawnDate.month and currentCase.withdrawnDate.day %}
+  {% set day = currentCase.withdrawnDate.day | int %}
+  {% set monthIndex = currentCase.withdrawnDate.month | int %}
+  {% set year = currentCase.withdrawnDate.year | int %}
+  {% set withdrawnDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set turnedAwayDateHtml = "-" %}
+{% if currentCase.turnedAwayDate.year and currentCase.turnedAwayDate.month and currentCase.turnedAwayDate.day %}
+  {% set day = currentCase.turnedAwayDate.day | int %}
+  {% set monthIndex = currentCase.turnedAwayDate.month | int %}
+  {% set year = currentCase.turnedAwayDate.year | int %}
+  {% set turnedAwayDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set siteVisitHtml = "-" %}
+{% if currentCase.siteVisit.year and currentCase.siteVisit.month and currentCase.siteVisit.day %}
+  {% set day = currentCase.siteVisit.day | int %}
+  {% set monthIndex = currentCase.siteVisit.month | int %}
+  {% set year = currentCase.siteVisit.year | int %}
+  {% set siteVisitHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+{% if currentCase.applicationStage == "Application" %}
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Notification received date</dt>
+            <dd class="govuk-summary-list__value">{{ notificationReceivedDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.notificationReceivedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application received date</dt>
+            <dd class="govuk-summary-list__value">{{ expectedSubmissionDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.expectedSubmissionDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application acknowledged</dt>
+            <dd class="govuk-summary-list__value">{{ applicationAcknowledgedHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicationAcknowledged.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Further information requested</dt>
+            <dd class="govuk-summary-list__value">{{ furtherInfoRequestedHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.furtherInfoRequested.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Date agreed for additional information</dt>
+            <dd class="govuk-summary-list__value">{{ additionalInfoAgreedHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.additionalInfoAgreed.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Application valid date</dt>
+            <dd class="govuk-summary-list__value">{{ applicationValidDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicationValidDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Valid letters sent</dt>
+            <dd class="govuk-summary-list__value">{{ validLettersSentHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.validLettersSent.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">LPA questionnaire sent date</dt>
+            <dd class="govuk-summary-list__value">{{ lpaQueSentDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.lpaQueSentDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">LPA questionnaire received date</dt>
+            <dd class="govuk-summary-list__value">{{ lpaQueReceivedDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.lpaQueReceivedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Target publish date</dt>
+            <dd class="govuk-summary-list__value">{{ targetPublishDateHtml | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row  govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Publish date</dt>
+            <dd class="govuk-summary-list__value">{{ publishDateHtml | default('-') }}</dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Press notice date</dt>
+            <dd class="govuk-summary-list__value">{{ pressNoticeDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.pressNoticeDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Neighbours notified by LPA date</dt>
+            <dd class="govuk-summary-list__value">{{ neighboursNotifiedDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.neighboursNotifiedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">LPA interested parties deadline</dt>
+            <dd class="govuk-summary-list__value">{{ interestedPartiesDeadlineHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.interestedPartiesDeadline.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site notice by LPA date</dt>
+            <dd class="govuk-summary-list__value">{{ siteNoticeLpaHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteNoticeLpa.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Interested parties press notice deadline</dt>
+            <dd class="govuk-summary-list__value">{{ interestedPartiesPressNoticeHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.interestedPartiesPressNotice.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Mineral applications</dt>
+            <dd class="govuk-summary-list__value">{{ mineralApplicationsHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.mineralApplications.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Interim findings date</dt>
+            <dd class="govuk-summary-list__value">{{ interimFindingsDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.interimFindingsDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Reconsultation details</dt>
+            <dd class="govuk-summary-list__value">{{ reconsultationDetailsHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.reconsultationDetails.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">S106 submitted date</dt>
+            <dd class="govuk-summary-list__value">{{ s106SubmittedDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.s106SubmittedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Target decision date</dt>
+            <dd class="govuk-summary-list__value">{{ targetDecisionDateHtml | default('-') }}</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Extended target decision date</dt>
+            <dd class="govuk-summary-list__value">{{ extTargetDecisionDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.extTargetDecisionDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Recovered date</dt>
+            <dd class="govuk-summary-list__value">{{ recoveredDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.recoveredDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+           <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Withdrawn date</dt>
+            <dd class="govuk-summary-list__value">{{ withdrawnDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.withdrawnDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+           <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Turned away date</dt>
+            <dd class="govuk-summary-list__value">{{ turnedAwayDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.turnedAwayDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+{% else %}
+
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Notification received date</dt>
+            <dd class="govuk-summary-list__value">{{ notificationReceivedDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.notificationReceivedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Pre-application received date</dt>
+            <dd class="govuk-summary-list__value">{{ expectedSubmissionDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.expectedSubmissionDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site visit</dt>
+            <dd class="govuk-summary-list__value">{{ siteVisitHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteVisit.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site visit type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.siteVisitType | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteVisitType %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Withdrawn date</dt>
+            <dd class="govuk-summary-list__value">{{ withdrawnDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.withdrawnDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+{% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
