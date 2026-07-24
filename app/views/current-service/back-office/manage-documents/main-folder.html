@@ -1,0 +1,100 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Mock Folder View
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to overview", href: "/current-service/back-office/tab-view/01-overview"}) }}
+{% endblock %}
+
+{% block content %}
+
+{# --- DELETE BANNER --- #}
+{% if deleteBanner %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% set deleteHtml %}
+        <h3 class="govuk-notification-banner__heading">
+          {{ deleteBanner }} folder deleted
+        </h3>
+      {% endset %}
+      {{ govukNotificationBanner({ html: deleteHtml, type: "success" }) }}
+    </div>
+  </div>
+{% endif %}
+
+{# --- SUCCESS BANNER --- #}
+{% if successBanner %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+  {% set successHtml %}
+    <h3 class="govuk-notification-banner__heading">
+      <a class="govuk-notification-banner__link" href="/cases/manage-folders/view/{{ successBanner.id }}/{{ successBanner.slug }}?ref={{ currentCase.reference }}">
+        {{ successBanner.name }}
+      </a> folder created
+    </h3>
+  {% endset %}
+
+  {{ govukNotificationBanner({
+    html: successHtml,
+    type: "success"
+  }) }}
+
+  </div>
+    </div>
+{% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
+        S62A/2026/0000001
+      </h1>
+
+    <form id="search-bar-form" action="" method="GET" data-cy="search-form">
+      
+      {# Hidden input to keep 'ref' securely in the URL #}
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+      <div class="govuk-form-group">
+        <div id="search-hint" class="govuk-hint">
+          To find a document, search by file name
+        </div>
+        <div style="display: flex; gap: 15px; align-items: flex-start;">
+          <input class="govuk-input govuk-input--width-30" id="search-input" value="" name="fileSearchCriteria" type="text" data-cy="search-input">
+          
+          {# Removed formaction so it uses the clean form action above #}
+          {{ govukButton({
+            text: "Search",
+            classes: "govuk-!-margin-bottom-0"
+          }) }}
+        </div>
+      </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="pins-link-menu" data-cy="folder-list">
+      
+      {# FOLDER LIST OR EMPTY STATE #}
+          <div class="govuk-!-margin-bottom-4">
+            <a class="govuk-link govuk-heading-s govuk-link--no-visited-state" 
+               href="#">
+              The Planning Application
+            </a>
+            <a class="govuk-link govuk-heading-s govuk-link--no-visited-state" 
+               href="/current-service/back-office/manage-documents/file-view-2">
+              Working documents
+            </a>
+          </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

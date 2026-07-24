@@ -1,0 +1,771 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Mock file view
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/main-folder">Manage documents</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/button/macro.njk" import govukButton -%}
+{%- from "govuk/components/pagination/macro.njk" import govukPagination -%}
+
+<style>
+  /* --- MOJ FILTER & LAYOUT STYLES --- */
+  .moj-filter__header { background-color: #b1b4b6; }
+  .moj-filter__selected { background-color: #f3f2f1; }
+  .moj-filter__heading-action a { font-size: 16px !important; font-weight: normal; }
+  .custom-filter-layout { display: flex; gap: 0; }
+  .custom-filter-column { flex: 0 0 31%; max-width: 31%; padding-right: 0; }
+  .custom-content-column { flex: 0 0 69%; max-width: 69%; padding-left: 30px; }
+
+  .moj-filter { width: 100%; }
+  .moj-filter-layout__filter { border: none !important; }
+  .moj-filter__options { margin-top: -1px; padding: 20px; box-shadow: inset 0 0 0 1px #b1b4b6 }
+  .moj-filter__options > .govuk-button:first-child { display: none !important; }
+
+  /* Pill Icons */
+  .moj-filter__tag::after {
+    content: "" !important;
+    background-image: url("/public/images/icon-tag-remove-cross.svg") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 10px !important;
+    display: inline-block !important;
+    width: 20px !important; height: 20px !important; vertical-align: middle !important; margin-left: 5px !important;
+  }
+  .moj-filter__tag:hover::after { background-image: url("/public/images/icon-tag-remove-cross-white.svg") !important; }
+</style>
+
+<div id="js-error-container"></div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+      <span class="govuk-caption-m">S62A/2026/0000001</span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">Working documents folder</h1>
+      <h1 class="govuk-heading-m" data-cy="folder-name-heading"></h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-button-group">
+    <a href="#" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">Create subfolder</a>
+    <a href="#" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">Rename folder</a>
+    <a href="#" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">Delete folder</a>
+  </div>
+</div>
+
+{# --- ACCORDION FOR SUBFOLDERS --- #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <style>
+      .hide-controls .govuk-accordion__show-all { display: none !important; }
+      .hide-controls .govuk-accordion__section-heading-text { display: none !important; }
+      .hide-controls .govuk-accordion__section-button { padding-top: 10px; padding-bottom: 10px; }
+    </style>
+    <div class="govuk-accordion hide-controls" data-module="govuk-accordion" id="sub-folders-accordion" data-remember-expanded="false"  data-i18n.hide-section="Show subfolders list" data-i18n.show-section="Show subfolders list">
+      <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button" id="sub-folders-accordion-heading-1">Show subfolders</span>
+          </h2>
+        </div>
+        <div id="sub-folders-accordion-content-1" class="govuk-accordion__section-content">
+          <div class="pins-link-menu">
+            <ul class="govuk-list">
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">File Notes and Correspondence</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">EIA</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Fees</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Hearings</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Decisions or Recommendations</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Representations</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Internal Correspondence</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form method="get" action="#">
+<div class="moj-filter-layout custom-filter-layout">
+
+  {# ========================================================== #}
+  {# LEFT COLUMN: THE FILTER                                    #}
+  {# ========================================================== #}
+  
+  <div class="custom-filter-column">
+    {%- set filterOptionsHtml %}
+      {{ govukButton({ text: "Apply filters", classes: "govuk-!-margin-bottom-4 govuk-!-width-full" }) }}
+      <div class="govuk-!-margin-bottom-0">
+        
+        <div class="govuk-!-margin-bottom-6">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-3">Select read status</h2>
+          {{ govukCheckboxes({
+            idPrefix: "fileReadStatus", name: "fileReadStatus", classes: "govuk-checkboxes--small",
+            items: [
+              { value: "Read", html: "Read <span id='count-read'>(12)</span>" },
+              { value: "Unread", html: "Unread <span id='count-unread'>(3)</span>" }
+            ]
+          }) }}
+        </div>
+
+        <div class="govuk-!-margin-bottom-2">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-3">Select flagged status</h2>
+          {{ govukCheckboxes({
+            idPrefix: "fileFlaggedStatus", name: "fileFlaggedStatus", classes: "govuk-checkboxes--small",
+            items: [
+              { value: "Flagged", html: "Flagged <span id='count-flagged'>(2)</span>" },
+              { value: "Unflagged", html: "Unflagged <span id='count-unflagged'>(13)</span>" }
+            ]
+          }) }}
+        </div>
+      </div>
+    {% endset -%}
+
+    {{ mojFilter({
+      heading: { text: "Filter" },
+      selectedFilters: {
+        heading: { text: "Selected filters" },
+        clearLink: { text: "Clear filters", href: "#", classes: "govuk-!-font-size-16" },
+        categories: []
+      },
+      optionsHtml: filterOptionsHtml
+    }) }}
+  </div>
+
+  {# ========================================================== #}
+  {# RIGHT COLUMN: RESULTS TABLE                                #}
+  {# ========================================================== #}
+  <div class="custom-content-column">
+      
+    <div id="pagination" class="govuk-body">
+      <p class="govuk-body govuk-!-font-weight-bold">File actions</p>
+      
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        This folder contains 15 file(s). Showing <strong>1</strong> to <strong>15</strong> of <strong>15</strong> files.
+      </p>
+
+      <p class="pins-pagination-options govuk-!-margin-bottom-4 govuk-!-margin-top-1">
+        <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="govuk-link--no-visited-state" href="#">100</a>
+      </p>
+
+      <div class="govuk-button-group govuk-!-margin-bottom-4">
+          <a href="#" class="govuk-button govuk-button--secondary">Upload files</a>
+          <button type="button" class="govuk-button govuk-button--secondary" id="mock-move-btn">Move selected</button>
+          <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
+          <button type="button" class="govuk-button govuk-button--secondary">Delete selected</button>
+      </div>
+
+      <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
+      <p class="govuk-body govuk-!-margin-bottom">Select 'All' checkbox to select all the files.</p>
+
+      <table class="govuk-table" data-module="moj-sortable-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 10%; min-width: 75px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small" style="margin-bottom: 0;">
+                <input type="checkbox" class="govuk-checkboxes__input" id="checkboxes-all" name="checkboxes-all" value="all">
+                <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold" for="checkboxes-all">All</label>
+              </div>
+            </th>
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 40%;" aria-sort="none"><button type="button" data-index="1">File name</button></th>
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;" aria-sort="descending"><button type="button" data-index="2">Uploaded</button></th>
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;">Status</th>
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 20%;">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          
+          {# Mock Document 1 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-1" name="selectedFiles" type="checkbox" value="1">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-1"><span class="govuk-visually-hidden">Select Site-plan-v2.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="site-plan-v2.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">Site-plan-v2.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 2.4MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-20" style="vertical-align: top; padding-top: 15px;">20 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-1">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-1" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="1">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="1">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 2 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-2" name="selectedFiles" type="checkbox" value="2">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-2"><span class="govuk-visually-hidden">Select application-form.docx</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="application-form.docx" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">application-form.docx</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: DOCX, 1.1MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-21" style="vertical-align: top; padding-top: 15px;">21 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-2">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-2">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="2">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="2">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 3 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-3" name="selectedFiles" type="checkbox" value="3">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-3"><span class="govuk-visually-hidden">Select site-photo-01.jpg</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="site-photo-01.jpg" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">site-photo-01.jpg</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: JPG, 4.5MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-22" style="vertical-align: top; padding-top: 15px;">22 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-3">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-3" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="3">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="3">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 4 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-4" name="selectedFiles" type="checkbox" value="4">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-4"><span class="govuk-visually-hidden">Select environmental-assessment.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="environmental-assessment.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">environmental-assessment.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 1.2MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-10" style="vertical-align: top; padding-top: 15px;">10 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-4">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-4" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="4">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="4">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 5 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-5" name="selectedFiles" type="checkbox" value="5">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-5"><span class="govuk-visually-hidden">Select floor-plans.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="floor-plans.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">floor-plans.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 5.4MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-12" style="vertical-align: top; padding-top: 15px;">12 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-5">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-5">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="5">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="5">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 6 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-6" name="selectedFiles" type="checkbox" value="6">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-6"><span class="govuk-visually-hidden">Select traffic-survey.docx</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="traffic-survey.docx" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">traffic-survey.docx</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: DOCX, 230KB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-15" style="vertical-align: top; padding-top: 15px;">15 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-6">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-6">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="6">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="6">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 7 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-7" name="selectedFiles" type="checkbox" value="7">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-7"><span class="govuk-visually-hidden">Select resident-objection-1.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="resident-objection-1.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">resident-objection-1.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 45KB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-18" style="vertical-align: top; padding-top: 15px;">18 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-7">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-7" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="7">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="7">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 8 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-8" name="selectedFiles" type="checkbox" value="8">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-8"><span class="govuk-visually-hidden">Select site-notice.jpg</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="site-notice.jpg" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">site-notice.jpg</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: JPG, 2.1MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-20" style="vertical-align: top; padding-top: 15px;">20 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-8">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-8" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="8">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="8">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 9 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-9" name="selectedFiles" type="checkbox" value="9">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-9"><span class="govuk-visually-hidden">Select local-council-response.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="local-council-response.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">local-council-response.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 1.8MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-06-25" style="vertical-align: top; padding-top: 15px;">25 Jun 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-9">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-9" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="9">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="9">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 10 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-10" name="selectedFiles" type="checkbox" value="10">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-10"><span class="govuk-visually-hidden">Select tree-survey.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="tree-survey.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">tree-survey.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 3.3MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-01" style="vertical-align: top; padding-top: 15px;">01 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-10">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-10">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="10">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="10">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 11 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-11" name="selectedFiles" type="checkbox" value="11">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-11"><span class="govuk-visually-hidden">Select heritage-statement.docx</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="heritage-statement.docx" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">heritage-statement.docx</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: DOCX, 890KB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-05" style="vertical-align: top; padding-top: 15px;">05 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-11">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-11" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="11">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="11">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 12 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-12" name="selectedFiles" type="checkbox" value="12">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-12"><span class="govuk-visually-hidden">Select drainage-strategy.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="drainage-strategy.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">drainage-strategy.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 6.1MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-08" style="vertical-align: top; padding-top: 15px;">08 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-12">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-12">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="12">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="12">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 13 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-13" name="selectedFiles" type="checkbox" value="13">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-13"><span class="govuk-visually-hidden">Select meeting-minutes.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="meeting-minutes.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">meeting-minutes.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 110KB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-10" style="vertical-align: top; padding-top: 15px;">10 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-13">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-13" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="13">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="13">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+          {# Mock Document 14 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-14" name="selectedFiles" type="checkbox" value="14">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-14"><span class="govuk-visually-hidden">Select elevation-drawings.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="elevation-drawings.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">elevation-drawings.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 8.2MB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-12" style="vertical-align: top; padding-top: 15px;">12 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--green" id="status-tag-read-14">Read</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-14" style="visibility: hidden;">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="14">Unread</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="14">Flag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+        {# Mock Document 15 #}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                <input class="govuk-checkboxes__input" id="select-file-15" name="selectedFiles" type="checkbox" value="15">
+                <label class="govuk-label govuk-checkboxes__label" for="select-file-15"><span class="govuk-visually-hidden">Select appeal-form.pdf</span></label>
+              </div>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="appeal-form.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">appeal-form.pdf</a>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 600KB</span>
+            </td>
+            <td class="govuk-table__cell" data-sort-value="2026-07-18" style="vertical-align: top; padding-top: 15px;">18 Jul 2026</td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+                <strong class="govuk-tag govuk-tag--blue" id="status-tag-read-15">Unread</strong>
+                <strong class="govuk-tag govuk-tag--red" id="status-tag-flag-15">Flagged</strong>
+              </div>
+            </td>
+            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-read-toggle" href="#" data-doc-id="15">Read</a></li>
+                <li class="govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state js-flag-toggle" href="#" data-doc-id="15">Unflag</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+              </ul>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+</form>
+
+<script type="module" nonce="">
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- 1. SELECT ALL LOGIC & DYNAMIC TEXT COUNTER ---
+    const selectAll = document.getElementById('checkboxes-all');
+    const checkboxes = document.querySelectorAll('input[name="selectedFiles"]');
+    const selectedCountText = document.getElementById('selected-files-count');
+
+    const updateSelectedCount = () => {
+      if (selectedCountText) {
+        const checkedCount = document.querySelectorAll('input[name="selectedFiles"]:checked').length;
+        selectedCountText.textContent = `${checkedCount} file(s) on this page selected.`;
+      }
+    };
+
+    if (selectAll) {
+      selectAll.addEventListener('change', function(e) {
+        checkboxes.forEach(function(cb) {
+          cb.checked = e.target.checked;
+        });
+        updateSelectedCount();
+      });
+
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          const allChecked = Array.from(checkboxes).every(c => c.checked);
+          selectAll.checked = allChecked;
+          updateSelectedCount();
+        });
+      });
+    }
+
+    // --- 2. FRONTEND VALIDATION FOR BULK ACTIONS (MOCKED) ---
+    const mockMoveBtn = document.getElementById('mock-move-btn');
+    const errorContainer = document.getElementById('js-error-container');
+
+    if (mockMoveBtn) {
+      mockMoveBtn.addEventListener('click', function(e) {
+        const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
+        
+        if (checkedFiles.length === 0) {
+          e.preventDefault(); 
+          window.scrollTo(0, 0); 
+          
+          errorContainer.innerHTML = `
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-error-summary" data-module="govuk-error-summary">
+                  <div role="alert">
+                    <h2 class="govuk-error-summary__title">There is a problem</h2>
+                    <div class="govuk-error-summary__body">
+                      <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="#checkboxes-all">Select a file or files to move</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+            errorContainer.innerHTML = '';
+            alert(`${checkedFiles.length} file(s) selected for move action.`);
+        }
+      });
+    }
+
+    // --- 3. DYNAMIC STATUS TOGGLES (LIVE FILTER COUNTING) ---
+    const updateCounter = (id, change) => {
+      const el = document.getElementById(id);
+      if (el) {
+        let num = parseInt(el.textContent.replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(num)) {
+          num += change;
+          el.textContent = `(${num})`;
+        }
+      }
+    };
+
+    const readToggles = document.querySelectorAll('.js-read-toggle');
+    const flagToggles = document.querySelectorAll('.js-flag-toggle');
+
+    readToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const docId = this.getAttribute('data-doc-id');
+        const statusTag = document.getElementById('status-tag-read-' + docId);
+
+        if (this.textContent.trim() === 'Read') {
+          this.textContent = 'Unread';
+          if (statusTag) {
+            statusTag.textContent = 'Read';
+            statusTag.className = 'govuk-tag govuk-tag--green';
+          }
+          updateCounter('count-read', 1);
+          updateCounter('count-unread', -1);
+        } else {
+          this.textContent = 'Read';
+          if (statusTag) {
+            statusTag.textContent = 'Unread';
+            statusTag.className = 'govuk-tag govuk-tag--blue';
+          }
+          updateCounter('count-read', -1);
+          updateCounter('count-unread', 1);
+        }
+      });
+    });
+
+    flagToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const docId = this.getAttribute('data-doc-id');
+        let flagTag = document.getElementById('status-tag-flag-' + docId);
+
+        if (this.textContent.trim() === 'Flag') {
+          this.textContent = 'Unflag';
+          if (flagTag) {
+            flagTag.style.visibility = 'visible';
+          }
+          updateCounter('count-flagged', 1);
+          updateCounter('count-unflagged', -1);
+        } else {
+          this.textContent = 'Flag';
+          if (flagTag) {
+            flagTag.style.visibility = 'hidden';
+          }
+          updateCounter('count-flagged', -1);
+          updateCounter('count-unflagged', 1);
+        }
+      });
+    });
+
+  });
+</script>
+{% endblock %}
