@@ -1,0 +1,155 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "outcome" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{% set decisionDateHtml = "-" %}
+{% if currentCase.decisionDate.year and currentCase.decisionDate.month and currentCase.decisionDate.day %}
+  {% set day = currentCase.decisionDate.day | int %}
+  {% set monthIndex = currentCase.decisionDate.month | int %}
+  {% set year = currentCase.decisionDate.year %}
+  {% set decisionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set recoveredReportSentDateHtml = "-" %}
+{% if currentCase.recoveredReportSentDate.year and currentCase.recoveredReportSentDate.month and currentCase.recoveredReportSentDate.day %}
+  {% set day = currentCase.recoveredReportSentDate.day | int %}
+  {% set monthIndex = currentCase.recoveredReportSentDate.month | int %}
+  {% set year = currentCase.recoveredReportSentDate.year %}
+  {% set recoveredReportSentDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set originalDecisionDateHtml = "-" %}
+{% if currentCase.originalDecisionDate.year and currentCase.originalDecisionDate.month and currentCase.originalDecisionDate.day %}
+  {% set day = currentCase.originalDecisionDate.day | int %}
+  {% set monthIndex = currentCase.originalDecisionDate.month | int %}
+  {% set year = currentCase.originalDecisionDate.year %}
+  {% set originalDecisionDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Outcome type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.outcomeType | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.outcomeType %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% if currentCase.outcomeType == "Decision" %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Decision outcome</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.decisionOutcome | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.decisionOutcome %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Decision date</dt>
+            <dd class="govuk-summary-list__value">{{ decisionDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.decisionDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% elif currentCase.outcomeType == "Recommendation" %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Recovered report sent date</dt>
+            <dd class="govuk-summary-list__value">{{ recoveredReportSentDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.recoveredReportSentDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% endif %} 
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Original decision date</dt>
+            <dd class="govuk-summary-list__value">{{ originalDecisionDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.originalDecisionDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+        </dl>
+  </div>
+</div>
+
+{% endblock %}

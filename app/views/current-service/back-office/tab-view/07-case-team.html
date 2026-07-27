@@ -1,0 +1,182 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "case-team" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{% set appointedPersonsHtml = "-" %}
+
+{% if currentCase.appointedPersons and currentCase.appointedPersons.length > 0 %}
+  {% set appointedPersonsHtml %}
+    <ul class="govuk-list govuk-list--bullet">
+      
+      {% for person in currentCase.appointedPersons %}
+        <li>
+          {{ person.fullName }}
+          
+          {# Check for Assigned Date on this specific person #}
+          {% if person.appointedPersonsAssigned.day and person.appointedPersonsAssigned.month and person.appointedPersonsAssigned.year %}
+            {% set aDay = person.appointedPersonsAssigned.day | int %}
+            {% set aMonth = person.appointedPersonsAssigned.month | int %}
+            {% set aYear = person.appointedPersonsAssigned.year %}
+            
+            <br>Date Assigned: {{ aDay }} {{ monthNames[aMonth] }} {{ aYear }}
+          {% endif %}
+          
+          {# Check for Appointed Date on this specific person #}
+          {% if person.appointedPersonsAppointed.day and person.appointedPersonsAppointed.month and person.appointedPersonsAppointed.year %}
+            {% set apDay = person.appointedPersonsAppointed.day | int %}
+            {% set apMonth = person.appointedPersonsAppointed.month | int %}
+            {% set apYear = person.appointedPersonsAppointed.year %}
+            
+            <br>Date Appointed: {{ apDay }} {{ monthNames[apMonth] }} {{ apYear }}
+          {% endif %}
+        </li>
+      {% endfor %}
+      
+    </ul>
+  {% endset %}
+{% endif %}
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+{% if currentCase.applicationStage == "Application" %}
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Appointed persons or inspectors</dt>
+            <dd class="govuk-summary-list__value">{{ appointedPersonsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.appointedPersons and currentCase.appointedPersons.length > 0 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Case officer</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.caseOfficer | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.caseOfficer %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Assessor inspector</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.assessorInspector | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.assessorInspector %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Planning officer</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.planningOfficer | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.planningOfficer %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Reader</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.reader | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.reader %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+        </dl>
+
+{% else %}
+
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Appointed persons or inspectors</dt>
+            <dd class="govuk-summary-list__value">{{ appointedPersonsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.appointedPersons and currentCase.appointedPersons.length > 0 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Case officer</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.caseOfficer | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.caseOfficer %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+        </dl>
+
+{% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

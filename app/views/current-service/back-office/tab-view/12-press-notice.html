@@ -1,0 +1,115 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "press-notice" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Press notice cost</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.pressNoticeCost | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.pressNoticeCost %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Press notice placed</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.pressNoticePlaced | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.pressNoticePlaced %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Press notice cost</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.pressNoticeReference | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.pressNoticeReference %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+
+        </dl>
+  </div>
+</div>
+
+{% endblock %}
