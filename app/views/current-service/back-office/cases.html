@@ -21,29 +21,27 @@
     
     {# --- 2. SEARCH SECTION (TWO-THIRDS WIDTH) --- #}
     <div class="govuk-grid-column-two-thirds">
-      
-      <form action="/search-cases" method="get" class="govuk-!-margin-bottom-6">
-        <div class="govuk-form-group">
-          
-          <h2 class="govuk-label-wrapper">
-            <label class="govuk-label govuk-label--l" for="search-input">
+
+      {% from "components/dashboard-box/dashboard-box.njk" import dashboardBox %}
+
+       {{ dashboardBox({
+          width: "full-width",
+          classes: "govuk-!-margin-bottom-6",
+          html: "<h1 class='govuk-label-wrapper'>
+            <label class='govuk-label govuk-label--l' id='search-label' for='search-input'>
               Search cases
             </label>
-          </h2>
-          
-          <div id="search-hint" class="govuk-hint">
+          </h1>
+          <div id='search-hint' class='govuk-hint'>
             To find a specific case, search by reference.
           </div>
-          
-          <div style="display: flex; gap: 10px;">
-            <input class="govuk-input" id="search-input" name="searchCriteria" type="text" aria-describedby="search-hint">
-            <button type="submit" class="govuk-button" data-module="govuk-button">
+          <div class='row-inline'><input class='govuk-input' id='search-input' value='' name='searchCriteria'
+              type='text'><button type='submit' class='govuk-button govuk-button' data-module='govuk-button'
+              id='search-button'>
               Search
-            </button>
-          </div>
-          
-        </div>
-      </form>
+            </button></div>"
+          }) }}
+            
 
     </div>
   </div>
