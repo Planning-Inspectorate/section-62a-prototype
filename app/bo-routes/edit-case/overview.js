@@ -24,7 +24,7 @@ const router = Router();
 
 
 // applicant overview contact - GET
-router.get('/current-service/back-office/edit-case/overview/applicant-overview-contact', function(req, res) {
+router.get('/current-service/back-office/edit-case/01-overview/applicant-overview-contact', function(req, res) {
   const currentCase = getCase(req);
   if (!currentCase) return res.redirect('/current-service/back-office/cases');
 
@@ -38,7 +38,7 @@ router.get('/current-service/back-office/edit-case/overview/applicant-overview-c
   req.session.data['applicant-overview-contact-email'] = contact.email || '';
   req.session.data['applicant-overview-contact-phone'] = contact.phone || '';
 
-  res.render('current-service/back-office/edit-case/overview/applicant-overview-contact', {
+  res.render('current-service/back-office/edit-case/01-overview/applicant-overview-contact', {
     currentCase: currentCase,
     data: req.session.data
   });
@@ -80,7 +80,7 @@ router.post('/applicant-overview-contact-answer', function(req, res) {
 
   // render errors if any
   if (errorList.length > 0) {
-    return res.render('current-service/back-office/edit-case/overview/applicant-overview-contact', {
+    return res.render('current-service/back-office/edit-case/01-overview/applicant-overview-contact', {
       currentCase: currentCase,
       data: data,
       errors: errors,

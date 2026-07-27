@@ -1,0 +1,71 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What is the duration of the hearing? - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "#"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">What is the duration of the hearing?</h1>
+
+    <form method="post" action="/next-page-url">
+      
+      {{ govukInput({
+        id: "hearing-duration-prep",
+        name: "currentCase[hearingDuration][prep]",
+        value: currentCase.hearingDuration.prep,
+        label: {
+          text: "Prep"
+        },
+        classes: "govuk-input--width-3",
+        suffix: {
+          text: "days"
+        }
+      }) }}
+
+      {{ govukInput({
+        id: "hearing-duration-sitting",
+        name: "currentCase[hearingDuration][sitting]",
+        value: currentCase.hearingDuration.sitting,
+        label: {
+          text: "Sitting"
+        },
+        classes: "govuk-input--width-3",
+        suffix: {
+          text: "days"
+        }
+      }) }}
+
+      {{ govukInput({
+        id: "hearing-duration-reporting",
+        name: "currentCase[hearingDuration][reporting]",
+        value: currentCase.hearingDuration.reporting,
+        label: {
+          text: "Reporting"
+        },
+        classes: "govuk-input--width-3",
+        suffix: {
+          text: "days"
+        }
+      }) }}
+
+      {{ govukButton({
+        text: "Save"
+      }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "event" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{% set noticeOfProcedureDateHtml = "-" %}
+{% if currentCase.noticeOfProcedureDate.year and currentCase.noticeOfProcedureDate.month and currentCase.noticeOfProcedureDate.day %}
+  {% set day = currentCase.noticeOfProcedureDate.day | int %}
+  {% set monthIndex = currentCase.noticeOfProcedureDate.month | int %}
+  {% set year = currentCase.noticeOfProcedureDate.year | int %}
+  {% set noticeOfProcedureDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set siteVisitHtml = "-" %}
+{% if currentCase.siteVisit.year and currentCase.siteVisit.month and currentCase.siteVisit.day %}
+  {% set day = currentCase.siteVisit.day | int %}
+  {% set monthIndex = currentCase.siteVisit.month | int %}
+  {% set year = currentCase.siteVisit.year | int %}
+  {% set siteVisitHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+
+{% set hearingDateHtml = "-" %}
+{% if currentCase.hearingDate.year and currentCase.hearingDate.month and currentCase.hearingDate.day %}
+
+  {% set day = currentCase.hearingDate.day | int %}
+  {% set monthIndex = currentCase.hearingDate.month | int %}
+  {% set year = currentCase.hearingDate.year %}
+  {% set formattedDate = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+
+  {% set formattedTime = "" %}
+  {% if currentCase.hearingDate.hour and currentCase.hearingDate.minute and currentCase.hearingDate.ampm %}
+    {% set formattedTime = "<br>" ~ currentCase.hearingDate.hour ~ ":" ~ currentCase.hearingDate.minute ~ currentCase.hearingDate.ampm %}
+  {% endif %}
+
+  {% set hearingDateHtml = formattedDate ~ formattedTime %}
+{% endif %}
+
+
+{% set hearingDurationHtml = "-" %}
+{% if currentCase.hearingDuration.prep or currentCase.hearingDuration.sitting or currentCase.hearingDuration.reporting %}
+  
+  {% set prep = currentCase.hearingDuration.prep | default('0') %}
+  {% set sitting = currentCase.hearingDuration.sitting | default('0') %}
+  {% set reporting = currentCase.hearingDuration.reporting | default('0') %}
+
+  {% set hearingDurationHtml %}
+    Prep: {{ prep }} days<br>
+    Sitting: {{ sitting }} days<br>
+    Reporting: {{ reporting }} days
+  {% endset %}
+{% endif %}
+
+
+{% set hearingNotificationDateHtml = "-" %}
+{% if currentCase.hearingNotificationDate.year and currentCase.hearingNotificationDate.month and currentCase.hearingNotificationDate.day %}
+  {% set day = currentCase.hearingNotificationDate.day | int %}
+  {% set monthIndex = currentCase.hearingNotificationDate.month | int %}
+  {% set year = currentCase.hearingNotificationDate.year | int %}
+  {% set hearingNotificationDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set additionalMeetingsRequiredHtml = "-" %}
+{% if currentCase.additionalMeetingsRequired.year and currentCase.additionalMeetingsRequired.month and currentCase.additionalMeetingsRequired.day %}
+  {% set day = currentCase.additionalMeetingsRequired.day | int %}
+  {% set monthIndex = currentCase.additionalMeetingsRequired.month | int %}
+  {% set year = currentCase.additionalMeetingsRequired.year | int %}
+  {% set additionalMeetingsRequiredHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+{% set hearingIssuesReportPublishedHtml = "-" %}
+{% if currentCase.hearingIssuesReportPublished.year and currentCase.hearingIssuesReportPublished.month and currentCase.hearingIssuesReportPublished.day %}
+  {% set day = currentCase.hearingIssuesReportPublished.day | int %}
+  {% set monthIndex = currentCase.hearingIssuesReportPublished.month | int %}
+  {% set year = currentCase.hearingIssuesReportPublished.year | int %}
+  {% set hearingIssuesReportPublishedHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+{% endif %}
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Notice of procedure date</dt>
+            <dd class="govuk-summary-list__value">{{ noticeOfProcedureDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.noticeOfProcedureDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site visit</dt>
+            <dd class="govuk-summary-list__value">{{ siteVisitHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteVisit.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site visit type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.siteVisitType | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.siteVisitType %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Hearing date</dt>
+            <dd class="govuk-summary-list__value">{{ hearingDateHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hearingDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Hearing duration</dt>
+            <dd class="govuk-summary-list__value">{{ hearingDurationHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hearingDuration.prep or currentCase.hearingDuration.sitting or currentCase.hearingDuration.reporting %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Hearing venue</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.hearingVenue | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hearingVenue %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Hearing notification date</dt>
+            <dd class="govuk-summary-list__value">{{ hearingNotificationDateHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hearingNotificationReceivedDate.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Additional meetings required</dt>
+            <dd class="govuk-summary-list__value">{{ additionalMeetingsRequiredHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.additionalMeetingsRequired.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Hearing issues report published date</dt>
+            <dd class="govuk-summary-list__value">{{ hearingIssuesReportPublishedHtml | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hearingIssuesReportPublished.day %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+        </dl>
+
+  </div>
+</div>
+
+{% endblock %}
