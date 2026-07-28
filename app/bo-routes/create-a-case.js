@@ -1004,6 +1004,7 @@ router.post('/case-created-confirmation', function (req, res) {
     agentContacts: data['has-agent'] === 'Yes' ? (data['agent-contact-list'] || []) : [],
 
     // standard arrays and fields
+    applicantType: data['applicant-type'], // applicant type now saved
     applicantOrgs: data['applicant-org-list'] || [],
     applicantContacts: data['applicant-contact-list'] || [],
     
@@ -1075,11 +1076,11 @@ router.post('/case-created-confirmation', function (req, res) {
     'application-stage', 'application-classification', 'application-type', 'lpa', 
     'lpa-contact-first-name', 'lpa-contact-last-name', 'lpa-contact-email', 'lpa-contact-phone',
     'has-secondary-lpa', 'secondary-lpa', 
-    'secondary-lpa-contact-first-name', 'secondary-lpa-contact-last-name', 'secondary-lpa-contact-email', 'secondary-lpa-contact-phone', // <-- New Secondary LPA fields
+    'secondary-lpa-contact-first-name', 'secondary-lpa-contact-last-name', 'secondary-lpa-contact-email', 'secondary-lpa-contact-phone',
     'has-agent', 'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
     'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode', 'agent-contact-list',
     
-    // applicant-type is not saved as it's only purpose is to direct user down the correct path, so it's cleared to reset the journey
+    // applicant-type is now saved in the create a case journey as it conditionally reveals applicant orgs in case-team tab
     'applicant-type', 
     'applicant-org-list', 'applicant-contact-list', 
     'site-address-line-1', 'site-address-line-2', 'site-address-town', 

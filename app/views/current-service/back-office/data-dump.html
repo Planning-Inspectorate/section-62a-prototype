@@ -1,0 +1,21 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block beforeContent %}
+
+{{ govukBackLink({
+    text: "Back to all cases",
+    href: "/current-service/back-office/cases"
+}) }}
+
+{% endblock %}
+
+{% block content %}
+
+            <h2 class="govuk-heading-l">Session Data Dump</h2>
+            <div style="background: #f3f2f1; padding: 20px;">
+            
+            <pre><code>{{ data | dump(2) }}</code></pre>
+            
+            </div>
+
+{% endblock %}

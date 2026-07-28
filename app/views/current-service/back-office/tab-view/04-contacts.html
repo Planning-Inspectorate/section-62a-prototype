@@ -1,0 +1,327 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "contacts" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all applications",
+    href: "/current-service/back-office/cases"
+  }) }}
+{% endblock %}
+
+{% block content %}
+          
+
+{# ========================================================= #}
+{# 1. FIND THE SPECIFIC CASE FROM THE URL QUERY              #}
+{# ========================================================= #}
+{% set currentCase = null %}
+{% for case in data.cases %}
+  {% if case.reference == data.reference %}
+    {% set currentCase = case %}
+  {% endif %}
+{% endfor %}
+
+{# ========================================================= #}
+{# 2. FORMAT COMPLEX HTML VARIABLES (Addresses, Dates, etc)  #}
+{# ========================================================= #}
+
+{# Date Formatter #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{# --- Primary LPA Contact HTML --- #}
+{% set lpaContactsHtml = "-" %}
+{% if currentCase.lpa or currentCase.lpaContact %}
+  {% set lpaContactsHtml %}
+    
+    {% if currentCase.lpaContact %}
+      {% if currentCase.lpaContact.firstName or currentCase.lpaContact.lastName %}
+        {{ currentCase.lpaContact.firstName }} {{ currentCase.lpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.email %}
+        {{ currentCase.lpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.lpaContact.phone %}
+        {{ currentCase.lpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{# --- Secondary LPA Contact HTML --- #}
+{% set secondaryLpaContactsHtml = "No" %}
+
+{% if currentCase.hasSecondaryLpa === 'Yes' %}
+  {% set secondaryLpaContactsHtml %}
+    
+    {% if currentCase.secondaryLpaContact %}
+      {% if currentCase.secondaryLpaContact.firstName or currentCase.secondaryLpaContact.lastName %}
+        {{ currentCase.secondaryLpaContact.firstName }} {{ currentCase.secondaryLpaContact.lastName }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.email %}
+        {{ currentCase.secondaryLpaContact.email }}<br>
+      {% endif %}
+      
+      {% if currentCase.secondaryLpaContact.phone %}
+        {{ currentCase.secondaryLpaContact.phone }}
+      {% endif %}
+    {% endif %}
+  {% endset %}
+{% endif %}
+
+{% set agentAddressHtml = "-" %}
+{% if currentCase.agentAddress and currentCase.agentAddress.line1 %}
+  {% set agentAddressHtml %}
+    {{ currentCase.agentAddress.line1 }}<br>
+    {% if currentCase.agentAddress.line2 %}{{ currentCase.agentAddress.line2 }}<br>{% endif %}
+    {% if currentCase.agentAddress.town %}{{ currentCase.agentAddress.town }}<br>{% endif %}
+    {% if currentCase.agentAddress.county %}{{ currentCase.agentAddress.county }}<br>{% endif %}
+    {% if currentCase.agentAddress.postcode %}{{ currentCase.agentAddress.postcode }}{% endif %}
+  {% endset %}
+{% endif %}
+
+{% set applicantOrganisationsHtml = "-" %}
+{% if currentCase.applicantOrgs.length > 0 %}
+  {% set applicantOrganisationsHtml %}
+    <ul class="govuk-list {% if currentCase.applicantOrgs.length > 1 %}govuk-list--bullet{% endif %}">
+      {% for org in currentCase.applicantOrgs %}
+        <li>{{ org.orgName }}<br>
+            {% if org.address.line1 %}{{ org.address.line1 }}<br>{% endif %}
+            {% if org.address.line2 %}{{ org.address.line2 }}<br>{% endif %}
+            {% if org.address.town %}{{ org.address.town }}<br>{% endif %}
+            {% if org.address.county %}{{ org.address.county }}<br>{% endif %}
+            {% if org.address.postcode %}{{ org.address.postcode }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{% set applicantOverviewContactsHtml = "-" %}
+{% if currentCase.applicantOverviewContacts and currentCase.applicantOverviewContacts.length > 0 %}
+  {% set applicantOverviewContactsHtml %}
+    <ul class="govuk-list govuk-!-margin-bottom-0">
+      {% for contact in currentCase.applicantOverviewContacts %}
+        <li>
+          {{ contact.orgName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+{% set applicantContactsHtml = "-" %}
+{% if currentCase.applicantContacts.length > 0 %}
+{% set applicantContactsHtml %}
+    <ul class="govuk-list {% if currentCase.applicantContacts.length > 1 %}govuk-list--bullet{% endif %}">
+    {% for contact in currentCase.applicantContacts %}
+        <li>
+        {{ contact.firstName }} {{ contact.lastName }}<br>
+        {% if contact.email %}{{ contact.email }}<br>{% endif %}
+        {% if contact.phone %}{{ contact.phone }}{% endif %}
+        {% if contact.linkedOrg %}
+                {% for org in currentCase.applicantOrgs %}
+                {% if org.id == contact.linkedOrg %}<br>{{ org.orgName }}{% endif %}
+                {% endfor %}
+        {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endset %}
+{% endif %}
+
+{% set agentContactsHtml = "-" %}
+{% if currentCase.agentContacts.length > 0 %}
+  {% set agentContactsHtml %}
+    <ul class="govuk-list {% if currentCase.agentContacts.length > 1 %}govuk-list--bullet{% endif %}">
+      {% for contact in currentCase.agentContacts %}
+        <li>
+          {{ contact.firstName }} {{ contact.lastName }}<br>
+          {% if contact.email %}{{ contact.email }}<br>{% endif %}
+          {% if contact.phone %}{{ contact.phone }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endset %}
+{% endif %}
+
+
+{% set primaryAddress = currentCase.lpa | getLpaAddress %}
+
+{% set lpaAddressHtml = "-" %}
+{% if primaryAddress %}
+  {% set lpaAddressHtml %}
+    {{ primaryAddress.addressLine1 }}<br>
+    {% if primaryAddress.addressLine2 %}{{ primaryAddress.addressLine2 }}<br>{% endif %}
+    {{ primaryAddress.townCity }}<br>
+    {{ primaryAddress.postcode }}
+  {% endset %}
+{% endif %}
+
+
+{% if currentCase.hasSecondaryLpa == "Yes" and currentCase.secondaryLpa %}
+  
+  {% set secondaryAddress = currentCase.secondaryLpa | getLpaAddress %}
+  {% set secondaryLpaAddressHtml = "-" %}
+  {% if secondaryAddress %}
+    {% set secondaryLpaAddressHtml %}
+      {{ secondaryAddress.addressLine1 }}<br>
+      {% if secondaryAddress.addressLine2 %}{{ secondaryAddress.addressLine2 }}<br>{% endif %}
+      {{ secondaryAddress.townCity }}<br>
+      {{ secondaryAddress.postcode }}
+    {% endset %}
+  {% endif %}
+
+{% endif %}
+
+
+
+{# ========================================================= #}
+{# 3. MAIN PAGE LAYOUT                                       #}
+{# ========================================================= #}
+
+{% if currentCase.linkedCaseReference %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            This application is connected to a
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+              {{ currentCase.linkedCaseType }} application
+            </a>.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      {{ currentCase.reference | default('Case Not Found') }}
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Publish Application"
+      }) }}
+      </div>
+
+  </div>
+</div>
+
+{% include "/components/side-nav/side-nav.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Applicant type</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.applicantType | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicantType %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% if currentCase.applicantType == "Organisation" %}
+
+         <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Applicant organisations</dt>
+            <dd class="govuk-summary-list__value">{{ applicantOrganisationsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicantOrgs and currentCase.applicantOrgs.length > 0 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% endif %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Applicant contacts</dt>
+            <dd class="govuk-summary-list__value">{{ applicantContactsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicantContacts and currentCase.applicantContacts.length > 0 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Has agent</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.hasAgent | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.hasAgent %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          {% if currentCase.hasAgent == 'Yes' %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Agent organisation name</dt>
+            <dd class="govuk-summary-list__value">{{ currentCase.agentOrgName | default('-') }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.agentOrgName %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Agent address</dt>
+            <dd class="govuk-summary-list__value">{{ agentAddressHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.agentAddress and currentCase.agentAddress.line1 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Agent contacts</dt>
+            <dd class="govuk-summary-list__value">{{ agentContactsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.agentContacts and currentCase.agentContacts.length > 0 %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+          {% endif %}
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Local planning authority (LPA) contact</dt>
+            <dd class="govuk-summary-list__value">{{ lpaContactsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.lpa or currentCase.lpaContact %}Change{% else %}Add{% endif %}</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">LPA address</dt>
+            <dd class="govuk-summary-list__value">{{ lpaAddressHtml | safe }}</dd>
+          </div>
+
+          {% if currentCase.hasSecondaryLpa === 'Yes' %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Secondary LPA contact</dt>
+            <dd class="govuk-summary-list__value">{{ secondaryLpaContactsHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Secondary LPA address</dt>
+            <dd class="govuk-summary-list__value">{{ secondaryLpaAddressHtml | safe }}</dd>
+          </div>
+          {% endif %}
+
+          {# show contact count using js #}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Additional contacts</dt>
+            <dd class="govuk-summary-list__value">2 Contacts</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+        </dl>
+
+  </div>
+</div>
+
+{% endblock %}
