@@ -1,0 +1,217 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {{ currentCase.reference | default('Case Not Found') }} - Manage representations
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to representations tab",
+    href: "/current-service/back-office/tab-view/06-representations"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl">{{ currentCase.reference | default('Case Not Found') }}</span>
+            Manage representations
+        </h1>
+    </div>
+</div>
+
+<form id="search-filter-form" method="GET">
+    <input type="hidden" name="itemsPerPage" value="25">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="filter-container govuk-!-padding-4 govuk-!-margin-bottom-4">
+                <div class="govuk-form-group">
+                    <div class="filter-box">
+                        <div class="govuk-form-group">
+                            <fieldset class="govuk-fieldset">
+                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                    Filter
+                                </legend>
+                                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters" name="filters"
+                                            type="checkbox" value="accepted">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters">
+                                            Accepted (1)
+                                        </label>
+                                    </div>
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters-2" name="filters"
+                                            type="checkbox" value="awaiting-review">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters-2">
+                                            Awaiting review (0)
+                                        </label>
+                                    </div>
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters-3" name="filters"
+                                            type="checkbox" value="rejected">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters-3">
+                                            Rejected (2)
+                                        </label>
+                                    </div>
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters-4" name="filters"
+                                            type="checkbox" value="withdrawn">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters-4">
+                                            Withdrawn (1)
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </div>
+                <a href="" class="govuk-button" id="toggleButton" data-module="govuk-button">
+                    Apply filters
+                </a>
+            </div>
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+            <h3 class="govuk-heading-m">Add a representation</h3>
+            <p class="govuk-body">
+                <a href="/current-service/back-office/representations/start?caseRef={{ currentCase.reference }}" class="govuk-link govuk-link--no-visited-state">Add a representation</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row row-inline">
+        <div class="govuk-grid-column-full">
+            <div class="govuk-form-group">
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--l" id="search-label" for="search-input">
+                        Search representations
+                    </label>
+                </h1>
+                <div id="search-hint" class="govuk-hint">
+                    Search by reference, keywords or by name of person or organisation who made the submission.
+                </div>
+                <div class="row-inline">
+                    <input class="govuk-input govuk-input--width-50" id="search-input" value="" name="searchCriteria"
+                        type="text">
+                    <a href="" type="submit" class="govuk-button govuk-button" data-module="govuk-button"
+                        id="search-button">
+                        Search
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<div id="pagination" class="govuk-body">
+    <p class="govuk-body govuk-clearfix">
+        <span class="govuk-body">Showing <strong>x</strong> to<strong> x</strong> of<strong> x</strong> representations, newest first.
+        </span>
+        <span class="pins-pagination-options">
+
+        </span>
+    </p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header" aria-sort="descending">
+                    <button type="button" data-index="0">Reference
+                        <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </th>
+                <th scope="col" class="govuk-table__header" aria-sort="none">
+                    <button type="button" data-index="1">From
+                        <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </th>
+                <th scope="col" class="govuk-table__header" aria-sort="ascending">
+                    <button type="button" data-index="2">Submission date
+                        <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.5625 15.5L11 6.63125L15.4375 15.5H6.5625Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </th>
+                <th scope="col" class="govuk-table__header" aria-sort="none">
+                    <button type="button" data-index="3">Status
+                        <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+                            <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </th>
+                <th scope="col" class="govuk-table__header">Action</th>
+            </tr>
+        </thead>
+
+            <tbody class="govuk-table__body">
+                    
+            {# 1. Grab the representations array FROM THE SPECIFIC CASE #}
+            {% set representations = currentCase.representations | default([]) %}
+
+            {% if representations.length > 0 %}
+                {# We use '| reverse' so the newest created representations appears at the top #}
+                {% for rep in representations | reverse %}
+                <tr class="govuk-table__row">
+                    
+                    {# REFERENCE #}
+                    <td class="govuk-table__cell">
+                    <p class="govuk-body">{{ rep.reference }}</p>
+                    </td>
+                    
+                    {# FROM (Using submitterName from your Front Office route) #}
+                    <td class="govuk-table__cell pins-white-space-pre-wrap">
+                        <p class="govuk-body">{{ rep.submitterName }}</p>
+                    </td>
+                    
+                    {# SUBMISSION DATE #}
+                    <td class="govuk-table__cell">
+                    {% if rep.submissionDate %}
+                        {{ rep.submissionDate | toGovukDate }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                    </td>
+                    
+                    {# STATUS #}
+                    <td class="govuk-table__cell">{{ rep.status }}
+                    </td>
+
+                    {# ACTION #}
+                    <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="#">{% if rep.status == "Awaiting review" %}Review{% else %}View{% endif %}</a>
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            
+            {% else %}
+                {# EMPTY STATE #}
+                <tr class="govuk-table__row">
+                {# Adjusted colspan to 4 since you only have 4 columns #}
+                <td class="govuk-table__cell" colspan="4">No representations have been added yet.</td>
+                </tr>
+            {% endif %}
+
+            </tbody>
+
+    </table>
+
+    <div aria-atomic="true" aria-live="polite" class="govuk-visually-hidden" role="status"></div>
+
+</div>
+{% endblock %}

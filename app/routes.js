@@ -36,6 +36,10 @@ import vehicleParkingTabRouter from './bo-routes/tab-view/15-vehicle-parking.js'
 import wasteTabRouter from './bo-routes/tab-view/16-waste.js';
 import preApplicationTabRouter from './bo-routes/tab-view/17-pre-application.js';
 
+// import manage representations bo-routers
+import manageRepresentationsRouter from './bo-routes/manage-representations/manage-representations.js';
+import addARepresentationRouter from './bo-routes/manage-representations/add-a-representation.js';
+
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
 import allApplicationsRouter from './fo-routes/all-applications.js';
@@ -100,6 +104,10 @@ router.use('/', nonResidentialTabRouter);
 router.use('/', vehicleParkingTabRouter);
 router.use('/', wasteTabRouter);
 router.use('/', preApplicationTabRouter);
+
+// mount manage representations bo-routers
+router.use('/', manageRepresentationsRouter);
+router.use('/', addARepresentationRouter);
 
 
 // mount fo-routers

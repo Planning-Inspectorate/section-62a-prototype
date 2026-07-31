@@ -1,0 +1,68 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Date when the representation was received
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/manage-representations" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/date-the-representation-was-received-answer" method="post" novalidate>
+
+      {{ govukDateInput({
+        id: "date-the-representation-was-received",
+        namePrefix: "date-the-representation-was-received",
+        fieldset: {
+          legend: {
+            text: "Date the representation was received",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "For example, 27 3 2007"
+        },
+        errorMessage: { text: errors.dateTheRepresentationWasReceived.text } if errors.dateTheRepresentationWasReceived else null,
+        
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
+            value: data['date-the-representation-was-received-day']
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
+            value: data['date-the-representation-was-received-month']
+          },
+          {
+            name: "year",
+            classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
+            value: data['date-the-representation-was-received-year']
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -6,11 +6,38 @@ const router = Router();
 // --- ROUTES ---
 
 router.get('/have-your-say-start-ur', function (req, res) {
-  const savedRepresentations = req.session.data.representations || [];
-  req.session.data = {};
-  req.session.data.representations = savedRepresentations;
+  const data = req.session.data;
+  
+  const targetCaseReference = 'S62A/2026/0048'; 
+  data['currentFrontOfficeCase'] = targetCaseReference;
+
+  if (data.cases) {
+    const targetCase = data.cases.find(c => c.reference === targetCaseReference);
+    if (targetCase && !targetCase.representations) {
+      targetCase.representations = [];
+    }
+  }
+
+  // 3. Wipe any leftover variables from a previous front-office attempt
+  const fieldsToClear = [
+      'who-submit-rep', 'who-are-you-representing', 'is-agent',
+      'agent-organisation-name', 'your-first-name', 'your-last-name',
+      'your-email-address', 'person-you-are-representing-first-name',
+      'person-you-are-representing-last-name', 'your-org-or-charity-name',
+      'your-job-title-or-volunteer-role', 'org-or-charity-you-are-representing',
+      'does-the-group-have-a-name', 'name-of-the-group', 'group-name-list',
+      'add-your-comments', 'include-attachments', 'uploadedFiles',
+      'did-you-use-ai', 'how-did-you-use-ai', 'declaration'
+  ];
+
+  fieldsToClear.forEach(field => {
+      delete data[field];
+  });
+
+  // 4. Send them to the first page of the form
   res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/01-who-are-you-submitting-a-representation-for');
 });
+
 
 // 01 - who are you submitting a representation for?
 router.post('/who-submit-rep-answer', function (req, res) {
@@ -464,6 +491,9 @@ router.post('/how-did-you-use-ai-answer', function (req, res) {
 router.post('/written-rep-submitted', function(req, res) {
     const data = req.session.data;
 
+  // capture date + time rep submitted
+    const todayISO = new Date().toISOString();
+
     if (!data['who-submit-rep']) {
             return res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/23-success');
         }
@@ -524,8 +554,8 @@ router.post('/written-rep-submitted', function(req, res) {
 
     const newRep = {
         reference: repReference,
-        status: "Received",
-        submissionDate: new Date().toISOString(),
+        status: "Awaiting review",
+        submissionDate: todayISO,
         
         // Submitter Details
         submitterType: data['who-submit-rep'],
@@ -576,9 +606,15 @@ router.post('/written-rep-submitted', function(req, res) {
         declarationsAgreed: data['declaration']
     };
 
-    // save to array
-    if (!data.representations) { data.representations = []; }
-    data.representations.push(newRep);
+    // save directly into the specific case object
+    if (data.cases) {
+      const targetCase = data.cases.find(c => c.reference === data['currentFrontOfficeCase']);
+      
+      if (targetCase) {
+        if (!targetCase.representations) { targetCase.representations = []; }
+        targetCase.representations.push(newRep);
+      }
+    }
 
     // wipe fields for fresh form
     const fieldsToClear = [

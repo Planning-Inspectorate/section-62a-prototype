@@ -72,3 +72,19 @@ addFilter('getLpaAddress', function(lpaName) {
   }
   return lpaAddressLookup[lpaName];
 });
+
+
+// convert ISO date to GDS format
+addFilter('toGovukDate', function(dateString) {
+  if (!dateString) return null;
+  
+  // Convert the ISO string back into a real JavaScript Date object
+  const date = new Date(dateString);
+  
+  // Use the built-in Internationalization API to format it perfectly for the UK
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+});

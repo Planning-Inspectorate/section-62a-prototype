@@ -1030,7 +1030,8 @@ router.post('/case-created-confirmation', function (req, res) {
       day: data['expected-submission-date-day'],
       month: data['expected-submission-date-month'],
       year: data['expected-submission-date-year']
-    }
+    },
+    representations: []
   };
 
 // check for LBC linked case condition
