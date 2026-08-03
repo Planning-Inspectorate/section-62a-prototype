@@ -34,7 +34,7 @@ router.get('/add-a-representation-start', function (req, res) {
   });
 
   // 3. Redirect to the first page of your manual representations journey
-  res.redirect('/current-service/back-office/manage-representations/add-a-represenation/01-date-the-representation-was-received');
+  res.redirect('/current-service/back-office/manage-representations/add-a-representation/01-date-the-representation-was-received');
 });
 
 
