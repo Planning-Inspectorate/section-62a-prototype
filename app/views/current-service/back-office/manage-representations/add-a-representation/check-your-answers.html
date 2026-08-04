@@ -1,0 +1,278 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Check your Answers
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">Check your answers</h1>
+
+    <br>
+
+    {# ========================================================= #}
+    {# set variables outside list                                #}
+    {# ========================================================= #}
+
+    {# --- Groups of People HTML (Conditionally Bulleted) --- #}
+    {% set groupOfPeopleHtml %}
+      {% set groupOfPeopleList = data['group-name-list'] or [] %}
+      {% if groupOfPeopleList.length > 0 %}
+        <ul class="govuk-list {% if groupOfPeopleList.length > 1 %}govuk-list--bullet{% endif %}">
+          {% for person in groupOfPeopleList %}
+            <li>
+              {{ person.firstName }} {{ person.lastName }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endset %}
+
+    {# ========================================================= #}
+    {# summary list with conditional rows                        #}
+    {# ========================================================= #}
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+    {# --- 01: Who you are submitting for --- #}
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Who you are submitting for</dt>
+    <dd class="govuk-summary-list__value">{{ data['who-submit-rep'] }}</dd>
+    <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/01-who-are-you-submitting-a-representation-for">Change<span class="govuk-visually-hidden"> who are you submitting a representation for?</span></a>
+    </dd>
+    </div>
+
+    {# --- 02: Who are you representing (Outer conditional) --- #}
+    {% if data['who-submit-rep'] == 'On behalf of another person, an organisation or group of people' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Who are you representing?</dt>
+        <dd class="govuk-summary-list__value">{{ data['who-are-you-representing'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/02-who-are-you-representing">Change<span class="govuk-visually-hidden"> who are you representing?</span></a>
+        </dd>
+    </div>
+
+    {# --- 03: Are you acting as an agent (Nested conditional) --- #}
+    {% if data['who-are-you-representing'] in [
+    'A person', 
+    'An organisation or charity that I do not work or volunteer for', 
+    'A group of people'
+    ] %}
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Are you an agent?</dt>
+        <dd class="govuk-summary-list__value">{{ data['is-agent'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/03-are-you-acting-as-an-agent-on-behalf-of-a-client">Change<span class="govuk-visually-hidden"> are you acting as an agent on behalf of a client?</span></a>
+    </dd>
+    </div>
+
+    {# --- 04: Agent organisation name (Nested conditional) --- #}
+    {% if data['is-agent'] == 'Yes' %}
+        <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent organisation name</dt>
+        <dd class="govuk-summary-list__value">{{ data['agent-organisation-name'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/04-what-is-the-name-of-the-organisation-you-work-for">Change<span class="govuk-visually-hidden"> what is the name of the organisation you work for?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+
+    {# --- 05: Your full name --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your full name</dt>
+        <dd class="govuk-summary-list__value">{{ data['your-first-name'] }} {{ data['your-last-name'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/05-what-is-your-name">Change<span class="govuk-visually-hidden"> what is your name?</span></a>
+        </dd>
+    </div>
+
+    {# --- 06: Email address --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Email address</dt>
+        <dd class="govuk-summary-list__value">{{ data['your-email-address'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address">Change<span class="govuk-visually-hidden"> what is your email address?</span></a>
+        </dd>
+    </div>
+
+    {# --- 07: Represented person name (Conditional) --- #}
+    {% if data['who-are-you-representing'] == 'A person' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Represented person name</dt>
+        <dd class="govuk-summary-list__value">{{ data['person-you-are-representing-first-name'] }} {{ data['person-you-are-representing-last-name'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/07-what-is-the-name-of-the-person-you-are-representing">Change<span class="govuk-visually-hidden"> what is the name of the person you are representing?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 08: Organisation or charity name (Conditional) --- #}
+    {% if data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Organisation or charity name</dt>
+        <dd class="govuk-summary-list__value">{{ data['your-org-or-charity-name'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/08-what-is-the-name-of-your-organisation-or-charity">Change<span class="govuk-visually-hidden"> what is the name of your organisation or charity?</span></a>
+        </dd>
+    </div>
+
+    {# --- 09: Job title or volunteer role (Conditional) --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Job title or volunteer role</dt>
+        <dd class="govuk-summary-list__value">{{ data['your-job-title-or-volunteer-role'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/09-what-is-your-job-title-or-volunteer-role">Change<span class="govuk-visually-hidden"> what is your job title or volunteer role?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 10: Name of the organisation or charity representing (Conditional) --- #}
+    {% if data['who-are-you-representing'] == 'An organisation or charity that I do not work or volunteer for' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Name of the organisation or charity representing</dt>
+        <dd class="govuk-summary-list__value">{{ data['org-or-charity-you-are-representing'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing">Change<span class="govuk-visually-hidden"> what is the name of the organisation or charity that you are representing?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 11: Group name? (Conditional) --- #}
+    {% if data['who-are-you-representing'] == 'A group of people' and data['who-submit-rep'] == 'On behalf of another person, an organisation or group of people' %}
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Group name?</dt>
+        <dd class="govuk-summary-list__value">{{ data['does-the-group-have-a-name'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/11-does-the-group-have-a-name">Change<span class="govuk-visually-hidden"> does the group have a name?</span></a>
+        </dd>
+    </div>
+
+    {# --- 12: Group name (Conditional) --- #}
+    {% if data['does-the-group-have-a-name'] == 'Yes' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Group name</dt>
+        <dd class="govuk-summary-list__value">{{ data['name-of-the-group'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/12-what-is-the-name-of-the-group">Change<span class="govuk-visually-hidden"> what is the name of the group?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 14: Check group name details (Conditional) --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Names in the group</dt>
+        <dd class="govuk-summary-list__value">{{ groupOfPeopleHtml | safe }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/14-check-group-name-details">Change<span class="govuk-visually-hidden"> group name details</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 16: Add your comments --- #}
+    {% set comment = data['add-your-comments'] | default('') %}
+    
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Tell us about application</dt>
+        <dd class="govuk-summary-list__value">
+        
+        {% if comment.length > 100 %}
+            <p class="govuk-body">{{ comment | truncate(100, true, "...") }}</p>
+            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">Read full comment</span>
+            </summary>
+            <div class="govuk-details__text">
+                {{ comment | nl2br | safe }}
+            </div>
+            </details>
+            
+        {% else %}
+            {# show normally if less than specified characters #}
+            {{ comment | nl2br | safe }}
+        {% endif %}
+        
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments">Change<span class="govuk-visually-hidden"> add your comments</span></a>
+        </dd>
+    </div>
+
+    {# --- 17: Attachments uploaded? --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Attachments uploaded?</dt>
+        <dd class="govuk-summary-list__value">{{ data['are-there-any-attachments'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-do-you-want-to-include-any-supporting-attachments-with-your-comment">Change<span class="govuk-visually-hidden"> do you want to include any supporting attachments with your comment?</span></a>
+        </dd>
+    </div>
+
+    {# --- 18: Attachments --- #}
+    {% if data['are-there-any-attachments'] == 'Yes' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Attachments</dt>
+        <dd class="govuk-summary-list__value">
+          
+          {% if data['uploadedFiles'] %}
+            {# Split the single string back into a list of individual files #}
+            {% set filesArray = data['uploadedFiles'].split('||') %}
+            
+            <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+              {% for file in filesArray %}
+                {# Ensure we don't print empty rows #}
+                {% if file %}
+                  <li>
+                    <a class="govuk-link" href="#">{{ file }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          {% else %}
+            None provided
+          {% endif %}
+
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments">
+            Change<span class="govuk-visually-hidden"> upload supporting attachments</span>
+          </a>
+        </dd>
+    </div>
+    {% endif %}
+
+    {# --- 19: Used artificial intelligence (AI)? --- #}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Used artificial intelligence (AI)?</dt>
+        <dd class="govuk-summary-list__value">{{ data['did-you-use-ai'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-did-you-use-artificial-intelligence-for-this-written-representation">Change<span class="govuk-visually-hidden"> did you use artificial intelligence for this written representation?</span></a>
+        </dd>
+    </div>
+
+    {# --- 20: How you used AI (Conditional) --- #}
+    {% if data['did-you-use-ai'] == 'Yes' %}
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">How you used AI</dt>
+        <dd class="govuk-summary-list__value">{{ data['how-did-you-use-ai'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/20-how-did-you-use-artificial-intelligence">Change<span class="govuk-visually-hidden"> how did you use artificial intelligence?</span></a>
+        </dd>
+    </div>
+    {% endif %}
+
+    </dl>
+
+    {{ govukButton({
+      text: "Continue",
+      href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/22-declaration"
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

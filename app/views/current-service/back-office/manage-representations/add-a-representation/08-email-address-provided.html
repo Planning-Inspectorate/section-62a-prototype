@@ -1,0 +1,50 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorYourEmailAddress %}Error: {% endif %}Email address provided
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/add-a-representation/07-preferred-contact-method"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorYourEmailAddress %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorYourEmailAddress, href: "#your-email-address" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/your-email-address-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "your-email-address",
+          name: "your-email-address",
+          spellcheck: false,
+          value: data['your-email-address'],
+          label: {
+            text: "Email address provided",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: { text: "We'll use this email address to send you information about the application. We will not publish your email address." 
+        },
+          errorMessage: { text: errorYourEmailAddress } if errorYourEmailAddress else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

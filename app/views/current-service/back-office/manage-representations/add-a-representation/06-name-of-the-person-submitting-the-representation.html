@@ -6,17 +6,17 @@
 
 {% block beforeContent %}
 
-{% if data['who-submit-rep'] == 'Myself' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/01-who-are-you-submitting-a-representation-for" %}
+{% if data['source-of-representation'] == 'Myself' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/05-source-of-the-representation" %}
 
-{% elif data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/02-who-are-you-representing" %}
+{% elif data['representation-made-on-behalf-of'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of" %}
 
 {% elif data['is-agent'] == 'Yes' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/04-what-is-the-name-of-the-organisation-you-work-for" %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation" %}
 
 {% elif data['is-agent'] == 'No' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/03-are-you-acting-as-an-agent-on-behalf-of-a-client" %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent" %}
 
 {% endif %}
 
@@ -37,10 +37,10 @@
       }) }}
     {% endif %}
 
-    <form method="post" action="/their-name-answer" novalidate>
+    <form method="post" action="/your-name-answer" novalidate>
     
       {% call govukFieldset({
-          describedBy: "their-name-hint",
+          describedBy: "your-name-hint",
           legend: {
               text: "Name of the person submitting the representation",
               classes: "govuk-fieldset__legend--l",
@@ -49,15 +49,15 @@
       }) %}
 
       {{ govukHint({
-          id: "their-name-hint",
-          text: "We'll publish their name on the website along with their written representation."
+          id: "your-name-hint",
+          text: "We'll publish your name on the website along with your written representation."
       }) }}
 
         {{ govukInput({ 
           label: { text: "First name" }, 
-          id: "their-first-name", 
-          name: "their-first-name", 
-          value: data['their-first-name'],
+          id: "your-first-name", 
+          name: "your-first-name", 
+          value: data['your-first-name'],
           autocomplete: "given-name",
           spellcheck: false,
           errorMessage: errors.firstName if errors.firstName else null
@@ -65,9 +65,9 @@
         
         {{ govukInput({ 
           label: { text: "Last name" }, 
-          id: "their-last-name", 
-          name: "their-last-name", 
-          value: data['their-last-name'],
+          id: "your-last-name", 
+          name: "your-last-name", 
+          value: data['your-last-name'],
           autocomplete: "family-name",
           spellcheck: false,
           errorMessage: errors.lastName if errors.lastName else null

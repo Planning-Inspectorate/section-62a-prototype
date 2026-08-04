@@ -1,0 +1,69 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ {% if errorWrittenRepresentationSubmitted %}Error: {% endif %}Written representation submitted
+{% endblock %}
+
+{% if data['preferred-contact-method'] == 'Email' and data['source-of-representation'] == 'Myself' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided" %}
+
+{% elif data['preferred-contact-method'] == 'Post' and data['source-of-representation'] == 'Myself' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided" %}
+
+{% elif data['representation-made-on-behalf-of'] == 'A person' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/17-name-of-the-individual-being-represented" %}
+
+{% elif data['representation-made-on-behalf-of'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/19-senders-job-title-or-role" %}
+
+{% elif data['representation-made-on-behalf-of'] == 'An organisation or charity that I do not work or volunteer for' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented" %}
+
+{% elif data['representation-made-on-behalf-of'] == 'A group of people' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/21-check-group-name-details" %}
+
+{% endif %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorWrittenRepresentationSubmitted %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorWrittenRepresentationSubmitted, href: "#written-representation-submitted" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/written-representation-submitted-answer" method="post" novalidate>
+      
+
+    <h1 class="govuk-heading-l">Written representation submitted</h1>
+
+      {{ govukTextarea({
+        name: "written-representation-submitted",
+        id: "written-representation-submitted",
+        value: data['written-representation-submitted'],
+        label: {
+            text: "Enter their comment",
+            classes: "govuk-label govuk-!-font-weight-bold"
+        },
+        hint: {
+            text: "You must tell us in your comment if you'd like to attend a hearing in the event that one is scheduled."
+        },
+        errorMessage: { text: errorWrittenRepresentationSubmitted } if errorWrittenRepresentationSubmitted else null
+     }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

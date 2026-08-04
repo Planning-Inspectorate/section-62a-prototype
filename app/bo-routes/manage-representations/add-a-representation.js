@@ -121,15 +121,15 @@ router.post('/source-of-representation-answer', function (req, res) {
       res.redirect('/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation');
     }
     else if (sourceOfRepresentation === "On behalf of another person, an organisation or group of people") {
-      res.redirect('/current-service/back-office/manage-representations/add-a-representation/x-');
+      res.redirect('/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of');
     }
 });
 
 
 // 06 - name of the person submitting the representation
-router.post('/their-name-answer', function (req, res) {
-    const firstName = req.session.data['their-first-name'];
-    const lastName = req.session.data['their-last-name'];
+router.post('/your-name-answer', function (req, res) {
+    const firstName = req.session.data['your-first-name'];
+    const lastName = req.session.data['your-last-name'];
 
     // error containers
     const errors = {};
@@ -137,12 +137,12 @@ router.post('/their-name-answer', function (req, res) {
 
     // validate name fields
     if (!firstName) {
-        errors.firstName = {text: "Enter their first name"};
-        errorList.push({ text: "Enter their first name", href: "#their-first-name" });
+        errors.firstName = {text: "Enter your first name"};
+        errorList.push({ text: "Enter your first name", href: "#your-first-name" });
     }
     if (!lastName) {
-        errors.lastName = {text: "Enter their last name"};
-        errorList.push({ text: "Enter their last name", href: "#their-last-name" });
+        errors.lastName = {text: "Enter your last name"};
+        errorList.push({ text: "Enter your last name", href: "#your-last-name" });
     }
 
     // render errors if any
@@ -170,11 +170,284 @@ router.post('/preferred-contact-method-answer', function (req, res) {
     if (preferredContactMethod === "Email") {
         res.redirect('/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided');
     }
-    else if (preferredContactMethod === "Phone") {
+    else if (preferredContactMethod === "Post") {
         res.redirect('/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided');
     }
 });
 
 
+// 08 - email address provided 
+router.post('/your-email-address-answer', function (req, res) {
+    const yourEmailAddress = req.session.data['your-email-address'];
+    const sourceOfRepresentation = req.session.data['source-of-representation'];
+    const representationMadeOnBehalfOf = req.session.data['representation-made-on-behalf-of'];
 
+    // validation
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
+
+    if (!yourEmailAddress) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/08-email-address-provided', { 
+            errorYourEmailAddress: "Enter your email address" 
+        });
+    }
+    if (!emailRegex.test(yourEmailAddress)) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/08-email-address-provided', { 
+            errorYourEmailAddress: "Enter your email address in the correct format, like name@example.com" 
+        });
+    }
+    if ( sourceOfRepresentation === "Myself" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+    }
+    else if ( representationMadeOnBehalfOf === "A person" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/17-name-of-the-individual-being-represented');
+    }
+    else if ( representationMadeOnBehalfOf === "An organisation or charity that I work or volunteer for" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/18-name-of-senders-organisation-or-charity');
+    }
+    else if ( representationMadeOnBehalfOf === "An organisation or charity that I do not work or volunteer for" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented');
+    }
+    else if ( representationMadeOnBehalfOf === "A group of people" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-check-group-name-detail');
+    }
+});
+
+
+
+// 09 - postal address provided
+router.post('/postal-address-answer', function (req, res) {
+    const postalAddressLine1 = req.session.data['postal-address-line-1'];
+    const postalAddressTown = req.session.data['postal-address-town'];
+    const postalAddressPostcode = req.session.data['postal-address-postcode'];
+    const postcodeError = validatePostcode(postalAddressPostcode);
+    const sourceOfRepresentation = req.session.data['source-of-representation'];
+    const representationMadeOnBehalfOf = req.session.data['representation-made-on-behalf-of'];
+    
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    // validation
+    if (!postalAddressLine1) {
+        errors.postalAddressLine1 = {text: "Enter your address line 1"};
+        errorList.push({ text: "Enter your address line 1", href: "#postal-address-line-1" });
+    }
+    if (!postalAddressTown) {
+        errors.postalAddressTown = {text: "Enter your town or city"};
+        errorList.push({ text: "Enter your town or city", href: "#postal-address-town" });
+    }
+    if (!postalAddressPostcode) {
+        errors.postalAddressPostcode = {text: "Enter your postcode"};
+        errorList.push({ text: "Enter your postcode", href: "#postal-address-postcode" });
+    }
+    if (postcodeError) {
+        errors.postalAddressPostcode = { text: postcodeError };
+        errorList.push({ text: postcodeError, href: "#postal-address-postcode" });
+    }
+    // render errors if any
+    if (errorList.length > 0) {
+      return res.render('current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided', { 
+        errors: errors,
+        errorList: errorList
+      });
+    }
+    if ( sourceOfRepresentation === "Myself" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+    }
+    else if ( representationMadeOnBehalfOf === "A person" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/17-name-of-the-individual-being-represented');
+    }
+    else if ( representationMadeOnBehalfOf === "An organisation or charity that I work or volunteer for" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/18-name-of-senders-organisation-or-charity');
+    }
+    else if ( representationMadeOnBehalfOf === "An organisation or charity that I do not work or volunteer for" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented');
+    }
+    else if ( representationMadeOnBehalfOf === "A group of people" ) {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-check-group-name-detail');
+    }
+});
+
+
+// 10 - written representation submitted
+router.post('/written-representation-submitted-answer', function (req, res) {
+    const writtenRepresentationSubmitted = req.session.data['written-representation-submitted'];
+    
+    // validation
+    if (!writtenRepresentationSubmitted) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted', {
+            errorWrittenRepresentationSubmitted: "Enter what you want to tell us about this proposed application"
+        });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/11-would-you-like-to-be-heard-at-a-hearing');
+});
+
+
+// 11 - would you like to be heard at a hearing
+router.post('/would-you-like-to-be-heard-at-a-hearing-answer', function (req, res) {
+    const wouldYouLikeToBeHeardAtAHearing = req.session.data['would-you-like-to-be-heard-at-a-hearing'];
+    
+    // validation
+    if (!wouldYouLikeToBeHeardAtAHearing) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/11-would-you-like-to-be-heard-at-a-hearing', {
+            errorWouldYouLikeToBeHeardAtAHearing: "Select yes if you would like to be heard at a hearing"
+        });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/12-are-there-any-attachments');
+});
+
+
+
+// 12 - are there any attachments
+router.post('/are-there-any-attachments-answer', function (req, res) {
+    const areThereAnyAttachments = req.session.data['are-there-any-attachments'];
+    
+    // validation
+    if (!areThereAnyAttachments) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/12-are-there-any-attachments', {
+            errorAreThereAnyAttachments: "Select yes if there are any attachments"
+        });
+    }
+    if (areThereAnyAttachments === "Yes") {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/13-upload-attachments');
+    }
+     if (areThereAnyAttachments === "No") {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/check-your-answers');
+    }
+});
+
+
+// 13 - upload attachments
+router.post('/upload-supporting-attachments-answer', function(req, res) {
+    const uploadedFiles = req.session.data['uploadedFiles'];
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    if (!uploadedFiles || uploadedFiles.length === 0) {
+        errors.uploadedFiles = { text: "Upload an attachment" };
+    
+        errorList.push({ text: "Upload an attachment", href: "#documents" });
+    }
+
+    // If there is an error, re-render the page
+    if (errorList.length > 0) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/13-upload-attachments', {
+            errors: errors,
+            errorList: errorList
+        });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/check-your-answers');
+});
+
+
+// 14 - representation made on behalf of
+router.post('/representation-made-on-behalf-of-answer', function (req, res) {
+    const representationMadeOnBehalfOf = req.session.data['representation-made-on-behalf-of'];
+
+    // validation
+    if (!representationMadeOnBehalfOf) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of', {
+            errorRepresentationMadeOnBehalfOf: "Select who the representation was made on behalf of"
+        });
+    }
+    if (representationMadeOnBehalfOf === "A person") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent');
+    }
+    else if (representationMadeOnBehalfOf === "An organisation or charity that I work or volunteer for") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation');
+    }
+    else if (representationMadeOnBehalfOf === "An organisation or charity that I do not work or volunteer for") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent');
+    }
+    else if (representationMadeOnBehalfOf === "A group of people") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent');
+    }
+});
+
+
+// 15 - was the representation submitted by an agent?
+router.post('/is-agent-answer', function (req, res) {
+    const isAgent = req.session.data['is-agent'];
+    if (!isAgent) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent', { errorIsAgent: "Select yes if the representation was submitted by an agent" });
+    }
+    if (isAgent === "Yes") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation');
+    }
+    else if (isAgent === "No") {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation');
+    }
+});
+
+
+// 16 - name of the agent's organisation
+router.post('/agent-organisation-name-answer', function (req, res) {
+    const agentOrganisationName = req.session.data['agent-organisation-name'];
+    if (!agentOrganisationName) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation', { errorAgentOrganisationName: "Enter the name of the agent's organisation" });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation');
+});
+
+
+// 17 - name of the individual being represented
+router.post('/name-of-individual-being-represented-answer', function (req, res) {
+    const firstName = req.session.data['name-of-individual-first-name'];
+    const lastName = req.session.data['name-of-individual-last-name'];
+
+    // error containers
+    const errors = {};
+    const errorList = [];
+
+    // validate name fields
+    if (!firstName) {
+        errors.firstName = {text: "Enter the first name"};
+        errorList.push({ text: "Enter the first name", href: "#name-of-individual-first-name" });
+    }
+    if (!lastName) {
+        errors.lastName = {text: "Enter the last name"};
+        errorList.push({ text: "Enter the last name", href: "#name-of-individual-last-name" });
+    }
+
+    // render errors if any
+    if (errorList.length > 0) {
+      return res.render('current-service/back-office/manage-representations/add-a-representation/17-name-of-the-individual-being-represented', { 
+        errors: errors,
+        errorList: errorList
+      });
+    }
+
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+});
+
+
+// 18 - name of senders organisation
+router.post('/name-of-senders-org-or-charity-answer', function (req, res) {
+    const nameOfSendersOrgOrCharity = req.session.data['name-of-senders-org-or-charity'];
+    if (!nameOfSendersOrgOrCharity) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/18-name-of-senders-organisation-or-charity', { errorNameOfSendersOrgOrCharity: "Enter the name of the sender's organisation or charity" });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/19-senders-job-title-or-role');
+});
+
+
+// 19 - senders job title or role
+router.post('/senders-job-title-or-role-answer', function (req, res) {
+    const sendersJobTitleOrRole = req.session.data['senders-job-title-or-role'];
+    if (!sendersJobTitleOrRole) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/19-senders-job-title-or-role', { errorSendersJobTitleOrRole: "Enter the name of the sender's organisation or charity" });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+});
+
+
+// 20 - name of org or charity being represented
+router.post('/org-or-charity-being-represented-answer', function (req, res) {
+    const orgOrCharityBeingRepresented = req.session.data['org-or-charity-being-represented'];
+    if (!orgOrCharityBeingRepresented) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented', { errorOrgOrCharityBeingRepresented: "Enter the name of the organisation or charity being represented" });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+});
 export default router;
