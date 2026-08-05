@@ -1,0 +1,56 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorOrgOrCharityBeingRepresented %}Error: {% endif %}Name of organisation or charity being represented
+{% endblock %}
+
+{% block beforeContent %}
+{% if data['preferred-contact-method'] == 'Email' %}
+    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided" %}
+
+{% elif data['preferred-contact-method'] == 'Post' %}
+    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided" %}
+
+{% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorOrgOrCharityBeingRepresented %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorOrgOrCharityBeingRepresented, href: "#org-or-charity-being-represented" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/bo-org-or-charity-being-represented-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "org-or-charity-being-represented",
+          name: "org-or-charity-being-represented",
+          spellcheck: false,
+          value: data['org-or-charity-being-represented'],
+          label: {
+            text: "Name of organisation or charity being represented",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorOrgOrCharityBeingRepresented } if errorOrgOrCharityBeingRepresented else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

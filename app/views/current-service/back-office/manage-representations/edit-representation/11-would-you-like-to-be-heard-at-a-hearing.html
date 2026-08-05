@@ -1,0 +1,54 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorWouldYouLikeToBeHeardAtAHearing %}Error: {% endif %}Would you like to be heard at a hearing?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorWouldYouLikeToBeHeardAtAHearing %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorWouldYouLikeToBeHeardAtAHearing, href: "#would-you-like-to-be-heard-at-a-hearing" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/would-you-like-to-be-heard-at-a-hearing-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "would-you-like-to-be-heard-at-a-hearing",
+        name: "would-you-like-to-be-heard-at-a-hearing",
+        fieldset: {
+          legend: { 
+            text: "Would you like to be heard at a hearing?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorWouldYouLikeToBeHeardAtAHearing } if errorWouldYouLikeToBeHeardAtAHearing else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['would-you-like-to-be-heard-at-a-hearing'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['would-you-like-to-be-heard-at-a-hearing'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

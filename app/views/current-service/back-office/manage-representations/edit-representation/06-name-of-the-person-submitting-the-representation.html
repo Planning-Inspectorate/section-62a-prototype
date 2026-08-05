@@ -1,0 +1,82 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Name of the person submitting the representation
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['source-of-representation'] == 'Myself' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/05-source-of-the-representation" %}
+
+{% elif data['representation-made-on-behalf-of'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of" %}
+
+{% elif data['is-agent'] == 'Yes' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation" %}
+
+{% elif data['is-agent'] == 'No' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent" %}
+
+{% endif %}
+
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: backLink 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/bo-your-name-answer" novalidate>
+    
+      {% call govukFieldset({
+          describedBy: "your-name-hint",
+          legend: {
+              text: "Name of the person submitting the representation",
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+          }
+      }) %}
+
+      {{ govukHint({
+          id: "your-name-hint",
+          text: "We'll publish your name on the website along with your written representation."
+      }) }}
+
+        {{ govukInput({ 
+          label: { text: "First name" }, 
+          id: "your-first-name", 
+          name: "your-first-name", 
+          value: data['your-first-name'],
+          autocomplete: "given-name",
+          spellcheck: false,
+          errorMessage: errors.firstName if errors.firstName else null
+        }) }}
+        
+        {{ govukInput({ 
+          label: { text: "Last name" }, 
+          id: "your-last-name", 
+          name: "your-last-name", 
+          value: data['your-last-name'],
+          autocomplete: "family-name",
+          spellcheck: false,
+          errorMessage: errors.lastName if errors.lastName else null
+        }) }}
+
+      {% endcall %}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

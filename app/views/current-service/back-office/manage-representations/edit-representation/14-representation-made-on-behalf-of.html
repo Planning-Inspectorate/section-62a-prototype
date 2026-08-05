@@ -1,0 +1,64 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorRepresentationMadeOnBehalfOf %}Error: {% endif %}Representation made on behalf of
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/05-source-of-the-representation" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorRepresentationMadeOnBehalfOf %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorRepresentationMadeOnBehalfOf, href: "#representation-made-on-behalf-of" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/representation-made-on-behalf-of-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "representation-made-on-behalf-of",
+        name: "representation-made-on-behalf-of",
+        fieldset: {
+          legend: { 
+            text: "Representation made on behalf of", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorRepresentationMadeOnBehalfOf } if errorRepresentationMadeOnBehalfOf else null,
+        items: [
+          { 
+            value: "A person", 
+            text: "A person", 
+            checked: data['representation-made-on-behalf-of'] == 'A person' 
+          },
+          { 
+            value: "An organisation or charity that I work or volunteer for", 
+            text: "An organisation or charity that I work or volunteer for", 
+            checked: data['representation-made-on-behalf-of'] == 'An organisation or charity that I work or volunteer for' 
+          },
+          { 
+            value: "An organisation or charity that I do not work or volunteer for", 
+            text: "An organisation or charity that I do not work or volunteer for", 
+            checked: data['representation-made-on-behalf-of'] == 'An organisation or charity that I do not work or volunteer for' 
+          },
+          { 
+            value: "A group of people", 
+            text: "A group of people", 
+            checked: data['representation-made-on-behalf-of'] == 'A group of people' 
+          } 
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

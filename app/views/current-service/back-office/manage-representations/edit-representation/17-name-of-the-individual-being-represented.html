@@ -1,0 +1,70 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Name of the individual being represented
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['preferred-contact-method'] == 'Email' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided" %}
+
+{% elif data['preferred-contact-method'] == 'Post' %}
+  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided" %}
+
+{% endif %}
+
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: backLink 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/bo-name-of-individual-being-represented-answer" novalidate>
+    
+      {% call govukFieldset({
+          legend: {
+              text: "Name of the individual being represented",
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+          }
+      }) %}
+
+        {{ govukInput({ 
+          label: { text: "First name" }, 
+          id: "name-of-individual-first-name", 
+          name: "name-of-individual-first-name", 
+          value: data['name-of-individual-first-name'],
+          autocomplete: "given-name",
+          spellcheck: false,
+          errorMessage: errors.firstName if errors.firstName else null
+        }) }}
+        
+        {{ govukInput({ 
+          label: { text: "Last name" }, 
+          id: "name-of-individual-last-name", 
+          name: "name-of-individual-last-name", 
+          value: data['name-of-individual-last-name'],
+          autocomplete: "family-name",
+          spellcheck: false,
+          errorMessage: errors.lastName if errors.lastName else null
+        }) }}
+
+      {% endcall %}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

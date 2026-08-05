@@ -1,0 +1,97 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Postal address provided
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/add-a-representation/07-preferred-contact-method"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorList %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+        }) }}
+      {% endif %}
+
+      <form action="/bo-postal-address-answer" method="post" novalidate>
+
+        {% call govukFieldset({
+          describedBy: "postal-address-hint",
+          legend: {
+            text: "Postal address provided",
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+        }) %}
+
+        {{ govukHint({
+            id: "postal-address-hint",
+            text: "We will not publish your address"
+        }) 
+
+        }}
+          {{ govukInput({
+            label: {
+              text: "Address line 1"
+            },
+            id: "postal-address-line-1",
+            name: "postal-address-line-1",
+            value: data['postal-address-line-1'],
+            autocomplete: "address-line1",
+            errorMessage: errors.postalAddressLine1
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Address line 2 (optional)"
+            },
+            id: "postal-address-line-2",
+            name: "postal-address-line-2",
+            value: data['postal-address-line-2'],
+            autocomplete: "address-line2"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Town or city"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "postal-address-town",
+            name: "postal-address-town",
+            value: data['postal-address-town'],
+            autocomplete: "address-level2",
+            errorMessage: errors.postalAddressTown
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Postcode"
+            },
+            classes: "govuk-input--width-10",
+            id: "postal-address-postcode",
+            name: "postal-address-postcode",
+            value: data['postal-address-postcode'],
+            autocomplete: "postal-code",
+            errorMessage: errors.postalAddressPostcode
+          }) }}
+
+        {% endcall %}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

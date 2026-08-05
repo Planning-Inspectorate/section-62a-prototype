@@ -1,0 +1,60 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorNameOfTheGroup %}Error: {% endif %}Group name (optional)
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['preferred-contact-method'] == 'Email' %}
+    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided" %}
+
+{% elif data['preferred-contact-method'] == 'Post' %}
+    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided" %}
+
+{% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorNameOfTheGroup %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorNameOfTheGroup, href: "#name-of-the-group" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/bo-name-of-the-group-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "name-of-the-group",
+          name: "name-of-the-group",
+          spellcheck: false,
+          value: data['name-of-the-group'],
+          label: {
+            text: "Group name (optional)",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: { 
+            text: "For example, a resident's association or a local community group." 
+          },
+          errorMessage: { text: errorNameOfTheGroup } if errorNameOfTheGroup else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

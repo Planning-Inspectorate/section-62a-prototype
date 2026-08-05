@@ -452,3 +452,31 @@ export function validateOptionalDecimalNumber(value, displayName, fieldName) {
   // 3. Success!
   return null;
 }
+
+
+// ================================================================================
+// 17. GET REPRESENTATION HELPER --- helper to find a specific representation
+// ================================================================================ 
+export function getRepresentation(req) {
+  // 1. Look for 'repRef' in the URL query, the body, or the session
+  const repRef = req.query.repRef || req.body.repRef || req.session.data['currentRepRef'];
+  
+  if (!repRef) return null;
+
+  // 2. Lock it into the session so future edit sub-pages remember what rep we are editing
+  req.session.data['currentRepRef'] = repRef;
+
+  // 3. Find and return the representation
+  const cases = req.session.data['cases'] || [];
+  
+  for (const currentCase of cases) {
+    if (currentCase.representations) {
+      const rep = currentCase.representations.find(r => r.reference === repRef);
+      if (rep) {
+        return rep; // Found it!
+      }
+    }
+  }
+  
+  return null; // Not found
+}

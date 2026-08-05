@@ -1,0 +1,57 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAreThereAnyAttachments %}Error: {% endif %}Are there any attachments?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/11-would-you-like-to-be-heard-at-a-hearing" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorAreThereAnyAttachments %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorAreThereAnyAttachments, href: "#are-there-any-attachments" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/are-there-any-attachments-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "are-there-any-attachments",
+        name: "are-there-any-attachments",
+        fieldset: {
+          legend: { 
+            text: "Are there any attachments?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: {
+          text: "Include any relevant documents, such as reports, photographs or previous submissions."
+        },
+        errorMessage: { text: errorAreThereAnyAttachments } if errorAreThereAnyAttachments else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['are-there-any-attachments'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['are-there-any-attachments'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

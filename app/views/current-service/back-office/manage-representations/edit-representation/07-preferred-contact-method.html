@@ -1,0 +1,54 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorPreferredContactMethod %}Error: {% endif %}Preferred contact method
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorPreferredContactMethod %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorPreferredContactMethod, href: "#preferred-contact-method" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/preferred-contact-method-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "preferred-contact-method",
+        name: "preferred-contact-method",
+        fieldset: {
+          legend: { 
+            text: "Preferred contact method", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorPreferredContactMethod } if errorPreferredContactMethod else null,
+        items: [
+          { 
+            value: "Email", 
+            text: "Email", 
+            checked: data['preferred-contact-method'] == 'Email' 
+          },
+          { 
+            value: "Post", 
+            text: "Post", 
+            checked: data['preferred-contact-method'] == 'Post' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

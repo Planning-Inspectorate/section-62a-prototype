@@ -1,0 +1,62 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorIsAgent %}Error: {% endif %}Was the representation submitted by an agent?
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorIsAgent %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorIsAgent, href: "#is-agent" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/bo-is-agent-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "is-agent",
+        name: "is-agent",
+        fieldset: {
+          legend: { 
+            text: "Are you acting as an agent on behalf of a client?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "For example, your organisation has been hired to represent a client on planning matters." 
+        },
+        errorMessage: { text: errorIsAgent } if errorIsAgent else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['is-agent'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['is-agent'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

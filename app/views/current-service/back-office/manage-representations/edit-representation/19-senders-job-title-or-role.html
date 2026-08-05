@@ -1,0 +1,49 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorSendersJobTitleOrRole %}Error: {% endif %}Sender's job title or role
+{% endblock %}
+
+{% block beforeContent %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/add-a-representation/18-name-of-senders-organisation-or-charity"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorSendersJobTitleOrRole %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorSendersJobTitleOrRole, href: "#senders-job-title-or-role" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/senders-job-title-or-role-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "senders-job-title-or-role",
+          name: "senders-job-title-or-role",
+          spellcheck: false,
+          value: data['senders-job-title-or-role'],
+          label: {
+            text: "Sender's job title or role",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorSendersJobTitleOrRole } if errorSendersJobTitleOrRole else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

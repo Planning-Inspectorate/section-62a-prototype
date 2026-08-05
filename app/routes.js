@@ -39,6 +39,8 @@ import preApplicationTabRouter from './bo-routes/tab-view/17-pre-application.js'
 // import manage representations bo-routers
 import manageRepresentationsRouter from './bo-routes/manage-representations/manage-representations.js';
 import addARepresentationRouter from './bo-routes/manage-representations/add-a-representation.js';
+import reviewRepresentationRouter from './bo-routes/manage-representations/review-representation.js';
+import editRepresentationRouter from './bo-routes/manage-representations/edit-representation.js';
 
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
@@ -63,7 +65,8 @@ import {
   updateCaseData,
   validateName,
   validateOptionalName,
-  validateOptionalDecimalNumber
+  validateOptionalDecimalNumber,
+  getRepresentation
 } from './helpers.js';
 
 // run initialization fixes
@@ -108,6 +111,8 @@ router.use('/', preApplicationTabRouter);
 // mount manage representations bo-routers
 router.use('/', manageRepresentationsRouter);
 router.use('/', addARepresentationRouter);
+router.use('/', reviewRepresentationRouter);
+router.use('/', editRepresentationRouter);
 
 
 // mount fo-routers
