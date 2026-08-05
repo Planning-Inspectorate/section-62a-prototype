@@ -153,7 +153,7 @@ router.post('/source-of-representation-answer', function (req, res) {
 
 
 // 06 - name of the person submitting the representation
-router.post('/your-name-answer', function (req, res) {
+router.post('/bo-your-name-answer', function (req, res) {
     const firstName = req.session.data['your-first-name'];
     const lastName = req.session.data['your-last-name'];
 
@@ -203,7 +203,7 @@ router.post('/preferred-contact-method-answer', function (req, res) {
 
 
 // 08 - email address provided 
-router.post('/your-email-address-answer', function (req, res) {
+router.post('/bo-your-email-address-answer', function (req, res) {
     const yourEmailAddress = req.session.data['your-email-address'];
     const sourceOfRepresentation = req.session.data['source-of-representation'];
     const representationMadeOnBehalfOf = req.session.data['representation-made-on-behalf-of'];
@@ -240,7 +240,7 @@ router.post('/your-email-address-answer', function (req, res) {
 
 
 // 09 - postal address provided
-router.post('/postal-address-answer', function (req, res) {
+router.post('/bo-postal-address-answer', function (req, res) {
     const postalAddressLine1 = req.session.data['postal-address-line-1'];
     const postalAddressTown = req.session.data['postal-address-town'];
     const postalAddressPostcode = req.session.data['postal-address-postcode'];
@@ -343,7 +343,7 @@ router.post('/are-there-any-attachments-answer', function (req, res) {
 
 
 // 13 - upload attachments
-router.post('/upload-supporting-attachments-answer', function(req, res) {
+router.post('/bo-upload-supporting-attachments-answer', function(req, res) {
     const uploadedFiles = req.session.data['uploadedFiles'];
     // error containers
     const errors = {};
@@ -392,7 +392,7 @@ router.post('/representation-made-on-behalf-of-answer', function (req, res) {
 
 
 // 15 - was the representation submitted by an agent?
-router.post('/is-agent-answer', function (req, res) {
+router.post('/bo-is-agent-answer', function (req, res) {
     const isAgent = req.session.data['is-agent'];
     if (!isAgent) {
         return res.render('current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent', { errorIsAgent: "Select yes if the representation was submitted by an agent" });
@@ -407,7 +407,7 @@ router.post('/is-agent-answer', function (req, res) {
 
 
 // 16 - name of the agent's organisation
-router.post('/agent-organisation-name-answer', function (req, res) {
+router.post('/bo-agent-organisation-name-answer', function (req, res) {
     const agentOrganisationName = req.session.data['agent-organisation-name'];
     if (!agentOrganisationName) {
         return res.render('current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation', { errorAgentOrganisationName: "Enter the name of the agent's organisation" });
@@ -417,7 +417,7 @@ router.post('/agent-organisation-name-answer', function (req, res) {
 
 
 // 17 - name of the individual being represented
-router.post('/name-of-individual-being-represented-answer', function (req, res) {
+router.post('/bo-name-of-individual-being-represented-answer', function (req, res) {
     const firstName = req.session.data['name-of-individual-first-name'];
     const lastName = req.session.data['name-of-individual-last-name'];
 
@@ -468,7 +468,7 @@ router.post('/senders-job-title-or-role-answer', function (req, res) {
 
 
 // 20 - name of org or charity being represented
-router.post('/org-or-charity-being-represented-answer', function (req, res) {
+router.post('/bo-org-or-charity-being-represented-answer', function (req, res) {
     const orgOrCharityBeingRepresented = req.session.data['org-or-charity-being-represented'];
     if (!orgOrCharityBeingRepresented) {
         return res.render('current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented', { errorOrgOrCharityBeingRepresented: "Enter the name of the organisation or charity being represented" });
@@ -478,7 +478,7 @@ router.post('/org-or-charity-being-represented-answer', function (req, res) {
 
 
 // 21 - group name
-router.post('/name-of-the-group-answer', function (req, res) {
+router.post('/bo-name-of-the-group-answer', function (req, res) {
     const nameOfTheGroup = req.session.data['name-of-the-group'];
     if (!nameOfTheGroup) {
         return res.render('current-service/back-office/manage-representations/add-a-representation/21-group-name', { errorNameOfTheGroup: "Enter the name of the group" });
@@ -489,7 +489,7 @@ router.post('/name-of-the-group-answer', function (req, res) {
 
 // 22 - check group name details (ATL)
 // --- (1) GET: Setup Person (Add or Edit) ---
-router.get('/setup-next-person', function(req, res) {
+router.get('/bo-setup-next-person', function(req, res) {
     const id = req.query.id;
     const groupNameList = req.session.data['group-name-list'] || [];
 
@@ -515,7 +515,7 @@ router.get('/setup-next-person', function(req, res) {
 
 
 // --- (2) POST: Save Data from Page 23 ---
-router.post('/name-of-person-answer', function(req, res) {
+router.post('/bo-name-of-person-answer', function(req, res) {
     const editId = req.session.data['edit-group-id'];
     const firstName = req.session.data['person-first-name'];
     const lastName = req.session.data['person-last-name'];
@@ -566,7 +566,7 @@ router.post('/name-of-person-answer', function(req, res) {
 
 
 // --- (3) GET: Direct Remove (No confirmation page) ---
-router.get('/remove-group-person', function(req, res) {
+router.get('/bo-remove-group-person', function(req, res) {
     const idToRemove = req.query.id;
 
     if (idToRemove && req.session.data['group-name-list']) {
@@ -577,7 +577,7 @@ router.get('/remove-group-person', function(req, res) {
 
 
 // --- (4) POST: Final Submission from the Table Page ---
-router.post('/check-group-name-details-answer', function(req, res) {
+router.post('/bo-check-group-name-details-answer', function(req, res) {
     const groupNameList = req.session.data['group-name-list'] || [];
     
     // Safety check: Don't let them continue if the list is totally empty!
