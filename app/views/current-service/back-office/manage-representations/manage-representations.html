@@ -13,6 +13,9 @@
 
 {% block content %}
 
+{# --- Date Mapping Array --- #}
+{% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
@@ -124,7 +127,7 @@
     <table class="govuk-table" data-module="moj-sortable-table">
         <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header" aria-sort="descending">
+                <th scope="col" class="govuk-table__header" aria-sort="none">
                     <button type="button" data-index="0">Reference
                         <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
@@ -179,10 +182,18 @@
                         <p class="govuk-body">{{ rep.submitterName }}</p>
                     </td>
                     
-                    {# SUBMISSION DATE #}
+                    {# SUBMISSION DATE COLUMN #}
                     <td class="govuk-table__cell">
-                    {% if rep.submissionDate %}
-                        {{ rep.submissionDate | toGovukDate }}
+                    {% if rep.submissionDate and rep.submissionDate.year %}
+                        
+                        {% set rDay = rep.submissionDate.day | int %}
+                        {% set rMonth = rep.submissionDate.month | int %}
+                        {% set rYear = rep.submissionDate.year %}
+                        {{ rDay ~ " " ~ monthNames[rMonth] ~ " " ~ rYear }}
+                        
+                    {% elif rep.backupIso %}
+                        {{ rep.backupIso | toGovukDate }}
+                        
                     {% else %}
                         Not provided
                     {% endif %}

@@ -1,0 +1,88 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Check group name details
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/21-group-name" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Check group name details</h1>
+
+    {% set groupNameList = data['group-name-list'] | default([]) %}
+
+    {# ========================================== #}
+    {# STATE 1: AT LEAST ONE PERSON ADDED         #}
+    {# ========================================== #}
+    {% if groupNameList.length > 0 %}
+      
+      <table class="govuk-table govuk-!-margin-bottom-7">
+        <caption class="govuk-table__caption govuk-visually-hidden">People added to the group</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header govuk-!-text-align-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for item in groupNameList %}
+            <tr class="govuk-table__row">
+              
+              <td class="govuk-table__cell">
+                {{ item.firstName }} {{ item.lastName }}
+              </td>
+              
+              <td class="govuk-table__cell govuk-!-text-align-right">
+                <ul class="govuk-summary-list__actions-list">
+                  <li class="govuk-summary-list__actions-list-item">
+                    <a class="govuk-link" href="/setup-next-person?id={{ item.id }}">
+                      Change<span class="govuk-visually-hidden"> {{ item.firstName }} {{ item.lastName }}</span>
+                    </a>
+                  </li>
+                  
+                  {# Only show Remove if there is more than 1 item #}
+                  {% if groupNameList.length > 1 %}
+                    <li class="govuk-summary-list__actions-list-item">
+                      <a class="govuk-link" href="/remove-group-person?id={{ item.id }}">
+                        Remove<span class="govuk-visually-hidden"> {{ item.firstName }} {{ item.lastName }}</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </td>
+              
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <form action="/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted" method="post" novalidate>
+        
+        <p class="govuk-body govuk-!-margin-bottom-6">
+          <a href="/setup-next-person" class="govuk-link govuk-!-font-size-19" id="add-person-link">Add another person</a>
+        </p>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </form>
+
+    {% else %}
+      
+      <p class="govuk-body govuk-!-margin-bottom-7">No people have been added to this group yet.</p>
+      
+      {{ govukButton({
+        text: "Add details",
+        href: "/setup-next-person"
+      }) }}
+
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

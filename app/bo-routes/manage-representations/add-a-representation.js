@@ -22,7 +22,33 @@ router.get('/add-a-representation-start', function (req, res) {
     'date-the-representation-was-received-day',
     'date-the-representation-was-received-month',
     'date-the-representation-was-received-year',
-    'how-was-this-representation-received'
+    'how-was-this-representation-received',
+    'reason-for-not-using-online-service',
+    'type-of-representation-submitted',
+    'source-of-representation',
+    'your-first-name',
+    'your-last-name',
+    'preferred-contact-method',
+    'your-email-address',
+    'postal-address-line-1',
+    'postal-address-line-2',
+    'postal-address-town',
+    'postal-address-county',
+    'postal-address-postcode',
+    'written-representation-submitted',
+    'would-you-like-to-be-heard-at-a-hearing',
+    'are-there-any-attachments',
+    'uploadedFiles',
+    'representation-made-on-behalf-of',
+    'is-agent',
+    'agent-organisation-name',
+    'name-of-individual-first-name',
+    'name-of-individual-last-name',
+    'name-of-senders-org-or-charity',
+    'senders-job-title-or-role',
+    'org-or-charity-being-represented',
+    'name-of-the-group',
+    'group-name-list'
   ];
 
   fieldsToClear.forEach(field => {
@@ -208,10 +234,9 @@ router.post('/your-email-address-answer', function (req, res) {
         res.redirect('/current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented');
     }
     else if ( representationMadeOnBehalfOf === "A group of people" ) {
-        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-check-group-name-detail');
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-group-name');
     }
 });
-
 
 
 // 09 - postal address provided
@@ -264,7 +289,7 @@ router.post('/postal-address-answer', function (req, res) {
         res.redirect('/current-service/back-office/manage-representations/add-a-representation/20-name-of-organisation-or-charity-being-represented');
     }
     else if ( representationMadeOnBehalfOf === "A group of people" ) {
-        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-check-group-name-detail');
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/21-group-name');
     }
 });
 
@@ -450,4 +475,280 @@ router.post('/org-or-charity-being-represented-answer', function (req, res) {
     }
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
 });
+
+
+// 21 - group name
+router.post('/name-of-the-group-answer', function (req, res) {
+    const nameOfTheGroup = req.session.data['name-of-the-group'];
+    if (!nameOfTheGroup) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/21-group-name', { errorNameOfTheGroup: "Enter the name of the group" });
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details');
+});
+
+
+// 22 - check group name details (ATL)
+// --- (1) GET: Setup Person (Add or Edit) ---
+router.get('/setup-next-person', function(req, res) {
+    const id = req.query.id;
+    const groupNameList = req.session.data['group-name-list'] || [];
+
+    if (id) {
+        // Editing: Store ID and hydrate form variables
+        req.session.data['edit-group-id'] = id;
+        const existingPerson = groupNameList.find(p => p.id === id);
+        
+        if (existingPerson) {
+            req.session.data['person-first-name'] = existingPerson.firstName;
+            // Fixed typo from your old code: it was 'next-person-last-name'
+            req.session.data['person-last-name'] = existingPerson.lastName; 
+        }
+    } else {
+        // Adding: Wipe variables clean
+        req.session.data['edit-group-id'] = "";
+        req.session.data['person-first-name'] = "";
+        req.session.data['person-last-name'] = "";
+    }
+
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/23-name-of-person-in-the-group');
+});
+
+
+// --- (2) POST: Save Data from Page 23 ---
+router.post('/name-of-person-answer', function(req, res) {
+    const editId = req.session.data['edit-group-id'];
+    const firstName = req.session.data['person-first-name'];
+    const lastName = req.session.data['person-last-name'];
+
+    const errors = {};
+    const errorList = [];
+
+    // Validation
+    if (!firstName) {
+        errors.firstName = {text: "Enter a first name"};
+        errorList.push({ text: "Enter a first name", href: "#person-first-name" }); 
+    }
+    if (!lastName) {
+        errors.lastName = {text: "Enter a last name"};
+        errorList.push({ text: "Enter a last name", href: "#person-last-name" });
+    }
+
+    if (errorList.length > 0) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/23-name-of-person-in-the-group', {
+            errors: errors,
+            errorList: errorList
+        });
+    }
+
+    if (!req.session.data['group-name-list']) {
+        req.session.data['group-name-list'] = [];
+    }
+
+    if (editId) {
+        // Updating an existing person
+        const index = req.session.data['group-name-list'].findIndex(p => p.id === editId);
+        if (index > -1) {
+            req.session.data['group-name-list'][index].firstName = firstName;
+            req.session.data['group-name-list'][index].lastName = lastName;
+        }
+    } else {
+        // Adding a brand new person
+        req.session.data['group-name-list'].push({ id: 'person-' + Date.now(), firstName, lastName });
+    }
+
+    // Wipe temporary variables clean
+    req.session.data['edit-group-id'] = "";
+    req.session.data['person-first-name'] = "";
+    req.session.data['person-last-name'] = "";
+
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details');
+});
+
+
+// --- (3) GET: Direct Remove (No confirmation page) ---
+router.get('/remove-group-person', function(req, res) {
+    const idToRemove = req.query.id;
+
+    if (idToRemove && req.session.data['group-name-list']) {
+        req.session.data['group-name-list'] = req.session.data['group-name-list'].filter(person => person.id !== idToRemove);
+    }
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details');
+});
+
+
+// --- (4) POST: Final Submission from the Table Page ---
+router.post('/check-group-name-details-answer', function(req, res) {
+    const groupNameList = req.session.data['group-name-list'] || [];
+    
+    // Safety check: Don't let them continue if the list is totally empty!
+    if (groupNameList.length === 0) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details', {
+            errorList: [{ text: "You must add at least one person to the group", href: "#add-person-link" }]
+        });
+    }
+    
+    // If they have at least 1 person, move on to the next page in the journey
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
+});
+
+
+// check your answers - ref generation + save logic + redirect to success page
+router.post('/representation-added', function(req, res) {
+    const data = req.session.data;
+
+    if (!data['source-of-representation']) {
+        return res.redirect('/current-service/back-office/manage-representations/add-a-representation/success-representation-added');
+    }
+
+    // --- Date Formatting ---
+    const day = data['date-the-representation-was-received-day'];
+    const month = data['date-the-representation-was-received-month'];
+    const year = data['date-the-representation-was-received-year'];
+    
+    // Generate the ISO backup 
+    const paddedDay = (day || '').padStart(2, '0');
+    const paddedMonth = (month || '').padStart(2, '0');
+    const isoBackup = (year && month && day) ? `${year}-${paddedMonth}-${paddedDay}T00:00:00.000Z` : new Date().toISOString();
+
+
+    // --- Reference Generation ---
+    const firstThreeDigits = Math.floor(100 + Math.random() * 900); 
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letter1 = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    const letter2 = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    const lastFourDigits = Math.floor(1000 + Math.random() * 9000); 
+    const repReference = `${firstThreeDigits}${letter1}${letter2}-${lastFourDigits}`;
+
+    // --- Logic Flags ---
+    const isBehalf = data['source-of-representation'] === 'On behalf of another person, an organisation or group of people';
+    const asksAgentQuestions = isBehalf && [
+        'A person', 
+        'An organisation or charity that I do not work or volunteer for', 
+        'A group of people'
+    ].includes(data['representation-made-on-behalf-of']);
+
+    // --- Map the Data Payload ---
+    const newRep = {
+        reference: repReference,
+        status: "Awaiting review",
+        submissionDate: {
+            day: day,
+            month: month,
+            year: year
+        },
+        // ISO backup
+        backupIso: isoBackup, 
+        
+        // Back-office specific metadata
+        howReceived: data['how-was-this-representation-received'],
+        reasonNotOnline: data['reason-for-not-using-online-service'],
+        type: data['type-of-representation-submitted'],
+        wantsHearing: data['would-you-like-to-be-heard-at-a-hearing'],
+        
+        // Submitter Details
+        submitterType: data['source-of-representation'],
+        submitterName: `${data['your-first-name']} ${data['your-last-name']}`,
+        contactMethod: data['preferred-contact-method'],
+        submitterEmail: data['preferred-contact-method'] === 'Email' ? data['your-email-address'] : null,
+        
+        postalAddress: data['preferred-contact-method'] === 'Post' ? {
+            line1: data['postal-address-line-1'],
+            line2: data['postal-address-line-2'],
+            town: data['postal-address-town'],
+            county: data['postal-address-county'],
+            postcode: data['postal-address-postcode']
+        } : null,
+
+        // Conditional: Who are they representing?
+        representing: isBehalf ? data['representation-made-on-behalf-of'] : 'Myself',
+
+        // Conditional: Agent Details
+        isAgent: asksAgentQuestions ? data['is-agent'] : null,
+        agentOrgName: (asksAgentQuestions && data['is-agent'] === 'Yes') ? data['agent-organisation-name'] : null,
+
+        // Conditional: Represented Person
+        representedPerson: (isBehalf && data['representation-made-on-behalf-of'] === 'A person') ? {
+            firstName: data['name-of-individual-first-name'],
+            lastName: data['name-of-individual-last-name']
+        } : null,
+
+        // Conditional: Represented Org (Work for)
+        representedOrgWorkFor: (isBehalf && data['representation-made-on-behalf-of'] === 'An organisation or charity that I work or volunteer for') ? {
+            name: data['name-of-senders-org-or-charity'],
+            role: data['senders-job-title-or-role']
+        } : null,
+
+        // Conditional: Represented Org (Do not work for)
+        representedOrgOther: (isBehalf && data['representation-made-on-behalf-of'] === 'An organisation or charity that I do not work or volunteer for') ? data['org-or-charity-being-represented'] : null,
+
+        // Conditional: Represented Group
+        representedGroup: (isBehalf && data['representation-made-on-behalf-of'] === 'A group of people') ? {
+            name: data['name-of-the-group'],
+            members: data['group-name-list'] || []
+        } : null,
+
+        // Representation Content & Attachments
+        comment: data['written-representation-submitted'],
+        hasAttachments: data['are-there-any-attachments'],
+        attachments: data['are-there-any-attachments'] === 'Yes' && data['uploadedFiles'] ? data['uploadedFiles'].split('||') : []
+    };
+
+    // --- Save to the specific Case ---
+    if (data.cases) {
+      // Changed to currentBackOfficeCase
+      const targetCase = data.cases.find(c => c.reference === data['currentBackOfficeCase']);
+      
+      if (targetCase) {
+        if (!targetCase.representations) { targetCase.representations = []; }
+        targetCase.representations.push(newRep);
+      }
+    }
+
+    // --- Wipe fields for fresh form ---
+    const fieldsToClear = [
+        'date-the-representation-was-received-day',
+        'date-the-representation-was-received-month',
+        'date-the-representation-was-received-year',
+        'how-was-this-representation-received',
+        'reason-for-not-using-online-service',
+        'type-of-representation-submitted',
+        'source-of-representation',
+        'your-first-name',
+        'your-last-name',
+        'preferred-contact-method',
+        'your-email-address',
+        'postal-address-line-1',
+        'postal-address-line-2',
+        'postal-address-town',
+        'postal-address-county',
+        'postal-address-postcode',
+        'written-representation-submitted',
+        'would-you-like-to-be-heard-at-a-hearing',
+        'are-there-any-attachments',
+        'uploadedFiles',
+        'representation-made-on-behalf-of',
+        'is-agent',
+        'agent-organisation-name',
+        'name-of-individual-first-name',
+        'name-of-individual-last-name',
+        'name-of-senders-org-or-charity',
+        'senders-job-title-or-role',
+        'org-or-charity-being-represented',
+        'name-of-the-group',
+        'group-name-list'
+    ];
+
+    fieldsToClear.forEach(field => delete data[field]);
+
+    // Pass reference to success page
+    data.submittedRepReference = repReference;
+
+    // Redirect to the back-office success page!
+    res.redirect('/current-service/back-office/manage-representations/add-a-representation/success-representation-added');
+});
+
+
+
+
+
 export default router;
