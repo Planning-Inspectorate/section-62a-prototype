@@ -555,7 +555,7 @@ router.post('/written-rep-submitted', function(req, res) {
     const newRep = {
         reference: repReference,
         status: "Awaiting review",
-        submissionDate: todayISO,
+        backupIso: todayISO,
         
         // Submitter Details
         submitterType: data['who-submit-rep'],
