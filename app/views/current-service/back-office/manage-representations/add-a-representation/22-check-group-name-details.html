@@ -64,7 +64,7 @@
       <form action="/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted" method="post" novalidate>
         
         <p class="govuk-body govuk-!-margin-bottom-6">
-          <a href="/bo-setup-next-person" class="govuk-link govuk-!-font-size-19" id="add-person-link">Add another person</a>
+          <a href="/bo-setup-next-person" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" id="add-person-link">Add another person</a>
         </p>
 
         {{ govukButton({
@@ -78,7 +78,7 @@
       
       {{ govukButton({
         text: "Add details",
-        href: "/setup-next-person"
+        href: "/bo-setup-next-person"
       }) }}
 
     {% endif %}

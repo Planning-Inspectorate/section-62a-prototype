@@ -43,7 +43,7 @@
                                         <input class="govuk-checkboxes__input" id="filters" name="filters"
                                             type="checkbox" value="accepted">
                                         <label class="govuk-label govuk-checkboxes__label" for="filters">
-                                            Accepted (1)
+                                            Accepted (0)
                                         </label>
                                     </div>
                                     <div class="govuk-checkboxes__item">
@@ -57,14 +57,28 @@
                                         <input class="govuk-checkboxes__input" id="filters-3" name="filters"
                                             type="checkbox" value="rejected">
                                         <label class="govuk-label govuk-checkboxes__label" for="filters-3">
-                                            Rejected (2)
+                                            Rejected (0)
                                         </label>
                                     </div>
                                     <div class="govuk-checkboxes__item">
                                         <input class="govuk-checkboxes__input" id="filters-4" name="filters"
                                             type="checkbox" value="withdrawn">
                                         <label class="govuk-label govuk-checkboxes__label" for="filters-4">
-                                            Withdrawn (1)
+                                            Withdrawn (0)
+                                        </label>
+                                    </div>
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters-5" name="filters"
+                                            type="checkbox" value="withdrawn">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters-5">
+                                            Yes to hearing (0)
+                                        </label>
+                                    </div>
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="filters-6" name="filters"
+                                            type="checkbox" value="withdrawn">
+                                        <label class="govuk-label govuk-checkboxes__label" for="filters-6">
+                                            No to hearing (0)
                                         </label>
                                     </div>
                                 </div>
@@ -112,9 +126,14 @@
     </div>
 </form>
 
+      {# 1. Grab the representations array FROM THE SPECIFIC CASE #}
+            {% set representations = currentCase.representations | default([]) %}
+
+            {% if representations.length > 0 %}
+
 <div id="pagination" class="govuk-body">
     <p class="govuk-body govuk-clearfix">
-        <span class="govuk-body">Showing <strong>x</strong> to<strong> x</strong> of<strong> x</strong> representations, newest first.
+        <span class="govuk-body">Showing <strong>1</strong> to<strong> x</strong> of<strong> x</strong> representations, newest first.
         </span>
         <span class="pins-pagination-options">
 
@@ -164,10 +183,7 @@
 
             <tbody class="govuk-table__body">
                     
-            {# 1. Grab the representations array FROM THE SPECIFIC CASE #}
-            {% set representations = currentCase.representations | default([]) %}
-
-            {% if representations.length > 0 %}
+      
                 {# We use '| reverse' so the newest created representations appears at the top #}
                 {% for rep in representations | reverse %}
                 <tr class="govuk-table__row">
@@ -215,10 +231,9 @@
             
             {% else %}
                 {# EMPTY STATE #}
-                <tr class="govuk-table__row">
-                {# Adjusted colspan to 4 since you only have 4 columns #}
-                <td class="govuk-table__cell" colspan="4">No representations have been added yet.</td>
-                </tr>
+                <p class="govuk-body">No results were found.</p>
+
+                <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Clear search and filters</a> to view all representations.</p>
             {% endif %}
 
             </tbody>
