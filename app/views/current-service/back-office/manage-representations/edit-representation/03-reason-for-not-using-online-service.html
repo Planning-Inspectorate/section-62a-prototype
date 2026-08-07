@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/manage-representations/add-a-representation/02-how-was-this-representation-received"
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
@@ -22,11 +22,12 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/reason-for-not-using-online-service-answer" method="post" novalidate>
+    <form class="form" action="/edit-reason-for-not-using-online-service" method="post" novalidate>
       
       {{ govukTextarea({
         name: "reason-for-not-using-online-service",
         id: "reason-for-not-using-online-service",
+        value: data['reason-for-not-using-online-service'],
         label: {
             text: "Reason for not using the online service (optional)",
             classes: "govuk-label--l",

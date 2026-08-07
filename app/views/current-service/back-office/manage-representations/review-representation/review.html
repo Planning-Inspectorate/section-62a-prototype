@@ -12,6 +12,23 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
+    {# --- SUCCESS BANNER --- #}
+    {% if successMessage %}
+
+    {% set successBannerHtml %}
+    <p class="govuk-notification-banner__heading">
+      {{ successMessage }}
+    </p>
+    {% endset %}
+
+    {{ govukNotificationBanner({
+    html: successBannerHtml,
+    type: "success"
+    }) }}
+
+    {% endif %}
+
+    {# --- PAGE HEADING --- #}
     <h1 class="govuk-heading-l">
         <span class="govuk-caption-xl">{{ rep.reference }}</span>
         Review representation
@@ -65,7 +82,7 @@
     {# ========================================================= #}
     {# SUMMARY LIST                                              #}
     {# ========================================================= #}
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    <dl class="govuk-summary-list">
 
       {# --- 00: Reference --- #}
       <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -82,7 +99,7 @@
           {{ dateReceivedHtml }}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="edit-date-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> date received</span></a>
+          <a class="govuk-link" href="/edit-date-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> date received</span></a>
         </dd>
       </div>
 
@@ -92,7 +109,7 @@
         <dt class="govuk-summary-list__key">How was this representation received?</dt>
         <dd class="govuk-summary-list__value">{{ rep.howReceived }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="edit-how-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> method received</span></a>
+          <a class="govuk-link" href="/edit-how-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> method received</span></a>
         </dd>
       </div>
       {% endif %}
@@ -103,7 +120,7 @@
         <dt class="govuk-summary-list__key">Reason for not using the online service</dt>
         <dd class="govuk-summary-list__value">{{ rep.reasonNotOnline }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="edit-reason-not-online?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> reason not using online service</span></a>
+          <a class="govuk-link" href="/edit-reason-not-online?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> reason not using online service</span></a>
         </dd>
       </div>
       {% endif %}
@@ -113,7 +130,7 @@
         <dt class="govuk-summary-list__key">Representation type</dt>
         <dd class="govuk-summary-list__value">{{ rep.type | default('-') }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="edit-type?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> type of representation</span></a>
+          <a class="govuk-link" href="/edit-rep-type?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> type of representation</span></a>
         </dd>
       </div>
 

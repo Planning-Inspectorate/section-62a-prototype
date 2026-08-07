@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/manage-representations" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/date-the-representation-was-received-answer" method="post" novalidate>
+    <form class="form" action="/edit-date-the-representation-was-received" method="post" novalidate>
 
       {{ govukDateInput({
         id: "date-the-representation-was-received",

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/01-date-the-representation-was-received" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/how-was-this-representation-received-answer" method="post" novalidate>
+    <form class="form" action="/edit-how-was-this-representation-received" method="post" novalidate>
       
       {{ govukRadios({
         idPrefix: "how-was-this-representation-received",

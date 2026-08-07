@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/03-reason-for-not-using-online-service" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/type-of-representation-submitted-answer" method="post" novalidate>
+    <form class="form" action="/edit-type-of-representation-submitted" method="post" novalidate>
       
       {{ govukRadios({
         idPrefix: "type-of-representation-submitted",

@@ -6,18 +6,15 @@ const router = Router();
 // --- ROUTES ---
 router.get('/add-a-representation-start', function (req, res) {
   const data = req.session.data;
-  
-  // 1. Grab the case reference from the URL query string
-  // (Assuming your link looks like: href="/.../add-a-representation-start?caseRef={{ currentCase.reference }}")
+  // grab the case ref from the url
   const caseRef = req.query.caseRef;
   
   if (caseRef) {
-    // Save it to the session so your POST route knows which case to attach the rep to
+    // save case ref to session to use in journey
     data['currentBackOfficeCase'] = caseRef;
   }
 
-  // 2. Clear out any temporary variables from a previous manual entry attempt
-  // Swap these out with the actual 'name' attributes you are using in your back-office forms
+  // wipe existing form data to prevent ghost data
   const fieldsToClear = [
     'date-the-representation-was-received-day',
     'date-the-representation-was-received-month',
@@ -55,7 +52,7 @@ router.get('/add-a-representation-start', function (req, res) {
     delete data[field];
   });
 
-  // 3. Redirect to the first page of your manual representations journey
+  // redirect to add a rep journey
   res.redirect('/current-service/back-office/manage-representations/add-a-representation/01-date-the-representation-was-received');
 });
 
@@ -743,7 +740,7 @@ router.post('/representation-added', function(req, res) {
     // Pass reference to success page
     data.submittedRepReference = repReference;
 
-    // Redirect to the back-office success page!
+    // Redirect to the back-office success page
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/success-representation-added');
 });
 

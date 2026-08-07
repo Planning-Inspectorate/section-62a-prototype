@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/04-type-of-representation-submitted" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/edit-representation/04-type-of-representation-submitted" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/source-of-representation-answer" method="post" novalidate>
+    <form class="form" action="/edit-source-of-representation" method="post" novalidate>
       
       {{ govukRadios({
         idPrefix: "source-of-representation",
