@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/manage-representations/add-a-representation/07-preferred-contact-method"
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
@@ -22,7 +22,7 @@
         }) }}
       {% endif %}
 
-      <form class="form" action="/bo-your-email-address-answer" method="post" novalidate>
+      <form class="form" action="/edit-your-email-address" method="post" novalidate>
 
         {{ govukInput({
           id: "your-email-address",

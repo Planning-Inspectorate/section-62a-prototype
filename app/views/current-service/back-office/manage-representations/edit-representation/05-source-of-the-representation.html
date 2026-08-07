@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/edit-representation/04-type-of-representation-submitted" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -46,7 +46,7 @@
         ]
       }) }}
       
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Save" }) }}
 
     </form>
   </div>

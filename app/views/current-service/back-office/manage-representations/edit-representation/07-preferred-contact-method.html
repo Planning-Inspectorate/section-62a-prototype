@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/06-name-of-the-person-submitting-the-representation" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/preferred-contact-method-answer" method="post" novalidate>
+    <form class="form" action="/edit-preferred-contact-method" method="post" novalidate>
       
       {{ govukRadios({
         idPrefix: "preferred-contact-method",

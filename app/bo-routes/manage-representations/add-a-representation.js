@@ -657,7 +657,7 @@ router.post('/representation-added', function(req, res) {
         } : null,
 
         // Conditional: Who are they representing?
-        representing: isBehalf ? data['representation-made-on-behalf-of'] : 'Myself',
+        representing: isBehalf ? data['representation-made-on-behalf-of'] : null,
 
         // Conditional: Agent Details
         isAgent: asksAgentQuestions ? data['is-agent'] : null,
