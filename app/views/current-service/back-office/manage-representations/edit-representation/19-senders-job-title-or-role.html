@@ -8,7 +8,7 @@
 
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/manage-representations/add-a-representation/18-name-of-senders-organisation-or-charity"
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
@@ -23,7 +23,7 @@
         }) }}
       {% endif %}
 
-      <form class="form" action="/senders-job-title-or-role-answer" method="post" novalidate>
+      <form class="form" action="/edit-senders-job-title-or-role" method="post" novalidate>
 
         {{ govukInput({
           id: "senders-job-title-or-role",

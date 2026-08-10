@@ -11,7 +11,7 @@
 {% block beforeContent %}
   {{ govukBackLink({ 
       text: "Back", 
-      href: "/current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details"
+      href: "/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details"
   }) }}
 {% endblock %}
 
@@ -26,7 +26,7 @@
       }) }}
     {% endif %}
 
-    <form method="post" action="/bo-name-of-person-answer" novalidate>
+    <form method="post" action="/edit-bo-name-of-person" novalidate>
     
       {% call govukFieldset({
           legend: {

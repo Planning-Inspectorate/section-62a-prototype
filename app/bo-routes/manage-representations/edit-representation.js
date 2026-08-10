@@ -692,18 +692,272 @@ router.get('/edit-represented-person', function(req, res) {
 
 // 18 - name of senders organisation or charity
 router.get('/edit-represented-org-charity', function(req, res) {
-    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    const rep = getRepresentation(req); 
     
     // pre-populate session data if rep exists
-    if (rep && rep.representedOrgWorkFor.role) {
-        req.session.data['name-of-senders-org-or-charity'] = rep.representedOrgWorkFor.role;
+    if (rep && rep.representedOrgWorkFor && rep.representedOrgWorkFor.name) {
+        req.session.data['name-of-senders-org-or-charity'] = rep.representedOrgWorkFor.name; 
     }
     // render page with pre-populated data
     res.redirect('/current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity');
 });
 
+    // 18 - post
+    router.post('/edit-name-of-senders-org-or-charity', function(req, res) {
+        const rep = getRepresentation(req);
+        const nameOfSendersOrgOrCharity = req.session.data['name-of-senders-org-or-charity'];
+        
+        // validation
+        if (!nameOfSendersOrgOrCharity) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity', {
+                errorNameOfSendersOrgOrCharity: "Enter the name of the sender's organisation or charity"
+            });
+        }
+        // Save back to the exact object property
+        if (rep) {
+            // If representedOrgWorkFor is undefined (null), create empty object first
+            if (!rep.representedOrgWorkFor) {
+                rep.representedOrgWorkFor = {};
+            }
+            // save and assign name data to object
+            rep.representedOrgWorkFor.name = nameOfSendersOrgOrCharity;
+        }
+        // set success banner and redirect
+        req.session.data['edit-success-message'] = "Organisation name updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
 
 
+// 19 - senders job title or role
+router.get('/edit-represented-org-charity-role', function(req, res) {
+    const rep = getRepresentation(req); 
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.representedOrgWorkFor && rep.representedOrgWorkFor.role) {
+        req.session.data['senders-job-title-or-role'] = rep.representedOrgWorkFor.role;
+    } 
+    // Redirect to the page
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role');
+});
+
+    // 19 - post
+    router.post('/edit-senders-job-title-or-role', function(req, res) {
+        const rep = getRepresentation(req);
+        const sendersJobTitleOrRole = req.session.data['senders-job-title-or-role'];
+
+        // validation
+        if (!sendersJobTitleOrRole) {
+            return res.render ('/current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role', {
+                errorSendersJobTitleOrRole: "Enter the name of the sender's job title or role"
+            });
+        }
+        // Save back to the exact object property
+        if (rep) {
+            // If representedOrgWorkFor is undefined (null), create empty object first
+            if (!rep.representedOrgWorkFor) {
+                rep.representedOrgWorkFor = {};
+            }
+            // save and assign role data to object
+            rep.representedOrgWorkFor.role = sendersJobTitleOrRole;
+        }
+        // Set success banner and redirect
+        req.session.data['edit-success-message'] = "Role or job title updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 20 - name of organisation or charity being represented
+router.get('/edit-represented-org-i-do-not', function(req, res) {
+    const rep = getRepresentation(req); 
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.representedOrgOther) {
+        req.session.data['org-or-charity-being-represented'] = rep.representedOrgOther;
+    } 
+    // Redirect to the page
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented');
+});
+
+    // 20 - post
+    router.post('/edit-bo-org-or-charity-being-represented', function(req, res) {
+        const rep = getRepresentation(req);
+        const orgOrCharityBeingRepresented = req.session.data['org-or-charity-being-represented'];
+
+        // validation
+        if (!orgOrCharityBeingRepresented) {
+            return res.render ('/current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented', {
+                errorOrgOrCharityBeingRepresented: "Enter the name of the organisation or charity being represented"
+            });
+        }
+        // Save back to the exact object property
+        if (rep) {
+            rep.representedOrgOther = orgOrCharityBeingRepresented;
+        }
+        // Set success banner and redirect
+        req.session.data['edit-success-message'] = "Name of organisation or charity being represented updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 21 - group name
+router.get('/edit-group-name', function(req, res) {
+    const rep = getRepresentation(req); 
+    
+    // check if group and group name object 
+    if (rep && rep.representedGroup && rep.representedGroup.name) {
+        req.session.data['name-of-the-group'] = rep.representedGroup.name;
+    } 
+    // redirect to group name page
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/21-group-name');
+});
+
+    // 21 - post
+    router.post('/edit-bo-name-of-the-group', function(req, res) {
+        const rep = getRepresentation(req);
+        const groupName = req.session.data['name-of-the-group'];
+        
+        // no validation as group name is optional
+
+        // Save back to the exact object property
+        if (rep) {
+            // initialise representedGroup if null
+            // create empty members array for group names to save names into it later safely
+            if (!rep.representedGroup) {
+                rep.representedGroup = { members: [] }; 
+            }
+            rep.representedGroup.name = groupName;
+        }
+        // Set success banner and redirect
+        req.session.data['edit-success-message'] = "Group name updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 22, 23 - check group name details (ATL)
+
+// 22 - check group name details (pre-load names if existing)
+router.get('/edit-group-members', function(req, res) {
+    const rep = getRepresentation(req);
+    
+    // stage the members array into the session data so the html table can read it
+    if (rep && rep.representedGroup && rep.representedGroup.members) {
+        req.session.data['group-name-list'] = rep.representedGroup.members;
+    } else {
+        req.session.data['group-name-list'] = [];
+    }
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+});
+
+// 23 - name of person in the group (prefill if editing)
+router.get('/edit-bo-setup-next-person', function(req, res) {
+    const id = req.query.id;
+    const groupNameList = req.session.data['group-name-list'] || [];
+
+    if (id) {
+        // Editing: Store ID and hydrate form variables
+        req.session.data['edit-group-id'] = id;
+        const existingPerson = groupNameList.find(p => p.id === id);
+        
+        if (existingPerson) {
+            req.session.data['person-first-name'] = existingPerson.firstName;
+            req.session.data['person-last-name'] = existingPerson.lastName; 
+        }
+    } else {
+        // Adding: Wipe variables clean
+        req.session.data['edit-group-id'] = "";
+        req.session.data['person-first-name'] = "";
+        req.session.data['person-last-name'] = "";
+    }
+
+    // Redirecting to your page 23 inside the edit folder
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/23-name-of-person-in-the-group');
+});
+
+    // 23 - post save person to temp array
+    router.post('/edit-bo-name-of-person', function(req, res) {
+        const editId = req.session.data['edit-group-id'];
+        const firstName = req.session.data['person-first-name'];
+        const lastName = req.session.data['person-last-name'];
+
+        const errors = {};
+        const errorList = [];
+
+        // Validation
+        if (!firstName) {
+            errors.firstName = {text: "Enter a first name"};
+            errorList.push({ text: "Enter a first name", href: "#person-first-name" }); 
+        }
+        if (!lastName) {
+            errors.lastName = {text: "Enter a last name"};
+            errorList.push({ text: "Enter a last name", href: "#person-last-name" });
+        }
+
+        // Render EDIT page if errors
+        if (errorList.length > 0) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/23-name-of-person-in-the-group', {
+                errors: errors,
+                errorList: errorList
+            });
+        }
+
+        if (!req.session.data['group-name-list']) {
+            req.session.data['group-name-list'] = [];
+        }
+
+        if (editId) {
+            // Updating an existing person
+            const index = req.session.data['group-name-list'].findIndex(p => p.id === editId);
+            if (index > -1) {
+                req.session.data['group-name-list'][index].firstName = firstName;
+                req.session.data['group-name-list'][index].lastName = lastName;
+            }
+        } else {
+            // Adding a brand new person
+            req.session.data['group-name-list'].push({ id: 'person-' + Date.now(), firstName, lastName });
+        }
+
+        // Wipe temporary variables clean
+        req.session.data['edit-group-id'] = "";
+        req.session.data['person-first-name'] = "";
+        req.session.data['person-last-name'] = "";
+
+        // Send back to the check page
+        res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+    });
+
+// 22 - remove get route
+router.get('/edit-bo-remove-group-person', function(req, res) {
+    const idToRemove = req.query.id;
+
+    if (idToRemove && req.session.data['group-name-list']) {
+        req.session.data['group-name-list'] = req.session.data['group-name-list'].filter(person => person.id !== idToRemove);
+    }
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+});
+
+    // 22 - final save to rep object post route
+    router.post('/edit-bo-check-group-name-details', function(req, res) {
+        const rep = getRepresentation(req);
+        const groupNameList = req.session.data['group-name-list'] || [];
+        
+        // validation for empty list
+        if (groupNameList.length === 0) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/22-check-group-name-details', {
+                errorList: [{ text: "You must add at least one person to the group", href: "#add-person-link" }]
+            });
+        }
+        // save to final object
+        if (rep) {
+            // if object doesn't exist, create empty object
+            if (!rep.representedGroup) {
+                rep.representedGroup = { name: '' };
+            }
+            rep.representedGroup.members = groupNameList;
+        }
+        // Set success banner and redirect to Review
+        req.session.data['edit-success-message'] = "Group members updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
 
 
 

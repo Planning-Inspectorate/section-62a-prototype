@@ -5,17 +5,10 @@
 {% endblock %}
 
 {% block beforeContent %}
-{% if data['preferred-contact-method'] == 'Email' %}
-    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/08-email-address-provided" %}
-
-{% elif data['preferred-contact-method'] == 'Post' %}
-    {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/09-postal-address-provided" %}
-
-{% endif %}
 
   {{ govukBackLink({
     text: "Back",
-    href: backLink
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
@@ -30,7 +23,7 @@
         }) }}
       {% endif %}
 
-      <form class="form" action="/bo-org-or-charity-being-represented-answer" method="post" novalidate>
+      <form class="form" action="/edit-bo-org-or-charity-being-represented" method="post" novalidate>
 
         {{ govukInput({
           id: "org-or-charity-being-represented",

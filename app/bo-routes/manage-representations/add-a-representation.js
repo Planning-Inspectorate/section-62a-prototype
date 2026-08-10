@@ -458,7 +458,7 @@ router.post('/name-of-senders-org-or-charity-answer', function (req, res) {
 router.post('/senders-job-title-or-role-answer', function (req, res) {
     const sendersJobTitleOrRole = req.session.data['senders-job-title-or-role'];
     if (!sendersJobTitleOrRole) {
-        return res.render('current-service/back-office/manage-representations/add-a-representation/19-senders-job-title-or-role', { errorSendersJobTitleOrRole: "Enter the name of the sender's organisation or charity" });
+        return res.render('current-service/back-office/manage-representations/add-a-representation/19-senders-job-title-or-role', { errorSendersJobTitleOrRole: "Enter the name of the sender's job title or role" });
     }
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted');
 });
