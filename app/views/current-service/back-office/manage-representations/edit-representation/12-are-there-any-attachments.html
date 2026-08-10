@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/add-a-representation/11-would-you-like-to-be-heard-at-a-hearing" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/are-there-any-attachments-answer" method="post" novalidate>
+    <form class="form" action="/edit-are-there-any-attachments" method="post" novalidate>
       
       {{ govukRadios({
         idPrefix: "are-there-any-attachments",

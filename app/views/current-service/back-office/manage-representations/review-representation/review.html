@@ -163,7 +163,7 @@
               <dt class="govuk-summary-list__key">Are you acting as an agent on behalf of a client?</dt>
               <dd class="govuk-summary-list__value">{{ rep.isAgent | default('-', true) }}</dd>
               <dd class="govuk-summary-list__actions">
-                <a class="govuk-link" href="edit-is-agent?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> submitted by agent?</span></a>
+                <a class="govuk-link" href="/edit-is-agent?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> submitted by agent?</span></a>
               </dd>
           </div>
 
@@ -172,7 +172,7 @@
               <dt class="govuk-summary-list__key">Agent organisation name</dt>
               <dd class="govuk-summary-list__value">{{ rep.agentOrgName | default('-', true) }}</dd>
               <dd class="govuk-summary-list__actions">
-                  <a class="govuk-link" href="edit-agent-org?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> agent organisation name</span></a>
+                  <a class="govuk-link" href="/edit-agent-org?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> agent organisation name</span></a>
               </dd>
             </div>
           {% endif %}
@@ -227,7 +227,7 @@
         {% if rep.representing == 'A person' %}
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Represented person name</dt>
-            <dd class="govuk-summary-list__value">{{ rep.representedPerson.firstName | default('-', true) }} {{ rep.representedPerson.lastName }}</dd>
+            <dd class="govuk-summary-list__value">{{ rep.representedPerson | default('-', true) }}</dd>
             <dd class="govuk-summary-list__actions">
               <a class="govuk-link" href="/edit-represented-person?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> represented person name</span></a>
             </dd>
@@ -240,7 +240,7 @@
             <dt class="govuk-summary-list__key">Your organisation or charity name</dt>
             <dd class="govuk-summary-list__value">{{ rep.representedOrgWorkFor.name | default('-', true) }}</dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="/edit-represented-org-work?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation name</span></a>
+              <a class="govuk-link" href="/edit-represented-org-charity?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation name</span></a>
             </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -258,7 +258,7 @@
             <dt class="govuk-summary-list__key">Name of the organisation or charity representing</dt>
             <dd class="govuk-summary-list__value">{{ rep.representedOrgOther | default('-', true) }}</dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="/edit-represented-org-other?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation representing</span></a>
+              <a class="govuk-link" href="/edit-represented-org-i-do-not?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation representing</span></a>
             </dd>
         </div>
         {% endif %}

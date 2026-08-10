@@ -8,7 +8,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of"
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
@@ -23,7 +23,7 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/bo-is-agent-answer" method="post" novalidate>
+    <form class="form" action="/edit-bo-is-agent" method="post" novalidate>
       
       {{ govukRadios({
         classes: "govuk-radios--inline",

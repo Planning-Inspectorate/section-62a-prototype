@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/manage-representations/add-a-representation/12-are-there-any-attachments"
+    href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
  
@@ -22,7 +22,7 @@
           }) }}
         {% endif %}
         
-        <form method="post" action="/bo-upload-supporting-attachments-answer" novalidate>
+        <form method="post" action="/edit-bo-upload-supporting-attachments" novalidate>
             <input type="hidden" name="_csrf" value="">
             
             <h1 class="govuk-heading-l">

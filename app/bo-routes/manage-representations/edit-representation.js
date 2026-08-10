@@ -235,7 +235,6 @@ router.get('/edit-submitter-name', function(req, res) {
             errors.lastName = {text: "Enter your last name"};
             errorList.push({ text: "Enter your last name", href: "#your-last-name" });
         }
-
         // render errors if any
         if (errorList.length > 0) {
         return res.render('current-service/back-office/manage-representations/edit-representation/06-name-of-the-person-submitting-the-representation', { 
@@ -243,12 +242,10 @@ router.get('/edit-submitter-name', function(req, res) {
             errorList: errorList
         });
         }
-
         if (rep) {
             // stitch first and last name back together and save to object
             rep.submitterName = `${firstName} ${lastName}`;
         }
-
         req.session.data['edit-success-message'] = "Submitter name updated";
         res.redirect('/current-service/back-office/manage-representations/review-representation/review');
     });
@@ -399,12 +396,148 @@ router.get('/edit-postal-address', function(req, res) {
     });
 
 
-
-
-
-
-
+// 10 - written representation submitted
+router.get('/edit-comment', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
     
+    // pre-populate session data if rep exists
+    if (rep && rep.comment) {
+        req.session.data['written-representation-submitted'] = rep.comment;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/10-written-representation-submitted');
+});
+
+    // 10 - post
+    router.post('/edit-written-representation-submitted', function (req, res) {
+        const rep = getRepresentation(req);
+        const writtenRepresentationSubmitted = req.session.data['written-representation-submitted'];
+
+        // validation
+        if (!writtenRepresentationSubmitted) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/10-written-representation-submitted', {
+                errorWrittenRepresentationSubmitted: "Enter what you want to tell us about this proposed application"
+            });
+        }
+        // save and update the exact object property
+        if (rep) {
+            rep.comment = writtenRepresentationSubmitted;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Written representation submitted has been updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 11 - would you like to be heard at a hearing
+router.get('/edit-hearing', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.wantsHearing) {
+        req.session.data['would-you-like-to-be-heard-at-a-hearing'] = rep.wantsHearing;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing');
+});
+
+    // 11 - post
+    router.post('/edit-would-you-like-to-be-heard-at-a-hearing', function (req, res) {
+        const rep = getRepresentation(req);
+        const wouldYouLikeToBeHeardAtAHearing = req.session.data['would-you-like-to-be-heard-at-a-hearing'];
+
+        // validation
+        if (!wouldYouLikeToBeHeardAtAHearing) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing', {
+                errorWouldYouLikeToBeHeardAtAHearing: "Select yes if you would like to be heard at a hearing"
+            });
+        }
+        // save and update the exact object property
+        if (rep) {
+            rep.wantsHearing = wouldYouLikeToBeHeardAtAHearing;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Hearing preference has been updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 12 - are there any attachments
+router.get('/edit-has-attachments' , function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.hasAttachments) {
+        req.session.data['are-there-any-attachments'] = rep.hasAttachments;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/12-are-there-any-attachments');
+});
+
+    // 12 - post
+    router.post('/edit-are-there-any-attachments', function (req, res) {
+        const rep = getRepresentation(req);
+        const areThereAnyAttachments = req.session.data['are-there-any-attachments'];
+
+        // validation
+        if (!areThereAnyAttachments) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/12-are-there-any-attachments', {
+                errorAreThereAnyAttachments: "Select yes if there are any attachments to this representation"
+            });
+        }
+        // save and update the exact object property
+        if (rep) {
+            rep.hasAttachments = areThereAnyAttachments;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Attachment preference has been updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 13 - upload attachments
+router.get('/edit-attachments', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.attachments) {
+        req.session.data['uploadedFiles'] = rep.attachments.join('||');
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/13-upload-attachments');
+});
+
+    // 13 - post
+    router.post('/edit-bo-upload-supporting-attachments', function(req, res) {
+        const rep = getRepresentation(req);
+        const uploadedFiles = req.session.data['uploadedFiles'];
+        
+        // error containers
+        const errors = {};
+        const errorList = [];
+
+        // validation
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+            errors.uploadedFiles = { text: "Upload an attachment" };
+            errorList.push({ text: "Upload an attachment", href: "#documents" });
+        }
+        // render errors if any
+        if (errorList.length > 0) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/13-upload-attachments', {
+                errors: errors,
+                errorList: errorList
+            });
+        }
+        // save back to the exact object property
+        if (rep) {
+            // Convert the '||' string back into an array
+            rep.attachments = uploadedFiles.split('||');
+        }
+        // set success banner and redirect
+        req.session.data['edit-success-message'] = "Attachments updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
 
 // 14 - representations made on behalf of
 router.get('/edit-rep-on-behalf-of', function(req, res) {
@@ -437,6 +570,141 @@ router.get('/edit-rep-on-behalf-of', function(req, res) {
         req.session.data['edit-success-message'] = "Who you are representing has been updated";
         res.redirect('/current-service/back-office/manage-representations/review-representation/review');
     });
+
+
+// 15 - was the representation submitted by an agent
+router.get('/edit-is-agent', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.isAgent) {
+        req.session.data['is-agent'] = rep.isAgent;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/15-was-the-representation-submitted-by-an-agent');
+});
+
+    // 15 - post
+    router.post('/edit-bo-is-agent', function (req, res) {
+        const rep = getRepresentation(req);
+        const isAgent = req.session.data['is-agent'];
+
+        // validation
+        if (!isAgent) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/15-was-the-representation-submitted-by-an-agent', {
+                errorIsAgent: "Select yes if the representation was submitted by an agent"
+            });
+        }
+        // save and update the exact object property
+        if (rep) {
+            rep.isAgent = isAgent;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Agent submission preference has been updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 16 - agent organisation name
+router.get('/edit-agent-org', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.agentOrgName) {
+        req.session.data['agent-organisation-name'] = rep.agentOrgName;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/16-name-of-agents-organisation');
+});
+
+    // 16 - post
+    router.post('/edit-bo-agent-organisation-name', function (req, res) {
+        const rep = getRepresentation(req);
+        const agentOrganisationName = req.session.data['agent-organisation-name'];
+
+        // validation
+        if (!agentOrganisationName) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/16-name-of-agents-organisation', {
+                errorAgentOrganisationName: "Enter the agent organisation name"
+            });
+        }
+        // save and update the exact object property
+        if (rep) {
+            rep.agentOrgName = agentOrganisationName;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Agent organisation name has been updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 17 - name of the individual being represented
+router.get('/edit-represented-person', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.representedPerson) {
+       // split submitterName into first and last name to match form inputs
+        const nameParts = rep.submitterName.split(' ');
+        
+        // First word is the first name, the rest is the last name
+        req.session.data['name-of-individual-first-name'] = nameParts[0];
+        req.session.data['name-of-individual-last-name'] = nameParts.slice(1).join(' ');
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented');
+});
+
+    // 17 - post
+    router.post('/edit-bo-name-of-individual-being-represented', function(req, res) {
+        const rep = getRepresentation(req);
+        const firstName = req.session.data['name-of-individual-first-name'];
+        const lastName = req.session.data['name-of-individual-last-name'];
+
+        // error containers
+        const errors = {};
+        const errorList = [];
+
+        // validate name fields
+        if (!firstName) {
+            errors.firstName = {text: "Enter the first name"};
+            errorList.push({ text: "Enter the first name", href: "#name-of-individual-first-name" });
+        }
+        if (!lastName) {
+            errors.lastName = {text: "Enter the last name"};
+            errorList.push({ text: "Enter the last name", href: "#name-of-individual-last-name" });
+        }
+        // render errors if any
+        if (errorList.length > 0) {
+        return res.render('current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented', { 
+            errors: errors,
+            errorList: errorList
+        });
+        }
+        if (rep) {
+            // stitch first and last name back together and save to object
+            rep.representedPerson = `${firstName} ${lastName}`;
+        }
+        req.session.data['edit-success-message'] = "Represented person's name updated";
+        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+    });
+
+
+// 18 - name of senders organisation or charity
+router.get('/edit-represented-org-charity', function(req, res) {
+    const rep = getRepresentation(req); // find the representation based on currentRepRef
+    
+    // pre-populate session data if rep exists
+    if (rep && rep.representedOrgWorkFor.role) {
+        req.session.data['name-of-senders-org-or-charity'] = rep.representedOrgWorkFor.role;
+    }
+    // render page with pre-populated data
+    res.redirect('/current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity');
+});
+
+
+
+
 
 
 export default router;
