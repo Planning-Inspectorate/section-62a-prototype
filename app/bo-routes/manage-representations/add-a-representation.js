@@ -477,9 +477,9 @@ router.post('/bo-org-or-charity-being-represented-answer', function (req, res) {
 // 21 - group name
 router.post('/bo-name-of-the-group-answer', function (req, res) {
     const nameOfTheGroup = req.session.data['name-of-the-group'];
-    if (!nameOfTheGroup) {
-        return res.render('current-service/back-office/manage-representations/add-a-representation/21-group-name', { errorNameOfTheGroup: "Enter the name of the group" });
-    }
+
+    // no validation required as it is optional
+
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/22-check-group-name-details');
 });
 

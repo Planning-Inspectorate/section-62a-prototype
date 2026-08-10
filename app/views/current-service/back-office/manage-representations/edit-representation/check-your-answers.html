@@ -231,7 +231,7 @@
         {% if data['representation-made-on-behalf-of'] == 'A group of people' %}
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Your group name</dt>
-            <dd class="govuk-summary-list__value">{{ data['name-of-the-group'] }}</dd>
+            <dd class="govuk-summary-list__value">{{ data['name-of-the-group'] | default('-', true) }}</dd>
             <dd class="govuk-summary-list__actions">
               <a class="govuk-link" href="/current-service/back-office/manage-representations/add-a-representation/21-group-name">Change<span class="govuk-visually-hidden"> group name</span></a>
             </dd>
