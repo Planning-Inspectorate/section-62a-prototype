@@ -71,14 +71,7 @@
                                         <input class="govuk-checkboxes__input" id="filters-5" name="filters"
                                             type="checkbox" value="withdrawn">
                                         <label class="govuk-label govuk-checkboxes__label" for="filters-5">
-                                            Yes to hearing (0)
-                                        </label>
-                                    </div>
-                                    <div class="govuk-checkboxes__item">
-                                        <input class="govuk-checkboxes__input" id="filters-6" name="filters"
-                                            type="checkbox" value="withdrawn">
-                                        <label class="govuk-label govuk-checkboxes__label" for="filters-6">
-                                            No to hearing (0)
+                                            Attend a hearing (0)
                                         </label>
                                     </div>
                                 </div>
@@ -133,12 +126,17 @@
 
 <div id="pagination" class="govuk-body">
     <p class="govuk-body govuk-clearfix">
-        <span class="govuk-body">Showing <strong>1</strong> to<strong> x</strong> of<strong> x</strong> representations, newest first.
+        <span class="govuk-body">
+            Showing 
+            <strong>{{ startItem }}</strong> to 
+            <strong>{{ endItem }}</strong> of 
+            <strong>{{ totalReps }}</strong> representations, newest first.
         </span>
         <span class="pins-pagination-options">
-
+            {# next/previous page links here #}
         </span>
     </p>
+</div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
