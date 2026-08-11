@@ -12,28 +12,66 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    {# --- SUCCESS BANNER --- #}
-    {% if successMessage %}
-
-    {% set successBannerHtml %}
-    <p class="govuk-notification-banner__heading">
-      {{ successMessage }}
-    </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-    html: successBannerHtml,
-    type: "success"
-    }) }}
-
+    {# --- ERROR SUMMARY --- #}
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
     {% endif %}
 
-    {# --- PAGE HEADING --- #}
-    <h1 class="govuk-heading-l">
-        <span class="govuk-caption-xl">{{ rep.reference }}</span>
-        Review representation
-    </h1>
+    {# ========================================================= #}
+    {# CREATE ATTACHMENT BANNER VARIABLE                         #}
+    {# ========================================================= #}
+  
+    {% set isMissingAttachments = (rep.hasAttachments == 'Yes') and (not rep.attachments or rep.attachments.length == 0) %}
+    
+    {# if attachments are missing + success message #}
+    {% set successWithMissingAttachmentsHtml %}
+      <ul class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
+        <li>{{ successMessage }}</li>
+        <li>There are no attachments added. <a class="govuk-notification-banner__link" href="/edit-attachments">Add attachments</a>.</li>
+      </ul>
+    {% endset %}
 
+    {# typical success message #}
+    {% set standardSuccessHtml %}
+      <h3 class="govuk-notification-banner__heading">{{ successMessage }}</h3>
+    {% endset %}
+
+    {# persistant attachment missing banner #}
+    {% set importantMissingAttachmentsHtml %}
+      <h3 class="govuk-notification-banner__heading">
+        There are no attachments added. <a class="govuk-notification-banner__link" href="/edit-attachments">Add attachments</a>.
+      </h3>
+    {% endset %}
+    
+    {% if successMessage %}
+      {% if isMissingAttachments %}
+
+        {{ govukNotificationBanner({
+          type: "success",
+          html: successWithMissingAttachmentsHtml
+        }) }}
+
+      {% else %}
+
+        {{ govukNotificationBanner({
+          type: "success",
+          html: standardSuccessHtml
+        }) }}
+
+      {% endif %}
+
+    {% elif isMissingAttachments %}
+      
+      {{ govukNotificationBanner({
+        titleText: "Important",
+        html: importantMissingAttachmentsHtml
+      }) }}
+    {% endif %}
+
+  
     {# ========================================================= #}
     {# PRE-RENDERED HTML SNIPPETS                                #}
     {# ========================================================= #}
@@ -81,9 +119,18 @@
       {% endif %}
     {% endset %}
 
+
+    {# --- PAGE HEADING --- #}
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl">{{ rep.reference }}</span>
+        Review representation
+    </h1>
+
+
     {# ========================================================= #}
     {# SUMMARY LIST                                              #}
     {# ========================================================= #}
+
     <dl class="govuk-summary-list">
 
       {# --- 00: Reference --- #}
@@ -354,11 +401,11 @@
           <a href="/withdraw-representation-start" class="govuk-link govuk-!-font-size-19" id="withdraw-representation-link">Withdraw representation</a>
     </p>
 
+    <form action="/review-answer" method="post" novalidate>
     {{ govukButton({
-      text: "Continue",
-      href: "",
-      classes: "govuk-button"
+      text: "Continue"
     }) }}
+    </form>
 
   </div>
 </div>
