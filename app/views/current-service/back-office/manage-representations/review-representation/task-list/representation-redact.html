@@ -1,0 +1,133 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Redact representation
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/task-list-review-rep"}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl">{{ rep.reference }}</span>
+        Redact representation
+    </h1>
+
+    <h2 class="govuk-heading-m">Redaction suggestions</h2>
+    <p class="govuk-body">No redaction suggestions found.</p>
+
+    <h2 class="govuk-heading-m">Redaction preview</h2>
+    
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          Original representation
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        {{ rep.comment }}
+      </div>
+    </details>
+
+    <form method="post" action="/representation-redact-answer" novalidate>
+      
+      <div class="govuk-form-group" id="redact-form-group">
+        
+        <p id="redaction-error" class="govuk-error-message" style="display: none;">
+          <span class="govuk-visually-hidden">Error:</span> <span id="redaction-error-text"></span>
+        </p>
+
+        <textarea 
+          class="govuk-textarea" 
+          id="redacted-comment" 
+          name="customRedactedComment"
+          rows="8"
+          readonly="true"
+        >{{ rep.redactedComment | default(rep.comment, true) }}</textarea>
+      </div>
+
+      <div class="govuk-button-group">
+        <button type="button" class="govuk-button govuk-button--secondary" id="btn-redact">Redact selected text</button>
+        <button type="button" class="govuk-button govuk-button--secondary" id="btn-undo">Undo</button>
+        <button type="button" class="govuk-button govuk-button--secondary" id="btn-remove-all">Remove all redactions</button>
+      </div>
+
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+
+  </div>
+</div>
+
+{# --- CLIENT-SIDE REDACTION LOGIC --- #}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('redacted-comment');
+    const btnRedact = document.getElementById('btn-redact');
+    const btnUndo = document.getElementById('btn-undo');
+    const btnRemoveAll = document.getElementById('btn-remove-all');
+    
+    // Error elements
+    const formGroup = document.getElementById('redact-form-group');
+    const errorContainer = document.getElementById('redaction-error');
+    const errorText = document.getElementById('redaction-error-text');
+
+    let historyStack = [];
+    const originalText = `{{ rep.comment | safe }}`; 
+
+    // --- Error Handling Functions ---
+    function showError(msg) {
+      errorText.innerText = msg;
+      errorContainer.style.display = 'block';
+      formGroup.classList.add('govuk-form-group--error');
+      textarea.classList.add('govuk-textarea--error');
+    }
+
+    function clearError() {
+      errorContainer.style.display = 'none';
+      formGroup.classList.remove('govuk-form-group--error');
+      textarea.classList.remove('govuk-textarea--error');
+    }
+
+    // --- Button Listeners ---
+    btnRedact.addEventListener('click', function() {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      if (start === end) {
+        showError("Select text to redact");
+      } else {
+        clearError(); // Error clears ONLY upon successful redaction
+        historyStack.push(textarea.value);
+        const selectedLength = end - start;
+        const redactionString = '█'.repeat(selectedLength);
+        textarea.value = textarea.value.substring(0, start) + redactionString + textarea.value.substring(end);
+      }
+    });
+
+    btnUndo.addEventListener('click', function() {
+      if (historyStack.length === 0) {
+        showError("No changes to undo");
+      } else {
+        clearError(); // Error clears ONLY upon successful undo
+        textarea.value = historyStack.pop();
+      }
+    });
+
+    btnRemoveAll.addEventListener('click', function() {
+      if (textarea.value === originalText) {
+        showError("No changes to undo");
+      } else {
+        clearError(); // Error clears ONLY upon successful removal
+        historyStack.push(textarea.value);
+        textarea.value = originalText;
+      }
+    });
+
+  });
+</script>
+{% endblock %}

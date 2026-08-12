@@ -644,8 +644,8 @@ router.get('/edit-represented-person', function(req, res) {
     
     // pre-populate session data if rep exists
     if (rep && rep.representedPerson) {
-       // split submitterName into first and last name to match form inputs
-        const nameParts = rep.submitterName.split(' ');
+       // split representedPerson into first and last name to match form inputs
+        const nameParts = rep.representedPerson.split(' ');
         
         // First word is the first name, the rest is the last name
         req.session.data['name-of-individual-first-name'] = nameParts[0];

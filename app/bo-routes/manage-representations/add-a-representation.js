@@ -664,10 +664,8 @@ router.post('/representation-added', function(req, res) {
         agentOrgName: (asksAgentQuestions && data['is-agent'] === 'Yes') ? data['agent-organisation-name'] : null,
 
         // Conditional: Represented Person
-        representedPerson: (isBehalf && data['representation-made-on-behalf-of'] === 'A person') ? {
-            firstName: data['name-of-individual-first-name'],
-            lastName: data['name-of-individual-last-name']
-        } : null,
+        representedPerson: (isBehalf && data['representation-made-on-behalf-of'] === 'A person') ? 
+            `${data['name-of-individual-first-name']} ${data['name-of-individual-last-name']}` : null,
 
         // Conditional: Represented Org (Work for)
         representedOrgWorkFor: (isBehalf && data['representation-made-on-behalf-of'] === 'An organisation or charity that I work or volunteer for') ? {

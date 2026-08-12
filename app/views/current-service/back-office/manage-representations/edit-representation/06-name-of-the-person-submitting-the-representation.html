@@ -6,23 +6,9 @@
 
 {% block beforeContent %}
 
-{% if data['source-of-representation'] == 'Myself' %}
-  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/05-source-of-the-representation" %}
-
-{% elif data['representation-made-on-behalf-of'] == 'An organisation or charity that I work or volunteer for' %}
-  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/14-representation-made-on-behalf-of" %}
-
-{% elif data['is-agent'] == 'Yes' %}
-  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/16-name-of-agents-organisation" %}
-
-{% elif data['is-agent'] == 'No' %}
-  {% set backLink = "/current-service/back-office/manage-representations/add-a-representation/15-was-the-representation-submitted-by-an-agent" %}
-
-{% endif %}
-
   {{ govukBackLink({ 
       text: "Back", 
-      href: backLink 
+      href: "/current-service/back-office/manage-representations/review-representation/review"
   }) }}
 {% endblock %}
 
