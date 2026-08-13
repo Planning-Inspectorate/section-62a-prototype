@@ -58,10 +58,12 @@
           
           <li class="govuk-task-list__item govuk-task-list__item--with-link">
             <div class="govuk-task-list__name-and-hint">
-              <a class="govuk-link govuk-task-list__link" href="#">{{ file }}</a>
+              <a class="govuk-link govuk-task-list__link" href="/task-list-review-attachment?file={{ file | urlencode }}">{{ file }}</a>
             </div>
             <div class="govuk-task-list__status">
-              {% if fileStatus == 'Accepted' %}
+              {% if fileStatus == 'Accepted and redacted' %}
+                <strong class="govuk-tag govuk-tag--green" style="max-width: none; white-space: nowrap;">Accepted and redacted</strong>
+              {% elif fileStatus == 'Accepted' %}
                 <strong class="govuk-tag govuk-tag--green">Accepted</strong>
               {% elif fileStatus == 'Rejected' %}
                 <strong class="govuk-tag govuk-tag--red">Rejected</strong>

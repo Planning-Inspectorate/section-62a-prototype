@@ -1,0 +1,191 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block head %}
+  {{ super() }}
+  
+  <style>
+    /* 1. The dashed container */
+    .custom-dropzone {
+      position: relative;
+      border: 2px dashed #b1b4b6;
+      padding: 60px 15px;
+      background-color: #ffffff;
+      margin-bottom: 30px;
+    }
+
+    /* Container turns grey on hover */
+    .custom-dropzone:hover {
+      background-color: #f3f2f1; 
+    }
+
+    /* 2. The invisible native file input */
+    .custom-dropzone__input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0; 
+      cursor: pointer;
+      z-index: 2; 
+    }
+
+    /* 3. The fake UI wrapper */
+    .custom-dropzone__ui {
+      position: relative;
+      z-index: 1; 
+      pointer-events: none; 
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* 4. The fake "Choose attachments" button */
+    .custom-dropzone__button {
+      background-color: #f3f2f1;
+      color: #0b0c0c;
+      padding: 8px 15px;
+      border-bottom: 2px solid #505a5f; 
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 19px;
+    }
+
+    /* Button turns slightly darker grey when the container is hovered */
+    .custom-dropzone:hover .custom-dropzone__button {
+      background-color: #dbdad9; 
+    }
+
+    /* 5. The "or drop attachments" text */
+    .custom-dropzone__text {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 19px;
+      color: #0b0c0c;
+    }
+  </style>
+{% endblock %}
+
+
+{% block pageTitle %}
+  {% if errorUpload %}Error: {% endif %}Redact original attachment
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/task-list-review-attachment?file=" + (fileName | urlencode) 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorUpload %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorUpload, href: "#redactedFileUpload" }]
+      }) }}
+    {% endif %}
+
+    </div>
+    </div>
+
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl">{{ rep.reference }}</span>
+        Redact original attachment
+    </h1>
+
+    {% set redactedFile = rep.redactedAttachments[fileName] %}
+
+    {# --- Dynamic Summary List --- #}
+    {% set redactedHtml %}
+      {% if redactedFile %}
+        <a href="#" class="govuk-link">{{ redactedFile }}</a>
+      {% else %}
+        -
+      {% endif %}
+    {% endset %}
+
+    {% set removeAction = null %}
+    {% if redactedFile %}
+      {% set removeAction = {
+        items: [{
+          href: "javascript:document.getElementById('remove-form').submit();",
+          text: "Remove",
+          visuallyHiddenText: "redacted attachment"
+        }]
+      } %}
+    {% endif %}
+
+    {{ govukSummaryList({
+      rows: [
+        { key: { text: "Reference" }, value: { text: rep.reference } },
+        { key: { text: "Original attachment" }, value: { html: '<a href="#" class="govuk-link">' + fileName + '</a>' } },
+        { key: { text: "Redacted attachment" }, value: { html: redactedHtml }, actions: removeAction }
+      ]
+    }) }}
+
+    <form id="remove-form" method="post" action="/task-list-attachment-redact-answer">
+      <input type="hidden" name="fileName" value="{{ fileName }}">
+      <input type="hidden" name="action" value="remove">
+    </form>
+
+   {# --- STATE 1: Upload Form (Only shows if no file exists) --- #}
+   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if not redactedFile %}
+      <h2 class="govuk-heading-m">Upload redacted attachment</h2>
+
+      <p class="govuk-body">Your files need to be:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XSLX</li>
+        <li>a single document not compressed as a zip file</li>
+        <li>smaller than 20MB</li>
+      </ul>
+      
+      <form method="post" action="/task-list-attachment-redact-answer" id="upload-form">
+        <input type="hidden" name="fileName" value="{{ fileName }}">
+        <input type="hidden" name="action" value="upload">
+        
+        {# UPDATE 2: Wrap the error and dropzone in a govuk-form-group #}
+        <div class="govuk-form-group {% if errorUpload %}govuk-form-group--error{% endif %}">
+          
+          {% if errorUpload %}
+            <p id="upload-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{ errorUpload }}
+            </p>
+          {% endif %}
+
+          <div class="custom-dropzone {% if errorUpload %}custom-dropzone--error{% endif %}">
+            
+            {# Make sure the ID here matches the href in the error summary #}
+            <input class="custom-dropzone__input" id="redactedFileUpload" name="redactedFileUpload" type="file" onchange="document.getElementById('upload-form').submit();" aria-label="Upload an attachment">
+            
+            <div class="custom-dropzone__ui" aria-hidden="true">
+              <span class="custom-dropzone__button">Choose attachments</span>
+              <span class="custom-dropzone__text">or drop attachments</span>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    {% endif %}
+
+    {# --- STATE 2: Continue Form --- #}
+    <form method="post" action="/task-list-attachment-redact-answer" novalidate>
+      <input type="hidden" name="fileName" value="{{ fileName }}">
+      <input type="hidden" name="action" value="continue">
+      
+      {{ govukButton({ 
+        text: "Continue"
+      }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

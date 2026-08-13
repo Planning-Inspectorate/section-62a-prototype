@@ -1,0 +1,62 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorReviewDecision %}Error: {% endif %}Review attachment
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/task-list" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {% if errorReviewDecision %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorReviewDecision, href: "#review-attachment-decision" }]
+      }) }}
+    {% endif %}
+    
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl">{{ rep.reference }}</span>
+        Review attachment
+    </h1>
+
+    {{ govukSummaryList({
+      rows: [
+        { key: { text: "Reference" }, value: { text: rep.reference } },
+        { key: { text: "Original attachment" }, value: { html: '<a href="#" class="govuk-link">' + fileName + '</a>' } }
+      ]
+    }) }}
+
+    {% set decisionError = null %}
+    {% if errorReviewDecision %}
+      {% set decisionError = { text: errorReviewDecision } %}
+    {% endif %}
+
+    <form method="post" action="/task-list-attachment-answer" novalidate>
+      
+      {# hidden input to track file name to pass on to next page #}
+      <input type="hidden" name="fileName" value="{{ fileName }}">
+
+      {{ govukRadios({
+        name: "review-attachment-decision",
+        fieldset: {
+          legend: { text: "Review decision", classes: "govuk-fieldset__legend--m" }
+        },
+        errorMessage: decisionError,
+        items: [
+          { value: "Accept", text: "Accept", checked: currentDecision == "Accept" },
+          { value: "Accept and redact", text: "Accept and redact", checked: currentDecision == "Accept and redact" },
+          { value: "Reject", text: "Reject", checked: currentDecision == "Reject" }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

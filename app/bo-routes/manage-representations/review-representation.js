@@ -259,6 +259,142 @@ router.get('/current-service/back-office/manage-representations/review-represent
   });
 
 
+// REVIEW ATTACHMENTS (Task List)
+router.get('/task-list-review-attachment', function(req, res) {
+    const rep = getRepresentation(req);
+    const fileName = req.query.file; // Grab the filename from the URL
+    
+    let currentDecision = '';
+    
+    if (rep && rep.attachmentReviews && rep.attachmentReviews[fileName]) {
+        if (rep.attachmentReviews[fileName] === 'Accepted') currentDecision = 'Accept';
+        if (rep.attachmentReviews[fileName] === 'Rejected') currentDecision = 'Reject';
+        if (rep.attachmentReviews[fileName] === 'Accepted and redacted') currentDecision = 'Accept and redact';
+    }
+
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment', { 
+        rep: rep,
+        fileName: fileName,
+        currentDecision: currentDecision 
+    });
+});
+
+// REVIEW ATTACHMENTS (Task List) - post
+  router.post('/task-list-attachment-answer', function(req, res) {
+      const rep = getRepresentation(req);
+      const fileName = req.body['fileName']; // Pass via hidden input in HTML
+      const decision = req.body['review-attachment-decision'];
+
+      if (!decision) {
+          return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment', {
+              rep: rep,
+              fileName: fileName,
+              errorReviewDecision: "Select the review decision",
+              currentDecision: ''
+          });
+      }
+
+      if (rep) {
+          // ensure storage objects exist
+          rep.attachmentReviews = rep.attachmentReviews || {};
+          rep.redactedAttachments = rep.redactedAttachments || {};
+
+          if (decision === 'Reject' || decision === 'Accept') {
+              rep.attachmentReviews[fileName] = decision === 'Reject' ? 'Rejected' : 'Accepted';
+              
+              // wipe any ghost redactions
+              rep.redactedAttachments[fileName] = null; 
+              
+              res.redirect('/current-service/back-office/manage-representations/review-representation/task-list');
+              
+          } else if (decision === 'Accept and redact') {
+              // pass file name to next screen, do not save status here
+              res.redirect(`/current-service/back-office/manage-representations/review-representation/task-list/attachment-redact?file=${encodeURIComponent(fileName)}`);
+          }
+      }
+  });
+
+
+// ATTACHMENT REDACT - load the upload page
+router.get('/current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', function(req, res) {
+    const rep = getRepresentation(req);
+    const fileName = req.query.file;
+    
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', { 
+        rep: rep,
+        fileName: fileName
+    });
+});
+
+  // ATTACHMENT REDACT - upload, remove, continue with redacted attachment + validation
+  router.post('/task-list-attachment-redact-answer', function(req, res) {
+      const rep = getRepresentation(req);
+      const fileName = req.body['fileName']; // The original file name
+      const action = req.body['action'];
+      
+      rep.redactedAttachments = rep.redactedAttachments || {};
+      rep.attachmentReviews = rep.attachmentReviews || {};
+
+      if (action === 'remove') {
+          rep.redactedAttachments[fileName] = null;
+          
+          // Optional: clear the session data array if your component relies on it
+          req.session.data['uploadedFiles'] = []; 
+          
+          return res.redirect(`/current-service/back-office/manage-representations/review-representation/task-list/attachment-redact?file=${encodeURIComponent(fileName)}`);
+      } 
+      
+      if (action === 'upload') {
+          // 1. Grab the file directly from the session data
+          const uploadedFile = req.session.data['redactedFileUpload'];
+
+          if (!uploadedFile) {
+              return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
+                  rep: rep, fileName: fileName, errorUpload: "Select a file to upload"
+              });
+          }
+
+          // 2. Strip out fake C:\fakepath\ that browsers add
+          const cleanUploadedFileName = uploadedFile.replace(/^.*[\\\/]/, '');
+
+          if (cleanUploadedFileName === fileName) {
+              return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
+                  rep: rep, fileName: fileName, errorUpload: "Original attachment has the same name."
+              });
+          }
+
+          const allRedactedFiles = Object.values(rep.redactedAttachments);
+          if (allRedactedFiles.includes(cleanUploadedFileName)) {
+              return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
+                  rep: rep, fileName: fileName, errorUpload: "A redacted attachment with this name has already been uploaded."
+              });
+          }
+
+          // 3. Save it to the database object!
+          rep.redactedAttachments[fileName] = cleanUploadedFileName;
+          
+          // 4. Wipe the session data so it doesn't accidentally auto-fill the NEXT time you upload!
+          req.session.data['redactedFileUpload'] = null;
+
+          return res.redirect(`/current-service/back-office/manage-representations/review-representation/task-list/attachment-redact?file=${encodeURIComponent(fileName)}`);
+      }
+
+      if (action === 'continue') {
+          if (!rep.redactedAttachments[fileName]) {
+              return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
+                  rep: rep,
+                  fileName: fileName,
+                  errorUpload: "Upload an attachment"
+              });
+          }
+
+          rep.attachmentReviews[fileName] = 'Accepted and redacted';
+          res.redirect('/current-service/back-office/manage-representations/review-representation/task-list');
+      }
+  });
+
 
 
 
