@@ -152,19 +152,21 @@ router.get('/task-list-review-rep', function(req, res) {
           return res.render('current-service/back-office/manage-representations/review-representation/task-list/representation', {
               rep: rep,
               errorReviewRepDecision: "Select the review decision",
-              currentDecision: '' // to keep radio safely unchecked on error screen
+              currentDecision: '' 
           });
       }
-      // set rep status or redirect to redaction page
+
       if (rep) {
+        // ensure storage objects exist
+        rep.attachmentReviews = rep.attachmentReviews || {};
+        rep.redactedAttachments = rep.redactedAttachments || {};
+
         if (reviewRepDecision === 'Reject') {
             rep.reviewStatus = 'Rejected';
-
             rep.redactedComment = null;
             
             // auto-reject all attachments if they exist
             if (rep.attachments && rep.attachments.length > 0) {
-                rep.attachmentReviews = rep.attachmentReviews || {};
                 rep.attachments.forEach(file => {
                     rep.attachmentReviews[file] = 'Rejected';
                 });
@@ -173,27 +175,31 @@ router.get('/task-list-review-rep', function(req, res) {
             
         } else if (reviewRepDecision === 'Accept') {
             rep.reviewStatus = 'Accepted';
-
             rep.redactedComment = null;
             
-            // revert rejected attachments to incomplete
-            if (rep.attachments && rep.attachments.length > 0 && rep.attachmentReviews) {
+            // revert rejected attachments to incomplete and wipe ghost redacted attachments
+            if (rep.attachments && rep.attachments.length > 0) {
                 rep.attachments.forEach(file => {
                     if (rep.attachmentReviews[file] === 'Rejected') {
                         rep.attachmentReviews[file] = 'Incomplete';
+                        
+                        // wipe previously redacted attachments
+                        rep.redactedAttachments[file] = null; 
                     }
                 });
             }
             res.redirect('/current-service/back-office/manage-representations/review-representation/task-list');
             
-        // prevent accept and redact status from being set if journey unfinished
         } else if (reviewRepDecision === 'Accept and redact') {
             
-            // revert rejected attachments to incomplete
-            if (rep.attachments && rep.attachments.length > 0 && rep.attachmentReviews) {
+            // revert rejected attachments to incomplete and wipe ghost redacted attachments
+            if (rep.attachments && rep.attachments.length > 0) {
                 rep.attachments.forEach(file => {
                     if (rep.attachmentReviews[file] === 'Rejected') {
                         rep.attachmentReviews[file] = 'Incomplete';
+                        
+                        // wipe previously uploaded redacted attachments
+                        rep.redactedAttachments[file] = null; 
                     }
                 });
             }

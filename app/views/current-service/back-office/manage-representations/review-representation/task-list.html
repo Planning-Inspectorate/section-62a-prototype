@@ -56,10 +56,22 @@
           {# Grab the status for this specific file, default to Incomplete #}
           {% set fileStatus = rep.attachmentReviews[file] | default('Incomplete') %}
           
-          <li class="govuk-task-list__item govuk-task-list__item--with-link">
+          {# Check if the main representation was rejected #}
+          {% set isRepRejected = (rep.reviewStatus == 'Rejected') %}
+          
+          {# Only apply the '--with-link' class if it's not rejected #}
+          <li class="govuk-task-list__item {% if not isRepRejected %}govuk-task-list__item--with-link{% endif %}">
+            
             <div class="govuk-task-list__name-and-hint">
-              <a class="govuk-link govuk-task-list__link" href="/task-list-review-attachment?file={{ file | urlencode }}">{{ file }}</a>
+              {% if isRepRejected %}
+                {# Plain text for rejected representations #}
+                {{ file }}
+              {% else %}
+                {# Clickable link for anything else #}
+                <a class="govuk-link govuk-task-list__link" href="/task-list-review-attachment?file={{ file | urlencode }}">{{ file }}</a>
+              {% endif %}
             </div>
+
             <div class="govuk-task-list__status">
               {% if fileStatus == 'Accepted and redacted' %}
                 <strong class="govuk-tag govuk-tag--green" style="max-width: none; white-space: nowrap;">Accepted and redacted</strong>
@@ -71,6 +83,7 @@
                 <strong class="govuk-tag govuk-tag--blue">Incomplete</strong>
               {% endif %}
             </div>
+            
           </li>
         {% endfor %}
       </ul>

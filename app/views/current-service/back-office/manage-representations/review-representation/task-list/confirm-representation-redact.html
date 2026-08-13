@@ -21,11 +21,11 @@
       rows: [
         {
           key: { text: "Original representation" },
-          value: { html: rep.comment | nl2br | escape }
+          value: { html: rep.comment | escape | safe }
         },
         {
           key: { text: "Redacted representation" },
-          value: { html: rep.redactedComment | nl2br | escape },
+          value: { html: rep.redactedComment | escape | safe },
           actions: {
             items: [
               {
