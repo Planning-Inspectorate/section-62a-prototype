@@ -16,17 +16,51 @@
     {# set variables outside list                                #}
     {# ========================================================= #}
 
-    {# --- Groups of People HTML (Conditionally Bulleted) --- #}
+    {# --- Groups of People HTML --- #}
     {% set groupOfPeopleHtml %}
-      {% set groupOfPeopleList = data['group-name-list'] or [] %}
+      {% set groupOfPeopleList = data['group-name-list'] | default([]) %}
+      
       {% if groupOfPeopleList.length > 0 %}
-        <ul class="govuk-list {% if groupOfPeopleList.length > 1 %}govuk-list--bullet{% endif %}">
-          {% for person in groupOfPeopleList %}
-            <li>
-              {{ person.firstName }} {{ person.lastName }}
-            </li>
+        {% set totalMembers = groupOfPeopleList.length %}
+        
+        {# Always show the first 3 members #}
+        <ul class="govuk-list {% if totalMembers > 1 %}govuk-list--bullet{% endif %} govuk-!-margin-bottom-0">
+          {% for i in range(0, 3) %}
+            {% if i < totalMembers %}
+              {% set person = groupOfPeopleList[i] %}
+              <li>{{ person.firstName }} {{ person.lastName }}</li>
+            {% endif %}
           {% endfor %}
         </ul>
+
+        {# If there are more than 3, show toggle and create hidden list #}
+        {% if totalMembers > 3 %}
+          {% set extraCount = totalMembers - 3 %}
+          
+          {# Wrapper container to scope the JavaScript #}
+          <div class="js-show-more-container" data-extra-count="{{ extraCount }}">
+            
+            <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+              {# Ensure aria-controls has a unique ID for this specific page #}
+              {# use 'Show {{ extraCount }} more' to show number of hidden items #}
+              <a href="#" class="govuk-link govuk-link--no-visited-state js-show-more-toggle" aria-expanded="false" aria-controls="extra-group-members-cya">Show more</a>
+            </p>
+
+            {# Hidden content block matching the aria-controls ID #}
+            <div id="extra-group-members-cya" class="js-show-more-content" hidden>
+              <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 govuk-!-margin-top-2">
+                {% for i in range(3, totalMembers) %}
+                  {% set person = groupOfPeopleList[i] %}
+                  <li>{{ person.firstName }} {{ person.lastName }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            
+          </div>
+        {% endif %}
+
+      {% else %}
+        None added
       {% endif %}
     {% endset %}
 
@@ -183,15 +217,7 @@
         <dd class="govuk-summary-list__value">
         
         {% if comment.length > 100 %}
-            <p class="govuk-body">{{ comment | truncate(100, true, "...") }}</p>
-            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">Read full comment</span>
-            </summary>
-            <div class="govuk-details__text">
-                {{ comment | nl2br | safe }}
-            </div>
-            </details>
+            <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments">Read more</a></p>
             
         {% else %}
             {# show normally if less than specified characters #}
@@ -275,4 +301,45 @@
 
   </div>
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Grab all toggle links on the page
+    const toggleLinks = document.querySelectorAll('.js-show-more-toggle');
+
+    toggleLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        // Prevent the link from jumping the page to the top
+        event.preventDefault(); 
+
+        // Find the specific container and content for this exact link
+        const container = link.closest('.js-show-more-container');
+        const content = container.querySelector('.js-show-more-content');
+        
+        // Grab the count we saved in the data attribute earlier
+        const extraCount = container.dataset.extraCount; 
+
+        // Check current state
+        const isExpanded = link.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          // Hide it
+          content.setAttribute('hidden', '');
+          link.setAttribute('aria-expanded', 'false');
+          // use `Show ${extraCount} more` to show number of hidden items
+          link.innerText = `Show more`;
+        } else {
+          // Show it
+          content.removeAttribute('hidden');
+          link.setAttribute('aria-expanded', 'true');
+          link.innerText = 'Hide';
+        }
+      });
+    });
+  });
+</script>
+
 {% endblock %}
