@@ -12,7 +12,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    
     <h1 class="govuk-heading-l">
         <span class="govuk-caption-xl">{{ rep.reference }}</span> 
         Review representation</h1>
@@ -45,29 +44,22 @@
     {% if rep.attachments and rep.attachments.length > 0 %}
       <h2 class="govuk-heading-m govuk-!-margin-top-8">Review attachments</h2>
       
-      {# Show hint if the parent rep was rejected #}
       {% if rep.reviewStatus == 'Rejected' %}
         <div class="govuk-hint">All attachments are rejected when the comment is rejected. To accept please review the comment.</div>
       {% endif %}
 
-      <ul class="govuk-task-list">
+     <ul class="govuk-task-list">
         {% for file in rep.attachments %}
           
-          {# Grab the status for this specific file, default to Incomplete #}
-          {% set fileStatus = rep.attachmentReviews[file] | default('Incomplete') %}
-          
-          {# Check if the main representation was rejected #}
+          {# Safely check the file status #}
+          {% set fileStatus = rep.attachmentReviews[file] if rep.attachmentReviews and rep.attachmentReviews[file] else 'Incomplete' %}
           {% set isRepRejected = (rep.reviewStatus == 'Rejected') %}
           
-          {# Only apply the '--with-link' class if it's not rejected #}
           <li class="govuk-task-list__item {% if not isRepRejected %}govuk-task-list__item--with-link{% endif %}">
-            
             <div class="govuk-task-list__name-and-hint">
               {% if isRepRejected %}
-                {# Plain text for rejected representations #}
                 {{ file }}
               {% else %}
-                {# Clickable link for anything else #}
                 <a class="govuk-link govuk-task-list__link" href="/task-list-review-attachment?file={{ file | urlencode }}">{{ file }}</a>
               {% endif %}
             </div>
@@ -83,11 +75,48 @@
                 <strong class="govuk-tag govuk-tag--blue">Incomplete</strong>
               {% endif %}
             </div>
-            
           </li>
         {% endfor %}
       </ul>
     {% endif %}
+
+    {# --- SECTION 3: SUBMISSION LOGIC --- #}
+    
+    {# 1. Assume complete to start #}
+    {% set isComplete = true %}
+    
+    {# 2. Check main representation #}
+    {% if repStatus == 'Incomplete' %}
+      {% set isComplete = false %}
+    {% endif %}
+
+    {# 3. The "Block Capture" Trick to bypass loop scoping limits #}
+    {# This dumps all attachment statuses into a hidden text block #}
+    {% set capturedStatuses %}
+      {% if rep.attachments %}
+        {% for file in rep.attachments %}
+          {{ rep.attachmentReviews[file] if rep.attachmentReviews and rep.attachmentReviews[file] else 'Incomplete' }}
+        {% endfor %}
+      {% endif %}
+    {% endset %}
+
+    {# If the word "Incomplete" is anywhere in that text block, the task list is NOT done! #}
+    {% if "Incomplete" in capturedStatuses %}
+      {% set isComplete = false %}
+    {% endif %}
+
+    {# 4. Render the appropriate UI #}
+
+      {% if isComplete %}
+        <form method="post" action="/task-list-submit">
+          {{ govukButton({ text: "Submit" }) }}
+        </form>
+      {% else %}
+        <strong class="govuk-tag govuk-tag--grey">
+          Review incomplete
+        </strong>
+      {% endif %}
+
 
   </div>
 </div>

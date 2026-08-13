@@ -14,6 +14,10 @@ router.get('/current-service/back-office/manage-representations/manage-represent
     return res.redirect('/current-service/back-office/cases'); 
   }
 
+  // banner logic for accepted or rejected rep
+  const successMessage = req.session.data['task-list-success-message'];
+  delete req.session.data['task-list-success-message']; // clear message after showing once
+
     // showing results and pagination logic
     //  find total number of reps
     let totalReps = 0;
@@ -34,7 +38,8 @@ router.get('/current-service/back-office/manage-representations/manage-represent
     currentCase: foundCase,
     totalReps: totalReps,
     startItem: startItem,
-    endItem: endItem
+    endItem: endItem,
+    successMessage: successMessage
   });
 });
 

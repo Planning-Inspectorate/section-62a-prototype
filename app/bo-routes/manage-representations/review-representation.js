@@ -114,6 +114,23 @@ router.get('/current-service/back-office/manage-representations/review-represent
 });
 
   // TASK LIST VIEW - post
+  router.post('/task-list-submit', function(req, res) {
+      const rep = getRepresentation(req);
+      
+      if (rep) {
+          // map the specific review decision to the overall representation status
+          if (rep.reviewStatus === 'Accepted and redacted') {
+              rep.status = 'Accepted';
+          } else {
+              // this safely handles both 'Accepted' and 'Rejected'
+              rep.status = rep.reviewStatus; 
+          }
+          req.session.data['task-list-success-message'] = `Representation has been ${rep.status.toLowerCase()}`;
+      }
+      // Redirect to the manage representations page
+      res.redirect('/current-service/back-office/manage-representations/manage-representations');
+  });
+
 
 
 // REVIEW REPRESENTATION (Task List)
