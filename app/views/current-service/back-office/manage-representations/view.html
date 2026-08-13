@@ -1,0 +1,514 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  View representation - {{ rep.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to manage representations", href: "/current-service/back-office/manage-representations/manage-representations" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {# --- ERROR SUMMARY --- #}
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    {# ========================================================= #}
+    {# CREATE ATTACHMENT BANNER VARIABLE                         #}
+    {# ========================================================= #}
+  
+    {% set isMissingAttachments = (rep.hasAttachments == 'Yes') and (not rep.attachments or rep.attachments.length == 0) %}
+    
+    {# if attachments are missing + success message #}
+    {% set successWithMissingAttachmentsHtml %}
+      <ul class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
+        <li>{{ successMessage }}</li>
+        <li>There are no attachments added. <a class="govuk-notification-banner__link" href="/edit-attachments">Add attachments</a>.</li>
+      </ul>
+    {% endset %}
+
+    {# typical success message #}
+    {% set standardSuccessHtml %}
+      <h3 class="govuk-notification-banner__heading">{{ successMessage }}</h3>
+    {% endset %}
+
+    {# persistant attachment missing banner #}
+    {% set importantMissingAttachmentsHtml %}
+      <h3 class="govuk-notification-banner__heading">
+        There are no attachments added. <a class="govuk-notification-banner__link" href="/edit-attachments">Add attachments</a>.
+      </h3>
+    {% endset %}
+    
+    {% if successMessage %}
+      {% if isMissingAttachments %}
+
+        {{ govukNotificationBanner({
+          type: "success",
+          html: successWithMissingAttachmentsHtml
+        }) }}
+
+      {% else %}
+
+        {{ govukNotificationBanner({
+          type: "success",
+          html: standardSuccessHtml
+        }) }}
+
+      {% endif %}
+
+    {% elif isMissingAttachments %}
+      
+      {{ govukNotificationBanner({
+        titleText: "Important",
+        html: importantMissingAttachmentsHtml
+      }) }}
+    {% endif %}
+
+  
+    {# ========================================================= #}
+    {# PRE-RENDERED HTML SNIPPETS                                #}
+    {# ========================================================= #}
+
+    {# --- Date Mapping Array --- #}
+    {% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+    {# --- Date Received HTML --- #}
+    {% set dateReceivedHtml %}
+      {% if rep.submissionDate and rep.submissionDate.year %}
+        {% set rDay = rep.submissionDate.day | int %}
+        {% set rMonth = rep.submissionDate.month | int %}
+        {% set rYear = rep.submissionDate.year %}
+        {{ rDay ~ " " ~ monthNames[rMonth] ~ " " ~ rYear }}
+      {% elif rep.backupIso %}
+        {{ rep.backupIso | toGovukDate }}
+      {% else %}
+        Not provided
+      {% endif %}
+    {% endset %}
+
+    {# --- Groups of People HTML --- #}
+    {% set groupOfPeopleHtml %}
+      {% if rep.representedGroup and rep.representedGroup.members.length > 0 %}
+        {% set totalMembers = rep.representedGroup.members.length %}
+        
+        {# 1. Always show the first 3 members #}
+        <ul class="govuk-list {% if totalMembers > 1 %}govuk-list--bullet{% endif %} govuk-!-margin-bottom-0">
+          {% for i in range(0, 3) %}
+            {% if i < totalMembers %}
+              {% set person = rep.representedGroup.members[i] %}
+              <li>{{ person.firstName }} {{ person.lastName }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+        {# If there are more than 3, show toggle and create hidden list #}
+        {% if totalMembers > 3 %}
+          {% set extraCount = totalMembers - 3 %}
+          
+          {# Wrapper container to scope the JavaScript #}
+          <div class="js-show-more-container" data-extra-count="{{ extraCount }}">
+            
+            <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+              {# use 'Show {{ extraCount }} more' to show number of hidden items #}
+              <a href="#" class="govuk-link govuk-link--no-visited-state js-show-more-toggle" aria-expanded="false" aria-controls="extra-group-members">Show more</a>
+            </p>
+
+            {# Hidden content block #}
+            <div id="extra-group-members" class="js-show-more-content" hidden>
+              <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 govuk-!-margin-top-2">
+                {% for i in range(3, totalMembers) %}
+                  {% set person = rep.representedGroup.members[i] %}
+                  <li>{{ person.firstName }} {{ person.lastName }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            
+          </div>
+        {% endif %}
+
+      {% else %}
+        None added
+      {% endif %}
+    {% endset %}
+
+    {# --- Postal Address HTML --- #}
+    {% set addressHtml %}
+      {% if rep.postalAddress %}
+        {{ rep.postalAddress.line1 }}<br>
+        {% if rep.postalAddress.line2 %}{{ rep.postalAddress.line2 }}<br>{% endif %}
+        {{ rep.postalAddress.town }}<br>
+        {% if rep.postalAddress.county %}{{ rep.postalAddress.county }}<br>{% endif %}
+        {{ rep.postalAddress.postcode }}
+      {% else %}
+        - 
+      {% endif %}
+    {% endset %}
+
+
+    {# --- PAGE HEADING --- #}
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl">{{ rep.reference }}</span>
+        View representation
+    </h1>
+
+
+    {# ========================================================= #}
+    {# SUMMARY LIST                                              #}
+    {# ========================================================= #}
+
+    <dl class="govuk-summary-list">
+
+      {# --- 00: Reference --- #}
+      <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">Reference</dt>
+        <dd class="govuk-summary-list__value">
+          {{ rep.reference }}
+        </dd>
+      </div>
+
+      {# --- 01: Date received --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">What date was the representation received?</dt>
+        <dd class="govuk-summary-list__value">
+          {{ dateReceivedHtml }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/edit-date-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> date received</span></a>
+        </dd>
+      </div>
+
+      {# --- 02: How received --- #}
+      {% if rep.howReceived %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">How was this representation received?</dt>
+        <dd class="govuk-summary-list__value">{{ rep.howReceived }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/edit-how-received?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> method received</span></a>
+        </dd>
+      </div>
+      {% endif %}
+
+      {# --- 03: Reason not using online service (Conditional) --- #}
+      {% if rep.reasonNotOnline %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Reason for not using the online service</dt>
+        <dd class="govuk-summary-list__value">{{ rep.reasonNotOnline }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/edit-reason-not-online?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> reason not using online service</span></a>
+        </dd>
+      </div>
+      {% endif %}
+
+      {# --- 04: Type of representation --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Representation type</dt>
+        <dd class="govuk-summary-list__value">{{ rep.type | default('-', true) }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/edit-rep-type?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> type of representation</span></a>
+        </dd>
+      </div>
+
+      {# --- Representation status --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">{{ rep.status | default('-', true) }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage<span class="govuk-visually-hidden"> representation status</span></a>
+        </dd>
+      </div>
+
+      {# --- 05: Source of representation --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Who you are submitting for</dt>
+        <dd class="govuk-summary-list__value">{{ rep.submitterType }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/edit-rep-source?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> source of representation</span></a>
+        </dd>
+      </div>
+
+      {# --- Conditional: BEHALF OF LOGIC --- #}
+      {% if rep.submitterType == 'On behalf of another person, an organisation or group of people' %}
+        
+        {# 14: Who are they representing? #}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Who are you representing?</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representing | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-rep-on-behalf-of?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> who are you representing?</span></a>
+            </dd>
+        </div>
+
+        {# 15 & 16: Agent questions (Only for Person, Org they don't work for, or Group) #}
+        {% if rep.representing in ['A person', 'An organisation or charity that I do not work or volunteer for', 'A group of people'] %}
+          <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Are you acting as an agent on behalf of a client?</dt>
+              <dd class="govuk-summary-list__value">{{ rep.isAgent | default('-', true) }}</dd>
+              <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="/edit-is-agent?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> submitted by agent?</span></a>
+              </dd>
+          </div>
+
+          {% if rep.isAgent == 'Yes' %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Agent organisation name</dt>
+              <dd class="govuk-summary-list__value">{{ rep.agentOrgName | default('-', true) }}</dd>
+              <dd class="govuk-summary-list__actions">
+                  <a class="govuk-link" href="/edit-agent-org?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> agent organisation name</span></a>
+              </dd>
+            </div>
+          {% endif %}
+        {% endif %}
+
+      {% endif %}
+
+
+      {# --- 06: Submitter full name --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your full name</dt>
+          <dd class="govuk-summary-list__value">{{ rep.submitterName }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-submitter-name?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> submitter name</span></a>
+          </dd>
+      </div>
+
+      {# --- 07: Preferred contact method --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">What is your contact preference?</dt>
+          <dd class="govuk-summary-list__value">{{ rep.contactMethod | default('-') }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-contact-method?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> contact method</span></a>
+          </dd>
+      </div>
+
+      {# --- 08: Email address (conditional) --- #}
+      {% if rep.contactMethod == 'Email' %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your email address</dt>
+          <dd class="govuk-summary-list__value">{{ rep.submitterEmail | default('-', true) }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-email?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> email address</span></a>
+          </dd>
+      </div>
+      {# --- 09: Postal address (conditional) --- #}
+      {% elif rep.contactMethod == 'Post' %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your postal address</dt>
+          <dd class="govuk-summary-list__value">{{ addressHtml | safe }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-postal-address?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> postal address</span></a>
+          </dd>
+      </div>
+      {% endif %}
+
+
+      {# --- Conditional: ENTITY DETAILS --- #}
+      {% if rep.submitterType == 'On behalf of another person, an organisation or group of people' %}
+        
+        {# 17: Person #}
+        {% if rep.representing == 'A person' %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Represented person name</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representedPerson | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-represented-person?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> represented person name</span></a>
+            </dd>
+        </div>
+        {% endif %}
+
+        {# 18 & 19: Org work for #}
+        {% if rep.representing == 'An organisation or charity that I work or volunteer for' %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Your organisation or charity name</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representedOrgWorkFor.name | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-represented-org-charity?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation name</span></a>
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Your job title or volunteer role</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representedOrgWorkFor.role | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-represented-org-charity-role?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> role or job title</span></a>
+            </dd>
+        </div>
+        {% endif %}
+
+        {# 20: Org DO NOT work for #}
+        {% if rep.representing == 'An organisation or charity that I do not work or volunteer for' %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Name of the organisation or charity representing</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representedOrgOther | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-represented-org-i-do-not?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> organisation representing</span></a>
+            </dd>
+        </div>
+        {% endif %}
+
+        {# 21 & 22: Group #}
+        {% if rep.representing == 'A group of people' %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Your group name</dt>
+            <dd class="govuk-summary-list__value">{{ rep.representedGroup.name | default('-', true) }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-group-name?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> group name</span></a>
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Names in the group</dt>
+            <dd class="govuk-summary-list__value">{{ groupOfPeopleHtml | safe }}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-group-members?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> group name details</span></a>
+            </dd>
+        </div>
+        {% endif %}
+
+      {% endif %}
+
+      {# --- 10: The Representation Comment --- #}
+      {% set comment = rep.comment | default('-', true) %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Tell us about application</dt>
+          <dd class="govuk-summary-list__value">
+          {% if comment.length > 100 %}
+              <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/edit-comment?repRef={{ rep.reference }}">Read more</a></p>
+          {% else %}
+              {{ comment | nl2br | safe }}
+          {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/edit-comment?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> comment</span></a>
+          </dd>
+      </div>
+
+      {# --- 11: Hearing --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Would you like to be heard at a hearing?</dt>
+          <dd class="govuk-summary-list__value">{{ rep.wantsHearing | default('-') }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-hearing?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> hearing preference</span></a>
+          </dd>
+      </div>
+
+      {# --- Redacted representation Comment --- #}
+      {% set redactedComment = rep.redactedComment | default('-', true) %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Redacted representation</dt>
+          <dd class="govuk-summary-list__value">
+          {% if redactedComment.length > 100 %}
+              <p class="govuk-body">{{ redactedComment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/back-office/manage-representations/review-representation/task-list">Read more</a></p>
+          {% else %}
+              {{ redactedComment | nl2br | safe }}
+          {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage<span class="govuk-visually-hidden"> comment</span></a>
+          </dd>
+      </div>
+
+      {# --- 12: Attachments Included? --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Attachments uploaded?</dt>
+          <dd class="govuk-summary-list__value">{{ rep.hasAttachments }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-has-attachments?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> attachments included</span></a>
+          </dd>
+      </div>
+
+      {# --- 13: Uploaded Files (If Yes) --- #}
+      {% if rep.hasAttachments == 'Yes' %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Attachments</dt>
+          <dd class="govuk-summary-list__value">
+            {% if rep.attachments and rep.attachments.length > 0 %}
+              <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+                {% for file in rep.attachments %}
+                  <li><a class="govuk-link" href="#">{{ file }}</a></li>
+                {% endfor %}
+              </ol>
+            {% else %}
+              -
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          <ul class="govuk-summary-list__actions-list">
+            <li class="govuk-summary-list__actions-list-item">
+                <a class="govuk-link" href="/current-service/back-office/manage-representations/review-representation/task-list">
+                Manage<span class="govuk-visually-hidden"> attachments</span>
+                </a>
+            </li>
+            <li class="govuk-summary-list__actions-list-item">
+                <a class="govuk-link" href="/edit-attachments?repRef={{ rep.reference }}">
+                Add<span class="govuk-visually-hidden"> attachments</span>
+                </a>
+            </li>
+          </ul>
+          </dd>
+      </div>
+      {% endif %}
+
+    </dl>
+
+    {% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' or actualRepStatus == 'Awaiting review' %}
+    <p class="govuk-body">
+          <a href="/withdraw-representation-start" class="govuk-link govuk-!-font-size-19" id="withdraw-representation-link">Withdraw representation</a>
+    </p>
+    {% elif actualRepStatus == 'Withdrawn' %}
+    <p class="govuk-body">
+          <a href="/reinstate-representation-start" class="govuk-link govuk-!-font-size-19" id="withdraw-representation-link">Reinstate representation</a>
+    </p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block pageScripts %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Grab all toggle links on the page
+    const toggleLinks = document.querySelectorAll('.js-show-more-toggle');
+
+    toggleLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        // Prevent the link from jumping the page to the top
+        event.preventDefault(); 
+
+        // Find the specific container and content for this exact link
+        const container = link.closest('.js-show-more-container');
+        const content = container.querySelector('.js-show-more-content');
+        
+        // Grab the count we saved in the data attribute earlier
+        const extraCount = container.dataset.extraCount; 
+
+        // Check current state
+        const isExpanded = link.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          // Hide it
+          content.setAttribute('hidden', '');
+          link.setAttribute('aria-expanded', 'false');
+           // use `Show ${extraCount} more` to show number of hidden items
+          link.innerText = `Show more`;
+        } else {
+          // Show it
+          content.removeAttribute('hidden');
+          link.setAttribute('aria-expanded', 'true');
+          link.innerText = 'Hide';
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

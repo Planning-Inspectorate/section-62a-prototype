@@ -1,0 +1,44 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Reinstate representation - {{ rep.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+
+{{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/manage-representations"
+}) }}
+
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Reinstate representation</h1>
+
+    <div class="govuk-hint">Representation reference: {{ rep.reference }}</div>
+
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            Reinstating this representation will restore it and any associated attachments to their original state.
+            <br>
+            <br>
+            If the representation was previously accepted, it will reappear on the Find a local planning application made to the Planning Inspectorate website.
+        </strong>
+    </div>
+
+    <form action="/reinstate-request-submitted" method="post" novalidate>
+      <input type="hidden" name="answers-checked" value="true">
+      {{ govukButton({
+        text: "Reinstate representation"
+      }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

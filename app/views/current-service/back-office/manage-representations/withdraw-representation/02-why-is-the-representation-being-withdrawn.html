@@ -1,0 +1,71 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorWhyIsTheRepresentationBeingWithdrawn %}Error: {% endif %}Why is the representation being withdrawn?
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: "/current-service/back-office/manage-representations/withdraw-representation/01-enter-date-of-withdrawal-request"
+    }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorWhyIsTheRepresentationBeingWithdrawn %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorWhyIsTheRepresentationBeingWithdrawn, href: "#why-is-the-representation-being-withdrawn" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/why-is-the-representation-being-withdrawn-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "why-is-the-representation-being-withdrawn",
+        name: "why-is-the-representation-being-withdrawn",
+        fieldset: {
+          legend: { 
+            text: "Why is the representation being withdrawn?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorWhyIsTheRepresentationBeingWithdrawn } if errorWhyIsTheRepresentationBeingWithdrawn else null,
+        items: [
+          { 
+            value: "Change of opinion", 
+            text: "Change of opinion", 
+            checked: data['why-is-the-representation-being-withdrawn'] == 'Change of opinion',
+            hint: {text: "They no longer feel the same way about the application"}
+          },
+          { 
+            value: "Mistaken Submission", 
+            text: "Mistaken Submission", 
+            checked: data['why-is-the-representation-being-withdrawn'] == 'Mistaken Submission',
+            hint: {text: "They accidentally submitted the representation"}
+          },
+          { 
+            value: "Misunderstanding", 
+            text: "Misunderstanding", 
+            checked: data['why-is-the-representation-being-withdrawn'] == 'Misunderstanding',
+            hint: {text: "They misunderstood the application or its implications"} 
+          },
+          { 
+            value: "Personal Reasons", 
+            text: "Personal Reasons", 
+            checked: data['why-is-the-representation-being-withdrawn'] == 'Personal Reasons',
+            hint: {text: "Such as privacy or a change in circumstances"}
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Save" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

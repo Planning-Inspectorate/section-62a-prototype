@@ -1,17 +1,17 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  Representation added - data['submittedRepReference']
+  Representation reinstated - {{ rep.reference }}
 {% endblock %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full-width">
+    <div class="govuk-grid-column-full">
         
         {{ govukPanel({
-            titleText: "Representation added",
-            html: "Representation reference<br><strong>" + data['submittedRepReference'] + "</strong>"
+            titleText: "Representation reinstated",
+            html: "Representation reference<br><strong>" + rep.reference + "</strong>"
         }) }}
         
         <p class="govuk-body govuk-!-margin-top-6">

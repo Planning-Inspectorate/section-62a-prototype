@@ -1,0 +1,84 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Enter date of withdrawal request
+{% endblock %}
+
+{% block beforeContent %}
+{% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
+        {% set backLink = '/current-service/back-office/manage-representations/view' %}
+    
+    {% elif actualRepStatus == 'Awaiting review' %}
+        {% set backLink = '/current-service/back-office/manage-representations/review-representation/review' %}
+    
+    {% else %}
+        {# Fallback just in case something goes wrong #}
+        {% set backLink = '/current-service/back-office/manage-representations/manage-representations' %}
+    {% endif %}
+
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: backLink
+    }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/enter-date-of-withdrawal-request-answer" method="post" novalidate>
+
+      {{ govukDateInput({
+        id: "enter-date-of-withdrawal-request",
+        namePrefix: "enter-date-of-withdrawal-request",
+        fieldset: {
+          legend: {
+            text: "Enter date of withdrawal request",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Use the date on the withdrawal correspondence. For example, 27 3 2007"
+        },
+        errorMessage: { text: errors.enterDateOfWithdrawalRequest.text } if errors.enterDateOfWithdrawalRequest else null,
+        
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
+            value: data['enter-date-of-withdrawal-request-day']
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
+            value: data['enter-date-of-withdrawal-request-month']
+          },
+          {
+            name: "year",
+            classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
+            value: data['enter-date-of-withdrawal-request-year']
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

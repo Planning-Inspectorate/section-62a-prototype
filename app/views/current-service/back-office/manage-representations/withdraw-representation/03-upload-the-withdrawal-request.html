@@ -1,0 +1,58 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Upload the withdrawal request
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/manage-representations/withdraw-representation/02-why-is-the-representation-being-withdrawn"
+  }) }}
+{% endblock %}
+ 
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if errorList %}
+          {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+          }) }}
+        {% endif %}
+        
+        <form method="post" action="/upload-the-withdrawal-request-answer" novalidate>
+            <input type="hidden" name="_csrf" value="">
+            
+            <h1 class="govuk-heading-l">
+                Upload the withdrawal request
+            </h1>
+            
+            <p class="govuk-body">You can upload the following file types: <br>
+            PDF, PNG, JPG, JPEG, TIF, TIFF, DOC, DOCX, XLS, XLSX</p>
+
+            <p class="govuk-body">Note that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>files must not be compressed (ZIP files will not be accepted)</li>
+                <li>each file must be under 25MB</li>
+                <li>only 3 files can be uploaded at a time</li>
+                <li>total upload size must be under 1GB</li>
+            </ul>
+            
+            {% from "components/multi-file-upload.njk" import uploadArea %}
+
+            {{ uploadArea({
+                serverError: errors.uploadedFiles if errors.uploadedFiles else null,
+                existingFiles: data['uploadedFiles']
+            }) }}
+
+            {{ govukButton({
+                text: "Continue"
+            }) }}
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

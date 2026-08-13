@@ -5,7 +5,7 @@ const router = Router();
 
 // routes below this
 
-router.get('/current-service/back-office/case-details', function(req, res) {
+router.get('/current-service/back-office/archived/case-details', function(req, res) {
   // find the case and lock in session
   const foundCase = getCase(req);
 
@@ -22,7 +22,7 @@ router.get('/current-service/back-office/case-details', function(req, res) {
   req.session.data['flashMessage'] = null;
 
   // Render the page
-  res.render('current-service/back-office/case-details', { 
+  res.render('current-service/back-office/archived/case-details', { 
     currentCase: foundCase,       
     flashSection: sectionToJumpTo,
     flashMessage: flashMessage

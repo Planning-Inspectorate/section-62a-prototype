@@ -3,7 +3,7 @@ import { getRepresentation } from '../../helpers.js';
 
 const router = Router();
 
-// MANAGE REPRESENTATIONS - get the correct rep
+// REVIEW REPRESENTATIONS CHECK - get the correct rep
 router.get('/current-service/back-office/manage-representations/review-representation/review', function (req, res) {
   const rep = getRepresentation(req);
   // if rep is missing, send back to manage-representations page
@@ -22,7 +22,7 @@ router.get('/current-service/back-office/manage-representations/review-represent
   });
 });
 
-  // MANAGE REPRESENTATIONS - post
+  // REVIEW REPRESENTATIONS CHECK - post
   router.post('/review-answer', function (req, res) {
     const rep = getRepresentation(req);
     
@@ -113,7 +113,7 @@ router.get('/current-service/back-office/manage-representations/review-represent
     });
 });
 
-  // TASK LIST VIEW - post
+  // TASK LIST VIEW - post (submit the rep to be either accepted or rejected)
   router.post('/task-list-submit', function(req, res) {
       const rep = getRepresentation(req);
       
@@ -130,7 +130,6 @@ router.get('/current-service/back-office/manage-representations/review-represent
       // Redirect to the manage representations page
       res.redirect('/current-service/back-office/manage-representations/manage-representations');
   });
-
 
 
 // REVIEW REPRESENTATION (Task List)

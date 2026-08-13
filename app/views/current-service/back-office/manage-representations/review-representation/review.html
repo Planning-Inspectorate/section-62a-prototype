@@ -421,9 +421,17 @@
 
     </dl>
 
+    {% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' or actualRepStatus == 'Awaiting review' %}
     <p class="govuk-body">
           <a href="/withdraw-representation-start" class="govuk-link govuk-!-font-size-19" id="withdraw-representation-link">Withdraw representation</a>
     </p>
+    {% elif actualRepStatus == 'Withdrawn' %}
+    <p class="govuk-body">
+          <a href="/reinstate-representation-start" class="govuk-link govuk-!-font-size-19" id="withdraw-representation-link">Reinstate representation</a>
+    </p>
+    {% endif %}
 
     <form action="/review-answer" method="post" novalidate>
     {{ govukButton({

@@ -642,6 +642,15 @@ router.post('/representation-added', function(req, res) {
         type: data['type-of-representation-submitted'],
         wantsHearing: data['would-you-like-to-be-heard-at-a-hearing'],
         
+        // Withdrawn related fields
+        withdrawnDate: {
+            day: null,
+            month: null,
+            year: null
+        },
+        withdrawnReason: null,
+        withdrawnRequest: [],
+        
         // Submitter Details
         submitterType: data['source-of-representation'],
         submitterName: `${data['your-first-name']} ${data['your-last-name']}`,

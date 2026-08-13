@@ -5,16 +5,45 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-representations/review-representation/review" }) }}
+{% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
+        {% set backLink = '/current-service/back-office/manage-representations/view' %}
+    
+    {% elif actualRepStatus == 'Awaiting review' %}
+        {% set backLink = '/current-service/back-office/manage-representations/review-representation/review' %}
+    
+    {% else %}
+        {# Fallback just in case something goes wrong #}
+        {% set backLink = '/current-service/back-office/manage-representations/manage-representations' %}
+    {% endif %}
+
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: backLink
+    }) }}
 {% endblock %}
 
 {% block content %}
+{% set actualRepStatus = rep.status %}
+
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
+        {% set taskListHeading = 'Manage representation' %}
+    
+    {% elif actualRepStatus == 'Awaiting review' %}
+        {% set taskListHeading = 'Review representation' %}
+    
+    {% else %}
+        {# Fallback just in case #}
+        {% set taskListHeading = 'Review representation' %}
+    {% endif %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
     <h1 class="govuk-heading-l">
         <span class="govuk-caption-xl">{{ rep.reference }}</span> 
-        Review representation</h1>
+        {{ taskListHeading }}</h1>
 
     {# --- SECTION 1: REPRESENTATION --- #}
     <h2 class="govuk-heading-m">Review representation</h2>

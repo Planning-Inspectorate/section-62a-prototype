@@ -1,0 +1,87 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Check your answers
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">Check your answers</h1>
+
+    {# --- Date Mapping Array --- #}
+    {% set monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+    {# --- Withdrawal Date HTML --- #}
+    {% set withdrawalDateHtml %}
+      {% if data['enter-date-of-withdrawal-request-year'] and data['enter-date-of-withdrawal-request-month'] and data['enter-date-of-withdrawal-request-day'] %}
+        {% set day = data['enter-date-of-withdrawal-request-day'] | int %}
+        {% set monthIndex = data['enter-date-of-withdrawal-request-month'] | int %}
+        {% set year = data['enter-date-of-withdrawal-request-year'] %}
+        
+        {{ day ~ " " ~ monthNames[monthIndex] ~ " " ~ year }}
+      {% endif %}
+    {% endset %}
+
+    <dl class="govuk-summary-list">
+
+      {# --- Withdrawal Date --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Withdrawal Date</dt>
+        <dd class="govuk-summary-list__value">
+          {{ withdrawalDateHtml }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/01-enter-date-of-withdrawal-request">Change<span class="govuk-visually-hidden"> withdrawal date</span></a>
+        </dd>
+      </div>
+
+      {# --- Why is the representation being withdrawn --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Why is the representation being withdrawn?</dt>
+        <dd class="govuk-summary-list__value">{{ data['why-is-the-representation-being-withdrawn'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/02-why-is-the-representation-being-withdrawn">Change<span class="govuk-visually-hidden"> why is the representation being withdrawn</span></a>
+        </dd>
+      </div>
+
+      {# --- Upload the withdrawal request --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Upload the withdrawal request</dt>
+          <dd class="govuk-summary-list__value">
+            {# UPDATED: Use the specific session variable we created for withdrawal files #}
+            {% if data['uploadedFiles'] %}
+              {% set filesArray = data['uploadedFiles'].split('||') %}
+              <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+                {% for file in filesArray %}
+                  {% if file %}
+                    <li><a class="govuk-link" href="#">{{ file }}</a></li>
+                  {% endif %}
+                {% endfor %}
+              </ol>
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/03-upload-the-withdrawal-request">
+              Change<span class="govuk-visually-hidden"> upload the withdrawal request</span>
+            </a>
+          </dd>
+      </div>
+    </dl>
+
+    {{ govukWarningText({
+      text: "The representation will be withdrawn",
+      iconFallbackText: "Warning"
+    }) }}
+
+    <form action="/withdrawal-request-submitted" method="post" novalidate>
+      <input type="hidden" name="answers-checked" value="true">
+      {{ govukButton({
+        text: "Accept and submit"
+      }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

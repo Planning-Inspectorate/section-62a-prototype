@@ -78,29 +78,48 @@ router.get('/edit-how-received', function(req, res) {
     if (rep && rep.howReceived) {
         req.session.data['how-was-this-representation-received'] = rep.howReceived;
     }
-    // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received');
+    
+    // Use res.render, but manually push the freshly updated session data into the template!
+    res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
+        rep: rep,
+        data: req.session.data // <--- This line completely fixes the radio hydration issue!
+    });
 });
 
     // 02 - post
-    router.post('/edit-how-was-this-representation-received', function (req, res) {
-        const rep = getRepresentation(req);
-        const howWasThisRepresentationReceived = req.session.data['how-was-this-representation-received'];
+        router.post('/edit-how-was-this-representation-received', function (req, res) {
+            const rep = getRepresentation(req);
+            const howWasThisRepresentationReceived = req.session.data['how-was-this-representation-received'];
 
-        // validation
-        if (!howWasThisRepresentationReceived) {
-            return res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
-                errorHowWasThisRepresentationReceived: "Select how this representation was received"
-            });
-        }
-        // save and update the exact object property
-        if (rep) {
-            rep.howReceived = howWasThisRepresentationReceived;
-        }
-        // trigger success banner
-        req.session.data['edit-success-message'] = "How the representation was received has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
-    });
+            // validation
+            if (!howWasThisRepresentationReceived) {
+                return res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
+                    errorHowWasThisRepresentationReceived: "Select how this representation was received"
+                });
+            }
+            
+            // save and update the exact object property
+            if (rep) {
+                rep.howReceived = howWasThisRepresentationReceived;
+                
+                // trigger success banner
+                req.session.data['edit-success-message'] = "How the representation was received has been updated";
+
+                // Redirect based on the overall status
+                if (rep.status === "Accepted" || rep.status === "Rejected") {
+                    // If it's already processed, send them back to the 'view' page
+                    res.redirect('/current-service/back-office/manage-representations/view');
+                }
+                else if (rep.status === "Awaiting review") {
+                    // If it's still being reviewed, send them back to the 'review' page
+                    res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+                }
+                else {
+                    // Safe fallback just in case!
+                    res.redirect('/current-service/back-office/manage-representations/manage-representations');
+                }
+            }
+        });
 
 
 // 03 - reason for not using online service
