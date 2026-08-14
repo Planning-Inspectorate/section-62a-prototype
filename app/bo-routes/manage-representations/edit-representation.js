@@ -79,10 +79,10 @@ router.get('/edit-how-received', function(req, res) {
         req.session.data['how-was-this-representation-received'] = rep.howReceived;
     }
     
-    // Use res.render, but manually push the freshly updated session data into the template!
+    // Use res.render, but manually push the freshly updated session data into the template
     res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
-        rep: rep,
-        data: req.session.data // <--- This line completely fixes the radio hydration issue!
+        rep: rep, // load rep information
+        data: req.session.data // hydrate fields
     });
 });
 
@@ -97,7 +97,7 @@ router.get('/edit-how-received', function(req, res) {
                     errorHowWasThisRepresentationReceived: "Select how this representation was received"
                 });
             }
-            
+        
             // save and update the exact object property
             if (rep) {
                 rep.howReceived = howWasThisRepresentationReceived;
@@ -523,7 +523,10 @@ router.get('/edit-attachments', function(req, res) {
         req.session.data['uploadedFiles'] = rep.attachments.join('||');
     }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/13-upload-attachments');
+    res.render('/current-service/back-office/manage-representations/edit-representation/13-upload-attachments', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 13 - post
