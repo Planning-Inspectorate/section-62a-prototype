@@ -21,12 +21,12 @@
     {% endif %}
 
     {# ========================================================= #}
-    {# CREATE ATTACHMENT BANNER VARIABLE                         #}
+    {# CREATE ATTACHMENT BANNER VARIABLES                        #}
     {# ========================================================= #}
   
+    {# --- 1. Missing Attachments Logic --- #}
     {% set isMissingAttachments = (rep.hasAttachments == 'Yes') and (not rep.attachments or rep.attachments.length == 0) %}
     
-    {# if attachments are missing + success message #}
     {% set successWithMissingAttachmentsHtml %}
       <ul class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
         <li>{{ successMessage }}</li>
@@ -34,41 +34,89 @@
       </ul>
     {% endset %}
 
-    {# typical success message #}
-    {% set standardSuccessHtml %}
-      <h3 class="govuk-notification-banner__heading">{{ successMessage }}</h3>
-    {% endset %}
-
-    {# persistant attachment missing banner #}
     {% set importantMissingAttachmentsHtml %}
       <h3 class="govuk-notification-banner__heading">
         There are no attachments added. <a class="govuk-notification-banner__link" href="/edit-attachments">Add attachments</a>.
       </h3>
     {% endset %}
-    
-    {% if successMessage %}
-      {% if isMissingAttachments %}
 
+    {# --- 2. Unreviewed Attachments Logic --- #}
+    {% set hasUnreviewedAttachments = false %}
+    
+    {% if rep.attachments and rep.attachments | length > 0 %}
+      {% for file in rep.attachments %}
+        {% set fileStatus = rep.attachmentReviews[file] if rep.attachmentReviews and rep.attachmentReviews[file] else 'Incomplete' %}
+        
+        {% if fileStatus == 'Incomplete' %}
+          {% set hasUnreviewedAttachments = true %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {# Combo snippet: Just uploaded a file, but needs review #}
+    {% set successWithUnreviewedAttachmentsHtml %}
+      <ul class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
+        <li>{{ successMessage }}</li>
+        <li>There are attachments awaiting review. <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage attachments</a>.</li>
+      </ul>
+    {% endset %}
+
+    {# Persistent snippet: Page refreshed, file still needs review #}
+    {% set unreviewedAttachmentsHtml %}
+      <h3 class="govuk-notification-banner__heading">
+        There are attachments awaiting review.
+        <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage attachments</a>.
+      </h3>
+    {% endset %}
+    
+    {# --- 3. Standard Success --- #}
+    {% set standardSuccessHtml %}
+      <h3 class="govuk-notification-banner__heading">{{ successMessage }}</h3>
+    {% endset %}
+
+
+    {# ========================================================= #}
+    {# RENDER THE BANNERS                                        #}
+    {# ========================================================= #}
+
+    {% if successMessage %}
+      
+      {# Initial banners #}
+      {% if isMissingAttachments %}
         {{ govukNotificationBanner({
           type: "success",
           html: successWithMissingAttachmentsHtml
         }) }}
-
+      
+      {% elif rep.status == 'Accepted' and hasUnreviewedAttachments %}
+        {{ govukNotificationBanner({
+          type: "success",
+          html: successWithUnreviewedAttachmentsHtml
+        }) }}
+      
       {% else %}
-
         {{ govukNotificationBanner({
           type: "success",
           html: standardSuccessHtml
         }) }}
-
       {% endif %}
 
-    {% elif isMissingAttachments %}
+    {% else %}
       
-      {{ govukNotificationBanner({
-        titleText: "Important",
-        html: importantMissingAttachmentsHtml
-      }) }}
+      {# Persistant banners #}
+      {% if isMissingAttachments %}
+        {{ govukNotificationBanner({
+          titleText: "Important",
+          html: importantMissingAttachmentsHtml
+        }) }}
+      
+      {% elif rep.status == 'Accepted' and hasUnreviewedAttachments %}
+        {{ govukNotificationBanner({
+          titleText: "Important",
+          html: unreviewedAttachmentsHtml
+        }) }}
+      {% endif %}
+
     {% endif %}
 
   
@@ -228,9 +276,11 @@
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">{{ rep.status | default('-', true) }}</dd>
+        {% if rep.status == 'Accepted' or rep.status == 'Rejected' %}
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage<span class="govuk-visually-hidden"> representation status</span></a>
         </dd>
+        {% endif %}
       </div>
 
       {# --- 05: Source of representation --- #}
@@ -416,18 +466,22 @@
               {{ redactedComment | nl2br | safe }}
           {% endif %}
           </dd>
+          {% if rep.status == 'Accepted' %}
           <dd class="govuk-summary-list__actions">
               <a class="govuk-link" href="/current-service/back-office/manage-representations/review-representation/task-list">Manage<span class="govuk-visually-hidden"> comment</span></a>
           </dd>
+          {% endif %}
       </div>
 
       {# --- 12: Attachments Included? --- #}
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Attachments uploaded?</dt>
           <dd class="govuk-summary-list__value">{{ rep.hasAttachments }}</dd>
+          {% if rep.status == 'Accepted' or rep.status == 'Withdrawn' %}
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/edit-has-attachments?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> attachments included</span></a>
           </dd>
+          {% endif %}
       </div>
 
       {# --- 13: Uploaded Files (If Yes) --- #}
@@ -445,6 +499,7 @@
               -
             {% endif %}
           </dd>
+          {% if rep.status == 'Accepted' %}
           <dd class="govuk-summary-list__actions">
           <ul class="govuk-summary-list__actions-list">
             <li class="govuk-summary-list__actions-list-item">
@@ -459,6 +514,11 @@
             </li>
           </ul>
           </dd>
+          {% elif rep.status == 'Withdrawn' %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-attachments?repRef={{ rep.reference }}">Add<span class="govuk-visually-hidden"> attachments</span></a>
+          </dd>
+          {% endif %}
       </div>
       {% endif %}
     

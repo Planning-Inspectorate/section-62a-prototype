@@ -383,14 +383,14 @@ router.get('/current-service/back-office/manage-representations/review-represent
 
           if (cleanUploadedFileName === fileName) {
               return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
-                  rep: rep, fileName: fileName, errorUpload: "Original attachment has the same name."
+                  rep: rep, fileName: fileName, errorUpload: "Original attachment has the same name"
               });
           }
 
           const allRedactedFiles = Object.values(rep.redactedAttachments);
           if (allRedactedFiles.includes(cleanUploadedFileName)) {
               return res.render('current-service/back-office/manage-representations/review-representation/task-list/attachment-redact', {
-                  rep: rep, fileName: fileName, errorUpload: "A redacted attachment with this name has already been uploaded."
+                  rep: rep, fileName: fileName, errorUpload: "A redacted attachment with this name has already been uploaded"
               });
           }
 

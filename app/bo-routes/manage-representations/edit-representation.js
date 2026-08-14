@@ -551,10 +551,24 @@ router.get('/edit-attachments', function(req, res) {
         if (rep) {
             // Convert the '||' string back into an array
             rep.attachments = uploadedFiles.split('||');
-        }
+        
         // set success banner and redirect
         req.session.data['edit-success-message'] = "Attachments updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        
+        // redirect based on the overall status
+                if (rep.status === "Accepted" || rep.status === "Rejected") {
+                    // If it's already processed, send them back to the 'view' page
+                    res.redirect('/current-service/back-office/manage-representations/view');
+                }
+                else if (rep.status === "Awaiting review") {
+                    // If it's still being reviewed, send them back to the 'review' page
+                    res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+                }
+                else {
+                    // Safe fallback just in case!
+                    res.redirect('/current-service/back-office/manage-representations/manage-representations');
+                }
+        }
     });
 
 
