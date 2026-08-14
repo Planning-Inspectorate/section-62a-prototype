@@ -151,6 +151,15 @@
       {% endif %}
     {% endset %}
 
+    {# --- Withdrawal Date HTML --- #}
+    {% set withdrawalDateHtml = "-" %}
+    {% if rep.withdrawnDate.year and rep.withdrawnDate.month and rep.withdrawnDate.day %}
+        {% set day = rep.withdrawnDate.day | int %}
+        {% set monthIndex = rep.withdrawnDate.month | int %}
+        {% set year = rep.withdrawnDate.year | int %}
+        {% set withdrawalDateHtml = day ~ " " ~ monthNames[monthIndex] ~ " " ~ year %}
+    {% endif %}
+
 
     {# --- PAGE HEADING --- #}
     <h1 class="govuk-heading-l">
@@ -452,6 +461,51 @@
           </dd>
       </div>
       {% endif %}
+    
+    {# --- Withdrawn fields (conditional) --- #}
+    {% if rep.status == 'Withdrawn' %}
+    <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Withdrawal Date</dt>
+          <dd class="govuk-summary-list__value">{{ withdrawalDateHtml }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-withdrawal-date?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> withdrawal date</span></a>
+          </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Why is the representation being withdrawn?</dt>
+          <dd class="govuk-summary-list__value">{{ rep.withdrawnReason }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-withdrawal-reason?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> why the representation is being withdrawn</span></a>
+          </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Upload the withdrawal request</dt>
+          <dd class="govuk-summary-list__value">
+            {% if rep.withdrawnRequest and rep.withdrawnRequest.length > 0 %}
+              <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+                {% for file in rep.withdrawnRequest %}
+                  <li><a class="govuk-link" href="#">{{ file }}</a></li>
+                {% endfor %}
+              </ol>
+            {% else %}
+              -
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="/edit-upload-withdrawal-reason?repRef={{ rep.reference }}">
+                Add<span class="govuk-visually-hidden"> withdrawal reason files</span>
+                </a>
+          </dd>
+      </div>
+
+      <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Date of withdrawal</dt>
+          <dd class="govuk-summary-list__value">{{ rep.withdrawalDateIso | toGovukDate }}</dd>
+      </div>
+    
+    {% endif %}
 
     </dl>
 

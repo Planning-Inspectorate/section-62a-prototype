@@ -200,7 +200,10 @@ router.get('/current-service/back-office/manage-representations/withdraw-represe
 router.post('/withdrawal-request-submitted', function(req, res) {
     const rep = getRepresentation(req);
     const data = req.session.data;
-    
+
+    // generate iso date
+    const todayISO = new Date().toISOString();
+
     if (rep) {
         // save date data
         rep.withdrawnDate = {
@@ -223,6 +226,8 @@ router.post('/withdrawal-request-submitted', function(req, res) {
 
         // update overall status
         rep.status = "Withdrawn"; 
+
+        rep.withdrawalDateIso = todayISO;
     }
     const fieldsToClear = [
         'enter-date-of-withdrawal-request-day',
@@ -275,8 +280,14 @@ router.get('/reinstate-representation-start', function(req, res) {
         const rep = getRepresentation(req);
         
         if (rep) {
-            // restore the previous status (with a safe fallback just in case)
-            rep.status = rep.previousStatus || "Awaiting review"; 
+        // reinstate specific rules
+        if (rep.previousStatus === "Accepted") {
+            // if it was accepted, it stays accepted
+            rep.status = "Accepted";
+        } else {
+            // if awaiting review or rejected, go back to awaiting review
+            rep.status = "Awaiting review"; 
+        }
             
             // wipe the withdrawal data so it's a clean slate
             rep.withdrawn = false;
@@ -284,6 +295,7 @@ router.get('/reinstate-representation-start', function(req, res) {
             rep.withdrawnReason = null;
             rep.withdrawnRequest = [];
             rep.previousStatus = null; // clean up previous status
+            rep.withdrawalDateIso = null;
         }
 
         // Redirect to the success page

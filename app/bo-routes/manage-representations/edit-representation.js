@@ -105,7 +105,7 @@ router.get('/edit-how-received', function(req, res) {
                 // trigger success banner
                 req.session.data['edit-success-message'] = "How the representation was received has been updated";
 
-                // Redirect based on the overall status
+                // redirect based on the overall status
                 if (rep.status === "Accepted" || rep.status === "Rejected") {
                     // If it's already processed, send them back to the 'view' page
                     res.redirect('/current-service/back-office/manage-representations/view');
@@ -977,6 +977,181 @@ router.get('/edit-bo-remove-group-person', function(req, res) {
         req.session.data['edit-success-message'] = "Group members updated";
         res.redirect('/current-service/back-office/manage-representations/review-representation/review');
     });
+
+
+
+
+// WITHDRAWAL FIELDS
+
+// 01 - enter date of withdrawal request
+router.get('/edit-withdrawal-date', function (req, res) {
+    const rep = getRepresentation(req);
+
+    // if rep is missing, send back to manage-representations page
+    if (!rep) {
+        return res.redirect('/current-service/back-office/manage-representations/manage-representations');
+    }
+
+    // Pre-populate session data if the rep already has a withdrawn date
+    if (rep.withdrawnDate && rep.withdrawnDate.day) {
+        req.session.data['enter-date-of-withdrawal-request-day'] = rep.withdrawnDate.day;
+        req.session.data['enter-date-of-withdrawal-request-month'] = rep.withdrawnDate.month;
+        req.session.data['enter-date-of-withdrawal-request-year'] = rep.withdrawnDate.year;
+    }
+
+    // render page using the found representation
+    res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/01-enter-date-of-withdrawal-request', {
+        rep: rep,
+        data: req.session.data
+    });
+});
+
+    // 01 - post
+    router.post('/edit-enter-date-of-withdrawal-request', function (req, res) {
+        const rep = getRepresentation(req);
+        
+        // Grab the date values from session data
+        const day = req.session.data['enter-date-of-withdrawal-request-day'];
+        const month = req.session.data['enter-date-of-withdrawal-request-month'];
+        const year = req.session.data['enter-date-of-withdrawal-request-year'];
+
+        // error containers
+        const errors = {};
+        const errorList = [];
+        
+        // pass objects to the helper and create error object
+        const dateError = validateDate(day, month, year, "Withdrawal request date", "enter-date-of-withdrawal-request");
+
+        // set error message from helper
+        if (dateError) {
+            errors.enterDateOfWithdrawalRequest = { text: dateError.text };
+            
+            // loop array of dateError and create simple flags for the html to add error classes to relevant inputs
+            if (dateError.errorFields) {
+                dateError.errorFields.forEach(field => {
+                    errors[field] = true; 
+                });
+            }
+            errorList.push(dateError);
+        }
+
+        // if there are errors, re-render the page
+        if (errorList.length > 0) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/01-enter-date-of-withdrawal-request', {
+                rep: rep,
+                errors: errors,
+                errorList: errorList
+            });
+        }
+
+        // save and update the exact object property
+        if (rep) {
+            rep.withdrawnDate = {
+                day: day,
+                month: month,
+                year: year
+            };
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Withdrawal date has been updated";
+        // redirect back to view page
+        res.redirect('/current-service/back-office/manage-representations/view');
+    });
+
+
+// 02 - why is the representation being withdrawn
+router.get('/edit-withdrawal-reason', function (req, res) {
+    const rep = getRepresentation(req);
+
+    // safety bounce
+    if (!rep) {
+        return res.redirect('/current-service/back-office/manage-representations/manage-representations');
+    }
+    // hydrate session data if it exists in the rep object
+    if (rep.withdrawnReason) {
+        req.session.data['why-is-the-representation-being-withdrawn'] = rep.withdrawnReason;
+    }
+    // render the page
+    res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/02-why-is-the-representation-being-withdrawn', {
+        rep: rep,
+        data: req.session.data
+    });
+});
+
+    // 02 - post
+    router.post('/edit-why-is-the-representation-being-withdrawn', function(req, res) {
+        const rep = getRepresentation(req);
+        const withdrawReason = req.session.data['why-is-the-representation-being-withdrawn'];
+
+        // validation
+        if (!withdrawReason) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/02-why-is-the-representation-being-withdrawn', {
+                rep: rep,
+                data: req.session.data,
+                errorWhyIsTheRepresentationBeingWithdrawn: "Select why the representation is being withdrawn"
+            });
+        }
+        // save data to the representation object
+        if (rep) {
+            rep.withdrawnReason = withdrawReason;
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Representation withdrawal reason has been updated";
+        // redirect back to view
+        res.redirect('/current-service/back-office/manage-representations/view'); 
+    });
+
+
+// 03 - upload withdrawal request
+router.get('/edit-upload-withdrawal-reason', function(req, res) {
+    const rep = getRepresentation(req); 
+    
+    // safety bounce
+    if (!rep) {
+        return res.redirect('/current-service/back-office/manage-representations/manage-representations');
+    }
+    // pre-populate session data if files were already uploaded
+    if (rep.withdrawnRequest && rep.withdrawnRequest.length > 0) {
+        req.session.data['uploadedFiles'] = rep.withdrawnRequest.join('||');
+    }
+    // render page with pre-populated data to ensure instant hydration
+    res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/03-upload-the-withdrawal-request', {
+        rep: rep,
+        data: req.session.data
+    });
+});
+
+    // 03 - post
+    router.post('/edit-upload-the-withdrawal-request', function(req, res) {
+        const rep = getRepresentation(req);
+        const uploadedFiles = req.session.data['uploadedFiles'];
+        
+        const errors = {};
+        const errorList = [];
+
+        // validation
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+            errors.uploadedFiles = { text: "Upload the withdrawal request" };
+            errorList.push({ text: "Upload the withdrawal request", href: "#documents" }); 
+        }
+
+        // render errors if any
+        if (errorList.length > 0) {
+            return res.render('current-service/back-office/manage-representations/edit-representation/withdraw-representation/03-upload-the-withdrawal-request', {
+                rep: rep,
+                data: req.session.data,
+                errors: errors,
+                errorList: errorList
+            });
+        }
+        // trigger success banner
+        req.session.data['edit-success-message'] = "Representation withdrawal request has been updated";
+        // redirect to cya
+        res.redirect('/current-service/back-office/manage-representations/view');
+    });
+
+
+
 
 
 
