@@ -15,8 +15,17 @@ router.get('/edit-date-received', function(req, res) {
     req.session.data['date-the-representation-was-received-month'] = rep.submissionDate.month;
     req.session.data['date-the-representation-was-received-year'] = rep.submissionDate.year;
     }
+    else {
+        delete req.session.data['date-the-representation-was-received-day'];
+        delete req.session.data['date-the-representation-was-received-month'];
+        delete req.session.data['date-the-representation-was-received-year'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/01-date-the-representation-was-received');
+    res.render('current-service/back-office/manage-representations/edit-representation/01-date-the-representation-was-received', {
+        rep: rep,
+        data: req.session.data
+    });
+    
 });
 
     // 01 - post
@@ -47,6 +56,8 @@ router.get('/edit-date-received', function(req, res) {
         }
         if (errorList.length > 0) {
             return res.render('current-service/back-office/manage-representations/edit-representation/01-date-the-representation-was-received', {
+            rep: rep,
+            data: req.session.data,
             errors: errors,
             errorList: errorList
             });
@@ -65,8 +76,19 @@ router.get('/edit-date-received', function(req, res) {
         rep.backupIso = (year && month && day) ? `${year}-${paddedMonth}-${paddedDay}T00:00:00.000Z` : new Date().toISOString();
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Date the representation was received has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -78,8 +100,11 @@ router.get('/edit-how-received', function(req, res) {
     if (rep && rep.howReceived) {
         req.session.data['how-was-this-representation-received'] = rep.howReceived;
     }
+    else {
+        delete req.session.data['how-was-this-representation-received'];
+    }
     
-    // Use res.render, but manually push the freshly updated session data into the template
+    // Use res.render, but manually push the freshly updated session data into the template 
     res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
         rep: rep, // load rep information
         data: req.session.data // hydrate fields
@@ -94,6 +119,8 @@ router.get('/edit-how-received', function(req, res) {
             // validation
             if (!howWasThisRepresentationReceived) {
                 return res.render('current-service/back-office/manage-representations/edit-representation/02-how-was-this-representation-received', {
+                    rep: rep,
+                    data: req.session.data,
                     errorHowWasThisRepresentationReceived: "Select how this representation was received"
                 });
             }
@@ -103,19 +130,17 @@ router.get('/edit-how-received', function(req, res) {
                 rep.howReceived = howWasThisRepresentationReceived;
                 
                 // trigger success banner
-                req.session.data['edit-success-message'] = "How the representation was received has been updated";
+                req.session.data['edit-success-message'] = "Representation has been updated";
 
-                // redirect based on the overall status
+                // redirect based on the overall status 
                 if (rep.status === "Accepted" || rep.status === "Rejected") {
-                    // If it's already processed, send them back to the 'view' page
                     res.redirect('/current-service/back-office/manage-representations/view');
                 }
                 else if (rep.status === "Awaiting review") {
-                    // If it's still being reviewed, send them back to the 'review' page
                     res.redirect('/current-service/back-office/manage-representations/review-representation/review');
                 }
                 else {
-                    // Safe fallback just in case!
+                    // fallback
                     res.redirect('/current-service/back-office/manage-representations/manage-representations');
                 }
             }
@@ -130,8 +155,14 @@ router.get('/edit-reason-not-online', function(req, res) {
     if (rep && rep.reasonNotOnline) {
         req.session.data['reason-for-not-using-online-service'] = rep.reasonNotOnline;
     }
+    else {
+        delete req.session.data['reason-for-not-using-online-service'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/03-reason-for-not-using-online-service');
+    res.render('current-service/back-office/manage-representations/edit-representation/03-reason-for-not-using-online-service', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 03 - post
@@ -146,8 +177,19 @@ router.get('/edit-reason-not-online', function(req, res) {
             rep.reasonNotOnline = reasonForNotUsingOnlineService;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Reason for not using the online service has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -159,8 +201,14 @@ router.get('/edit-rep-type', function(req, res) {
     if (rep && rep.type) {
         req.session.data['type-of-representation-submitted'] = rep.type;
     }
+    else {
+        delete req.session.data['type-of-representation-submitted'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/04-type-of-representation-submitted');
+    res.render('current-service/back-office/manage-representations/edit-representation/04-type-of-representation-submitted', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 04 - post
@@ -171,6 +219,8 @@ router.get('/edit-rep-type', function(req, res) {
         // validation
         if (!typeOfRepresentationSubmitted) {
             return res.render('current-service/back-office/manage-representations/edit-representation/04-type-of-representation-submitted', {
+                rep: rep,
+                data: req.session.data,
                 errorTypeOfRepresentationSubmitted: "Select the type of representation submitted"
             });
         }
@@ -179,8 +229,19 @@ router.get('/edit-rep-type', function(req, res) {
             rep.type = typeOfRepresentationSubmitted;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Type of representation submitted has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -188,12 +249,18 @@ router.get('/edit-rep-type', function(req, res) {
 router.get('/edit-rep-source', function(req, res) {
     const rep = getRepresentation(req); // find the representation based on currentRepRef
     
-    // pre-populate session data if rep exists
-    if (rep && rep.submitterType) {
-        req.session.data['source-of-representation'] = rep.submitterType;
+    // re-populate if it exists, wipe form if not to clear ghost data
+    if (rep && rep.isAgent) {
+        req.session.data['is-agent'] = rep.isAgent;
+    } else {
+        delete req.session.data['is-agent']; 
     }
+
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/05-source-of-the-representation');
+    res.render('current-service/back-office/manage-representations/edit-representation/05-source-of-the-representation', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 05 - post
@@ -204,6 +271,8 @@ router.get('/edit-rep-source', function(req, res) {
         // validation
         if (!sourceOfRepresentation) {
             return res.render('current-service/back-office/manage-representations/edit-representation/05-source-of-the-representation', {
+                rep: rep,
+                data: req.session.data,
                 errorSourceOfRepresentation: "Select the source of the representation"
             });
         }
@@ -212,8 +281,19 @@ router.get('/edit-rep-source', function(req, res) {
             rep.submitterType = sourceOfRepresentation;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Source of the representation has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -232,7 +312,10 @@ router.get('/edit-submitter-name', function(req, res) {
     }
     
     // redirect to render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/06-name-of-the-person-submitting-the-representation');
+    res.render('current-service/back-office/manage-representations/edit-representation/06-name-of-the-person-submitting-the-representation', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 06 - post
@@ -256,7 +339,9 @@ router.get('/edit-submitter-name', function(req, res) {
         }
         // render errors if any
         if (errorList.length > 0) {
-        return res.render('current-service/back-office/manage-representations/edit-representation/06-name-of-the-person-submitting-the-representation', { 
+        return res.render('current-service/back-office/manage-representations/edit-representation/06-name-of-the-person-submitting-the-representation', {
+            rep: rep,
+            data: req.session.data,
             errors: errors,
             errorList: errorList
         });
@@ -265,8 +350,19 @@ router.get('/edit-submitter-name', function(req, res) {
             // stitch first and last name back together and save to object
             rep.submitterName = `${firstName} ${lastName}`;
         }
-        req.session.data['edit-success-message'] = "Submitter name updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -278,8 +374,14 @@ router.get('/edit-contact-method', function(req, res) {
     if (rep && rep.contactMethod) {
         req.session.data['preferred-contact-method'] = rep.contactMethod;
     }
+    else {
+        delete req.session.data['preferred-contact-method'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/07-preferred-contact-method');
+    res.render('current-service/back-office/manage-representations/edit-representation/07-preferred-contact-method', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 07 - post
@@ -290,6 +392,8 @@ router.get('/edit-contact-method', function(req, res) {
         // validation
         if (!preferredContactMethod) {
             return res.render('current-service/back-office/manage-representations/edit-representation/07-preferred-contact-method', {
+                rep: rep,
+                data: req.session.data,
                 errorPreferredContactMethod: "Select your preferred contact method"
             });
         }
@@ -298,8 +402,19 @@ router.get('/edit-contact-method', function(req, res) {
             rep.contactMethod = preferredContactMethod;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Preferred contact method has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -311,8 +426,14 @@ router.get('/edit-email', function(req, res) {
     if (rep && rep.submitterEmail) {
         req.session.data['your-email-address'] = rep.submitterEmail;
     }
+    else {
+        delete req.session.data['your-email-address'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/08-email-address-provided');
+    res.render('current-service/back-office/manage-representations/edit-representation/08-email-address-provided', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 08 - post
@@ -324,12 +445,16 @@ router.get('/edit-email', function(req, res) {
         const emailRegex = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
 
         if (!yourEmailAddress) {
-            return res.render('current-service/back-office/manage-representations/edit-representation/08-email-address-provided', { 
+            return res.render('current-service/back-office/manage-representations/edit-representation/08-email-address-provided', {
+                rep: rep,
+                data: req.session.data, 
                 errorYourEmailAddress: "Enter your email address" 
             });
         }
         if (!emailRegex.test(yourEmailAddress)) {
-            return res.render('current-service/back-office/manage-representations/edit-representation/08-email-address-provided', { 
+            return res.render('current-service/back-office/manage-representations/edit-representation/08-email-address-provided', {
+                rep: rep,
+                data: req.session.data, 
                 errorYourEmailAddress: "Enter your email address in the correct format, like name@example.com" 
             });
         }
@@ -338,8 +463,19 @@ router.get('/edit-email', function(req, res) {
             rep.submitterEmail = yourEmailAddress;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Email address has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -355,8 +491,18 @@ router.get('/edit-postal-address', function(req, res) {
         req.session.data['postal-address-county'] = rep.postalAddress.county;
         req.session.data['postal-address-postcode'] = rep.postalAddress.postcode;
     }
+    else {
+        delete req.session.data['postal-address-line-1'];
+        delete req.session.data['postal-address-line-2'];
+        delete req.session.data['postal-address-town'];
+        delete req.session.data['postal-address-county'];
+        delete req.session.data['postal-address-postcode'];
+    }
     // redirect to render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/09-postal-address-provided');
+    res.render('current-service/back-office/manage-representations/edit-representation/09-postal-address-provided', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 09 - post
@@ -394,7 +540,9 @@ router.get('/edit-postal-address', function(req, res) {
         }
         // render errors if any
         if (errorList.length > 0) {
-        return res.render('current-service/back-office/manage-representations/edit-representation/09-postal-address-provided', { 
+        return res.render('current-service/back-office/manage-representations/edit-representation/09-postal-address-provided', {
+            rep: rep,
+            data: req.session.data, 
             errors: errors,
             errorList: errorList
         });
@@ -410,8 +558,19 @@ router.get('/edit-postal-address', function(req, res) {
             };
         }
         // Set success banner and redirect
-        req.session.data['edit-success-message'] = "Postal address updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -423,8 +582,14 @@ router.get('/edit-comment', function(req, res) {
     if (rep && rep.comment) {
         req.session.data['written-representation-submitted'] = rep.comment;
     }
+    else {
+        delete req.session.data['written-representation-submitted'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/10-written-representation-submitted');
+    res.render('current-service/back-office/manage-representations/edit-representation/10-written-representation-submitted', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 10 - post
@@ -435,6 +600,8 @@ router.get('/edit-comment', function(req, res) {
         // validation
         if (!writtenRepresentationSubmitted) {
             return res.render('current-service/back-office/manage-representations/edit-representation/10-written-representation-submitted', {
+                rep: rep,
+                data: req.session.data,
                 errorWrittenRepresentationSubmitted: "Enter what you want to tell us about this proposed application"
             });
         }
@@ -443,8 +610,19 @@ router.get('/edit-comment', function(req, res) {
             rep.comment = writtenRepresentationSubmitted;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Written representation submitted has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -456,8 +634,14 @@ router.get('/edit-hearing', function(req, res) {
     if (rep && rep.wantsHearing) {
         req.session.data['would-you-like-to-be-heard-at-a-hearing'] = rep.wantsHearing;
     }
+    else {
+        delete req.session.data['would-you-like-to-be-heard-at-a-hearing'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing');
+    res.render('current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 11 - post
@@ -468,6 +652,8 @@ router.get('/edit-hearing', function(req, res) {
         // validation
         if (!wouldYouLikeToBeHeardAtAHearing) {
             return res.render('current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing', {
+                rep: rep,
+                data: req.session.data,
                 errorWouldYouLikeToBeHeardAtAHearing: "Select yes if you would like to be heard at a hearing"
             });
         }
@@ -476,8 +662,19 @@ router.get('/edit-hearing', function(req, res) {
             rep.wantsHearing = wouldYouLikeToBeHeardAtAHearing;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Hearing preference has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -489,8 +686,14 @@ router.get('/edit-has-attachments' , function(req, res) {
     if (rep && rep.hasAttachments) {
         req.session.data['are-there-any-attachments'] = rep.hasAttachments;
     }
+    else {
+        req.session.data['are-there-any-attachments'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/12-are-there-any-attachments');
+    res.render('current-service/back-office/manage-representations/edit-representation/12-are-there-any-attachments', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 12 - post
@@ -501,6 +704,8 @@ router.get('/edit-has-attachments' , function(req, res) {
         // validation
         if (!areThereAnyAttachments) {
             return res.render('current-service/back-office/manage-representations/edit-representation/12-are-there-any-attachments', {
+                rep: rep,
+                data: req.session.data,
                 errorAreThereAnyAttachments: "Select yes if there are any attachments to this representation"
             });
         }
@@ -509,8 +714,19 @@ router.get('/edit-has-attachments' , function(req, res) {
             rep.hasAttachments = areThereAnyAttachments;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Attachment preference has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -522,8 +738,11 @@ router.get('/edit-attachments', function(req, res) {
     if (rep && rep.attachments) {
         req.session.data['uploadedFiles'] = rep.attachments.join('||');
     }
+    else {
+        delete req.session.data['uploadedFiles'];
+    }
     // render page with pre-populated data
-    res.render('/current-service/back-office/manage-representations/edit-representation/13-upload-attachments', {
+    res.render('current-service/back-office/manage-representations/edit-representation/13-upload-attachments', {
         rep: rep,
         data: req.session.data
     });
@@ -546,6 +765,8 @@ router.get('/edit-attachments', function(req, res) {
         // render errors if any
         if (errorList.length > 0) {
             return res.render('current-service/back-office/manage-representations/edit-representation/13-upload-attachments', {
+                rep: rep,
+                data: req.session.data,
                 errors: errors,
                 errorList: errorList
             });
@@ -556,7 +777,7 @@ router.get('/edit-attachments', function(req, res) {
             rep.attachments = uploadedFiles.split('||');
         
         // set success banner and redirect
-        req.session.data['edit-success-message'] = "Attachments updated";
+        req.session.data['edit-success-message'] = "Representation has been updated";
         
         // redirect based on the overall status
                 if (rep.status === "Accepted" || rep.status === "Rejected") {
@@ -578,13 +799,20 @@ router.get('/edit-attachments', function(req, res) {
 // 14 - representations made on behalf of
 router.get('/edit-rep-on-behalf-of', function(req, res) {
     const rep = getRepresentation(req); // find the representation based on currentRepRef
-    
-    // pre-populate session data if rep exists
+
+    // re-populate if it exists, wipe form if not to clear ghost data
     if (rep && rep.representing) {
         req.session.data['representation-made-on-behalf-of'] = rep.representing;
+    } 
+    else {
+        delete req.session.data['representation-made-on-behalf-of']; 
     }
+
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/14-representation-made-on-behalf-of');
+    res.render('current-service/back-office/manage-representations/edit-representation/14-representation-made-on-behalf-of', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 14 - post
@@ -595,6 +823,8 @@ router.get('/edit-rep-on-behalf-of', function(req, res) {
         // validation
         if (!representationMadeOnBehalfOf) {
             return res.render('current-service/back-office/manage-representations/edit-representation/14-representation-made-on-behalf-of', {
+                rep: rep,
+                data: req.session.data,
                 errorRepresentationMadeOnBehalfOf: "Select who you are representing"
             });
         }
@@ -603,8 +833,19 @@ router.get('/edit-rep-on-behalf-of', function(req, res) {
             rep.representing = representationMadeOnBehalfOf;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Who you are representing has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -616,8 +857,14 @@ router.get('/edit-is-agent', function(req, res) {
     if (rep && rep.isAgent) {
         req.session.data['is-agent'] = rep.isAgent;
     }
+    else {
+        delete req.session.data['is-agent'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/15-was-the-representation-submitted-by-an-agent');
+    res.render('current-service/back-office/manage-representations/edit-representation/15-was-the-representation-submitted-by-an-agent', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 15 - post
@@ -628,6 +875,8 @@ router.get('/edit-is-agent', function(req, res) {
         // validation
         if (!isAgent) {
             return res.render('current-service/back-office/manage-representations/edit-representation/15-was-the-representation-submitted-by-an-agent', {
+                rep: rep,
+                data: req.session.data,
                 errorIsAgent: "Select yes if the representation was submitted by an agent"
             });
         }
@@ -636,8 +885,19 @@ router.get('/edit-is-agent', function(req, res) {
             rep.isAgent = isAgent;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Agent submission preference has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -649,8 +909,14 @@ router.get('/edit-agent-org', function(req, res) {
     if (rep && rep.agentOrgName) {
         req.session.data['agent-organisation-name'] = rep.agentOrgName;
     }
+    else {
+        delete req.session.data['agent-organisation-name'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/16-name-of-agents-organisation');
+    res.render('current-service/back-office/manage-representations/edit-representation/16-name-of-agents-organisation', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 16 - post
@@ -661,6 +927,8 @@ router.get('/edit-agent-org', function(req, res) {
         // validation
         if (!agentOrganisationName) {
             return res.render('current-service/back-office/manage-representations/edit-representation/16-name-of-agents-organisation', {
+                rep: rep,
+                data: req.session.data,
                 errorAgentOrganisationName: "Enter the agent organisation name"
             });
         }
@@ -669,8 +937,19 @@ router.get('/edit-agent-org', function(req, res) {
             rep.agentOrgName = agentOrganisationName;
         }
         // trigger success banner
-        req.session.data['edit-success-message'] = "Agent organisation name has been updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -687,8 +966,15 @@ router.get('/edit-represented-person', function(req, res) {
         req.session.data['name-of-individual-first-name'] = nameParts[0];
         req.session.data['name-of-individual-last-name'] = nameParts.slice(1).join(' ');
     }
+    else {
+        delete req.session.data['name-of-individual-first-name'];
+        delete req.session.data['name-of-individual-last-name'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented');
+    res.render('current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 17 - post
@@ -712,7 +998,9 @@ router.get('/edit-represented-person', function(req, res) {
         }
         // render errors if any
         if (errorList.length > 0) {
-        return res.render('current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented', { 
+        return res.render('current-service/back-office/manage-representations/edit-representation/17-name-of-the-individual-being-represented', {
+            rep: rep,
+            data: req.session.data, 
             errors: errors,
             errorList: errorList
         });
@@ -721,8 +1009,19 @@ router.get('/edit-represented-person', function(req, res) {
             // stitch first and last name back together and save to object
             rep.representedPerson = `${firstName} ${lastName}`;
         }
-        req.session.data['edit-success-message'] = "Represented person's name updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+       
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -734,8 +1033,14 @@ router.get('/edit-represented-org-charity', function(req, res) {
     if (rep && rep.representedOrgWorkFor && rep.representedOrgWorkFor.name) {
         req.session.data['name-of-senders-org-or-charity'] = rep.representedOrgWorkFor.name; 
     }
+    else {
+        delete req.session.data['name-of-senders-org-or-charity'];
+    }
     // render page with pre-populated data
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity');
+    res.render('current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 18 - post
@@ -746,6 +1051,8 @@ router.get('/edit-represented-org-charity', function(req, res) {
         // validation
         if (!nameOfSendersOrgOrCharity) {
             return res.render('current-service/back-office/manage-representations/edit-representation/18-name-of-senders-organisation-or-charity', {
+                rep: rep,
+                data: req.session.data,
                 errorNameOfSendersOrgOrCharity: "Enter the name of the sender's organisation or charity"
             });
         }
@@ -759,8 +1066,19 @@ router.get('/edit-represented-org-charity', function(req, res) {
             rep.representedOrgWorkFor.name = nameOfSendersOrgOrCharity;
         }
         // set success banner and redirect
-        req.session.data['edit-success-message'] = "Organisation name updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -772,8 +1090,14 @@ router.get('/edit-represented-org-charity-role', function(req, res) {
     if (rep && rep.representedOrgWorkFor && rep.representedOrgWorkFor.role) {
         req.session.data['senders-job-title-or-role'] = rep.representedOrgWorkFor.role;
     } 
+    else {
+        delete req.session.data['senders-job-title-or-role'];
+    }
     // Redirect to the page
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role');
+    res.render('current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 19 - post
@@ -783,7 +1107,9 @@ router.get('/edit-represented-org-charity-role', function(req, res) {
 
         // validation
         if (!sendersJobTitleOrRole) {
-            return res.render ('/current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role', {
+            return res.render ('current-service/back-office/manage-representations/edit-representation/19-senders-job-title-or-role', {
+                rep: rep,
+                data: req.session.data,
                 errorSendersJobTitleOrRole: "Enter the name of the sender's job title or role"
             });
         }
@@ -797,8 +1123,19 @@ router.get('/edit-represented-org-charity-role', function(req, res) {
             rep.representedOrgWorkFor.role = sendersJobTitleOrRole;
         }
         // Set success banner and redirect
-        req.session.data['edit-success-message'] = "Role or job title updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -810,8 +1147,14 @@ router.get('/edit-represented-org-i-do-not', function(req, res) {
     if (rep && rep.representedOrgOther) {
         req.session.data['org-or-charity-being-represented'] = rep.representedOrgOther;
     } 
+    else {
+        delete req.session.data['org-or-charity-being-represented'];
+    }
     // Redirect to the page
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented');
+    res.render('current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 20 - post
@@ -821,7 +1164,9 @@ router.get('/edit-represented-org-i-do-not', function(req, res) {
 
         // validation
         if (!orgOrCharityBeingRepresented) {
-            return res.render ('/current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented', {
+            return res.render ('current-service/back-office/manage-representations/edit-representation/20-name-of-organisation-or-charity-being-represented', {
+                rep: rep,
+                data: req.session.data,
                 errorOrgOrCharityBeingRepresented: "Enter the name of the organisation or charity being represented"
             });
         }
@@ -830,8 +1175,19 @@ router.get('/edit-represented-org-i-do-not', function(req, res) {
             rep.representedOrgOther = orgOrCharityBeingRepresented;
         }
         // Set success banner and redirect
-        req.session.data['edit-success-message'] = "Name of organisation or charity being represented updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -842,9 +1198,15 @@ router.get('/edit-group-name', function(req, res) {
     // check if group and group name object 
     if (rep && rep.representedGroup && rep.representedGroup.name) {
         req.session.data['name-of-the-group'] = rep.representedGroup.name;
-    } 
+    }
+    else {
+        delete req.session.data['name-of-the-group'];
+    }
     // redirect to group name page
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/21-group-name');
+    res.render('current-service/back-office/manage-representations/edit-representation/21-group-name', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 21 - post
@@ -864,8 +1226,19 @@ router.get('/edit-group-name', function(req, res) {
             rep.representedGroup.name = groupName;
         }
         // Set success banner and redirect
-        req.session.data['edit-success-message'] = "Group name updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 
@@ -874,18 +1247,29 @@ router.get('/edit-group-name', function(req, res) {
 // 22 - check group name details (pre-load names if existing)
 router.get('/edit-group-members', function(req, res) {
     const rep = getRepresentation(req);
-    
-    // stage the members array into the session data so the html table can read it
-    if (rep && rep.representedGroup && rep.representedGroup.members) {
-        req.session.data['group-name-list'] = rep.representedGroup.members;
-    } else {
-        req.session.data['group-name-list'] = [];
+
+    if (req.query.action === 'start') {
+        delete req.session.data['group-name-list'];
     }
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+    
+    if (!req.session.data['group-name-list']) {
+        if (rep && rep.representedGroup && rep.representedGroup.members) {
+            // THE FIX: Deep copy the array so objects are completely disconnected from the database
+            req.session.data['group-name-list'] = JSON.parse(JSON.stringify(rep.representedGroup.members));
+        } else {
+            req.session.data['group-name-list'] = [];
+        }
+    }
+    
+    res.render('current-service/back-office/manage-representations/edit-representation/22-check-group-name-details', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
 // 23 - name of person in the group (prefill if editing)
 router.get('/edit-bo-setup-next-person', function(req, res) {
+    const rep = getRepresentation (req);
     const id = req.query.id;
     const groupNameList = req.session.data['group-name-list'] || [];
 
@@ -905,12 +1289,16 @@ router.get('/edit-bo-setup-next-person', function(req, res) {
         req.session.data['person-last-name'] = "";
     }
 
-    // Redirecting to your page 23 inside the edit folder
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/23-name-of-person-in-the-group');
+    // redirect to actual page
+    res.render('current-service/back-office/manage-representations/edit-representation/23-name-of-person-in-the-group', {
+        rep: rep,
+        data: req.session.data
+    });
 });
 
     // 23 - post save person to temp array
     router.post('/edit-bo-name-of-person', function(req, res) {
+        const rep = getRepresentation (req);
         const editId = req.session.data['edit-group-id'];
         const firstName = req.session.data['person-first-name'];
         const lastName = req.session.data['person-last-name'];
@@ -931,6 +1319,8 @@ router.get('/edit-bo-setup-next-person', function(req, res) {
         // Render EDIT page if errors
         if (errorList.length > 0) {
             return res.render('current-service/back-office/manage-representations/edit-representation/23-name-of-person-in-the-group', {
+                rep: rep,
+                data: req.session.data,
                 errors: errors,
                 errorList: errorList
             });
@@ -958,17 +1348,18 @@ router.get('/edit-bo-setup-next-person', function(req, res) {
         req.session.data['person-last-name'] = "";
 
         // Send back to the check page
-        res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+        res.redirect('/edit-group-members');
     });
 
 // 22 - remove get route
 router.get('/edit-bo-remove-group-person', function(req, res) {
+    const rep = getRepresentation (req)
     const idToRemove = req.query.id;
 
     if (idToRemove && req.session.data['group-name-list']) {
         req.session.data['group-name-list'] = req.session.data['group-name-list'].filter(person => person.id !== idToRemove);
     }
-    res.redirect('/current-service/back-office/manage-representations/edit-representation/22-check-group-name-details');
+    res.redirect('/edit-group-members');
 });
 
     // 22 - final save to rep object post route
@@ -979,6 +1370,8 @@ router.get('/edit-bo-remove-group-person', function(req, res) {
         // validation for empty list
         if (groupNameList.length === 0) {
             return res.render('current-service/back-office/manage-representations/edit-representation/22-check-group-name-details', {
+                rep: rep,
+                data: req.session.data,
                 errorList: [{ text: "You must add at least one person to the group", href: "#add-person-link" }]
             });
         }
@@ -990,9 +1383,23 @@ router.get('/edit-bo-remove-group-person', function(req, res) {
             }
             rep.representedGroup.members = groupNameList;
         }
+        // wipe temp array
+        delete req.session.data['group-name-list'];
+
         // Set success banner and redirect to Review
-        req.session.data['edit-success-message'] = "Group members updated";
-        res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        req.session.data['edit-success-message'] = "Representation has been updated";
+        
+        // redirect based on the overall status 
+        if (rep.status === "Accepted" || rep.status === "Rejected") {
+            res.redirect('/current-service/back-office/manage-representations/view');
+        }
+        else if (rep.status === "Awaiting review") {
+            res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+        }
+        else {
+            // fallback
+            res.redirect('/current-service/back-office/manage-representations/manage-representations');
+        }
     });
 
 

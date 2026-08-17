@@ -5,11 +5,23 @@
 {% endblock %}
 
 {% block beforeContent %}
+{% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
+        {% set backLink = '/current-service/back-office/manage-representations/view' %}
+    
+    {% elif actualRepStatus == 'Awaiting review' %}
+        {% set backLink = '/current-service/back-office/manage-representations/review-representation/review' %}
+  
+    {% else %}
+        {# Fallback just in case something goes wrong #}
+        {% set backLink = '/current-service/back-office/manage-representations/manage-representations' %}
+    {% endif %}
 
-  {{ govukBackLink({ 
-      text: "Back", 
-      href: "/current-service/back-office/manage-representations/review-representation/review"
-  }) }}
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: backLink
+    }) }}
 {% endblock %}
 
 {% block content %}

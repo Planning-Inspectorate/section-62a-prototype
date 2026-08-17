@@ -4,7 +4,7 @@
   {% if errorHowWasThisRepresentationReceived %}Error: {% endif %}How was this representation received?
 {% endblock %}
 
-{% block beforeContent %}
+{% block beforeContent %} 
 {% set actualRepStatus = rep.status %}
     
     {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
