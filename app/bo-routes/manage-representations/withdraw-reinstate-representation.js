@@ -284,11 +284,15 @@ router.get('/reinstate-representation-start', function(req, res) {
         if (rep.previousStatus === "Accepted") {
             // if it was accepted, it stays accepted
             rep.status = "Accepted";
-        } else {
-            // if awaiting review or rejected, go back to awaiting review
+        }
+        else if (rep.previousStatus ==="Rejected") {
+            // if awaiting review go back to awaiting review
+            rep.status = "Rejected"; 
+        }
+        else if (rep.previousStatus ==="Awaiting review") {
+            // if awaiting review go back to awaiting review
             rep.status = "Awaiting review"; 
         }
-            
             // wipe the withdrawal data so it's a clean slate
             rep.withdrawn = false;
             rep.withdrawnDate = null;

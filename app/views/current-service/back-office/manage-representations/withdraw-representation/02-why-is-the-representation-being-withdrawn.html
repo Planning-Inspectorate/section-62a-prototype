@@ -59,11 +59,17 @@
             text: "Personal Reasons", 
             checked: data['why-is-the-representation-being-withdrawn'] == 'Personal Reasons',
             hint: {text: "Such as privacy or a change in circumstances"}
+          },
+          { 
+            value: "Added to the wrong case", 
+            text: "Added to the wrong case", 
+            checked: data['why-is-the-representation-being-withdrawn'] == 'Added to the wrong case',
+            hint: {text: "An administrative error by the case management team"}
           }
         ]
       }) }}
       
-      {{ govukButton({ text: "Save" }) }}
+      {{ govukButton({ text: "Continue" }) }}
 
     </form>
   </div>

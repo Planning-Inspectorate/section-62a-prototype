@@ -25,6 +25,7 @@ router.get('/add-a-representation-start', function (req, res) {
     'source-of-representation',
     'your-first-name',
     'your-last-name',
+    'obscure-name',
     'preferred-contact-method',
     'your-email-address',
     'postal-address-line-1',
@@ -151,6 +152,7 @@ router.post('/source-of-representation-answer', function (req, res) {
 
 // 06 - name of the person submitting the representation
 router.post('/bo-your-name-answer', function (req, res) {
+    const typeOfRepresentationSubmitted = req.session.data['type-of-representation-submitted'];
     const firstName = req.session.data['your-first-name'];
     const lastName = req.session.data['your-last-name'];
 
@@ -175,7 +177,26 @@ router.post('/bo-your-name-answer', function (req, res) {
         errorList: errorList
       });
     }
+    // redirect based on type of rep submitted
+    if (typeOfRepresentationSubmitted === 'Interested party') {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/06a-does-the-interested-party-want-their-name-obscured');
+    }
+    else if (typeOfRepresentationSubmitted === 'Consultees') {
+        res.redirect('/current-service/back-office/manage-representations/add-a-representation/07-preferred-contact-method');
+    }
+});
 
+
+// 06a - would you like to hide your name from being published
+router.post('/obscure-name-answer', function (req, res) {
+    const obscureName = req.session.data['obscure-name'];
+
+    // validation
+    if (!obscureName) {
+        return res.render('current-service/back-office/manage-representations/add-a-representation/06a-does-the-interested-party-want-their-name-obscured', {
+            errorObscureName: "Select yes if the interested party wants to obscure their name"
+        });
+    }
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/07-preferred-contact-method');
 });
 
@@ -654,6 +675,7 @@ router.post('/representation-added', function(req, res) {
         // Submitter Details
         submitterType: data['source-of-representation'],
         submitterName: `${data['your-first-name']} ${data['your-last-name']}`,
+        obscureName: data['type-of-representation-submitted'] === 'Interested party' ? data['obscure-name'] : null,
         contactMethod: data['preferred-contact-method'],
         submitterEmail: data['preferred-contact-method'] === 'Email' ? data['your-email-address'] : null,
         
@@ -719,6 +741,7 @@ router.post('/representation-added', function(req, res) {
         'source-of-representation',
         'your-first-name',
         'your-last-name',
+        'obscure-name',
         'preferred-contact-method',
         'your-email-address',
         'postal-address-line-1',

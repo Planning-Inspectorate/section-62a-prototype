@@ -1,0 +1,73 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorObscureName %}Error: {% endif %}Does the interested party want their name obscured?
+{% endblock %}
+
+{% block beforeContent %}
+{% set actualRepStatus = rep.status %}
+    
+    {% if actualRepStatus == 'Accepted' or actualRepStatus == 'Rejected' %}
+        {% set backLink = '/current-service/back-office/manage-representations/view' %}
+    
+    {% elif actualRepStatus == 'Awaiting review' %}
+        {% set backLink = '/current-service/back-office/manage-representations/review-representation/review' %}
+  
+    {% else %}
+        {# Fallback just in case something goes wrong #}
+        {% set backLink = '/current-service/back-office/manage-representations/manage-representations' %}
+    {% endif %}
+
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: backLink
+    }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorObscureName %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorObscureName, href: "#obscure-name" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/edit-obscure-name" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "obscure-name",
+        name: "obscure-name",
+        fieldset: {
+          legend: { 
+            text: "Would you like to hide your name from being published?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: { 
+            text: "Select yes if the interested party has contacted the Planning Inspectorate asking for their name to be obscured from the front office."
+        },
+        errorMessage: { text: errorObscureName } if errorObscureName else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['obscure-name'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['obscure-name'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

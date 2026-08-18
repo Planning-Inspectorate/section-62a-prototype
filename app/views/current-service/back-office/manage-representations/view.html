@@ -337,6 +337,17 @@
           </dd>
       </div>
 
+      {# --- 06a: Obscure name (conditional) --- #}
+      {% if rep.type == 'Interested party' %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Obscure name?</dt>
+          <dd class="govuk-summary-list__value">{{ rep.obscureName | default('-', true) }}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/edit-hide-name?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> would you like to hide your name from being published</span></a>
+          </dd>
+      </div>
+      {% endif %}
+
       {# --- 07: Preferred contact method --- #}
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">What is your contact preference?</dt>
@@ -477,7 +488,7 @@
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Attachments uploaded?</dt>
           <dd class="govuk-summary-list__value">{{ rep.hasAttachments }}</dd>
-          {% if rep.status == 'Accepted' or rep.status == 'Withdrawn' %}
+          {% if rep.status == 'Accepted' %}
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/edit-has-attachments?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> attachments included</span></a>
           </dd>
@@ -514,10 +525,6 @@
             </li>
           </ul>
           </dd>
-          {% elif rep.status == 'Withdrawn' %}
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/edit-attachments?repRef={{ rep.reference }}">Add<span class="govuk-visually-hidden"> attachments</span></a>
-          </dd>
           {% endif %}
       </div>
       {% endif %}
@@ -525,7 +532,7 @@
     {# --- Withdrawn fields (conditional) --- #}
     {% if rep.status == 'Withdrawn' %}
     <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Withdrawal Date</dt>
+          <dt class="govuk-summary-list__key">Withdrawal request date</dt>
           <dd class="govuk-summary-list__value">{{ withdrawalDateHtml }}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/edit-withdrawal-date?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> withdrawal date</span></a>

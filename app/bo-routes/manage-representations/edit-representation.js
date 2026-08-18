@@ -366,6 +366,61 @@ router.get('/edit-submitter-name', function(req, res) {
     });
 
 
+// 06a - would you like to hide your name from being published
+router.get('/edit-hide-name', function(req, res) {
+    const rep = getRepresentation (req);
+
+    //pre-populate session data
+    if (rep && rep.obscureName) {
+        req.session.data['obscure-name'] = rep.obscureName;
+    }
+    else {
+        delete req.session.data['obscure-name'];
+    }
+
+    // Use res.render, but manually push the freshly updated session data into the template 
+    res.render('current-service/back-office/manage-representations/edit-representation/06a-does-the-interested-party-want-their-name-obscured', {
+        rep: rep, // load rep information
+        data: req.session.data // hydrate fields
+    });
+});
+
+    // 06a - post
+    router.post('/edit-obscure-name', function (req, res) {
+            const rep = getRepresentation(req);
+            const obscureName = req.session.data['obscure-name'];
+
+            // validation
+            if (!obscureName) {
+                return res.render('current-service/back-office/manage-representations/edit-representation/06a-does-the-interested-party-want-their-name-obscured', {
+                    rep: rep,
+                    data: req.session.data,
+                    errorObscureName: "Select yes if the interested party wants to obscure their name"
+                });
+            }
+        
+            // save and update the exact object property
+            if (rep) {
+                rep.obscureName = obscureName;
+                
+                // trigger success banner
+                req.session.data['edit-success-message'] = "Representation has been updated";
+
+                // redirect based on the overall status 
+                if (rep.status === "Accepted" || rep.status === "Rejected") {
+                    res.redirect('/current-service/back-office/manage-representations/view');
+                }
+                else if (rep.status === "Awaiting review") {
+                    res.redirect('/current-service/back-office/manage-representations/review-representation/review');
+                }
+                else {
+                    // fallback
+                    res.redirect('/current-service/back-office/manage-representations/manage-representations');
+                }
+            }
+        });
+
+
 // 07 - contact method
 router.get('/edit-contact-method', function(req, res) {
     const rep = getRepresentation(req); // find the representation based on currentRepRef
