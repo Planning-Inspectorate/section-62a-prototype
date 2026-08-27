@@ -1,0 +1,469 @@
+
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0048 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+    <style>
+        /* Force override of the GOV.UK default details icon */
+        details.govuk-details .govuk-details__summary::before {
+            
+            border: none !important;
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%) !important;
+            
+            width: 16px !important;
+            height: 16px !important;
+            
+            background-color: #000000 !important; /* Matches GOV.UK link blue, change to black if preferred */
+        }
+
+        /* Force override for the open state */
+        details.govuk-details[open] > .govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%) !important;
+        }
+
+        /* ========================================================= */
+        /* MOJ SIDE NAVIGATION OVERRIDES                             */
+        /* ========================================================= */
+        
+        .moj-side-navigation__item a {
+            font-size: 19px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .moj-side-navigation__item {
+            margin-bottom: 15px; 
+        }
+
+    </style>
+
+    <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/documents" aria-current="location">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/hys">Have your say</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/written-representations">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+            <h3 class="govuk-heading-m">Filters</h3>
+            <div style="padding-bottom:10px;">
+                <a href="" class="govuk-link">
+                    Show all filters</a>
+            </div>
+            <details class="govuk-details govuk-!-margin-bottom-0" id="filter-panel">
+                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
+                    <a class="govuk-link govuk-link--no-underline">
+                        Submitted by
+                    </a>
+                </summary>
+                <div style="padding-left:30px;">
+                    <form class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <div class="govuk-grid-row">
+                                <div class="">
+                                    <fieldset class="govuk-fieldset" aria-describedby="type-of-application-hint">
+                                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                    Consultee (11)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                    Interested party (40)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+
+            <details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-padding-0 govuk-!-margin-bottom-0">
+                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
+                    <a class="govuk-link govuk-link--no-underline">
+                        Contains attachments
+                    </a>
+                </summary>
+                <div style="padding-left:30px;">
+                    <form class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <div class="govuk-grid-row">
+                                <div class="">
+                                    <fieldset class="govuk-fieldset" aria-describedby="type-of-application-hint">
+                                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                    Yes (32)
+                                                </label>
+                                            </div>
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
+                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                    No (19)
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+
+            <details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-padding-0" id="filter-panel">
+                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
+                    <a class="govuk-link govuk-link--no-underline">Date submitted</a>
+                </summary>
+                <div style="padding-left:30px;">
+                    <form class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                <h4 class="govuk-fieldset__heading">
+                                    From
+                                </h4>
+                            </legend>
+                            <div id="passport-issued-hint" class="govuk-hint">
+                                For example, 5 7 2022
+                            </div>
+                            <div class="govuk-date-input" id="passport-issued">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+                                            Day
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+                                            Month
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+                                            Year
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                            </div>
+                            <legend style="margin-top:20px" class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                <h4 class="govuk-fieldset__heading">
+                                    To
+                                </h4>
+                            </legend>
+                            <div id="passport-issued-hint" class="govuk-hint">
+                                For example, 27 3 2023
+                            </div>
+                            <div class="govuk-date-input" id="passport-issued">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+                                            Day
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+                                            Month
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+                                            Year
+                                        </label>
+                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+            </details>
+            <a href="written-reps-selected" class="govuk-button" style="margin-bottom:0px;">
+                Apply filters
+            </a>
+        </div>
+
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">S62A/2026/0048</span>
+            <h1 class="govuk-heading-l">Written representations</h1>
+            <div style="padding-bottom: 24px;">
+                <div id="search-hint" class="govuk-hint">
+                    Search by keywords or by name of person or organisation who made the submission.</div>
+                <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off" style="width:100%;">
+                    <button class="govuk-button" id="keyword-search-button" type="submit" style="margin-bottom:0px;">Search</button>
+                </form>
+
+            </div>
+            <div id="pagination" class="govuk-body">
+                <p class="govuk-body">
+                    Showing
+                    <strong>1</strong>
+                    to
+                    <strong>25</strong>
+                    of
+                    <strong>51</strong>
+                    representations, newest first.
+                </p>
+
+                <span>
+                    <strong>Results per page</strong>
+                </span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <span class="govuk-body">25</span>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="govuk-link--no-visited-state" href="?itemsPerPage=50" data-pagination="50">50</a>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="govuk-link--no-visited-state" href="?itemsPerPage=100" data-pagination="100">100</a>
+            </div>
+            <div style="margin-top: 24px;">
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>St Albans City and District Council</a>
+                </p>
+                <p class='govuk-body'>The development will bring economic benefits, but clarity is needed on local procurement opportunities and job creation commitments.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            St Albans City and District Council</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            23 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Heather Scott on behalf of Harpenden Town Council</a>
+                </p>
+                <p class='govuk-body'>No objection in principle subject to the appropriate ecological and bat surveys
+                                    being conducted and sufficient tree protection measures implemented to protect
+                                    the mature tree on the frontage. Policies ESD2, ESD13 and ESD14 of the Harpenden
+                                    Neighbourhood Plan and Policies 70 and 74 of the St Albans District Local Plan
+                                    1994 refers.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Heather Scott</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            21 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Environmental Compliance</a>
+                </p>
+                <p class='govuk-body'>See the attached letter.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Environmental Compliance</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            20 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Sophie Batchelor on behalf of Hertfordshire County Council</a>
+                </p>
+                <p class='govuk-body'>See attached letter.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Sophie Batchelor</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            20 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Ivan Bogoliubov on behalf of Affinity Water Limited</a>
+                </p>
+                <p class='govuk-body'>Affinity Water has no comments to make regarding planning application S62A/2026/0048.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Avonvale Heritage Trust</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            16 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Mark Doran on behalf of Hertfordshire County Council</a>
+                </p>
+                <p class='govuk-body'>See the attached document.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Mark Doran</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            16 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>Mark Youngman on behalf of HCC Highways authority</a>
+                </p>
+                <p class='govuk-body'>See attached letter.</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            Mark Youngman</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            16 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <p class='govuk-body govuk-!-font-weight-bold'>
+                    <a href='written-representations-example' class='govuk-link'>UK Power Networks</a>
+                </p>
+                <p class='govuk-body'>If the proposed works are located within 6m of the substation, then they are
+                                    notifiable under the Party Wall etc. Act 1996. The Applicant should provide
+                                    details of the proposed works and liaise with the Company to ensure that
+                                    appropriate protective measures and mitigation solutions are agreed in
+                                    accordance with the Act...</p>
+                <div class='govuk-grid-row'>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Submitted by:</strong>
+                            UK Power Networks</p>
+                    </div>
+                    <div class='govuk-grid-column-one-half'>
+                        <p class='govuk-body'>
+                            <strong>Date submitted:</strong>
+                            16 Jun 2026</p>
+                    </div>
+                </div>
+
+                <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+            </div>
+            <nav class="govuk-pagination" aria-label="Pagination">
+            <ul class="govuk-pagination__list">
+                <li class="govuk-pagination__item govuk-pagination__item--current">
+                    <a class="govuk-link govuk-pagination__link" href="?page=1" aria-label="Page 1" aria-current="page">
+                        1
+                    </a>
+                </li>
+                <li class="govuk-pagination__item">
+                    <a class="govuk-link govuk-pagination__link" href="?page=2" aria-label="Page 2">
+                        2
+                    </a>
+                </li>
+                <li class="govuk-pagination__item">
+                    <a class="govuk-link govuk-pagination__link" href="?page=11" aria-label="Page 11">
+                        3
+                    </a>
+                </li>
+            </ul>
+
+            <div class="govuk-pagination__next">
+                <a class="govuk-link govuk-pagination__link" href="?page=2" rel="next">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden">
+                            page</span>
+                    </span>
+                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg"
+                        height="13" width="15" aria-hidden="true" focusable="false" viewbox="0 0 15 13">
+                        <path
+                            d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
