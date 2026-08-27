@@ -1,0 +1,64 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAddCommentAttachments %}Error: {% endif %}Do you want to submit a comment and attchments - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorAddCommentAttachments %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorAddCommentAttachments, href: "#add-comment-attachments" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/add-comment-attachments-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "add-comment-attachments",
+        name: "add-comment-attachments",
+        fieldset: {
+          legend: { 
+            text: "What would you like to submit?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "You're able to submit your comment on its own or with attachments" 
+        },
+        errorMessage: { text: errorAddCommentAttachments } if errorAddCommentAttachments else null,
+        items: [
+          { 
+            value: "Submit a comment only", 
+            text: "Submit a comment only", 
+            checked: data['add-comment-attachments'] == 'Submit a comment only'
+          },
+          { 
+            value: "Submit a comment and attachments", 
+            text: "Submit a comment and attachments", 
+            checked: data['add-comment-attachments'] == 'Submit a comment and attachments',
+            hint: {
+                text: "Include any relevant attachments such as reports, photographs, previous submissions or your comment if it's a file"
+            }
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -98,10 +98,11 @@
           html: sensitiveHtml
         }) }}
 
-        {{ govukTextarea({
+        {{ govukCharacterCount({
             name: "add-your-comments",
             id: "add-your-comments",
             value: data['add-your-comments'],
+            maxlength: 65000,
             rows: 5,
             label: {
                 text: "Enter your comment",

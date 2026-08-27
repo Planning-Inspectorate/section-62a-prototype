@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorObscureName %}Error: {% endif %}Does the interested party want their name obscured?
+  {% if errorObscureName %}Error: {% endif %}Does the interested party want their name withheld?
 {% endblock %}
 
 {% block beforeContent %}
@@ -48,7 +48,7 @@
           }
         },
         hint: { 
-            text: "Select yes if the interested party has contacted the Planning Inspectorate asking for their name to be obscured from the front office."
+            text: "Select yes if the interested party has contacted the Planning Inspectorate asking for their name to be withheld from the front office."
         },
         errorMessage: { text: errorObscureName } if errorObscureName else null,
         items: [

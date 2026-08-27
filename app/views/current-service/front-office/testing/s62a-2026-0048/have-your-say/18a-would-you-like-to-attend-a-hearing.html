@@ -1,0 +1,62 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAttendHearing %}Error: {% endif %}Would you like to attend a hearing if one takes place? - Find a Section 62A application
+{% endblock %}
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorAttendHearing %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorAttendHearing, href: "#attend-hearing" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/attend-hearing-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "attend-hearing",
+        name: "attend-hearing",
+        fieldset: {
+          legend: { 
+            text: "Would you like to attend a hearing if one takes place?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "If a hearing does take place, we'll reach out to you to confirm whether you'd like to attend or not" 
+        },
+        errorMessage: { text: errorAttendHearing } if errorAttendHearing else null,
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['attend-hearing'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['attend-hearing'] == 'No' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

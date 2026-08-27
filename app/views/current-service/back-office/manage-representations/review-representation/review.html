@@ -269,10 +269,10 @@
           </dd>
       </div>
 
-      {# --- 06a: Obscure name (conditional) --- #}
+      {# --- 06a: Withhold name (conditional) --- #}
       {% if rep.type == 'Interested party' %}
       <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Obscure name?</dt>
+          <dt class="govuk-summary-list__key">Withhold name?</dt>
           <dd class="govuk-summary-list__value">{{ rep.obscureName | default('-', true) }}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="/edit-hide-name?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> would you like to hide your name from being published</span></a>
@@ -378,7 +378,7 @@
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Tell us about application</dt>
           <dd class="govuk-summary-list__value">
-          {% if comment.length > 100 %}
+          {% if comment.length > 500 %}
               <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/edit-comment?repRef={{ rep.reference }}">Read more</a></p>
           {% else %}
               {{ comment | nl2br | safe }}

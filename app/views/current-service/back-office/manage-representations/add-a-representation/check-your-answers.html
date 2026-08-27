@@ -186,13 +186,13 @@
           </dd>
       </div>
 
-      {# --- 06a: Obscure name (conditional) --- #}
+      {# --- 06a: Withhold name (conditional) --- #}
       {% if data['type-of-representation-submitted'] == 'Interested party' %}
       <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Obscure name?</dt>
+          <dt class="govuk-summary-list__key">Withhold name?</dt>
           <dd class="govuk-summary-list__value">{{ data['obscure-name'] }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/edit-hide-name?repRef={{ rep.reference }}">Edit<span class="govuk-visually-hidden"> would you like to hide your name from being published</span></a>
+            <a class="govuk-link" href="/edit-hide-name?repRef={{ rep.reference }}">Change<span class="govuk-visually-hidden"> would you like to hide your name from being published</span></a>
           </dd>
       </div>
       {% endif %}
@@ -297,8 +297,8 @@
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Tell us about application</dt>
           <dd class="govuk-summary-list__value">
-          {% if comment.length > 100 %}
-              <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted">Read more</a></p>
+          {% if comment.length > 500 %}
+              <p class="govuk-body">{{ comment | truncate(500, true, "... ")}}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/back-office/manage-representations/add-a-representation/10-written-representation-submitted">Read more</a></p>
               
           {% else %}
               {{ comment | nl2br | safe }}
