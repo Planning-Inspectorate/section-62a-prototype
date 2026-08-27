@@ -1,14 +1,14 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  {% if errorAttendHearing %}Error: {% endif %}Would you like to attend a hearing if one takes place? - Find a Section 62A application
+  {% if errorIsAgent %}Error: {% endif %}Are you acting as an agent on behalf of a client? - Find a Section 62A application
 {% endblock %}
 
 
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments"
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/02-who-are-you-representing"
   }) }}
 {% endblock %}
 
@@ -16,40 +16,40 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if errorAttendHearing %}
+    {% if errorIsAgent %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorAttendHearing, href: "#attend-hearing" }]
+        errorList: [{ text: errorIsAgent, href: "#is-agent" }]
       }) }}
     {% endif %}
 
-    <form class="form" action="/attend-hearing-answer" method="post" novalidate>
+    <form class="form" action="/is-agent-answer" method="post" novalidate>
       
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        idPrefix: "attend-hearing",
-        name: "attend-hearing",
+        idPrefix: "is-agent",
+        name: "is-agent",
         fieldset: {
           legend: { 
-            text: "Would you like to attend a hearing if one takes place?", 
+            text: "Are you acting as an agent on behalf of a client?", 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
         },
         hint: 
-            { text: "If a hearing does take place, we'll reach out to you to confirm whether you'd like to attend or not" 
+            { text: "For example, your organisation has been hired to represent a client on planning matters." 
         },
-        errorMessage: { text: errorAttendHearing } if errorAttendHearing else null,
+        errorMessage: { text: errorIsAgent } if errorIsAgent else null,
         items: [
           { 
             value: "Yes", 
             text: "Yes", 
-            checked: data['attend-hearing'] == 'Yes' 
+            checked: data['is-agent'] == 'Yes' 
           },
           { 
             value: "No", 
             text: "No", 
-            checked: data['attend-hearing'] == 'No' 
+            checked: data['is-agent'] == 'No' 
           }
         ]
       }) }}

@@ -19,6 +19,8 @@
         color: #505a5f;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
+        font-size: 1rem;
+        line-height: 1.25;
     }
 
     .document-list,
@@ -42,7 +44,7 @@
     .document-list .govuk-list,
     .govuk-list .document-list,
     .govuk-list .govuk-list {
-        margin-top: 10px;
+        margin-top: 10px
     }
 
     .document-list>li,
@@ -129,22 +131,70 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
     }
-
-        /* Force override of the GOV.UK default details icon */
-    details.govuk-details .govuk-details__summary::before {
-        
-        border: none !important;
-        clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%) !important;
-        
-        width: 16px !important;
-        height: 16px !important;
-        
-        background-color: #000000 !important; /* Matches GOV.UK link blue, change to black if preferred */
+    .filter {
+        background-color: #f3f2f1;
+        padding: 8px;
+        border-radius: 5px;
+        margin-left: 10px;
+        border: 1px solid #505a5f;
+        text-decoration: none;
+        color: black;
     }
 
-    /* Force override for the open state */
-    details.govuk-details[open] > .govuk-details__summary::before {
-        clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%) !important;
+    .filters {
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #b1b4b6;
+    }
+
+    .filters .govuk-details__text {
+        border: none;
+        padding-left: 0;
+    }
+
+    .filtersText {
+        text-decoration: none;
+        color: #000;
+        font-weight: 700;
+        font-size: 1.1875rem;
+    }
+
+    .filter:visited {
+        color: black;
+    }
+
+    .govuk-details__summary::before {
+        clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+        background-color: black;
+        color: black;
+        width: 3px;
+        height: 3px;
+    }
+
+    .govuk-details[open]>.govuk-details__summary::before {
+        clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
+        width: 3px;
+        height: 3px;
+    }
+
+    .govuk-accordion__section-button {
+        font-size: 19px !important;
+    }
+
+    .govuk-accordion__section-button {
+        padding-bottom: 0px !important;
+    }
+
+    #accordion-default-content-1 {
+        padding-bottom: 0px !important;
+    }
+
+    .govuk-form-group {
+        margin-bottom: 20px !important;
+    }
+
+    .govuk-accordion__section-content {
+        padding-bottom: 0px !important;
     }
 
     /* ========================================================= */
@@ -180,162 +230,211 @@
                     <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/written-representations">Written representations</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0048/written-representations">Written representations (Comments and feedback)</a>
                 </li>
             </ul>
         </nav>
 
          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+         <div style="margin-left:12px;">
 
-            <h3 class="govuk-heading-m">Filters</h3>
-            <div style="padding-bottom:10px;">
-                <a href="" class="govuk-link">
-                    Show all filters</a>
-            </div>
-            <details class="govuk-details govuk-!-margin-bottom-0" id="filter-panel">
-                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
-                    <a class="govuk-link govuk-link--no-underline">
-                        Category
-                    </a>
-                </summary>
-                <div style="padding-left:30px;">
-                    <form class="govuk-form-group">
-                        <fieldset class="govuk-fieldset">
-                            <div class="govuk-grid-row">
-                                <div class="">
-                                    <fieldset class="govuk-fieldset" aria-describedby="type-of-application-hint">
-                                        <div class="govuk-checkboxes govuk-checkboxes--small">
-                                            <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
-                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
-                                                    Application Plans and Documents (15)
-                                                </label>
-                                            </div>
-                                            <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
-                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
-                                                    Questionnaire and supporting documents (15)
-                                                </label>
-                                            </div>
-                                            <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="type-1" name="type" type="checkbox" value="Planning permission">
-                                                <label class="govuk-label govuk-checkboxes__label" for="type-1">
-                                                    Planning Inspectorate Correspondence (1)
-                                                </label>
-                                            </div>
-                                            <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
-                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
-                                                    Applicant Correspondence (0)
-                                                </label>
-                                            </div>
-                                            <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="type-2" name="type" type="checkbox" value="Outline planning permission with some matters reserved">
-                                                <label class="govuk-label govuk-checkboxes__label" for="type-2">
-                                                    Decision (0)
-                                                </label>
-                                            </div>
+            <h2 class="govuk-heading-m">Filters</h2>
 
+            <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default" data-remember-expanded="false">
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h3 class="govuk-accordion__section-heading">
+                            <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                                Category
+                            </span>
+                        </h3>
+                    </div>
+                    <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+                        <div style="padding-left:30px;">
+                            <form class="govuk-form-group">
+                                <fieldset class="govuk-fieldset">
+                                    <div class="govuk-grid-row">
+                                        <div class="">
+                                            <fieldset class="govuk-fieldset"
+                                                aria-describedby="type-of-application-hint">
+                                                <div class="govuk-checkboxes govuk-checkboxes--small">
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-1" name="type"
+                                                            type="checkbox" value="Planning permission">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                            Application Plans and Documents (15)
+                                                        </label>
+                                                    </div>
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-1" name="type"
+                                                            type="checkbox" value="Planning permission">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-1">
+                                                            Questionnaire and supporting documents (15)
+                                                        </label>
+                                                    </div>
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-4" name="type"
+                                                            type="checkbox" value="Hearing">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-4">
+                                                            Planning Inspectorate Correspondence (1)
+                                                        </label>
+                                                    </div>
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-2" name="type"
+                                                            type="checkbox"
+                                                            value="Outline planning permission with some matters reserved">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                            Applicant Correspondence (0)
+                                                        </label>
+                                                    </div>
+                                                     <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-2" name="type"
+                                                            type="checkbox"
+                                                            value="Outline planning permission with some matters reserved">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                            Decision (0)
+                                                        </label>
+                                                    </div>
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="type-2" name="type"
+                                                            type="checkbox"
+                                                            value="Outline planning permission with some matters reserved">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="type-2">
+                                                            Other (3)
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </fieldset>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </details>
-            <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h2 class="govuk-accordion__section-heading">
+                            <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+                                Date published
+                            </span>
+                        </h2>
+                    </div>
+                    <div id="accordion-default-content-2" class="govuk-accordion__section-content">
+                        <div style="padding-left:30px;">
+                            <form class="govuk-form-group">
+                                <fieldset class="govuk-fieldset">
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                        <h4 class="govuk-fieldset__heading">
+                                            From
+                                        </h4>
+                                    </legend>
+                                    <div id="passport-issued-hint" class="govuk-hint">
+                                        For example, 5 7 2022
+                                    </div>
+                                    <div class="govuk-date-input" id="passport-issued">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-day">
+                                                    Day
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                                    id="passport-issued-day" name="passport-issued-day" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-month">
+                                                    Month
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                                    id="passport-issued-month" name="passport-issued-month" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-year">
+                                                    Year
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                                    id="passport-issued-year" name="passport-issued-year" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <legend style="margin-top:20px"
+                                        class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                        <h4 class="govuk-fieldset__heading">
+                                            To
+                                        </h4>
+                                    </legend>
+                                    <div id="passport-issued-hint" class="govuk-hint">
+                                        For example, 27 3 2023
+                                    </div>
+                                    <div class="govuk-date-input" id="passport-issued">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-day">
+                                                    Day
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                                    id="passport-issued-day" name="passport-issued-day" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-month">
+                                                    Month
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                                    id="passport-issued-month" name="passport-issued-month" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label"
+                                                    for="passport-issued-year">
+                                                    Year
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                                    id="passport-issued-year" name="passport-issued-year" type="text"
+                                                    inputmode="numeric">
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-padding-0" id="filter-panel">
-                <summary class="govuk-details__summary" style="padding:10px 30px;width:80%">
-                    <a class="govuk-link govuk-link--no-underline">Date submitted</a>
-                </summary>
-                <div style="padding-left:30px;">
-                    <form class="govuk-form-group">
-                        <fieldset class="govuk-fieldset">
-                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
-                                <h4 class="govuk-fieldset__heading">
-                                    From
-                                </h4>
-                            </legend>
-                            <div id="passport-issued-hint" class="govuk-hint">
-                                For example, 5 7 2022
-                            </div>
-                            <div class="govuk-date-input" id="passport-issued">
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
-                                            Day
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
-                                            Month
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
-                                            Year
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                            </div>
-                            <legend style="margin-top:20px" class="govuk-fieldset__legend govuk-fieldset__legend--xs">
-                                <h4 class="govuk-fieldset__heading">
-                                    To
-                                </h4>
-                            </legend>
-                            <div id="passport-issued-hint" class="govuk-hint">
-                                For example, 27 3 2023
-                            </div>
-                            <div class="govuk-date-input" id="passport-issued">
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
-                                            Day
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
-                                            Month
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="govuk-date-input__item">
-                                    <div class="govuk-form-group">
-                                        <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
-                                            Year
-                                        </label>
-                                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset>
-                    </form>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-            </details>
-            <a href="written-reps-selected" class="govuk-button" style="margin-bottom:0px;">
+            </div>
+
+            <a href="" class="govuk-button" id="apply-filters" style="margin-bottom:0px;">
                 Apply filters
             </a>
+        </div> 
 
     </div>
 
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-xl">S62A/2026/0048</span>
-        <h1 class="govuk-heading-l">Documents</h1>
+
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-xl">S62A/2026/0048</span>
+            Documents
+        </h1>
+        
         <div>
             <div id="search-hint" class="govuk-hint">
                 Search by document name</div>
@@ -346,8 +445,10 @@
                 <button class="govuk-button" id="keyword-search-button" type="submit"
                     style="margin-bottom:0px;">Search</button>
             </form>
-
         </div>
+
+        <hr class="govuk-section-break govuk-section-break--l">
+
         <div id="pagination" class="govuk-body">
             <p class="govuk-body">
                 Showing
@@ -375,249 +476,250 @@
 
                <ul class="govuk-list document-list">
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">01-230526-0003_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">01-230526-0003_Redacted (PDF, 687 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>687 KB</div>
+                            <div></div>
+                            <div>Other</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Bat Survey_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Bat Survey_Redacted (PDF, 2.75 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>2.75 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Design and Access Statement_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Design and Access Statement_checked (PDF, 444 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>444 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Exisiting Elevations_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Exisiting Elevations_checked (PDF, 646 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>646 KB</div>
+                            <div></div>
+                            <div>Other</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Existing Block Plan_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Existing Block Plan_checked (PDF, 76.1 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>76.1 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Existing Plans and Elevations_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Existing Plans and Elevations_checked (PDF, 608 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>23 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>608 KB</div>
+                            <div></div>
+                            <div>Other</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">External Materials Schedule_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">External Materials Schedule_checked (PDF, 49.9 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>22 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>49.9 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Howard_20260806_104158 Hard Soft Landscaping Plan levels_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Howard_20260806_104158 Hard Soft Landscaping Plan levels_Redacted (PDF, 3.39 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>22 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>3.39 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Justification for Development and Sustainability Statement_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Justification for Development and Sustainability Statement_checked (PDF, 283 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>22 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>283 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Location Plan_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Location Plan_Redacted (PDF, 505 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>21 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>505 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Planning Application - 1 Wheatfield Road_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Planning Application - 1 Wheatfield Road_Redacted (PDF, 4.16 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>21 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>4.16 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Proposed Plans and Elevations (2)_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Proposed Plans and Elevations (2)_Redacted (PDF, 5.56 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>21 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>5.56 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Proposed Plans and Elevations_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Proposed Plans and Elevations_Redacted (PDF, 4.95 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>21 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>4.95 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Tree Protection Statement_checked</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Tree Protection Statement_checked (PDF, 306 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>20 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>306 KB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Howard_20260801_145225_Redacted</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Howard_20260801_145225_Redacted (PDF, 2.4 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>20 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>2.4 MB</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">S62A Questionnaire</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">S62A Questionnaire (PDF, 118 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>20 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>118 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">106 - Nature Conservation</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">106 - Nature Conservation (PDF, 20.8 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>20 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>20.8 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">2 - Settlement Strategy</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">2 - Settlement Strategy (PDF, 74.5 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>20 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>74.5 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">34 - Highways Considerations in Development Control</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">34 - Highways Considerations in Development Control (PDF, 36.8 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>19 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>36.8 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">39 - Parking Standards General Requirements</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">39 - Parking Standards General Requirements (PDF, 234 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>19 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>234 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">4 - New Housing Development in Towns</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">4 - New Housing Development in Towns (PDF, 212 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>19 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>212 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">40 - Residential Development Parking Standards</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">40 - Residential Development Parking Standards (PDF, 43.6 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>17 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>43.6 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">69 - General Design and Layout</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">69 - General Design and Layout (PDF, 19.3 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>17 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>19.3 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">70 - Design and Layout of New Housing</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">70 - Design and Layout of New Housing (PDF, 83 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>17 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>83 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">74 - Landscaping and Tree Preservation</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">74 - Landscaping and Tree Preservation (PDF, 30.4 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>17 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>30.4 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Design Advice Leaflet No 1</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Design Advice Leaflet No 1 (PDF, 5.61 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>16 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>5.61 MB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Front Sheet SADC Local Plan Review 1994</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Front Sheet SADC Local Plan Review 1994 (PDF, 19.1 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>16 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>19.1 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Harpenden Neighbourhood Plan - version for referendum Nov 2018 Combined</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Harpenden Neighbourhood Plan - version for referendum Nov 2018 Combined (PDF, 4.39 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>16 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>4.39 MB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Planning history 1 Wheatfield Road</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Planning history 1 Wheatfield Road (PDF, 5.11 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>15 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>5.11 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                     <li>
-                        <a class="govuk-link" href="" rel="noreferrer">Revised Parking Policies and Standards January 2002</a>
-                        <div class="document-list__meta-data">
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Revised Parking Policies and Standards January 2002 (PDF, 949 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
                             <div>13 Jun 2026</div>
-                            <div>PDF</div>
-                            <div>949 KB</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
                         </div>
                     </li>
                 </ul>
             </div>
 
         </div>
+
         <nav class="govuk-pagination" aria-label="Pagination">
             <ul class="govuk-pagination__list">
                 <li class="govuk-pagination__item govuk-pagination__item--current">
@@ -626,14 +728,14 @@
                     </a>
                 </li>
                 <li class="govuk-pagination__item">
-                    <a class="govuk-link govuk-pagination__link" href="?page=2" aria-label="Page 2">
+                    <a class="govuk-link govuk-link--no-visited-state govuk-pagination__link" href="?page=2" aria-label="Page 2">
                         2
                     </a>
                 </li>
             </ul>
 
             <div class="govuk-pagination__next">
-                <a class="govuk-link govuk-pagination__link" href="?page=2" rel="next">
+                <a class="govuk-link govuk-link--no-visited-state govuk-pagination__link" href="?page=2" rel="next">
                     <span class="govuk-pagination__link-title">
                         Next<span class="govuk-visually-hidden">
                             page</span>

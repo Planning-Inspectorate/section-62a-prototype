@@ -6,11 +6,20 @@
 
 {% block beforeContent %}
 
-{% if data['include-attachments'] == 'Yes' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments" %}
+{% if data['who-submit-rep'] == 'Myself' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address" %}
 
-{% elif data['include-attachments'] == 'No' %}
-  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment" %}
+{% elif data['who-are-you-representing'] == 'A person' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/07-what-is-the-name-of-the-person-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/09-what-is-your-job-title-or-volunteer-role" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I do not work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'A group of people' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/14-check-group-name-details" %}
 
 {% endif %}
 

@@ -1,0 +1,50 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAgentOrganisationName %}Error: {% endif %}What is the name of the organisation you work for?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/03-are-you-acting-as-an-agent-on-behalf-of-a-client"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorAgentOrganisationName %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorAgentOrganisationName, href: "#agent-organisation-name" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/agent-organisation-name-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "agent-organisation-name",
+          name: "agent-organisation-name",
+          spellcheck: false,
+          value: data['agent-organisation-name'],
+          label: {
+            text: "What is the name of the organisation you work for?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: { text: "We will publish your organisation name, your client's name and their representation on the website." 
+        },
+          errorMessage: { text: errorAgentOrganisationName } if errorAgentOrganisationName else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

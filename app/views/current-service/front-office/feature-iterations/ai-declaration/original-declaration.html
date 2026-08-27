@@ -49,8 +49,14 @@
             
             {% set itemAiAccurate = {
                 value: "ai-accurate",
-                text: "I have checked my submission to make sure it accurately reflects my views and does not contain misleading or false information",
+                text: "If I used artificial intelligence (AI) tools in my written representation, I have checked that all data is accurate and reflects my views",
                 checked: checked("declaration", "ai-accurate")
+            } %}
+            
+            {% set itemAiFalseEvidence = {
+                value: "ai-no-false-evidence",
+                text: "If I used artificial intelligence, no automated content has been included that introduces false or misleading factual evidence",
+                checked: checked("declaration", "ai-no-false-evidence")
             } %}
             
             {% set itemPrivacy = {
@@ -59,12 +65,21 @@
                 checked: checked("declaration", "privacy-notice")
             } %}
 
+            {% if data['did-you-use-ai'] == 'Yes' %}
                 {% set declarationList = [
                     itemConsentPublish, 
                     itemConsentContact, 
                     itemAiAccurate, 
+                    itemAiFalseEvidence, 
                     itemPrivacy
                 ] %}
+            {% else %}
+                {% set declarationList = [
+                    itemConsentPublish, 
+                    itemConsentContact, 
+                    itemPrivacy
+                ] %}
+            {% endif %}
 
             {{ govukCheckboxes({
                 name: "declaration",

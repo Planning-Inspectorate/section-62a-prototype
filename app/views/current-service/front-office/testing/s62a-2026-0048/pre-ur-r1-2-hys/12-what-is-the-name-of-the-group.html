@@ -1,0 +1,48 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorNameOfTheGroup %}Error: {% endif %}What is the name of the group?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/11-does-the-group-have-a-name"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorNameOfTheGroup %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorNameOfTheGroup, href: "#name-of-the-group" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/name-of-the-group-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "name-of-the-group",
+          name: "name-of-the-group",
+          spellcheck: false,
+          value: data['name-of-the-group'],
+          label: {
+            text: "What is the name of the group?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorNameOfTheGroup } if errorNameOfTheGroup else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

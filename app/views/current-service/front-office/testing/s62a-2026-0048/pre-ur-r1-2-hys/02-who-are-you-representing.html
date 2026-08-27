@@ -1,0 +1,67 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorWhoAreYouRepresenting %}Error: {% endif %}Who are you representing? - Find a Section 62A application
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/01-who-are-you-submitting-a-representation-for"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorWhoAreYouRepresenting %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorWhoAreYouRepresenting, href: "#who-are-you-representing" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/who-are-you-representing-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "who-are-you-representing",
+        name: "who-are-you-representing",
+        fieldset: {
+          legend: { 
+            text: "Who are you representing?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: { text: errorWhoAreYouRepresenting } if errorWhoAreYouRepresenting else null,
+        items: [
+          { 
+            value: "A person", 
+            text: "A person", 
+            checked: data['who-are-you-representing'] == 'A person' 
+          },
+          { 
+            value: "An organisation or charity that I work or volunteer for", 
+            text: "An organisation or charity that I work or volunteer for", 
+            checked: data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' 
+          },
+          { 
+            value: "An organisation or charity that I do not work or volunteer for", 
+            text: "An organisation or charity that I do not work or volunteer for", 
+            checked: data['who-are-you-representing'] == 'An organisation or charity that I do not work or volunteer for' 
+          },
+          { 
+            value: "A group of people", 
+            text: "A group of people", 
+            checked: data['who-are-you-representing'] == 'A group of people' 
+          }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

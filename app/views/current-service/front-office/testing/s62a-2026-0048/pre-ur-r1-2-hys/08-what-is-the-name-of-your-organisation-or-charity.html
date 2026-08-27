@@ -1,0 +1,50 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorYourOrgOrCharityName %}Error: {% endif %}What is the name of your organisation or charity?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorYourOrgOrCharityName %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorYourOrgOrCharityName, href: "#your-org-or-charity-name" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/your-org-or-charity-name-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "your-org-or-charity-name",
+          name: "your-org-or-charity-name",
+          spellcheck: false,
+          value: data['your-org-or-charity-name'],
+          label: {
+            text: "What is the name of your organisation or charity?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: { text: "We'll publish your organisation name, your client's name and their representation on the website." 
+        },
+          errorMessage: { text: errorYourOrgOrCharityName } if errorYourOrgOrCharityName else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

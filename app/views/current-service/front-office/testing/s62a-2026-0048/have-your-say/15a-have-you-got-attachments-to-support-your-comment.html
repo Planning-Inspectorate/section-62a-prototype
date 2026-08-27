@@ -1,0 +1,78 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorHaveYouGotAttachments %}Error: {% endif %}Have you got attachments to support your comment? - Find a Section 62A application
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['who-submit-rep'] == 'Myself' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address" %}
+
+{% elif data['who-are-you-representing'] == 'A person' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/07-what-is-the-name-of-the-person-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/09-what-is-your-job-title-or-volunteer-role" %}
+
+{% elif data['who-are-you-representing'] == 'An organisation or charity that I do not work or volunteer for' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing" %}
+
+{% elif data['who-are-you-representing'] == 'A group of people' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/14-check-group-name-details" %}
+
+{% endif %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorIncludeAttachments %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{ text: errorHaveYouGotAttachments, href: "#include-attachments" }]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/include-attachments-answer" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "include-attachments",
+        name: "include-attachments",
+        fieldset: {
+          legend: { 
+            text: "Have you got attachments to support your comment?", 
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        hint: 
+            { text: "Include any relevant attachments such as reports, photographs or previous submissions" 
+        },
+        errorMessage: { text: errorIncludeAttachments } if errorIncludeAttachments else null,
+        items: [
+          { 
+            value: "Yes",
+            text: "Yes, I have attachments to upload first", 
+            checked: data['include-attachments'] == 'Yes'
+        },
+          { 
+            value: "No", 
+            text: "No, I do not have atttachments to upload", 
+            checked: data['include-attachments'] == 'No'
+        }
+        ]
+      }) }}
+      
+      {{ govukButton({ text: "Continue" }) }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

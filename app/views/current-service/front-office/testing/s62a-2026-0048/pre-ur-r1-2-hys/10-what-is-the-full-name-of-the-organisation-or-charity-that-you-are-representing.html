@@ -1,0 +1,48 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorOrgOrCharityYouAreRepresenting %}Error: {% endif %}What is the full name of the organisation or charity that you are representing?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/06-what-is-your-email-address"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorOrgOrCharityYouAreRepresenting %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorOrgOrCharityYouAreRepresenting, href: "#org-or-charity-you-are-representing" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/org-or-charity-you-are-representing-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "org-or-charity-you-are-representing",
+          name: "org-or-charity-you-are-representing",
+          spellcheck: false,
+          value: data['org-or-charity-you-are-representing'],
+          label: {
+            text: "What is the full name of the organisation or charity that you are representing?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorOrgOrCharityYouAreRepresenting } if errorOrgOrCharityYouAreRepresenting else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

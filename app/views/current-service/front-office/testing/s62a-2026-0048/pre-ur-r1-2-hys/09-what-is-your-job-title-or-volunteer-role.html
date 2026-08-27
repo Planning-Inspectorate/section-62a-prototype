@@ -1,0 +1,48 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorYourJobTitleOrVolunteerRole %}Error: {% endif %}What is your job title or volunteer role?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/08-what-is-the-name-of-your-organisation-or-charity"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorYourJobTitleOrVolunteerRole %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorYourJobTitleOrVolunteerRole, href: "#your-job-title-or-volunteer-role" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/your-job-title-or-volunteer-role-answer" method="post" novalidate>
+
+        {{ govukInput({
+          id: "your-job-title-or-volunteer-role",
+          name: "your-job-title-or-volunteer-role",
+          spellcheck: false,
+          value: data['your-job-title-or-volunteer-role'],
+          label: {
+            text: "What is your job title or volunteer role?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorYourJobTitleOrVolunteerRole } if errorYourJobTitleOrVolunteerRole else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}What is the name of the first person you are representing?
+{% endblock %}
+
+{% block beforeContent %}
+
+{% if data['does-the-group-have-a-name'] == 'Yes' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/12-what-is-the-name-of-the-group" %}
+
+{% elif data['does-the-group-have-a-name'] == 'No' %}
+  {% set backLink = "/current-service/front-office/testing/s62a-2026-0048/have-your-say/11-does-the-group-have-a-name" %}
+
+{% endif %}
+
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: backLink 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/name-of-first-person-you-are-representing-answer" novalidate>
+    
+      {% call govukFieldset({
+          describedBy: "name-of-first-person-you-are-representing-hint",
+          legend: {
+              text: "What is the name of the first person you are representing?",
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+          }
+      }) %}
+
+      {{ govukHint({
+          id: "name-of-first-person-you-are-representing-hint",
+          text: "You will be able to add more people on the next page."
+      }) }}
+
+        {{ govukInput({ 
+          label: { text: "First name" }, 
+          id: "name-of-first-person-you-are-representing-first-name", 
+          name: "name-of-first-person-you-are-representing-first-name", 
+          value: data['name-of-first-person-you-are-representing-first-name'],
+          autocomplete: "given-name",
+          spellcheck: false,
+          errorMessage: errors.firstName if errors.firstName else null
+        }) }}
+        
+        {{ govukInput({ 
+          label: { text: "Last name" }, 
+          id: "name-of-first-person-you-are-representing-last-name", 
+          name: "name-of-first-person-you-are-representing-last-name", 
+          value: data['name-of-first-person-you-are-representing-last-name'],
+          autocomplete: "family-name",
+          spellcheck: false,
+          errorMessage: errors.lastName if errors.lastName else null
+        }) }}
+
+      {% endcall %}
+      
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}
