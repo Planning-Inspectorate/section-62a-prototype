@@ -150,7 +150,7 @@ router.post('/your-email-address-answer', function (req, res) {
         });
     }
     if ( whoSubmitRep === "Myself" ) {
-        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment');
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment');
     }
     else if ( whoAreYouRepresenting === "A person" ) {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/07-what-is-the-name-of-the-person-you-are-representing');
@@ -194,7 +194,7 @@ router.post('/person-you-are-representing-answer', function (req, res) {
       });
     }
 
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment');
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment');
 });
 
 
@@ -214,7 +214,7 @@ router.post('/your-job-title-or-volunteer-role-answer', function (req, res) {
     if (!yourJobTitleOrVolunteerRole) {
         return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/09-what-is-your-job-title-or-volunteer-role', { errorYourJobTitleOrVolunteerRole: "Enter your job title or volunteer role" });
     }
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment');
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment');
 });
 
 
@@ -224,7 +224,7 @@ router.post('/org-or-charity-you-are-representing-answer', function (req, res) {
     if (!orgOrCharityYouAreRepresenting) {
         return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/10-what-is-the-full-name-of-the-organisation-or-charity-that-you-are-representing', { errorOrgOrCharityYouAreRepresenting: "Enter the full name of the organisation or charity that you are representing" });
     }
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment');
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment');
 });
 
 
@@ -412,40 +412,29 @@ router.get('/remove-group-person', function(req, res) {
 });
 
 
-// 15a - have you got attachments to support your comment
+// 16 - have you got attachments to support your comment
 router.post('/include-attachments-answer', function (req, res) {
     const includeAttachments = req.session.data['include-attachments'];
     if (!includeAttachments) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment', { errorHaveYouGotAttachments: "Select yes if you have attachments to upload first" });
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment', { errorHaveYouGotAttachments: "Select yes if you have attachments to upload first" });
     }
     if (includeAttachments === "Yes") {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments');
     }
     if (includeAttachments === "No") {
-        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments');
+        res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-add-your-comments');
     }
 });
 
 
-// 16 - add your comments
+// 17 - add your comments
 router.post('/add-your-comments-answer', function (req, res) {
     const addYourComments = req.session.data['add-your-comments'];
     if (!addYourComments) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments', { errorAddYourComments: "Enter what you want to tell us about this proposed application" });
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/17-add-your-comments', { errorAddYourComments: "Enter what you want to tell us about this proposed application" });
     }
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/18a-would-you-like-to-attend-a-hearing');
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-would-you-like-to-attend-a-hearing');
 });
-
-
-// 18a - would you like to attend a hearing
-router.post('/attend-hearing-answer', function (req, res) {
-    const attendHearing = req.session.data['attend-hearing'];
-    if (!attendHearing) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/18a-would-you-like-to-attend-a-hearing', { errorAddYourComments: "Select yes if you would like to be contacted in the future to attend a hearing" });
-    }
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/21-check-your-answers');
-});
-
 
 
 /* 17 - do you want to include any supporting attachments with your comment?
@@ -483,7 +472,17 @@ router.post('/upload-supporting-attachments-answer', function(req, res) {
             errorList: errorList
         });
     }
-    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments');
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-add-your-comments');
+});
+
+
+// 19 - would you like to attend a hearing
+router.post('/attend-hearing-answer', function (req, res) {
+    const attendHearing = req.session.data['attend-hearing'];
+    if (!attendHearing) {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/19-would-you-like-to-attend-a-hearing', { errorAttendHearing: "Select yes if you would like to be contacted in the future to attend a hearing" });
+    }
+    res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/check-your-answers');
 });
 
 
@@ -513,7 +512,7 @@ router.post('/how-did-you-use-ai-answer', function (req, res) {
 */
 
 
-// 22 - declaration + ref generation + save logic
+// declaration + ref generation + save logic
 router.post('/written-rep-submitted', function(req, res) {
     const data = req.session.data;
 
@@ -521,7 +520,7 @@ router.post('/written-rep-submitted', function(req, res) {
     const todayISO = new Date().toISOString();
 
     if (!data['who-submit-rep']) {
-            return res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/23-success');
+            return res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/success');
         }
 
   // checkbox validation
@@ -548,7 +547,7 @@ router.post('/written-rep-submitted', function(req, res) {
     }
     // render the page with errors if any
     if (errorList.length > 0) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/22-declaration', {
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/declaration', {
             errors: errors,
             errorList: errorList
         });
@@ -680,7 +679,7 @@ router.post('/written-rep-submitted', function(req, res) {
     // pass reference to success page
     data.submittedRepReference = repReference;
 
-  res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/23-success');
+  res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/success');
 });
 
 

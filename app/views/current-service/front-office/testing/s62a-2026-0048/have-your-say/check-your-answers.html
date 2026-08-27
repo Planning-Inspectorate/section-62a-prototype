@@ -209,12 +209,12 @@
     </div>
     {% endif %}
 
-    {# --- 15: Have you got attachments to support your comment --- #}
+    {# --- 16: Have you got attachments to support your comment --- #}
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Have you got attachments?</dt>
         <dd class="govuk-summary-list__value">{{ data['include-attachments'] }}</dd>
         <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/15a-have-you-got-attachments-to-support-your-comment">Change<span class="govuk-visually-hidden"> have you got attachments to support your comment</span></a>
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment">Change<span class="govuk-visually-hidden"> have you got attachments to support your comment</span></a>
         </dd>
     </div>
 
@@ -251,7 +251,7 @@
     </div>
     {% endif %}
 
-    {# --- 16: Add your comments --- #}
+    {# --- 17: Add your comments --- #}
     {% set comment = data['add-your-comments'] | default('') %}
     
     <div class="govuk-summary-list__row">
@@ -259,7 +259,7 @@
         <dd class="govuk-summary-list__value">
         
         {% if comment.length > 100 %}
-            <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments">Read more</a></p>
+            <p class="govuk-body">{{ comment | truncate(500, true, "... ") }}<a class="govuk-link govuk-link--no-visited-state" style="max-width: none; white-space: nowrap;" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-add-your-comments">Read more</a></p>
             
         {% else %}
             {# show normally if less than specified characters #}
@@ -268,16 +268,16 @@
         
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/16-add-your-comments">Change<span class="govuk-visually-hidden"> add your comments</span></a>
+            <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/17-add-your-comments">Change<span class="govuk-visually-hidden"> add your comments</span></a>
         </dd>
     </div>
 
-    {# --- 18a: Attend hearing --- #}
+    {# --- 19: Attend hearing --- #}
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Attend hearing?</dt>
         <dd class="govuk-summary-list__value">{{ data['attend-hearing'] }}</dd>
         <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/18a-would-you-like-to-attend-a-hearing">Change<span class="govuk-visually-hidden"> would you like to attend a hearing if one takes place</span></a>
+        <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/have-your-say/19-would-you-like-to-attend-a-hearing">Change<span class="govuk-visually-hidden"> would you like to attend a hearing if one takes place</span></a>
         </dd>
     </div>
 
@@ -285,7 +285,7 @@
 
     {{ govukButton({
       text: "Continue",
-      href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/22-declaration"
+      href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/declaration"
     }) }}
 
   </div>
