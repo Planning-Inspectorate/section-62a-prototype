@@ -36,7 +36,7 @@
     {% if errorIncludeAttachments %}
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [{ text: errorHaveYouGotAttachments, href: "#include-attachments" }]
+        errorList: [{ text: errorIncludeAttachments, href: "#include-attachments" }]
       }) }}
     {% endif %}
 
@@ -64,7 +64,7 @@
         },
           { 
             value: "No", 
-            text: "No, I do not have atttachments to upload", 
+            text: "No, I do not have attachments to upload", 
             checked: data['include-attachments'] == 'No'
         }
         ]

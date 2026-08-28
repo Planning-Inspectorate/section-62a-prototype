@@ -416,7 +416,7 @@ router.get('/remove-group-person', function(req, res) {
 router.post('/include-attachments-answer', function (req, res) {
     const includeAttachments = req.session.data['include-attachments'];
     if (!includeAttachments) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment', { errorHaveYouGotAttachments: "Select yes if you have attachments to upload first" });
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/16-have-you-got-attachments-to-support-your-comment', { errorIncludeAttachments: "Select yes if you have attachments to upload first" });
     }
     if (includeAttachments === "Yes") {
         res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/18-upload-supporting-attachments');

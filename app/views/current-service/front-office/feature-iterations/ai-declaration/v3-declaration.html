@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/check-your-answers"
+    href: "/current-service/front-office/testing/s62a-2026-0048/have-your-say/21-check-your-answers"
   }) }}
 {% endblock %}
 
@@ -22,15 +22,15 @@
           }) }}
         {% endif %}
 
-         <h1 class="govuk-heading-l">
+        <h1 class="govuk-heading-l">
             Declaration
         </h1>
-
+        
         <p class="govuk-body">You are making a written representation on a Section 62A development application. Planning Inspectors will consider your submission before a decision is made.</p>
         
         <p class="govuk-body govuk-!-margin-bottom-6">You must confirm that the information provided is accurate and true to the best of your knowledge before you submit this representation.</p>
 
-        <form action="/written-rep-submitted" method="post" novalidate>
+        <form action="" method="post" novalidate>
             
             {% set itemConsentPublish = {
                 value: "consent-publish",
