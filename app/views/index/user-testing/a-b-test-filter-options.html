@@ -1,0 +1,28 @@
+{% extends "layouts/main.njk" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back to user testing",
+  href: "/index#user-testing"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+    
+        <h1 class="govuk-header-l">A/B testing: All applications filter options</h1>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                <a href="/current-service/front-office/feature-iterations/all-applications-list/v3-all-applications">A - Left sided filter</a>
+            </li>
+            <li>
+                <a href="/current-service/front-office/feature-iterations/all-applications-list/v4-all-applications">B - On top filter</a>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+{% endblock %}
