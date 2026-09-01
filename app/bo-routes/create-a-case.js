@@ -930,25 +930,26 @@ router.post('/case-created-confirmation', function (req, res) {
   if (!data.cases) { data.cases = []; }
 
 // generate ref number
+  const isLbcType = data['application-type'] === 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building';
+
   let nextCaseNumber = 1;
   if (data.cases.length > 0) {
     const lastCase = data.cases[data.cases.length - 1];
     
-    // strip LBC suffix if it exists to get clean 7 last digits
-    const cleanRef = lastCase.reference.replace('/LBC', '');
+    // split the reference by '/'
+    // e.g. "S62A/2026/0000001/PRE" becomes ["S62A", "2026", "0000001", "PRE"]
+    const parts = lastCase.reference.split('/');
     
-    // split slashes and use cleaned up last digits from previous step
-    const lastNumberString = cleanRef.split('/').pop();
-    
-    // convert string into number and + 1 for new case
-    nextCaseNumber = parseInt(lastNumberString, 10) + 1;
+    // the 7-digit number is always the 3rd item (Index 2), regardless of suffixes
+    if (parts.length >= 3) {
+      nextCaseNumber = parseInt(parts[2], 10) + 1;
+    }
   }
   const counterString = String(nextCaseNumber).padStart(7, '0');
-  
-  // conditionally build the reference string based on application stage
+
   let caseReference;
   if (data['application-stage'] === 'Pre-application') {
-    caseReference = `S62A/PRE/2026/${counterString}`;
+    caseReference = `S62A/2026/${counterString}/PRE`;
   } else {
     caseReference = `S62A/2026/${counterString}`;
   }
@@ -1004,7 +1005,7 @@ router.post('/case-created-confirmation', function (req, res) {
     agentContacts: data['has-agent'] === 'Yes' ? (data['agent-contact-list'] || []) : [],
 
     // standard arrays and fields
-    applicantType: data['applicant-type'], // applicant type now saved
+    applicantType: data['applicant-type'], 
     applicantOrgs: data['applicant-org-list'] || [],
     applicantContacts: data['applicant-contact-list'] || [],
     
@@ -1034,14 +1035,11 @@ router.post('/case-created-confirmation', function (req, res) {
     representations: []
   };
 
-// check for LBC linked case condition
-  const isLinkedLBC = (
-    data['application-type'] === 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building' && 
-    data['application-stage'] === 'Application'
-  );
+  // 4. check for Linked Case condition (Only applies to 'Application' stage)
+  const isLinkedLBC = isLbcType && data['application-stage'] === 'Application';
 
   if (isLinkedLBC) {
-    // generate LBC reference
+    // generate LBC reference for the linked duplicate
     const lbcReference = `${caseReference}/LBC`;
 
     // link both cases so banner can be displayed on case details
@@ -1067,7 +1065,7 @@ router.post('/case-created-confirmation', function (req, res) {
     addAuditLog(req, lbcReference, 'Case created (Linked LBC)');
 
   } else {
-    // save logic for singular cases
+    // save logic for singular cases (Including ALL Pre-applications)
     data.cases.push(newCase);
     addAuditLog(req, caseReference, 'Case created');
   }
@@ -1080,10 +1078,7 @@ router.post('/case-created-confirmation', function (req, res) {
     'secondary-lpa-contact-first-name', 'secondary-lpa-contact-last-name', 'secondary-lpa-contact-email', 'secondary-lpa-contact-phone',
     'has-agent', 'agent-org-name', 'agent-org-address-line-1', 'agent-org-address-line-2', 
     'agent-org-address-town', 'agent-org-address-county', 'agent-org-address-postcode', 'agent-contact-list',
-    
-    // applicant-type is now saved in the create a case journey as it conditionally reveals applicant orgs in case-team tab
-    'applicant-type', 
-    'applicant-org-list', 'applicant-contact-list', 
+    'applicant-type', 'applicant-org-list', 'applicant-contact-list', 
     'site-address-line-1', 'site-address-line-2', 'site-address-town', 
     'site-address-county', 'site-address-postcode', 'site-coords-easting', 
     'site-coords-northing', 'site-area', 'site-area-hectares', 'site-area-sq-metres', 
@@ -1096,7 +1091,7 @@ router.post('/case-created-confirmation', function (req, res) {
     delete data[field];
   });
 
-// pass reference to success page and redirect
+  // pass reference to success page and redirect
   data.newlyCreatedReference = caseReference;
   
   if (isLinkedLBC) {
