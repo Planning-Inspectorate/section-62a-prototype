@@ -177,56 +177,56 @@
 
         <div class="govuk-grid-column-one-third" style="margin-top: -40px;">
 
-        <h2 class="govuk-heading-m">Filters</h2>
+            <h2 class="govuk-heading-m">Filters</h2>
 
-        <div class="govuk-accordion" data-module="govuk-accordion">
-            <div class="govuk-accordion__section">
-                <div class="govuk-accordion__section-header">
-                    <h3 class="govuk-accordion__section-heading">
-                        <span class="govuk-accordion__section-button">
-                            LPA
-                        </span>
-                    </h3>
-                </div>
-                <div class="govuk-accordion__section-content">
-                    <div style="padding-left:30px;">
-                        <form class="govuk-form-group">
-                            <fieldset class="govuk-fieldset">
-                                <div class="govuk-grid-row">
-                                    <div class="">
-                                        <fieldset class="govuk-fieldset" aria-describedby="type-hint">
-                                            <div class="govuk-checkboxes govuk-checkboxes--small">
-                                                <div class="govuk-checkboxes__item">
-                                                    <input class="govuk-checkboxes__input" id="type-pdf" name="type"
-                                                        type="checkbox" value="PDF">
-                                                    <label class="govuk-label govuk-checkboxes__label" for="type-pdf">
-                                                        Bristol City Council (<span class="type-count" data-type-count="PDF">2</span>)
-                                                    </label>
+            <div class="govuk-accordion" data-module="govuk-accordion">
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h3 class="govuk-accordion__section-heading">
+                            <span class="govuk-accordion__section-button">
+                                LPA
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="govuk-accordion__section-content">
+                        <div style="padding-left:30px;">
+                            <form class="govuk-form-group">
+                                <fieldset class="govuk-fieldset">
+                                    <div class="govuk-grid-row">
+                                        <div class="">
+                                            <fieldset class="govuk-fieldset" aria-describedby="type-hint">
+                                                <div class="govuk-checkboxes govuk-checkboxes--small">
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input filter-checkbox" id="lpa-bristol" name="lpa"
+                                                            type="checkbox" value="Bristol City Council">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="lpa-bristol">
+                                                            Bristol City Council <span class="filter-count" data-filter-lpa="Bristol City Council"></span>
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input filter-checkbox" id="lpa-stalbans" name="lpa"
+                                                            type="checkbox" value="St Albans City and District Council">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="lpa-stalbans">
+                                                            St Albans City and District Council <span class="filter-count" data-filter-lpa="St Albans City and District Council"></span>
+                                                        </label>
+                                                    </div>
+
                                                 </div>
-                                                <div class="govuk-checkboxes__item">
-                                                    <input class="govuk-checkboxes__input" id="type-doc" name="type"
-                                                        type="checkbox" value="DOC">
-                                                    <label class="govuk-label govuk-checkboxes__label" for="type-doc">
-                                                        St Albans City and District Council (<span class="type-count"
-                                                            data-type-count="DOC">2</span>)
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </fieldset>
+                                            </fieldset>
+                                        </div>
                                     </div>
-                                </div>
-                            </fieldset>
-                        </form>
+                                </fieldset>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <button class="govuk-button" id="apply-filters-button" type="button">Apply filters</button>
+
         </div>
-
-        <button class="govuk-button" id="apply-filters-button" type="button">Apply
-            filters</button>
-
-        </div>  
 
 
 
@@ -253,7 +253,7 @@
                         style="margin-bottom: 0;">Search</button>
                 </form>
 
-                    <div id="active-filters-section" class="active-filters" style="display: none;">
+                    <div id="active-filters-section" class="active-filters" style="display: none; margin-top: 16px;">
                         <h3 class="govuk-heading-s">Active filters</h3>
                         <div id="active-filters-list" class="active-filters__list"></div>
                         <div class="clear-link">
