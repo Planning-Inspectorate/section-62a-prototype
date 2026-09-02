@@ -330,12 +330,12 @@ router.get('/edit-submitter-name', function(req, res) {
 
         // validate name fields
         if (!firstName) {
-            errors.firstName = {text: "Enter your first name"};
-            errorList.push({ text: "Enter your first name", href: "#your-first-name" });
+            errors.firstName = {text: "First name must be between 1 and 250 characters"};
+            errorList.push({ text: "First name must be between 1 and 250 characters", href: "#your-first-name" });
         }
         if (!lastName) {
-            errors.lastName = {text: "Enter your last name"};
-            errorList.push({ text: "Enter your last name", href: "#your-last-name" });
+            errors.lastName = {text: "Last name must be between 1 and 250 characters"};
+            errorList.push({ text: "Last name must be between 1 and 250 characters", href: "#your-last-name" });
         }
         // render errors if any
         if (errorList.length > 0) {
@@ -395,7 +395,7 @@ router.get('/edit-hide-name', function(req, res) {
                 return res.render('current-service/back-office/manage-representations/edit-representation/06a-does-the-interested-party-want-their-name-obscured', {
                     rep: rep,
                     data: req.session.data,
-                    errorObscureName: "Select yes if the interested party wants to obscure their name"
+                    errorObscureName: "Select yes if the interested party wants their name withheld"
                 });
             }
         
