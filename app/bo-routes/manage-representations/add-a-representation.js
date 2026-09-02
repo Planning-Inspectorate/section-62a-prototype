@@ -333,7 +333,7 @@ router.post('/would-you-like-to-be-heard-at-a-hearing-answer', function (req, re
     // validation
     if (!wouldYouLikeToBeHeardAtAHearing) {
         return res.render('current-service/back-office/manage-representations/add-a-representation/11-would-you-like-to-be-heard-at-a-hearing', {
-            errorWouldYouLikeToBeHeardAtAHearing: "Select yes if you would like to be heard at a hearing"
+            errorWouldYouLikeToBeHeardAtAHearing: "Select the hearing preference"
         });
     }
     res.redirect('/current-service/back-office/manage-representations/add-a-representation/12-are-there-any-attachments');

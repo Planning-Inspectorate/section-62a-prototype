@@ -709,7 +709,7 @@ router.get('/edit-hearing', function(req, res) {
             return res.render('current-service/back-office/manage-representations/edit-representation/11-would-you-like-to-be-heard-at-a-hearing', {
                 rep: rep,
                 data: req.session.data,
-                errorWouldYouLikeToBeHeardAtAHearing: "Select yes if you would like to be heard at a hearing"
+                errorWouldYouLikeToBeHeardAtAHearing: "Select the hearing preference"
             });
         }
         // save and update the exact object property
