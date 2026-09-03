@@ -1,11 +1,11 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList %}Error: {% endif %}When was the notification of intent submitted?
+  {% if errorList %}Error: {% endif %}When is the application expected to be submitted?
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/10-dev-description" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/30-notification-received-date" }) }}
 {% endblock %}
 
 {% block content %}
@@ -20,14 +20,22 @@
       }) }}
     {% endif %}
 
-    <form class="form" action="/notification-received-date-answer" method="post" novalidate>
+      {% if data['application-stage'] == 'Pre-application' %}
+      {% set questionHeading = "When is the pre-application advice expected to be submitted?" %}
+
+      {% elif data['application-stage'] == 'Application' %}
+        {% set questionHeading = "When is the application expected to be submitted?" %}
+
+      {% endif %}
+
+    <form class="form" action="/expected-submission-date-answer" method="post" novalidate>
 
       {{ govukDateInput({
-        id: "notification-received-date",
-        namePrefix: "notification-received-date",
+        id: "expected-submission-date",
+        namePrefix: "expected-submission-date",
         fieldset: {
           legend: {
-            text: "When was the notification of intent submitted? (optional)",
+            text: questionHeading,
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l"
           }
@@ -35,23 +43,23 @@
         hint: {
           text: "For example, 27 3 2007"
         },
-        errorMessage: { text: errors.notificationReceivedDate.text } if errors.notificationReceivedDate else null,
+        errorMessage: { text: errors.expectedSubmissionDate.text } if errors.expectedSubmissionDate else null,
         
         items: [
           {
             name: "day",
             classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
-            value: data['notification-received-date-day']
+            value: data['expected-submission-date-day']
           },
           {
             name: "month",
             classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
-            value: data['notification-received-date-month']
+            value: data['expected-submission-date-month']
           },
           {
             name: "year",
             classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
-            value: data['notification-received-date-year']
+            value: data['expected-submission-date-year']
           }
         ]
       }) }}

@@ -160,147 +160,178 @@
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-      {# --- 0: Stage --- #}
+      {# --- 01: Stage --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Application stage</dt>
         <dd class="govuk-summary-list__value">{{ data['application-stage'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/0-application-stage">Change<span class="govuk-visually-hidden"> application stage</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/01-application-stage">Change<span class="govuk-visually-hidden"> application stage</span></a>
         </dd>
       </div>
       
     {# --- CONDITIONAL APPLICATION STAGE ROW --- #}
     {% if data['application-stage'] == 'Application' %}
 
-      {# --- 0: Category --- #}
+      {# --- 02: Pre-application advice requested --- #}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Application classification</dt>
-        <dd class="govuk-summary-list__value">{{ data['application-classification'] }}</dd>
+        <dt class="govuk-summary-list__key">Pre-application advice requested?</dt>
+        <dd class="govuk-summary-list__value">{{ data['pre-application-advice-requested'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/0-application-classification">Change<span class="govuk-visually-hidden"> application classification</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/02-has-pre-application-advice-been-requested-for-this-case">Change<span class="govuk-visually-hidden"> has pre-application advice been requested for this case</span></a>
+        </dd>
+      </div>
+
+      {# --- 03: Pre-app reference from PINS --- #}
+      {% if data['pre-application-advice-requested'] == 'Yes - PINS' %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Pre-application reference</dt>
+        <dd class="govuk-summary-list__value">{{ data['pre-app-ref-pins'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/03-what-is-the-pre-application-reference-pins">Change<span class="govuk-visually-hidden"> what is the pre-application reference from PINS</span></a>
+        </dd>
+      </div>
+
+      {# --- 04: Pre-app reference from Council --- #}
+      {% elif data['pre-application-advice-requested'] == 'Yes - Council' %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Pre-application reference</dt>
+        <dd class="govuk-summary-list__value">{{ data['pre-app-ref-council'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/04-what-is-the-pre-application-reference-council">Change<span class="govuk-visually-hidden"> what is the pre-application reference from the council</span></a>
         </dd>
       </div>
       {% endif %}
 
-      {# --- 1: Type --- #}
+      {# --- 05: Classification --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Application classification</dt>
+        <dd class="govuk-summary-list__value">{{ data['application-classification'] }}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/05-application-classification">Change<span class="govuk-visually-hidden"> application classification</span></a>
+        </dd>
+      </div>
+
+    {% endif %}  
+
+      {# --- 06: Type --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Application type</dt>
         <dd class="govuk-summary-list__value">{{ data['application-type'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/1-application-type">Change<span class="govuk-visually-hidden"> application type</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/06-application-type">Change<span class="govuk-visually-hidden"> application type</span></a>
         </dd>
       </div>
 
-      {# --- 2: LPA --- #}
+      {# --- 07: LPA --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">LPA</dt>
         <dd class="govuk-summary-list__value">{{  lpaContactsHtml | safe  }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/2-1-lpa">Change<span class="govuk-visually-hidden"> LPA</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/07-lpa">Change<span class="govuk-visually-hidden"> LPA</span></a>
         </dd>
       </div>
 
-      {# --- 3-1: Has Secondary LPA --- #}
+      {# --- 09: Has Secondary LPA --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Secondary LPA?</dt>
         <dd class="govuk-summary-list__value">{{ data['has-secondary-lpa'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/3-1-has-secondary-lpa">Change<span class="govuk-visually-hidden"> whether there is a secondary LPA</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/09-has-secondary-lpa">Change<span class="govuk-visually-hidden"> whether there is a secondary LPA</span></a>
         </dd>
       </div>
 
-      {# --- CONDITIONAL SECONDARY LPA ROW --- #}
+      {# --- 10: CONDITIONAL SECONDARY LPA ROW --- #}
       {% if data['has-secondary-lpa'] == 'Yes' %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Secondary LPA name</dt>
           <dd class="govuk-summary-list__value">{{  secondaryLpaContactsHtml | safe  }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/back-office/create-a-case/3-2-secondary-lpa-input">Change<span class="govuk-visually-hidden"> secondary LPA</span></a>
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/10-secondary-lpa-input">Change<span class="govuk-visually-hidden"> secondary LPA</span></a>
           </dd>
         </div>
       {% endif %}
 
-      {# --- 4-1: Has Agent --- #}
+      {# --- 12: Has Agent --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Agent?</dt>
         <dd class="govuk-summary-list__value">{{ data['has-agent'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/4-1-has-agent">Change<span class="govuk-visually-hidden"> whether applicant has an agent</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/12-has-agent">Change<span class="govuk-visually-hidden"> whether applicant has an agent</span></a>
         </dd>
       </div>
 
       {# --- CONDITIONAL AGENT ROWS --- #}
       {% if data['has-agent'] == 'Yes' %}
         
-        {# 4-2: Agent Org Name #}
+        {# 13: Agent Org Name #}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Agent organisation name</dt>
           <dd class="govuk-summary-list__value">{{ data['agent-org-name'] }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-2-agent-org-name">Change<span class="govuk-visually-hidden"> agent organisation name</span></a>
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/13-agent-org-name">Change<span class="govuk-visually-hidden"> agent organisation name</span></a>
           </dd>
         </div>
 
-        {# 4-3: Agent Address #}
+        {# 14: Agent Address #}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Agent address</dt>
           <dd class="govuk-summary-list__value">{{ agentAddressHtml | safe }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-3-agent-org-address">Change<span class="govuk-visually-hidden"> agent address</span></a>
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/14-agent-org-address">Change<span class="govuk-visually-hidden"> agent address</span></a>
           </dd>
         </div>
 
-        {# 4-4: Agent Contacts #}
+        {# 15: Agent Contacts #}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Agent contacts</dt>
           <dd class="govuk-summary-list__value">{{ agentContactsHtml | safe }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/back-office/create-a-case/4-4-agent-check">Change<span class="govuk-visually-hidden"> agent contacts</span></a>
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/15-agent-check">Change<span class="govuk-visually-hidden"> agent contacts</span></a>
           </dd>
         </div>
 
       {% endif %}
       {# --- END CONDITIONAL ROWS --- #}
 
-      {# --- 5-0: Applicant Type --- #}
+      {# --- 18: Applicant Type --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Applicant type</dt>
         <dd class="govuk-summary-list__value">{{ data['applicant-type'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/5-0-applicant-type">Change<span class="govuk-visually-hidden"> applicant type</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/18-applicant-type">Change<span class="govuk-visually-hidden"> applicant type</span></a>
         </dd>
       </div>
 
-      {# --- 5: Applicant Organisations (Conditional) --- #}
+      {# --- 19: Applicant Organisations (Conditional) --- #}
       {% if data['applicant-type'] == 'Organisation' %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Applicant organisations</dt>
           <dd class="govuk-summary-list__value">{{ applicantsHtml | safe }}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="/current-service/back-office/create-a-case/5-1-applicant-check">Change<span class="govuk-visually-hidden"> applicant organisations</span></a>
+            <a class="govuk-link" href="/current-service/back-office/create-a-case/19-applicant-check">Change<span class="govuk-visually-hidden"> applicant organisations</span></a>
           </dd>
         </div>
       {% endif %}
 
-      {# --- 6: Applicant Contacts --- #}
+      {# --- 23: Applicant Contacts --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Applicant contacts</dt>
         <dd class="govuk-summary-list__value">{{ applicantContactsHtml | safe }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/6-1-applicant-contact-check">Change<span class="govuk-visually-hidden"> applicant contacts</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/23-applicant-contact-check">Change<span class="govuk-visually-hidden"> applicant contacts</span></a>
         </dd>
       </div>
 
-      {# --- 7: Site Address --- #}
+      {# --- 26: Site Address --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Site address</dt>
         <dd class="govuk-summary-list__value">{{ siteAddressHtml | safe }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/7-site-address">Change<span class="govuk-visually-hidden"> site address</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/26-site-address">Change<span class="govuk-visually-hidden"> site address</span></a>
         </dd>
       </div>
 
-      {# --- 8: Site Coordinates --- #}
+      {# --- 27: Site Coordinates --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Site coordinates</dt>
         <dd class="govuk-summary-list__value">
@@ -308,11 +339,11 @@
           {% if data['site-coords-northing'] %}Northing: {{ data['site-coords-northing'] }}{% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/8-site-coords">Change<span class="govuk-visually-hidden"> site coordinates</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/27-site-coords">Change<span class="govuk-visually-hidden"> site coordinates</span></a>
         </dd>
       </div>
 
-      {# --- 9: Site Area --- #}
+      {# --- 28: Site Area --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Site area</dt>
         <dd class="govuk-summary-list__value">
@@ -323,36 +354,36 @@
           {% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/9-site-area">
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/28-site-area">
             Change<span class="govuk-visually-hidden"> site area</span>
           </a>
         </dd>
       </div>
 
-      {# --- 10: Development Description --- #}
+      {# --- 29: Development Description --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Development description</dt>
         <dd class="govuk-summary-list__value">{{ data['dev-description'] }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/10-dev-description">Change<span class="govuk-visually-hidden"> development description</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/29-dev-description">Change<span class="govuk-visually-hidden"> development description</span></a>
         </dd>
       </div>
 
-      {# --- 11: Notification Received Date --- #}
+      {# --- 30: Notification Received Date --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Date notification submitted</dt>
         <dd class="govuk-summary-list__value">{{ notificationDateHtml | safe }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/11-notification-received-date">Change<span class="govuk-visually-hidden"> notification received date</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/30-notification-received-date">Change<span class="govuk-visually-hidden"> notification received date</span></a>
         </dd>
       </div>
 
-      {# --- 12: Expected Submission Date --- #}
+      {# --- 31: Expected Submission Date --- #}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Expected submission date</dt>
         <dd class="govuk-summary-list__value">{{ expectedDateHtml | safe }}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/current-service/back-office/create-a-case/12-exp-submission-date">Change<span class="govuk-visually-hidden"> expected submission date</span></a>
+          <a class="govuk-link" href="/current-service/back-office/create-a-case/31-exp-submission-date">Change<span class="govuk-visually-hidden"> expected submission date</span></a>
         </dd>
       </div>
 

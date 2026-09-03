@@ -1,13 +1,13 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorAgentOrgAddress %}Error: {% endif %}What is the address of the agent organisation?
+  {% if errorApplicantOrgAddress %}Error: {% endif %}What is the address of the applicant organisation?
 {% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/current-service/back-office/create-a-case/4-2-agent-org-name"
+    href: "/current-service/back-office/create-a-case/20-applicant-org-name"
   }) }}
 {% endblock %}
 
@@ -15,23 +15,23 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% if errorAgentOrgAddress %}
+      {% if errorApplicantOrgAddress %}
         {{ govukErrorSummary({
           titleText: "There is a problem",
           errorList: [
             {
-              text: errorAgentOrgAddress,
-              href: "#agent-org-address-postcode" 
+              text: errorApplicantOrgAddress,
+              href: "#applicant-org-address-postcode" 
             }
           ]
         }) }}
       {% endif %}
 
-      <form class="form" action="/agent-org-address-answer" method="post" novalidate>
+      <form class="form" action="/applicant-org-address-answer" method="post" novalidate>
 
         {% call govukFieldset({
           legend: {
-            text: "What is the address of the agent organisation?",
+            text: "What is the address of the applicant organisation?",
             classes: "govuk-fieldset__legend--l",
             isPageHeading: true
           }
@@ -41,9 +41,9 @@
             label: {
               text: "Address line 1 (optional)"
             },
-            id: "agent-org-address-line-1",
-            name: "agent-org-address-line-1",
-            value: data['agent-org-address-line-1'],
+            id: "applicant-org-address-line-1",
+            name: "applicant-org-address-line-1",
+            value: data['applicant-org-address-line-1'],
             autocomplete: "address-line1"
           }) }}
 
@@ -51,9 +51,9 @@
             label: {
               text: "Address line 2 (optional)"
             },
-            id: "agent-org-address-line-2",
-            name: "agent-org-address-line-2",
-            value: data['agent-org-address-line-2'],
+            id: "applicant-org-address-line-2",
+            name: "applicant-org-address-line-2",
+            value: data['applicant-org-address-line-2'],
             autocomplete: "address-line2"
           }) }}
 
@@ -62,9 +62,9 @@
               text: "Town or city (optional)"
             },
             classes: "govuk-!-width-two-thirds",
-            id: "agent-org-address-town",
-            name: "agent-org-address-town",
-            value: data['agent-org-address-town'],
+            id: "applicant-org-address-town",
+            name: "applicant-org-address-town",
+            value: data['applicant-org-address-town'],
             autocomplete: "address-level2"
           }) }}
 
@@ -73,9 +73,9 @@
               text: "County (optional)"
             },
             classes: "govuk-!-width-two-thirds",
-            id: "agent-org-address-county",
-            name: "agent-org-address-county",
-            value: data['agent-org-address-county']
+            id: "applicant-org-address-county",
+            name: "applicant-org-address-county",
+            value: data['applicant-org-address-county']
           }) }}
 
           {{ govukInput({
@@ -83,11 +83,11 @@
               text: "Postcode (optional)"
             },
             classes: "govuk-input--width-10",
-            id: "agent-org-address-postcode",
-            name: "agent-org-address-postcode",
-            value: data['agent-org-address-postcode'],
+            id: "applicant-org-address-postcode",
+            name: "applicant-org-address-postcode",
+            value: data['applicant-org-address-postcode'],
             autocomplete: "postal-code",
-            errorMessage: { text: errorAgentOrgAddress } if errorAgentOrgAddress else null
+            errorMessage: { text: errorApplicantOrgAddress } if errorApplicantOrgAddress else null
           }) }}
 
         {% endcall %}

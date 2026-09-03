@@ -1,11 +1,11 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  Remove agent contact?
+  Remove applicant contact?
 {% endblock %}
 
 {% block beforeContent %}
-    {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/4-4-agent-check" }) }}
+    {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/23-applicant-contact-check" }) }}
 {% endblock %}
 
 {% block content %}
@@ -14,11 +14,14 @@
 
     <h1 class="govuk-heading-l">Remove contact</h1>
     
-    <p class="govuk-body">Do you want to remove this agent contact?</p>
+    <p class="govuk-body">Do you want to remove this applicant contact?</p>
 
     {# --- FIND AND DISPLAY THE TARGET CONTACT --- #}
     {% set removeId = data['id'] or data['remove-contact-id'] %}
-    {% set contactList = data['agent-contact-list'] or [] %}
+    {% set contactList = data['applicant-contact-list'] or [] %}
+    
+    {# ADDED: Pull in the org list so we can find the name #}
+    {% set orgList = data['applicant-org-list'] or [] %}
     
     {% for contact in contactList %}
       {% if (contact.id | string) == (removeId | string) %}
@@ -26,7 +29,15 @@
         {% set insetTextHtml %}
           {{ contact.firstName }} {{ contact.lastName }}<br>
           {% if contact.email %}{{ contact.email }}<br>{% endif %}
-          {% if contact.phone %}{{ contact.phone }}{% endif %}
+          {% if contact.phone %}{{ contact.phone }}<br>{% endif %}
+          
+          {% if contact.linkedOrg %}
+            {% for org in orgList %}
+              {% if org.id == contact.linkedOrg %}
+                <span class="govuk-body">{{ org.orgName }}</span>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
         {% endset %}
 
         {{ govukInsetText({
@@ -37,9 +48,9 @@
     {% endfor %}
 
     {# --- FORM WITH WARNING & CANCEL BUTTONS --- #}
-    <form action="/agent-contact-remove-answer" method="post" novalidate>
+    <form action="/applicant-contact-remove-answer" method="post" novalidate>
       
-      <input type="hidden" name="agent-contact-remove" value="Yes">
+      <input type="hidden" name="applicant-contact-remove" value="Yes">
       <input type="hidden" name="remove-contact-id" value="{{ removeId }}">
       
       <div class="govuk-button-group">
@@ -51,7 +62,7 @@
         {{ govukButton({ 
           text: "Cancel",
           classes: "govuk-button--secondary",
-          href: "/current-service/back-office/create-a-case/4-4-agent-check"
+          href: "/current-service/back-office/create-a-case/23-applicant-contact-check"
         }) }}
       </div>
 

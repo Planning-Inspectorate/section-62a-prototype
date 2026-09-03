@@ -7,13 +7,13 @@
 {% block beforeContent %}
 
   {% if data['pre-application-advice-requested'] == 'Yes - PINS' %}
-    {% set backLink = "/current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-pins" %}
+    {% set backLink = "/current-service/back-office/create-a-case/03-what-is-the-pre-application-reference-pins" %}
 
   {% elif data['pre-application-advice-requested'] == 'Yes - Council' %}
-    {% set backLink = "/current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-council" %}
+    {% set backLink = "/current-service/back-office/create-a-case/04-what-is-the-pre-application-reference-council" %}
 
   {% elif data['pre-application-advice-requested'] == 'No' %}
-    {% set backLink = "/current-service/back-office/create-a-case/0a-has-pre-application-advice-been-requested-for-this-case" %}
+    {% set backLink = "/current-service/back-office/create-a-case/02-has-pre-application-advice-been-requested-for-this-case" %}
 
   {% endif %}
 

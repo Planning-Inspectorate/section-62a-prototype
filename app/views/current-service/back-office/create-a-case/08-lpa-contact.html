@@ -1,11 +1,11 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  {% if errorList %}Error: {% endif %}What are the secondary LPA's contact details?
+  {% if errorList %}Error: {% endif %}What are the LPA's contact details?
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/3-2-secondary-lpa-input" }) }}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/create-a-case/07-lpa" }) }}
 {% endblock %}
 
 {% block content %}
@@ -19,40 +19,40 @@
       }) }}
     {% endif %}
 
-    <form method="post" action="/secondary-lpa-contact-answer" novalidate>
-      <h1 class="govuk-heading-l">What are the secondary local planning authority's contact details?</h1>
+    <form method="post" action="/lpa-contact-answer" novalidate>
+      <h1 class="govuk-heading-l">What are the local planning authority's contact details?</h1>
 
       {{ govukInput({ 
         label: { text: "First name" }, 
-        id: "secondary-lpa-contact-first-name", 
-        name: "secondary-lpa-contact-first-name", 
-        value: data['secondary-lpa-contact-first-name'],
+        id: "lpa-contact-first-name", 
+        name: "lpa-contact-first-name", 
+        value: data['lpa-contact-first-name'],
         errorMessage: errors.firstName if errors.firstName else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Last name" }, 
-        id: "secondary-lpa-contact-last-name", 
-        name: "secondary-lpa-contact-last-name", 
-        value: data['secondary-lpa-contact-last-name'],
+        id: "lpa-contact-last-name", 
+        name: "lpa-contact-last-name", 
+        value: data['lpa-contact-last-name'],
         errorMessage: errors.lastName if errors.lastName else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Email address" }, 
-        id: "secondary-lpa-contact-email", 
-        name: "secondary-lpa-contact-email", 
+        id: "lpa-contact-email", 
+        name: "lpa-contact-email", 
         type: "email", 
-        value: data['secondary-lpa-contact-email'],
+        value: data['lpa-contact-email'],
         errorMessage: errors.email if errors.email else null
       }) }}
       
       {{ govukInput({ 
         label: { text: "Phone number (optional)" }, 
-        id: "secondary-lpa-contact-phone", 
-        name: "secondary-lpa-contact-phone", 
+        id: "lpa-contact-phone", 
+        name: "lpa-contact-phone", 
         type: "tel", 
-        value: data['secondary-lpa-contact-phone'],
+        value: data['lpa-contact-phone'],
         errorMessage: errors.phone if errors.phone else null
       }) }}
       
