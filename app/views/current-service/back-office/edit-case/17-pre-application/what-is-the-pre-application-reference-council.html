@@ -1,0 +1,47 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorPreAppRefCouncil %}Error: {% endif %}What is the pre-application reference?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/tab-view/17-pre-application"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorPreAppRefCouncil %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorPreAppRefCouncil, href: "#pre-app-ref-council" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/edit-pre-app-ref-council" method="post" novalidate>
+
+        {{ govukInput({
+          id: "pre-app-ref-council",
+          name: "pre-app-ref-council",
+          value: data['pre-app-ref-council'],
+          label: {
+            text: "What is the pre-application reference?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorPreAppRefCouncil } if errorPreAppRefCouncil else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

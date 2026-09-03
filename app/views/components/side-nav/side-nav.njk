@@ -79,9 +79,13 @@
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/16-waste" {% if currentPage == 'waste' %} aria-current="page" {% endif %}>Waste</a>
         </li>
 
+        {% if currentCase.preApplicationRequested in ['Yes - PINS', 'Yes - Council'] %}
+
         <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/17-pre-application" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
         </li>
+
+        {% endif %}
 
         {% if currentPage == 'hearing' %}
         <li class="moj-sub-navigation__item {% if currentPage == 'hearing' %}moj-sub-navigation__item--active{% endif %}">

@@ -5,6 +5,8 @@ export const cases = [
     "reference": "S62A/2026/0048",
     "status": "New",
     "applicationStage": "Application",
+    "preApplicationRequested": "Yes - PINS",
+    "preApplicationReferencePins": "S62A/2026/0000049/PRE",
     "applicationClassification": "Major",
     "applicationType": "Planning permission",
     "lpa": "Camden London Borough Council",

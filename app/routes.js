@@ -8,14 +8,8 @@ import caseDetailsRouter from './bo-routes/archived/case-details.js';
 import caseAuditLogRouter from './bo-routes/archived/case-audit-log.js';
 
 // import edit case bo-routers
-import editCaseTeamRouter from './bo-routes/edit-case/case-team.js';
-import editContactsRouter from './bo-routes/edit-case/contacts.js';
-import editDatesRouter from './bo-routes/edit-case/dates.js';
-import editDetailsRouter from './bo-routes/edit-case/details.js';
-import editEiaRouter from './bo-routes/edit-case/eia.js';
-import editFeeRouter from './bo-routes/edit-case/fee.js';
-import editOverviewRouter from './bo-routes/edit-case/overview.js';
-import editCaseRepsPeriodRouter from './bo-routes/edit-case/reps-period.js';
+import editOverview from './bo-routes/edit-case/01-overview.js';
+import editPreApplication from './bo-routes/edit-case/17-pre-application.js';
 
 // import tab-view case bo-routers
 import overviewTabRouter from './bo-routes/tab-view/01-overview.js';
@@ -82,14 +76,8 @@ router.use('/', caseDetailsRouter);
 router.use('/', caseAuditLogRouter);
 
 // mount edit case bo-routers
-router.use('/', editCaseTeamRouter);
-router.use('/', editContactsRouter);
-router.use('/', editDatesRouter);
-router.use('/', editDetailsRouter);
-router.use('/', editEiaRouter);
-router.use('/', editFeeRouter);
-router.use('/', editOverviewRouter);
-router.use('/', editCaseRepsPeriodRouter);
+router.use('/', editOverview);
+router.use('/', editPreApplication);
 
 // mount tab-view bo-routes
 router.use('/', overviewTabRouter);
