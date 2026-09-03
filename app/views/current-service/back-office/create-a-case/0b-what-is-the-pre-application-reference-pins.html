@@ -1,0 +1,67 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorPreAppRefPins %}Error: {% endif %}What is the pre-application reference?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/create-a-case/0a-has-pre-application-advice-been-requested-for-this-case"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorPreAppRefPins %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorPreAppRefPins, href: "#pre-app-ref-pins" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/pre-app-ref-pins-answer" method="post" novalidate>
+
+        {{ govukSelect({
+          id: "pre-app-ref-pins",
+          name: "pre-app-ref-pins",
+          label: {
+            text: "What is the pre-application reference?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: {
+            text: "Start typing the pre-application reference and choose from the list"
+          },
+          errorMessage: { text: errorPreAppRefPins } if errorPreAppRefPins else null,
+          items: preAppItems
+        }) }}
+
+        {{ govukButton({ text: "Continue" }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+<link rel="stylesheet" href="/public/css/accessible-autocomplete.min.css">
+<script src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script>
+  // Script finds #pre-app-ref-pins dropdown and visually upgrades it into a searchable text box
+  const selectElement = document.querySelector('#pre-app-ref-pins');
+  
+  if (selectElement) {
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: selectElement,
+      showAllValues: true, // Better for this use-case so users can click to see all generated PRE cases
+      confirmOnBlur: false, 
+      autoselect: true,
+      defaultValue: "" 
+    });
+  }
+</script>
+{% endblock %}

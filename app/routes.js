@@ -3,9 +3,9 @@ import govukPrototypeKit from "govuk-prototype-kit";
 import { applyAzureHostingFix } from "./azure-hosting-fix.js";
 
 // import bo-routers
-import createCaseRouter from './bo-routes/create-a-case.js';
-import caseDetailsRouter from './bo-routes/case-details.js';
-import caseAuditLogRouter from './bo-routes/case-audit-log.js';
+import createCaseRouter from './bo-routes/create-a-case/create-a-case.js';
+import caseDetailsRouter from './bo-routes/archived/case-details.js';
+import caseAuditLogRouter from './bo-routes/archived/case-audit-log.js';
 
 // import edit case bo-routers
 import editCaseTeamRouter from './bo-routes/edit-case/case-team.js';

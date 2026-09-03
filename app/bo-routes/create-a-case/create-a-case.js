@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName } from '../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName } from '../../helpers.js';
 
 const router = Router();
 
@@ -23,8 +23,106 @@ router.post('/application-stage-answer', function (req, res) {
     res.redirect('/current-service/back-office/create-a-case/1-application-type');
   }
   else if (applicationStage === "Application") {
+    res.redirect('/current-service/back-office/create-a-case/0a-has-pre-application-advice-been-requested-for-this-case');
+  }
+});
+
+
+// ========================================================
+// 0a - Has pre application advice been received (POST)
+// ========================================================
+router.post('/pre-application-advice-requested-answer', function (req, res) {
+  const preApplicationAdviceRequested = req.session.data['pre-application-advice-requested'];
+  
+  if (!preApplicationAdviceRequested) {
+    return res.render('current-service/back-office/create-a-case/0a-has-pre-application-advice-been-requested-for-this-case', { 
+      errorPreApplicationAdviceRequested: "Select if pre-application advice has been requested for this application" 
+    });
+  }
+  
+  if (preApplicationAdviceRequested === "Yes - PINS") {
+    res.redirect('/current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-pins');
+  }
+  else if (preApplicationAdviceRequested === "Yes - Council") {
+    res.redirect('/current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-council');
+  }
+  else if (preApplicationAdviceRequested === "No") {
     res.redirect('/current-service/back-office/create-a-case/0-application-classification');
   }
+});
+
+
+// ========================================================
+// 0b - What is the pre-application reference PINS (GET)
+// ========================================================
+router.get('/current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-pins', function (req, res) {
+  const cases = req.session.data.cases || [];
+  
+  // Filter for cases that end in /PRE
+  const preAppCases = cases.filter(c => c.reference && c.reference.endsWith('/PRE'));
+  
+  // Map them into the format the GOV.UK Select component needs
+  const preAppItems = preAppCases.map(c => ({
+    value: c.reference,
+    text: c.reference,
+    selected: req.session.data['pre-app-ref-pins'] === c.reference
+  }));
+
+  // Add the default empty/placeholder option to the very top
+  preAppItems.unshift({
+    value: "",
+    text: "Select the pre-application reference or historic reference",
+    selected: !req.session.data['pre-app-ref-pins']
+  });
+
+  // Render the page and pass the dynamic items
+  res.render('current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-pins', {
+    preAppItems: preAppItems
+  });
+});
+
+
+// ========================================================
+// 0b - What is the pre-application reference PINS (POST)
+// ========================================================
+router.post('/pre-app-ref-pins-answer', function (req, res) {
+  const preAppRef = req.session.data['pre-app-ref-pins'];
+
+  // Validation: Did they leave it blank?
+  if (!preAppRef || preAppRef.trim() === "") {
+    
+    // We must rebuild the list of PRE cases to re-render the page with the error
+    const cases = req.session.data.cases || [];
+    const preAppCases = cases.filter(c => c.reference && c.reference.endsWith('/PRE'));
+    const preAppItems = preAppCases.map(c => ({
+      value: c.reference,
+      text: c.reference,
+      selected: false // nothing is selected because it failed validation
+    }));
+    preAppItems.unshift({
+      value: "",
+      text: "Select the pre-application reference or historic reference",
+      selected: true
+    });
+
+    return res.render('current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-pins', {
+      preAppItems: preAppItems,
+      errorPreAppRefPins: "Select a pre-application reference"
+    });
+  }
+
+  // If validation passes, move to the next step in the journey
+  res.redirect('/current-service/back-office/create-a-case/0-application-classification');
+});
+
+
+// 0b - what is the pre-application 
+router.post('/pre-app-ref-council-answer', function (req, res) {
+  const errorPreAppRefCouncil = req.session.data['pre-app-ref-council'];
+  if (!errorPreAppRefCouncil) {
+    return res.render('current-service/back-office/create-a-case/0b-what-is-the-pre-application-reference-council', { errorPreAppRefCouncil: "Enter the pre-application reference" });
+  }
+  res.redirect('/current-service/back-office/create-a-case/0-application-classification');
 });
 
 

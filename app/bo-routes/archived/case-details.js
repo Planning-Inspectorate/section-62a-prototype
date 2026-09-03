@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCase } from '../helpers.js';
+import { getCase } from '../../helpers.js';
 
 const router = Router();
 
