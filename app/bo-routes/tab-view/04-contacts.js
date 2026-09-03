@@ -15,16 +15,13 @@ router.get('/current-service/back-office/tab-view/04-contacts', function(req, re
   }
 
   // handle flash messages (green success banners) for case edits
-  const sectionToJumpTo = req.session.data['flashSection'];
   const flashMessage = req.session.data['flashMessage'];
   
-  req.session.data['flashSection'] = null; 
   req.session.data['flashMessage'] = null;
 
   // Render the page
   res.render('current-service/back-office/tab-view/04-contacts', { 
     currentCase: foundCase,       
-    flashSection: sectionToJumpTo,
     flashMessage: flashMessage
   });
 });

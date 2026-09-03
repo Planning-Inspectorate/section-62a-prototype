@@ -17,7 +17,6 @@ router.get('/current-service/back-office/tab-view/01-overview', function(req, re
   // handle flash messages (green success banners) for case edits
   const flashMessage = req.session.data['flashMessage'];
   
-  req.session.data['flashSection'] = null; 
   req.session.data['flashMessage'] = null;
 
   // Render the page

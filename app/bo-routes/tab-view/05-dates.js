@@ -14,17 +14,14 @@ router.get('/current-service/back-office/tab-view/05-dates', function(req, res) 
     return res.redirect('/current-service/back-office/cases'); 
   }
 
-  // handle flash messages (green success banners) for case edits
-  const sectionToJumpTo = req.session.data['flashSection'];
+  // handle flash messages (green success banners) for case edits 
   const flashMessage = req.session.data['flashMessage'];
   
-  req.session.data['flashSection'] = null; 
   req.session.data['flashMessage'] = null;
 
   // Render the page
   res.render('current-service/back-office/tab-view/05-dates', { 
-    currentCase: foundCase,       
-    flashSection: sectionToJumpTo,
+    currentCase: foundCase,      
     flashMessage: flashMessage
   });
 });
