@@ -1,0 +1,114 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+
+      
+      <form class="form" action="/next-page-url" method="post">
+
+        <h3 class="govuk-heading-xl">Which specialism is this case?</h3>
+       
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: errorApplicationType} %}
+        {% endif %}
+       
+        {{ govukRadios({
+          idPrefix: "1-specialism",
+          name: "specialism",
+          fieldset: {
+            legend: {
+              text: questionHeading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+    
+          items: [
+            {
+              value: "Architecture design",
+              text: "Architecture design",
+              checked: data['specialism'] == 'Architecture design'
+            },
+            {
+              value: "Gypsy and traveller",
+              text: "Gypsy and traveller",
+              checked: data['specialism'] == 'Gypsy and traveller'
+            },
+            {
+              value:"Historic heritage",
+              text: "Historic heritage",
+              checked: data['specialism'] == 'Historic heritage'
+            },
+            {
+              value:"Minerals",
+              text: "Minerals",
+              checked: data['specialism'] == 'Minerals'
+            },
+            {
+              value:"Renewable energy/ wind farms",
+              text: "Renewable energy/ wind farms",
+              checked: data['specialism'] == 'Renewable energy/ wind farms'
+            },
+            {
+              value:"Shopping",
+              text: "Shopping",
+              checked: data['specialism'] == 'Shopping'
+            },
+            {
+              value:"Tree preservation order",
+              text: "Tree preservation order",
+              checked: data['specialism'] == 'Tree preservation order'
+            },
+            {
+              value:"Transport",
+              text: "Transport",
+              checked: data['specialism'] == 'Transport'
+            },
+             {
+              value:"Waste",
+              text: "Waste",
+              checked: data['specialism'] == 'Waste'
+            },
+            {
+            value:"Water",
+            text: "Water",
+            checked: data['specialism'] == 'Water'
+            }
+            
+
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+        {{ govukButton({
+            text: "Remove and save",
+            classes: "govuk-button--secondary"
+            }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

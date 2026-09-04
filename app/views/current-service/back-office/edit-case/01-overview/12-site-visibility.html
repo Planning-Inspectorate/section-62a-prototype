@@ -1,0 +1,79 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        
+
+       <!-- This only shows if the 'error' variable is true -->
+       {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{text: errorApplicationType, href: "#1-application-type" }]
+           
+        }) }}
+      {% endif %}
+
+      
+      <form class="form" action="/next-page-url" method="post">
+
+        <h4 class="govuk-heading-l">Is this visible from Public Land?</h4>
+       
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: errorApplicationType} %}
+        {% endif %}
+       
+        {{ govukRadios({
+          idPrefix: "site-visibility",
+          name: "site-visibility",
+          fieldset: {
+            legend: {
+              text: questionHeading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+           errorMessage: radioError,
+          items: [
+            {
+              value: "Yes",
+              text: "Yes",
+              checked: data['site-visibility'] == 'Yes'
+            },
+            {
+              value: "No",
+              text: "No",
+              checked: data['site-visibility'] == 'No'
+            }  
+
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

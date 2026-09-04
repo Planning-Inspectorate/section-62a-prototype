@@ -1,0 +1,73 @@
+{% extends "layouts/back-office.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.css">
+{% endblock %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "3-check-applicant-details"
+  }) }}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+
+    <form method="post" action="/add-contact-handler">
+      <h1 class="govuk-heading-l">What is the site address? (optional)</h1>
+      
+
+      <!-- Address Line 1 Input -->
+      {{ govukInput({
+        label: { text: "Address line 1 (optional)" },
+        id: "address-line-1",
+        name: "address-line-1",
+        value: data['address-line-1']
+      }) }}
+
+       {{ govukInput({
+        label: { text: "Address line 2 (optional)" },
+        id: "address-line-2",
+        name: "address-line-2",
+        value: data['address-line-2']
+      }) }}
+
+       {{ govukInput({
+        label: { text: "Town or city (optional)" },
+        id: "town-or-city",
+        name: "town-or-city",
+        value: data['town-or-city']
+      }) }}
+
+
+       {{ govukInput({
+        label: { text: "County (optional)" },
+        id: "county",
+        name: "county",
+        value: data['county']
+        }) }}
+      
+       {{ govukInput({
+        label: { text: "Postcode (optional)" },
+        id: "postcode",
+        name: "postcode",
+        value: data['postcode']
+      }) }}
+
+
+      {{ govukButton({ text: "Save" }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

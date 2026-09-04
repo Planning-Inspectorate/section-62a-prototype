@@ -1,0 +1,99 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+       <!-- This only shows if the 'error' variable is true -->
+       {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{text: errorApplicationType, href: "#1-application-type" }]
+           
+        }) }}
+      {% endif %}
+
+      <!-- Setting a vasiable for the heading depending if its an application or a pre-applicatio -->
+      {% if data['preapplication-or-application']== 'Pre-application' %}
+        {% set questionHeading = "What type of application is this pre-application advice for?" %}
+
+      {% else %}
+        {% set questionHeading = "What type of application is it?" %}
+       {% endif %}
+      
+
+      
+
+      <form class="form" action="/next-page-url" method="post">
+       
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: errorApplicationType} %}
+        {% endif %}
+       
+        {{ govukRadios({
+          idPrefix: "1-application-type",
+          name: "application-type",
+          fieldset: {
+            legend: {
+              text: questionHeading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+           errorMessage: radioError,
+          items: [
+            {
+              value: "Planning permission",
+              text: "Planning permission",
+              checked: data['application-type'] == 'Planning permission'
+            },
+            {
+              value: "Outline planning permission with some matters reserved",
+              text: "Outline planning permission with some matters reserved",
+              checked: data['application-type'] == 'Outline planning permission with some matters reserved'
+            },
+            {
+              value:"Outline planning permission with all matters reserved",
+              text: "Outline planning permission with all matters reserved",
+              checked: data['application-type'] == 'Outline planning permission with all matters reserved'
+              
+            },
+            {
+              value:"Approved of reserved matterns following outline approval",
+              text: "Approved of reserved matterns following outline approval",
+              checked: data['application-type'] == 'Approved of reserved matterns following outline approval'
+            },
+            {
+              value:"Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building",
+              text: "Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building",
+              checked: data['application-type'] == 'Planning permission and listed building consent (LBC) for alterations, extension or demolition of a listed building'
+            }
+            
+
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

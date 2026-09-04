@@ -1,0 +1,66 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        What is the area of the site? (optional)
+      </h1>
+
+      <p class="govuk-body">
+        You can enter the site area in either hectares or square metres.
+        <br>
+        Use numbers, for example 10.4 or 5.
+      </p>
+
+      <form action="#" method="post" novalidate>
+
+        {{ govukInput({
+          id: "site-area-hectares",
+          name: "siteAreaHectares",
+          label: {
+            text: "Site area in hectares (optional)"
+          },
+          classes: "govuk-input--width-5",
+          suffix: {
+            text: "ha"
+          }
+        }) }}
+
+        <p class="govuk-body">or</p>
+
+        {{ govukInput({
+          id: "site-area-square-metres",
+          name: "siteAreaSquareMetres",
+          label: {
+            text: "Site area in square metres (optional)"
+          },
+          classes: "govuk-input--width-5",
+          suffix: {
+            text: "m²"
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

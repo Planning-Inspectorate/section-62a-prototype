@@ -1,0 +1,40 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+ What are the likely issues with this application? (optional)
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/next-page-url" method="post">
+
+        {{ govukTextarea({
+          name: "likelyIssuesText",
+          id: "likelyIssuesText",
+          label: {
+            text: "What are the likely issues with this application? (optional)",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          value: data['likelyIssuesText']
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

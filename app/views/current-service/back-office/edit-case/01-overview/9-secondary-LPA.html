@@ -1,0 +1,80 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        
+
+       <!-- This only shows if the 'error' variable is true -->
+       {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{text: errorApplicationType, href: "#1-application-type" }]
+           
+        }) }}
+      {% endif %}
+
+      
+      <form class="form" action="/next-page-url" method="post">
+
+        <h3 class="govuk-heading-l">Is there a secondary local planning authority for this application?</h3>
+       
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: errorApplicationType} %}
+        {% endif %}
+       
+        {{ govukRadios({
+          idPrefix: "1-inspector-band",
+          name: "secondaryLPA",
+          fieldset: {
+            legend: {
+              text: questionHeading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+           errorMessage: radioError,
+          items: [
+            {
+              value: "Yes",
+              text: "Yes",
+              checked: data['secondaryLPA
+              '] == 'Yes'
+            },
+            {
+              value: "No",
+              text: "No",
+              checked: data['secondaryLPA'] == 'No'
+            }  
+
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

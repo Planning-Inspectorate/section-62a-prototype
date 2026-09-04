@@ -1,0 +1,89 @@
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <!-- This only shows if the 'error' variable is true -->
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: "Select if this is a major or non-major case",
+              href: "#preapplication-or-application"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      
+
+      <form class="form" action="/next-page-url" method="post">
+
+          <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: "Select if this is a major or non major case" } %}
+        {% endif %}
+
+        {{ govukRadios({
+          value: data['major-or-nonmajor'],
+          name: "major-or-nonmajor",
+          fieldset: {
+            legend: {
+              text: "Is this a major or non-major case?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: radioError,
+          items: [
+            {
+              value: "Major",
+              text: "Major",
+              checked: data['major-or-nonmajor'] == 'Major'
+            },
+            {
+              value: "Non-major",
+              text: "Non-major",
+              checked: data['major-or-nonmajor'] == 'Non-major'
+            }
+          ]
+        }) }}
+
+       <!-- 2. TRIAL** - The official "Inset Text" grey box
+          This is the official GOV.UK way to make a grey callout box before a button.
+        </div> -->
+
+        <!-- 2. TRIAL** - Make a new grey box  
+        <div class="govuk-!-padding-4 govuk-!-margin-bottom-6" style="background-color: #f3f2f1;">
+        <h2 class="govuk-heading-m">Important note</h2>
+        <p class="govuk-body">
+          This box is using the official GOV.UK light grey color (#f3f2f1).
+        </p>
+        </div> -->
+          
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

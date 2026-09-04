@@ -1,0 +1,50 @@
+{% extends "layouts/back-office.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.css">
+{% endblock %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+
+    <form method="post" action="/add-contact-handler">
+      <h1 class="govuk-heading-l">What are the coordinates of the site? (optional)</h1>
+      
+
+      <!-- Address Line 1 Input -->
+      {{ govukInput({
+        label: { text: "Easting" },
+        id: "easting",
+        name: "easting",
+        value: data['easting']
+      }) }}
+
+       {{ govukInput({
+        label: { text: "Northing" },
+        id: "northing",
+        name: "northing",
+        value: data['northing']
+      }) }}
+
+      {{ govukButton({ text: "Save" }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

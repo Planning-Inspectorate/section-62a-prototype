@@ -1,0 +1,80 @@
+
+{% extends "layouts/back-office.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+   <!-- This only shows if the 'error' variable is true -->
+       {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: "Select if this is a pre-application or an application",
+              href: "#preapplication-or-application"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      
+
+      <form class="form" action="/next-page-url" method="post">
+
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: "Select if this is a pre-application or an application" } %}
+        {% endif %}
+
+
+        {{ govukRadios({
+          value: data['preapplication-or-application'],
+          name: "preapplication-or-application",
+          fieldset: {
+            legend: {
+              text: "Is this a pre-application or an application?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+
+        
+         errorMessage: radioError,
+          items: [
+            {
+              value: "Pre-application",
+              text: "Pre-application",
+              checked: data['preapplication-or-application'] == 'Pre-application'
+            },
+            {
+              value: "Application",
+              text: "Application",
+              checked: data['preapplication-or-application'] == 'Application'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+        </form>
+ 
+  </div>
+  </div>
+
+
+{% endblock %}

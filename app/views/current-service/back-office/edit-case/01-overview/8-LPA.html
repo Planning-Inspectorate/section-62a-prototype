@@ -1,0 +1,92 @@
+{% extends "layouts/back-office.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.css">
+{% endblock %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    <!-- This only shows if the 'error' variable is true -->
+       {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{text: "Select the local planning authority", href: "#planning-authority" }]
+           
+        }) }}
+      {% endif %}
+
+      <!-- Setting a variable for the heading depending if its an application or a pre-applicatio -->
+      {% if data['preapplication-or-application']== 'Pre-application' %}
+        {% set questionHeading = "Which local planning authority is this pre-application advice related to?" %}
+
+      {% else %}
+        {% set questionHeading = "Which local planning authority is this application advice related to?" %}
+       {% endif %}
+
+      
+
+      <form class="form" action="/2-planning-authority-answer" method="post">
+
+        <!-- We set up a variable for the inline error -->
+        {% set radioError = null %}
+        {% if error %}
+          {% set radioError = { text: "Select the local planning authority" } %}
+        {% endif %}
+
+      {{ govukSelect({
+          value: data['planning-authority'],
+          id: "planning-authority",
+          name: "planning-authority",
+          label: {
+            text: questionHeading,
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+           hint: {
+            text: "Start typing the name of the council and choose from the list"
+          },
+
+          errorMessage: radioError,
+          items: [
+            { value: "" },
+            { value: "Southwark Council ", text: "Southwark Council " },
+            { value: "York City Council ", text: "York City Council " }
+           
+          ]
+        }) }}
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}
+
+{% block pageScripts %}
+  {{ super() }}
+  <script src="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.js"></script>
+  <script>
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: document.querySelector('#planning-authority'), /* <-- Make sure this comma is here! */
+      showAllValues: true
+    })
+  </script>
+{% endblock %}
