@@ -90,7 +90,7 @@
         <div class="govuk-notification-banner__content">
           <p class="govuk-notification-banner__heading">
             This application is connected to a
-            <a class="govuk-notification-banner__link" href="/current-service/back-office/case-details?reference={{ currentCase.linkedCaseReference }}">
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/tab-view/11-fee?reference={{ currentCase.linkedCaseReference }}">
               {{ currentCase.linkedCaseType }} application
             </a>.
           </p>
@@ -131,36 +131,52 @@
     
         <dl class="govuk-summary-list">
 
+          {% if currentCase.linkedCaseType  == "planning permission" %}
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Fee amount</dt>
+            <dd class="govuk-summary-list__value">N/A</dd>
+          </div>
+
+          {% else %}
+
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Application fee</dt>
+            <dt class="govuk-summary-list__key">Fee amount</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.applicationFee | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicationFee %}Change{% else %}Add{% endif %}</a></dd>
           </div>
+          {% endif %}
 
           {% if currentCase.applicationFee == "Yes" %}
-
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Fee received date</dt>
             <dd class="govuk-summary-list__value">{{ feeReceivedDateHtml | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.feeReceivedDate.day %}Change{% else %}Add{% endif %}</a></dd>
           </div>
-        
           {% endif %}
+
+
+          {% if currentCase.linkedCaseType  == "planning permission" %}
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Fee refund</dt>
+            <dd class="govuk-summary-list__value">N/A</dd>
+          </div>
+
+          {% else %}
 
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Fee refund</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.feeRefund | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.feeRefund %}Change{% else %}Add{% endif %}</a></dd>
           </div>
+          {% endif %}
+          
 
           {% if currentCase.feeRefund == "Yes" %}
-
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Fee refund paid date</dt>
             <dd class="govuk-summary-list__value">{{ feeRefundPaidDateHtml | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.feeRefundPaidDate.day %}Change{% else %}Add{% endif %}</a></dd>
           </div>
-
           {% endif %}
 
         </dl>

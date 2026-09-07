@@ -206,21 +206,19 @@
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Application type</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.applicationType | default('-') }}</dd>
-            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">{% if currentCase.applicationSubType %}{% else %}Change{% endif %}</a></dd>
           </div>
 
           {# CONDITIONAL SUB-TYPE ROW FOR LINKED CASES #}
           {% if currentCase.applicationSubType %}
-          <div class="govuk-summary-list__row">
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
             <dt class="govuk-summary-list__key">Application sub type</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.applicationSubType }}</dd>
-            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
           </div>
 
-          <div class="govuk-summary-list__row">
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
             <dt class="govuk-summary-list__key">Connected application</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.connectedApplication }}</dd>
-            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
           </div>
           {% endif %}
 
@@ -234,7 +232,7 @@
           {% endif %}
 
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Pre-application or application</dt>
+            <dt class="govuk-summary-list__key">Application phase</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.applicationStage | default('-') }}</dd>
             <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#"></a></dd>
           </div>
