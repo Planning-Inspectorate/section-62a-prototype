@@ -139,11 +139,14 @@
 
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Pre-application reference</dt>
+            
             <dd class="govuk-summary-list__value">
               {% if currentCase.preApplicationRequested == "Yes - PINS" %}
                 
                 {% if currentCase.preApplicationReferencePins %}
-                  {{ currentCase.preApplicationReferencePins }}
+                  <a class="govuk-link" href="/current-service/back-office/tab-view/01-overview?reference={{ currentCase.preApplicationReferencePins }}" rel="noreferrer noopener" target="_blank">
+                    {{ currentCase.preApplicationReferencePins }}
+                  </a>
                 {% else %}
                   <span class="govuk-hint">-</span>
                 {% endif %}
@@ -160,38 +163,23 @@
                 {{ '-' }}
               {% endif %} 
             </dd>
+            
             <dd class="govuk-summary-list__actions">
-  
               {% if currentCase.preApplicationRequested == "Yes - PINS" %}
                 
-                {% if currentCase.preApplicationReferencePins %}
-                  <ul class="govuk-summary-list__actions-list">
-                    <li class="govuk-summary-list__actions-list-item">
-                      <a class="govuk-link" href="/current-service/back-office/tab-view/01-overview?reference={{ currentCase.preApplicationReferencePins }}" rel="noreferrer noopener" target="_blank">
-                        View<span class="govuk-visually-hidden"> pre-application case {{ currentCase.preApplicationReferencePins }}</span>
-                      </a>
-                    </li>
-                    <li class="govuk-summary-list__actions-list-item">
-                      <a class="govuk-link" href="/pre-app-ref-pins-change">
-                        Change<span class="govuk-visually-hidden"> pre-application reference</span>
-                      </a>
-                    </li>
-                  </ul>
-                {% else %}
-                  <a class="govuk-link" href="/pre-app-ref-pins-change">
-                    Add<span class="govuk-visually-hidden"> pre-application reference</span>
-                  </a>
-                {% endif %}
+                <a class="govuk-link" href="/pre-app-ref-pins-change?reference={{ currentCase.reference }}">
+                  {% if currentCase.preApplicationReferencePins %}Change{% else %}Add{% endif %}
+                  <span class="govuk-visually-hidden"> pre-application reference</span>
+                </a>
 
               {% elif currentCase.preApplicationRequested == "Yes - Council" %}
                 
-                <a class="govuk-link" href="/pre-app-ref-council-change">
+                <a class="govuk-link" href="/pre-app-ref-council-change?reference={{ currentCase.reference }}">
                   {% if currentCase.preApplicationReferenceCouncil %}Change{% else %}Add{% endif %}
                   <span class="govuk-visually-hidden"> pre-application reference</span>
                 </a>
 
               {% endif %}
-
             </dd>
           </div>
         

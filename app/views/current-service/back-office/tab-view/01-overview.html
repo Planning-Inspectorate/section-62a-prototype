@@ -299,7 +299,7 @@
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Pre-application advice</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.preApplicationRequested }}</dd>
-            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="/pre-application-advice-requested-change">{% if currentCase.preApplicationRequested %}Change{% else %}Add{% endif %}</a></dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="/pre-application-advice-requested-change?reference={{ currentCase.reference }}">{% if currentCase.preApplicationRequested %}Change{% else %}Add{% endif %}</a></dd>
           {% endif %}
         </dl>
 
