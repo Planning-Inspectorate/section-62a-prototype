@@ -23,6 +23,7 @@
     </div>
 {% endblock %}
 
+
 {% block content %}
 
     <style>
@@ -68,37 +69,6 @@
         a { color: #1d70b8; }
         .grey-box { display: none; }
         .govuk-main-wrapper { padding-top: 0; }
-
-        .filter {
-            background-color: #f3f2f1;
-            padding: 8px;
-            border-radius: 5px;
-            margin-left: 10px;
-            border: 1px solid #505a5f;
-            text-decoration: none;
-            color: black;
-        }
-
-        .filters {
-            margin-bottom: 16px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid #b1b4b6;
-        }
-
-        .filters .govuk-details__text {
-            border: none;
-            padding-left: 0;
-        }
-
-        .filtersText {
-            text-decoration: none;
-            color: #000;
-            font-weight: 700;
-            font-size: 1.1875rem;
-        }
-
-        .filter:visited { color: black; }
-
         .govuk-header,
         .govuk-header__container {
             background-color: rgb(7, 71, 69);
@@ -162,7 +132,53 @@
             align-items: center;
             margin-top: 0.5rem;
         }
+
+          /* Front office filters dropdown */
+  .filters .govuk-details__summary::before {
+      clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+      width: 3px;
+      height: 3px;
+      border-color: inherit;
+      border-width: 8px 0 4px 12.124px;
+  }
+
+  .filters dl .govuk-details__summary::before {
+      background-color: black;
+      color: black;
+  }
+
+  dl .filters {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #b1b4b6;
+
+      .govuk-details__summary {
+          margin-left: 15px;
+      }
+
+      .govuk-details__text {
+          padding-left: 0px;
+          margin-left: 15px;
+      }
+  }
+
+  .filters .govuk-details__text {
+      border: none;
+      padding: 20px;
+  }
+
+  .filters .govuk-details__summary-text {
+      text-decoration: none;
+  }
+
+  .filters.govuk-details[open]>.govuk-details__summary::before {
+      clip-path: polygon(0% 71.88%, 49.5% 12.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 26.88%, 7.37% 79.29%);
+      width: 3px;
+      height: 3px;
+      border-color: inherit;
+  }
     </style>
+
 
     {# --- DISABLED DYNAMIC CODE ---
     {% set dynamicCasesCount = publishedCases | length %}
@@ -170,13 +186,87 @@
     -------------------------------- #}
 
     <main class="govuk-main-wrapper" id="main-content">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <h2 class="govuk-heading-l" style="margin-top: -40px;">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+
+                <h3 class="govuk-heading-l" style="margin-top: -40px;">
                     All applications
-                </h2>
+                </h3>
+         
+                <div id="search-hint" class="govuk-hint">
+                    To find a specific case, search by local authority, reference, first line of an address or postcode.</div>
+                <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center; margin-bottom: 0px;">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    <div style="position: relative; width: 100%;">
+                        <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
+                            style="margin-bottom: 0; width:100%; padding-right: 40px;">
+                        <button type="button" id="clear-search-icon" aria-label="Clear search" 
+                            style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; color: #505a5f; cursor: pointer; padding: 0;">
+                            &times;
+                        </button>
+                    </div>
+
+                    <button class="govuk-button" id="keyword-search-button" type="submit"
+                        style="margin-bottom: 0;">Search</button>
+                </form>
+
+    <details class="govuk-details filters" style="margin-top: 20px">
+          <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text filtersText">
+                  Filter applications
+              </span>
+          </summary>
+          <div class="govuk-details__text" style="background-color:#F3F2F1;">
+              
+              <!-- Removed the inner accordion and replaced with an accessible fieldset -->
+              <div class="govuk-form-group">
+                  <fieldset class="govuk-fieldset">
+                      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                          <h4 class="govuk-fieldset__heading">
+                              Local planning authority (LPA)
+                          </h4>
+                      </legend>
+                      
+                      <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                          
+                          <div class="govuk-checkboxes__item">
+                              <input class="govuk-checkboxes__input filter-checkbox" id="organisation" name="organisation"
+                                  type="checkbox" value="Bristol City Council">
+                              <label class="govuk-label govuk-checkboxes__label" for="organisation">
+                                  Bristol City Council 
+                                  <span class="filter-count" data-filter-lpa="Bristol City Council"></span>
+                              </label>
+                          </div>
+                          
+                          <div class="govuk-checkboxes__item">
+                              <input class="govuk-checkboxes__input filter-checkbox" id="organisation-2"
+                                  name="organisation" type="checkbox" value="St Albans City and District Council">
+                              <label class="govuk-label govuk-checkboxes__label" for="organisation-2">
+                                  St Albans City and District Council 
+                                  <span class="filter-count" data-filter-lpa="St Albans City and District Council"></span>
+                              </label>
+                          </div>
+
+                      </div>
+                  </fieldset>
+              </div>
+              
+              <button class="govuk-button" id="apply-filters-button" type="button" style="margin-top: 15px;">Apply filters</button>
+          </div>
+      </details>
+
+                    <div id="active-filters-section" class="active-filters" style="display: none;">
+                        <h3 class="govuk-heading-s">Active filters</h3>
+                        <div id="active-filters-list" class="active-filters__list"></div>
+                        <div class="clear-link">
+                            <p class="govuk-body">
+                                <a href="#" id="clear-filters-link" class="govuk-link">Clear filters</a>
+                            </p>
+                        </div>
+                    </div>
                 
-                <p class="govuk-body" id="results-count-text">
+                <p class="govuk-body" id="results-count-text" style="margin-top: 50px;">
                     Showing
                     <strong id="count-start">1</strong>
                     to
@@ -188,20 +278,25 @@
                 </p>
 
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-            </div>
 
-            <div class="govuk-grid-column-full">
+                <div id="no-results-message" style="display: none; margin-top: 20px;">
+                    <h3 class="govuk-heading-m">No results were found.</h3>
+                    <p class="govuk-body">
+                        <a href="#" id="clear-all-link" class="govuk-link">Clear search and filters</a> to view all applications.
+                    </p>
+                </div>
 
-                <div class="pins-table__container">
-                    <table class="govuk-table">
+                <div class="pins-table__container" style="overflow-x: auto" tabindex="0">
+                    <table class="govuk-table govuk-table--small-text-until-tablet">
                         <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
                             List of all published Section 62A applications
                         </caption>
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header" style="width: 15%;">Application reference</th>
-                                <th scope="col" class="govuk-table__header" style="width: 60%;">Applicant name</th>
-                                <th scope="col" class="govuk-table__header" style="width: 25%;">Local planning authority</th>
+                                <th scope="col" class="govuk-table__header" style="width: 30%;">Applicant name</th>
+                                <th scope="col" class="govuk-table__header" style="width: 30%;">Site address</th>
+                                <th scope="col" class="govuk-table__header" style="width: 25%;">LPA</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -246,10 +341,11 @@
                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
                                     <a class="govuk-link" href="#">
-                                        S62A/2026/0032
+                                        S62A/2026/0000032
                                     </a>
                                 </th>
                                 <td class="govuk-table__cell">Andy Merrick</td>
+                                <td class="govuk-table__cell">21 Thatcher Road, BS1 2JL</td>
                                 <td class="govuk-table__cell">Bristol City Council</td>
                             </tr>
 
@@ -260,22 +356,25 @@
                                     </a>
                                 </th>
                                 <td class="govuk-table__cell">Colin Franzmann</td>
+                                <td class="govuk-table__cell">1 Wheatfield Road, Harpenden, AL5 2NY</td>
                                 <td class="govuk-table__cell">St Albans City and District Council</td>
                             </tr>
 
                             <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
-                                    <a class="govuk-link" href="#">S62A/2026/0099</a>
+                                    <a class="govuk-link" href="#">S62A/2026/0000099</a>
                                 </th>
                                 <td class="govuk-table__cell">Sarah Jenkins</td>
+                                <td class="govuk-table__cell">45 Clifton Suspension Road, Bristol, BS8 4AA</td>
                                 <td class="govuk-table__cell">Bristol City Council</td>
                             </tr>
 
                             <tr class="govuk-table__row case-row" data-lpa="St Albans City and District Council">
                                 <th scope="row" class="govuk-table__header">
-                                    <a class="govuk-link" href="#">S62A/2026/0105</a>
+                                    <a class="govuk-link" href="#">S62A/2026/0000105</a>
                                 </th>
                                 <td class="govuk-table__cell">Marcus Aurelius</td>
+                                <td class="govuk-table__cell">9 Roman Way, St Albans, AL3 6PQ</td>
                                 <td class="govuk-table__cell">St Albans City and District Council</td>
                             </tr>
 
@@ -283,6 +382,211 @@
                     </table>
                 </div>
             </div>
-        </div>
+      
     </main>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const applyBtn = document.getElementById("apply-filters-button");
+        const clearBtn = document.getElementById("clear-filters-link");
+        const activeFiltersSection = document.getElementById("active-filters-section");
+        const activeFiltersList = document.getElementById("active-filters-list");
+        
+        // search elements
+        const searchInput = document.getElementById("keyword-search");
+        const searchBtn = document.getElementById("keyword-search-button");
+        const searchForm = searchBtn.closest("form"); // grab the form wrapping the search
+
+        // grab table rows and checkboxes
+        const rows = document.querySelectorAll(".case-row");
+        const checkboxes = document.querySelectorAll(".filter-checkbox");
+
+        const tableContainer = document.querySelector(".pins-table__container");
+        const noResultsMessage = document.getElementById("no-results-message");
+        
+        // pagination and counter (resultsCountText disabled for now and replaced with data for static cases)
+        const paginationContainer = document.querySelector(".govuk-pagination");
+        const resultsCountText = document.getElementById("results-count-text");
+
+        // calculate fake cases counter with filter and search
+        function calculateFilterCounts() {
+            const lpaCounts = {};
+
+            rows.forEach(row => {
+                let lpa = row.getAttribute("data-lpa");
+                if (lpa) {
+                    lpaCounts[lpa] = (lpaCounts[lpa] || 0) + 1;
+                }
+            });
+
+            const countSpans = document.querySelectorAll(".filter-count");
+            countSpans.forEach(span => {
+                let lpaToMatch = span.getAttribute("data-filter-lpa");
+                let total = lpaCounts[lpaToMatch] || 0;
+                span.innerText = `(${total})`;
+            });
+        }
+        calculateFilterCounts();
+
+        function applyFilters() {
+            let selectedLpas = Array.from(checkboxes)
+                                   .filter(cb => cb.checked)
+                                   .map(cb => cb.value);
+
+            let searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let rowLpa = row.getAttribute("data-lpa");
+                let rowText = row.textContent.toLowerCase(); 
+                
+                let matchesLpa = (selectedLpas.length === 0 || selectedLpas.includes(rowLpa));
+                let matchesSearch = (searchTerm === "" || rowText.includes(searchTerm));
+                
+                if (matchesLpa && matchesSearch) {
+                    row.style.display = ""; 
+                    visibleCount++;
+                } else {
+                    row.style.display = "none"; 
+                }
+            });
+
+            // Toggle the entire table, pagination, message, and results counter if empty
+            if (visibleCount === 0) {
+                tableContainer.style.display = "none";
+                noResultsMessage.style.display = "block";
+                
+                // hide the results text ("Showing 1 to X...")
+                if (resultsCountText) {
+                    resultsCountText.style.display = "none";
+                }
+                
+                // hide pagination if it exists
+                if (paginationContainer) {
+                    paginationContainer.style.display = "none";
+                }
+            } else {
+                tableContainer.style.display = "block";
+                noResultsMessage.style.display = "none";
+                
+                // show the results text again
+                if (resultsCountText) {
+                    resultsCountText.style.display = "block";
+                }
+                
+                // show pagination again if it exists
+                if (paginationContainer) {
+                    paginationContainer.style.display = "block";
+                }
+            }
+            updateActiveFilters(selectedLpas);
+            updateResultCount(visibleCount);
+        }
+
+        function updateActiveFilters(selectedLpas) {
+            // clear current tags
+            activeFiltersList.innerHTML = "";
+            
+            if (selectedLpas.length > 0) {
+                activeFiltersSection.style.display = "block";
+                
+                selectedLpas.forEach(lpa => {
+                    let tag = document.createElement("span");
+                    tag.className = "selected-filter-tag";
+                    tag.innerHTML = `${lpa} <button type="button" class="remove-filter-btn" data-value="${lpa}" style="margin-left:8px; border:none; background:transparent; font-weight:bold; cursor:pointer;" aria-label="Remove filter">&times;</button>`;
+                    activeFiltersList.appendChild(tag);
+                });
+            } else {
+                activeFiltersSection.style.display = "none";
+            }
+        }
+
+        function updateResultCount(count) {
+            const countStart = document.getElementById("count-start");
+            const countVisible = document.getElementById("count-visible");
+            
+            if (countStart && countVisible) {
+                countStart.innerText = count > 0 ? "1" : "0";
+                countVisible.innerText = count;
+            }
+        }
+
+        // search form submission
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault(); // stop page reload (only client side behaviour)
+                applyFilters();
+            });
+        }
+
+        // listen for clicking the 'x' on an active filter tag
+        activeFiltersList.addEventListener("click", function(e) {
+            if (e.target.classList.contains("remove-filter-btn")) {
+                let valueToRemove = e.target.getAttribute("data-value");
+                let cb = Array.from(checkboxes).find(c => c.value === valueToRemove);
+                if (cb) cb.checked = false;
+                applyFilters();
+            }
+        });
+
+        // listen for "Apply filters" button
+        if (applyBtn) {
+            applyBtn.addEventListener("click", function() {
+                applyFilters();
+                
+                const detailsContainer = applyBtn.closest('details');
+                if (detailsContainer) {
+                    detailsContainer.removeAttribute('open');
+                }
+            });
+        }
+
+        // listen for "Clear filters" link
+        if (clearBtn) {
+            clearBtn.addEventListener("click", function(e) {
+                e.preventDefault(); 
+                
+                checkboxes.forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
+
+        // clear search box icon logic ---
+        const clearSearchIcon = document.getElementById("clear-search-icon");
+
+        if (searchInput && clearSearchIcon) {
+            searchInput.addEventListener("input", function() {
+                if (searchInput.value.trim().length > 0) {
+                    clearSearchIcon.style.display = "block";
+                } else {
+                    clearSearchIcon.style.display = "none";
+                }
+            });
+            clearSearchIcon.addEventListener("click", function() {
+                searchInput.value = ""; // Empty the box
+                clearSearchIcon.style.display = "none";
+                searchInput.focus();
+                
+                applyFilters();
+            });
+        }
+
+        // listen for "Clear search and filters" inside the no results message ---
+        const clearAllLink = document.getElementById("clear-all-link");
+        
+        if (clearAllLink) {
+            clearAllLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                
+                if (searchInput) {
+                    searchInput.value = "";
+                }
+                checkboxes.forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
+    });
+</script>
 {% endblock %}
