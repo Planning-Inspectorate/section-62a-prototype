@@ -26,4 +26,46 @@ router.get('/current-service/back-office/tab-view/03-updates', function(req, res
   });
 });
 
+
+// specific route for publish button
+router.post('/publish-status-answer-03-updates', function (req, res) {
+  const foundCase = getCase(req);
+  // Safety check: kick to case list if case not found
+  if (!foundCase) {
+    return res.redirect('/current-service/back-office/cases');
+  }
+  // validation check
+  if (foundCase.publishStatus !== "Yes") {
+    
+    // check if first line of site address exists and isn't empty
+    const hasAddress = foundCase.siteAddress && 
+                       foundCase.siteAddress.postcode && 
+                       foundCase.siteAddress.postcode.trim() !== "";
+    
+    // check if both easting and northing exist and aren't empty
+    const hasCoords = foundCase.siteCoords && 
+                      foundCase.siteCoords.easting && foundCase.siteCoords.easting.trim() !== "" &&
+                      foundCase.siteCoords.northing && foundCase.siteCoords.northing.trim() !== "";
+
+    // block the publish if neither exists and re-render the page with an error
+    if (!hasAddress && !hasCoords) {
+      return res.render('current-service/back-office/tab-view/03-updates', {
+        currentCase: foundCase,
+        errorPublishValidation: "You must enter site coordinates or postcode within the site address"
+      });
+    }
+  }
+  
+  // flip the publish status and set a flash message for the banner
+  if (foundCase.publishStatus === "Yes") {
+    foundCase.publishStatus = "No";
+    req.session.data['flashMessage'] = "Application unpublished";
+  } else {
+    foundCase.publishStatus = "Yes";
+    req.session.data['flashMessage'] = "Application published";
+  }
+
+  res.redirect(`/current-service/back-office/tab-view/03-updates?reference=${foundCase.reference}`);
+});
+
 export default router;

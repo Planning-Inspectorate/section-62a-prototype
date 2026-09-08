@@ -152,6 +152,27 @@
     {% endif %}
     {# --- SUCCESS BANNER END --- #}
 
+
+    {# --- ERROR SUMMARY START --- #}
+    {% if errorPublishValidation %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errorPublishValidation,
+            href: "#01-overview"
+          }
+        ]
+      }) }}
+
+      </div>
+    </div>
+    {% endif %}
+    {# --- ERROR SUMMARY END --- #}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
     <h1 class="govuk-heading-l">
@@ -159,15 +180,36 @@
     </h1>
 
       <div class="govuk-button-group">
+
+      <form method="post" action="/current-service/back-office/manage-documents/main-folder" novalidate>
       {{ govukButton({
         text: "Manage documents",
-        classes: "govuk-button--secondary",
-        href: "/current-service/back-office/manage-documents/main-folder"
+        classes: "govuk-button--secondary"
       }) }}
+      </form>
 
-      {{ govukButton({
-        text: "Publish Application"
-      }) }}
+     {% if currentCase.applicationStage == "Application" %}
+        <form method="post" action="/publish-status-answer-01-overview?reference={{ currentCase.reference }}" novalidate>
+          
+          {% if currentCase.publishStatus == "Yes" %}
+            
+            {{ govukButton({
+              id: "publish-button",
+              text: "Unpublish application",
+              classes: "govuk-button--warning"
+            }) }}
+
+          {% else %}
+            
+            {{ govukButton({
+              id: "publish-button",
+              text: "Publish application"
+            }) }}
+
+          {% endif %}
+
+        </form>
+      {% endif %}
       </div>
 
   </div>
@@ -180,7 +222,7 @@
     
     {# OVERVIEW CARD #}
 
-        <dl class="govuk-summary-list">
+        <dl class="govuk-summary-list" id="01-overview">
           <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
             <dt class="govuk-summary-list__key">Case reference</dt>
             <dd class="govuk-summary-list__value">{{ currentCase.reference }}</dd>

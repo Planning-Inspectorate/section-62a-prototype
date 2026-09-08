@@ -62,7 +62,8 @@ export const cases = [
     ],
     "lastModified": "1 August 2026 at 9:00 am",
     "lastModifiedBy": "System",
-    "representations": []
+    "representations": [],
+    "publishStatus": "No"
   },
   {
       "reference": "S62A/2026/0000049/PRE",
@@ -145,6 +146,7 @@ export const cases = [
         "year": "2026"
       },
       "representations": [],
+      "publishStatus": "No",
       "auditLog": [
         {
           "date": "3 September 2026<br>10:00 am",

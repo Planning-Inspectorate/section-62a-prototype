@@ -26,6 +26,18 @@
 
 {% block content %}
 
+    {# --- CALCULATE TOTAL RESULTS --- #}
+    {% set publishedDynamicCount = 0 %}
+    {% if data.cases %}
+        {% for case in data.cases %}
+            {% if case.applicationStage == "Application" and case.publishStatus == "Yes" %}
+                {% set publishedDynamicCount = publishedDynamicCount + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% set totalCases = publishedDynamicCount + 4 %}
+    {# ------------------------------- #}
+
     <style>
         /* Tooltip text */
         #tooltiptext {
@@ -69,6 +81,7 @@
         a { color: #1d70b8; }
         .grey-box { display: none; }
         .govuk-main-wrapper { padding-top: 0; }
+        
         .govuk-header,
         .govuk-header__container {
             background-color: rgb(7, 71, 69);
@@ -133,57 +146,51 @@
             margin-top: 0.5rem;
         }
 
-          /* Front office filters dropdown */
-  .filters .govuk-details__summary::before {
-      clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
-      width: 3px;
-      height: 3px;
-      border-color: inherit;
-      border-width: 8px 0 4px 12.124px;
-  }
+        /* Front office filters dropdown */
+        .filters .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            width: 3px;
+            height: 3px;
+            border-color: inherit;
+            border-width: 8px 0 4px 12.124px;
+        }
 
-  .filters dl .govuk-details__summary::before {
-      background-color: black;
-      color: black;
-  }
+        .filters dl .govuk-details__summary::before {
+            background-color: black;
+            color: black;
+        }
 
-  dl .filters {
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #b1b4b6;
+        dl .filters {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #b1b4b6;
 
-      .govuk-details__summary {
-          margin-left: 15px;
-      }
+            .govuk-details__summary {
+                margin-left: 15px;
+            }
 
-      .govuk-details__text {
-          padding-left: 0px;
-          margin-left: 15px;
-      }
-  }
+            .govuk-details__text {
+                padding-left: 0px;
+                margin-left: 15px;
+            }
+        }
 
-  .filters .govuk-details__text {
-      border: none;
-      padding: 20px;
-  }
+        .filters .govuk-details__text {
+            border: none;
+            padding: 20px;
+        }
 
-  .filters .govuk-details__summary-text {
-      text-decoration: none;
-  }
+        .filters .govuk-details__summary-text {
+            text-decoration: none;
+        }
 
-  .filters.govuk-details[open]>.govuk-details__summary::before {
-      clip-path: polygon(0% 71.88%, 49.5% 12.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 26.88%, 7.37% 79.29%);
-      width: 3px;
-      height: 3px;
-      border-color: inherit;
-  }
+        .filters.govuk-details[open]>.govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 12.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 26.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+            border-color: inherit;
+        }
     </style>
-
-
-    {# --- DISABLED DYNAMIC CODE ---
-    {% set dynamicCasesCount = publishedCases | length %}
-    {% set totalCases = dynamicCasesCount %}
-    -------------------------------- #}
 
     <main class="govuk-main-wrapper" id="main-content">
 
@@ -195,7 +202,9 @@
                 </h3>
          
                 <div id="search-hint" class="govuk-hint">
-                    To find a specific case, search by local authority, reference, first line of an address or postcode.</div>
+                    To find a specific case, search by local authority, reference, first line of an address or postcode.
+                </div>
+                
                 <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center; margin-bottom: 0px;">
                     <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
                     <div style="position: relative; width: 100%;">
@@ -207,73 +216,53 @@
                         </button>
                     </div>
 
-                    <button class="govuk-button" id="keyword-search-button" type="submit"
-                        style="margin-bottom: 0;">Search</button>
+                    <button class="govuk-button" id="keyword-search-button" type="submit" style="margin-bottom: 0;">Search</button>
                 </form>
 
-    <details class="govuk-details filters" style="margin-top: 20px">
-          <summary class="govuk-details__summary">
-              <span class="govuk-details__summary-text filtersText">
-                  Filter applications
-              </span>
-          </summary>
-          <div class="govuk-details__text" style="background-color:#F3F2F1;">
-              
-              <!-- Removed the inner accordion and replaced with an accessible fieldset -->
-              <div class="govuk-form-group">
-                  <fieldset class="govuk-fieldset">
-                      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                          <h4 class="govuk-fieldset__heading">
-                              Local planning authority (LPA)
-                          </h4>
-                      </legend>
-                      
-                      <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                          
-                          <div class="govuk-checkboxes__item">
-                              <input class="govuk-checkboxes__input filter-checkbox" id="organisation" name="organisation"
-                                  type="checkbox" value="Bristol City Council">
-                              <label class="govuk-label govuk-checkboxes__label" for="organisation">
-                                  Bristol City Council 
-                                  <span class="filter-count" data-filter-lpa="Bristol City Council"></span>
-                              </label>
-                          </div>
-                          
-                          <div class="govuk-checkboxes__item">
-                              <input class="govuk-checkboxes__input filter-checkbox" id="organisation-2"
-                                  name="organisation" type="checkbox" value="St Albans City and District Council">
-                              <label class="govuk-label govuk-checkboxes__label" for="organisation-2">
-                                  St Albans City and District Council 
-                                  <span class="filter-count" data-filter-lpa="St Albans City and District Council"></span>
-                              </label>
-                          </div>
+                <details class="govuk-details filters" style="margin-top: 20px">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text filtersText">
+                            Filter applications
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text" style="background-color:#F3F2F1;">
+                        
+                        <div class="govuk-form-group">
+                            <fieldset class="govuk-fieldset">
+                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                                    <h4 class="govuk-fieldset__heading">
+                                        Local planning authority (LPA)
+                                    </h4>
+                                </legend>
+                                
+                                <!-- JS will inject the dynamic checkboxes in here -->
+                                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes" id="dynamic-lpa-checkboxes">
+                                </div>
 
-                      </div>
-                  </fieldset>
-              </div>
-              
-              <button class="govuk-button" id="apply-filters-button" type="button" style="margin-top: 15px;">Apply filters</button>
-          </div>
-      </details>
-
-                    <div id="active-filters-section" class="active-filters" style="display: none;">
-                        <h3 class="govuk-heading-s">Active filters</h3>
-                        <div id="active-filters-list" class="active-filters__list"></div>
-                        <div class="clear-link">
-                            <p class="govuk-body">
-                                <a href="#" id="clear-filters-link" class="govuk-link">Clear filters</a>
-                            </p>
+                            </fieldset>
                         </div>
+                        
+                        <button class="govuk-button" id="apply-filters-button" type="button" style="margin-top: 15px;">Apply filters</button>
                     </div>
+                </details>
+
+                <div id="active-filters-section" class="active-filters" style="display: none;">
+                    <h3 class="govuk-heading-s">Active filters</h3>
+                    <div id="active-filters-list" class="active-filters__list"></div>
+                    <div class="clear-link">
+                        <p class="govuk-body">
+                            <a href="#" id="clear-filters-link" class="govuk-link">Clear filters</a>
+                        </p>
+                    </div>
+                </div>
                 
                 <p class="govuk-body" id="results-count-text" style="margin-top: 50px;">
                     Showing
-                    <strong id="count-start">1</strong>
+                    <strong id="count-start">{% if totalCases > 0 %}1{% else %}0{% endif %}</strong>
                     to
-                    <strong id="count-visible">4</strong>
+                    <strong id="count-visible">{{ totalCases }}</strong>
                     of
-                    <strong id="count-total">4</strong>
-                    {# <strong>{{ totalCases }}</strong> #}
+                    <strong id="count-total">{{ totalCases }}</strong>
                     results
                 </p>
 
@@ -301,44 +290,54 @@
                         </thead>
                         <tbody class="govuk-table__body">
 
-                            {# --- DISABLED DYNAMIC LOOP ---
-                            {% if dynamicCasesCount > 0 %}
-                                {% for case in publishedCases | reverse %}
+                            {# --- DYNAMIC CASES LOGIC --- #}
+                            {% if data.cases and data.cases.length > 0 %}
+                                {% for case in data.cases | reverse %}
                                 
-                                    {% set displayApplicantName = "Not provided" %}
-
-                                    {% if case.hasAgent == "Yes" %}
-                                      {% if case.agentOrgName %}
-                                        {% set displayApplicantName = case.agentOrgName %}
-                                      {% elif case.agentContacts and case.agentContacts.length > 0 %}
-                                        {% set displayApplicantName = case.agentContacts[0].firstName + " " + case.agentContacts[0].lastName %}
-                                      {% endif %}
-                                    {% elif case.applicantOrgs and case.applicantOrgs.length > 0 %}
-                                      {% set displayApplicantName %}
-                                        {%- for org in case.applicantOrgs -%}
-                                          {{ org.orgName }}{% if not loop.last %}, {% endif %}
-                                        {%- endfor -%}
-                                      {% endset %}
-                                    {% elif case.applicantContacts and case.applicantContacts.length > 0 %}
-                                      {% set displayApplicantName = case.applicantContacts[0].firstName + " " + case.applicantContacts[0].lastName %}
-                                    {% endif %}   
-
-                                    <tr class="govuk-table__row">
-                                        <th scope="row" class="govuk-table__header">
-                                            <a class="govuk-link" href="application-information?reference={{ case.reference }}">
-                                                {{ case.reference | default('Reference not set') }}
-                                            </a>
-                                        </th>
-                                        <td class="govuk-table__cell">{{ displayApplicantName | safe }}</td>
-                                        <td class="govuk-table__cell">{{ case.lpa | default('Not provided') }}</td>
-                                    </tr>
+                                    {# Only show if it's an Application AND it has been published #}
+                                    {% if case.applicationStage == "Application" and case.publishStatus == "Yes" %}
                                     
+                                        {% set displayApplicantName = "Not provided" %}
+
+                                        {% if case.hasAgent == "Yes" %}
+                                          {% if case.agentOrgName %}
+                                            {% set displayApplicantName = case.agentOrgName %}
+                                          {% elif case.agentContacts and case.agentContacts.length > 0 %}
+                                            {% set displayApplicantName = case.agentContacts[0].firstName + " " + case.agentContacts[0].lastName %}
+                                          {% endif %}
+                                        {% elif case.applicantOrgs and case.applicantOrgs.length > 0 %}
+                                          {% set displayApplicantName %}
+                                            {%- for org in case.applicantOrgs -%}
+                                              {{ org.orgName }}{% if not loop.last %}, {% endif %}
+                                            {%- endfor -%}
+                                          {% endset %}
+                                        {% elif case.applicantContacts and case.applicantContacts.length > 0 %}
+                                          {% set displayApplicantName = case.applicantContacts[0].firstName + " " + case.applicantContacts[0].lastName %}
+                                        {% endif %}   
+                                        
+                                        {% set displayAddress = case.siteAddress.line1 %}
+                                        {% if case.siteAddress.postcode %}
+                                            {% set displayAddress = displayAddress + ", " + case.siteAddress.postcode %}
+                                        {% endif %}
+
+                                        <tr class="govuk-table__row case-row" data-lpa="{{ case.lpa }}">
+                                            <th scope="row" class="govuk-table__header">
+                                                <a class="govuk-link" href="application-information?reference={{ case.reference }}">
+                                                    {{ case.reference | default('Reference not set') }}
+                                                </a>
+                                            </th>
+                                            <td class="govuk-table__cell">{{ displayApplicantName | safe }}</td>
+                                            <td class="govuk-table__cell">{{ displayAddress | default('Not provided') }}</td>
+                                            <td class="govuk-table__cell">{{ case.lpa | default('Not provided') }}</td>
+                                        </tr>
+                                        
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
+                            {# --- END DYNAMIC CASES LOGIC --- #}
 
-                             -------------------------------- #}    
-
-                           <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                            {# --- STATIC CASES --- #}
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
                                     <a class="govuk-link" href="#">
                                         S62A/2026/0000032
@@ -382,7 +381,7 @@
                     </table>
                 </div>
             </div>
-      
+        </div>
     </main>
 {% endblock %}
 
@@ -397,39 +396,64 @@
         // search elements
         const searchInput = document.getElementById("keyword-search");
         const searchBtn = document.getElementById("keyword-search-button");
-        const searchForm = searchBtn.closest("form"); // grab the form wrapping the search
+        const searchForm = searchBtn.closest("form");
 
-        // grab table rows and checkboxes
+        // grab table rows
         const rows = document.querySelectorAll(".case-row");
-        const checkboxes = document.querySelectorAll(".filter-checkbox");
+        const checkboxContainer = document.getElementById("dynamic-lpa-checkboxes");
+        
+        // Use 'let' instead of 'const' because we will define the checkboxes AFTER we build them
+        let checkboxes; 
 
         const tableContainer = document.querySelector(".pins-table__container");
         const noResultsMessage = document.getElementById("no-results-message");
         
-        // pagination and counter (resultsCountText disabled for now and replaced with data for static cases)
         const paginationContainer = document.querySelector(".govuk-pagination");
         const resultsCountText = document.getElementById("results-count-text");
 
-        // calculate fake cases counter with filter and search
-        function calculateFilterCounts() {
+        // ---------------------------------------------------------
+        // Build checkboxes dynamically based on the table data
+        // ---------------------------------------------------------
+        function buildFilterCheckboxes() {
             const lpaCounts = {};
 
+            // 1. Tally up the LPAs from the table rows
             rows.forEach(row => {
                 let lpa = row.getAttribute("data-lpa");
-                if (lpa) {
+                if (lpa && lpa !== "Not provided") {
                     lpaCounts[lpa] = (lpaCounts[lpa] || 0) + 1;
                 }
             });
 
-            const countSpans = document.querySelectorAll(".filter-count");
-            countSpans.forEach(span => {
-                let lpaToMatch = span.getAttribute("data-filter-lpa");
-                let total = lpaCounts[lpaToMatch] || 0;
-                span.innerText = `(${total})`;
-            });
-        }
-        calculateFilterCounts();
+            // 2. Clear out the container just in case
+            checkboxContainer.innerHTML = "";
 
+            // 3. Sort them alphabetically and build the HTML
+            Object.keys(lpaCounts).sort().forEach((lpa, index) => {
+                const count = lpaCounts[lpa];
+                const id = "lpa-" + index;
+                
+                const item = document.createElement("div");
+                item.className = "govuk-checkboxes__item";
+                item.innerHTML = `
+                    <input class="govuk-checkboxes__input filter-checkbox" id="${id}" name="organisation" type="checkbox" value="${lpa}">
+                    <label class="govuk-label govuk-checkboxes__label" for="${id}">
+                        ${lpa} <span>(${count})</span>
+                    </label>
+                `;
+                checkboxContainer.appendChild(item);
+            });
+
+            // 4. Now that they exist in the DOM, grab them for the filtering logic
+            checkboxes = document.querySelectorAll(".filter-checkbox");
+        }
+        
+        // Run it immediately on page load!
+        buildFilterCheckboxes();
+
+        // ---------------------------------------------------------
+        // Filtering logic
+        // ---------------------------------------------------------
         function applyFilters() {
             let selectedLpas = Array.from(checkboxes)
                                    .filter(cb => cb.checked)
@@ -453,40 +477,23 @@
                 }
             });
 
-            // Toggle the entire table, pagination, message, and results counter if empty
             if (visibleCount === 0) {
                 tableContainer.style.display = "none";
                 noResultsMessage.style.display = "block";
-                
-                // hide the results text ("Showing 1 to X...")
-                if (resultsCountText) {
-                    resultsCountText.style.display = "none";
-                }
-                
-                // hide pagination if it exists
-                if (paginationContainer) {
-                    paginationContainer.style.display = "none";
-                }
+                if (resultsCountText) resultsCountText.style.display = "none";
+                if (paginationContainer) paginationContainer.style.display = "none";
             } else {
                 tableContainer.style.display = "block";
                 noResultsMessage.style.display = "none";
-                
-                // show the results text again
-                if (resultsCountText) {
-                    resultsCountText.style.display = "block";
-                }
-                
-                // show pagination again if it exists
-                if (paginationContainer) {
-                    paginationContainer.style.display = "block";
-                }
+                if (resultsCountText) resultsCountText.style.display = "block";
+                if (paginationContainer) paginationContainer.style.display = "block";
             }
+            
             updateActiveFilters(selectedLpas);
             updateResultCount(visibleCount);
         }
 
         function updateActiveFilters(selectedLpas) {
-            // clear current tags
             activeFiltersList.innerHTML = "";
             
             if (selectedLpas.length > 0) {
@@ -513,15 +520,13 @@
             }
         }
 
-        // search form submission
         if (searchForm) {
             searchForm.addEventListener("submit", function(e) {
-                e.preventDefault(); // stop page reload (only client side behaviour)
+                e.preventDefault();
                 applyFilters();
             });
         }
 
-        // listen for clicking the 'x' on an active filter tag
         activeFiltersList.addEventListener("click", function(e) {
             if (e.target.classList.contains("remove-filter-btn")) {
                 let valueToRemove = e.target.getAttribute("data-value");
@@ -531,11 +536,9 @@
             }
         });
 
-        // listen for "Apply filters" button
         if (applyBtn) {
             applyBtn.addEventListener("click", function() {
                 applyFilters();
-                
                 const detailsContainer = applyBtn.closest('details');
                 if (detailsContainer) {
                     detailsContainer.removeAttribute('open');
@@ -543,19 +546,15 @@
             });
         }
 
-        // listen for "Clear filters" link
         if (clearBtn) {
             clearBtn.addEventListener("click", function(e) {
                 e.preventDefault(); 
-                
                 checkboxes.forEach(cb => cb.checked = false);
                 applyFilters();
             });
         }
 
-        // clear search box icon logic ---
         const clearSearchIcon = document.getElementById("clear-search-icon");
-
         if (searchInput && clearSearchIcon) {
             searchInput.addEventListener("input", function() {
                 if (searchInput.value.trim().length > 0) {
@@ -565,24 +564,18 @@
                 }
             });
             clearSearchIcon.addEventListener("click", function() {
-                searchInput.value = ""; // Empty the box
+                searchInput.value = ""; 
                 clearSearchIcon.style.display = "none";
                 searchInput.focus();
-                
                 applyFilters();
             });
         }
 
-        // listen for "Clear search and filters" inside the no results message ---
         const clearAllLink = document.getElementById("clear-all-link");
-        
         if (clearAllLink) {
             clearAllLink.addEventListener("click", function(e) {
                 e.preventDefault();
-                
-                if (searchInput) {
-                    searchInput.value = "";
-                }
+                if (searchInput) searchInput.value = "";
                 checkboxes.forEach(cb => cb.checked = false);
                 applyFilters();
             });

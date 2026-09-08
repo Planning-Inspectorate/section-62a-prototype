@@ -60,6 +60,42 @@
 
     {% endif %}
 
+    {# --- SUCCESS BANNER START --- #}
+    {% if flashMessage %}
+      {% set bannerHtml %}
+        <h3 class="govuk-notification-banner__heading">
+          {{ flashMessage }}
+        </h3>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        type: "success",
+        html: bannerHtml
+      }) }}
+    {% endif %}
+    {# --- SUCCESS BANNER END --- #}
+
+
+    {# --- ERROR SUMMARY START --- #}
+    {% if errorPublishValidation %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errorPublishValidation,
+            href: "#"
+          }
+        ]
+      }) }}
+
+      </div>
+    </div>
+    {% endif %}
+    {# --- ERROR SUMMARY END --- #}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
     <h1 class="govuk-heading-l">
@@ -68,14 +104,35 @@
 
       <div class="govuk-button-group">
 
+      <form method="post" action="/current-service/back-office/manage-documents/main-folder" novalidate>
       {{ govukButton({
         text: "Manage documents",
         classes: "govuk-button--secondary"
       }) }}
+      </form>
 
-      {{ govukButton({
-        text: "Publish Application"
-      }) }}
+     {% if currentCase.applicationStage == "Application" %}
+        <form method="post" action="/publish-status-answer-13-residential?reference={{ currentCase.reference }}" novalidate>
+          
+          {% if currentCase.publishStatus == "Yes" %}
+            
+            {{ govukButton({
+              id: "publish-button",
+              text: "Unpublish application",
+              classes: "govuk-button--warning"
+            }) }}
+
+          {% else %}
+            
+            {{ govukButton({
+              id: "publish-button",
+              text: "Publish application"
+            }) }}
+
+          {% endif %}
+
+        </form>
+      {% endif %}
       </div>
 
   </div>

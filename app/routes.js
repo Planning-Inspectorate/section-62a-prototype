@@ -38,6 +38,9 @@ import editRepresentationRouter from './bo-routes/manage-representations/edit-re
 import viewRepresentationRouter from './bo-routes/manage-representations/view-representation.js';
 import withdrawReinstateRepresentationRouter from './bo-routes/manage-representations/withdraw-reinstate-representation.js';
 
+// import manage documents bo-routers
+import manageDocumentsRouter from './bo-routes/manage-documents/main-folder.js';
+
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
 import allApplicationsRouter from './fo-routes/all-applications.js';
@@ -105,6 +108,9 @@ router.use('/', reviewRepresentationRouter);
 router.use('/', editRepresentationRouter);
 router.use('/', viewRepresentationRouter);
 router.use('/', withdrawReinstateRepresentationRouter);
+
+// mount manage documents bo-routers
+router.use('/', manageDocumentsRouter);
 
 
 // mount fo-routers

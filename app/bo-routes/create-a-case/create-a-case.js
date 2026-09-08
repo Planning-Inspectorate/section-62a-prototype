@@ -1137,7 +1137,8 @@ router.post('/case-created-confirmation', function (req, res) {
       month: data['expected-submission-date-month'],
       year: data['expected-submission-date-year']
     },
-    representations: []
+    representations: [],
+    publishStatus: "No"
   };
 
   // 4. check for Linked Case condition (Only applies to 'Application' stage)

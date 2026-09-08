@@ -50,7 +50,7 @@
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
     
       <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
-        S62A/2026/0000001
+        {{ currentCase.reference | default('Case Not Found') }}
       </h1>
 
     <form id="search-bar-form" action="" method="GET" data-cy="search-form">
@@ -92,10 +92,13 @@
                href="/current-service/back-office/manage-documents/file-view-2">
               Working documents
             </a>
-            <a class="govuk-link govuk-heading-s govuk-link--no-visited-state" 
-               href="#">
-              Pre-application advice
-            </a>
+
+            {% if currentCase.preApplicationRequested in ["Yes - PINS", "Yes - Council"] %}
+              <a class="govuk-link govuk-heading-s govuk-link--no-visited-state" 
+                 href="#">
+                Pre-application advice
+              </a>
+            {% endif %}
           </div>
 
     </div>
