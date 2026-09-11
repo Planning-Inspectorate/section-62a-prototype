@@ -1,0 +1,56 @@
+
+<style>
+        /* floating panel */
+
+        .floating-panel {
+            position: fixed;
+            top: 100px;
+            left: 40px;
+            width: 150px;
+            background: #f3f2f1;
+            border: 1px solid #b1b4b6;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px 16px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: 'Helvetica', Helvetica, Arial, sans-serif;
+        }
+
+        .floating-panel h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .govuk-details__summary {
+            width: 96%;
+        }
+
+        .pins-modded-summary-full-width {
+            margin: 10px 0;
+        }
+
+        .floating-panel .govuk-button {
+            width: 100%;
+            margin-bottom: 0;
+        }
+    </style>
+
+<div class="floating-panel">
+
+<h3 class="govuk-heading-m">Demo documents</h3>
+
+<a href="/current-service/front-office/demo/planning-application-notice" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Planning application notice</a>
+<a href="/current-service/front-office/demo/stat-consultee-comment" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Stat consultee to comment</a>
+<a href="/current-service/front-office/demo/written-rep-received" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Written representation received</a>
+
+<h3 class="govuk-heading-m">Prototype home</h3>
+<a href="/current-service/front-office/all-applications" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Back to front office</a>
+
+</div>
+
+<iframe src="/public/files/planning-application-notice.pdf" width="100%" height="100%"></iframe>

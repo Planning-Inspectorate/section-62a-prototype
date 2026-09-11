@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2025/0138 - Application information - Find a Section 62A application
+  S62A/2026/0000105 - Application information - Find a Section 62A application
 {% endblock %}
 
 {% block content %}
@@ -41,6 +41,9 @@
 
     .pins-modded-summary-full-width {
         margin: 10px 0;
+    }
+    .govuk-list .govuk-list--bullet {
+        text-indent: 50px;
     }
 
     /* ========================================================= */
@@ -137,16 +140,17 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/app-info" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/documents">Documents</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/documents">Documents</a>
+                </li>
+             
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/application-updates">Application updates</a>
-                </li>
-                <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/written-representations">Written representations</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/written-representations">Written representations (Comments and feedback)</a>
                 </li>
             </ul>
         </nav>
@@ -154,34 +158,8 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title"
-            data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
-            <div class="govuk-notification-banner__header">
-                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                    Important
-                </h2>
-            </div>
-            <div class="govuk-notification-banner__content">
-
-                <p class="govuk-notification-banner__heading">
-                    Latest update — 14 Jan 2025
-
-                </p>
-                <p>
-                    Decision issued - available to view under the application information tab
-                </p>
-                <p>
-                    <a href="/current-service/front-office/testing/s62a-2025-0138/application-updates">
-                        View all updates
-                    </a>
-                </p>
-
-            </div>
-        </div>
-
-
-        <span class="govuk-caption-xl">S62A/2025/0138</span>
-       <h1 class="govuk-heading-xl">Application information</h1>
+        <span class="govuk-caption-xl">S62A/2026/0000105</span>
+        <h1 class="govuk-heading-xl">Application information</h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
         
@@ -193,18 +171,17 @@
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant name</dt>
-            <dd class="govuk-summary-list__value">Bristol Design Properties Ltd</dd>
+            <dd class="govuk-summary-list__value">Marcus Aurelius</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
-            <dd class="govuk-summary-list__value">26 Sturdon Road, Bristol, Bristol, BS3 2BA</dd>
+            <dd class="govuk-summary-list__value">9 Roman Way, St Albans, AL3 6PQ</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Description of the proposed development</dt>
-            <dd class="govuk-summary-list__value">Change of use from a dwellinghouse used by a single person or household (Use Class C3a) to a small dwellinghouse in multiple occupation (Use Class C4), 
-                                                including the erection of a cycle and refuse/recycling stores.</dd>
+            <dd class="govuk-summary-list__value">Demolition of existing 4 bedroom house and outbuildings. Construction of replacement 4 bedroom house and double garage</dd>
           </div>
           
           <div class="govuk-summary-list__row">
@@ -226,36 +203,30 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Date application valid" }, value: { text: "20 November 2025" } },
-            { key: { text: "Date by when representations must be made" }, value: { text: "30 December 2025" } },
-            { key: { text: "Target decision" }, value: { text: "15 January 2026" } },
-            { key: { text: "Decision date" }, value: { text: "14 January 2026" } }
+            { key: { text: "Date application valid" }, value: { text: "12 September 2026" } },
+            { key: { text: "Date by when representations must be made" }, value: { text: "22 November 2026" } }
           ]
         }) }}
 
-         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
-
-        <h2 class="govuk-heading-m">Decision</h2>
-
-        <ul class="govuk-list govuk-list--bullet">
-                 <li><a class="govuk-link" href="#">Decision Notice and Statement of Reasons</a> (PDF, 180 KB, 11 pages)</li>
-        </ul>
-
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
-        <h2 class="govuk-heading-m">Make a representation</h2>
+        <h2 class="govuk-heading-m">Have your say</h2>
 
-        <p class="govuk-body">The written representations period has ended.</p>
-        <p class="govuk-body">You can <a href="/current-service/front-office/testing/s62a-2025-0138/written-representations">view the written representations </a>for this application.</p>
+        <p class="govuk-body">
+            The representation period for this application has closed.
+        </p>
+        <p class="govuk-body">
+            You'll be able to view the representations after a publish date has been set.
+        </p>
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
-        <h2 class="govuk-heading-m">Application stage</h2>
-        <p class="govuk-body">This application is at the <strong>post decision</strong> stage.</p>
+        <h2 class="govuk-heading-m">Application stages</h2>
+        <p class="govuk-body">This application is at the <strong>procedure decision</strong> stage.</p>
 
         <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
             <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
@@ -272,7 +243,7 @@
                 <div class="govuk-details__text">
                     <p>The pre-application process for Section 62A applications is handled by the Planning Inspectorate.</p>
                     <p>The applicant sends the notice of intent to PINS with information on:</p>
-                    <ul class="govuk-list govuk-list--bullet">
+                    <ul>
                         <li>who the applicant is</li>
                         <li>the site address</li>
                         <li>the size of the development</li>
@@ -319,26 +290,28 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The relevant Local Planning Authority (LPA) publicises the fact that a Section 62A application
-                        application has been made. The LPA notifies anyone who has been consulted.</p>
-                    <p>The Planning Inspectorate (PINS) accepts written representations from statutory consultees and
-                        other interested parties.</p>
-                    <p>The time limit for submitting written representations is no less than 21 days from the date the
-                        application is accepted. Any representations submitted after this date may not be taken into
-                        account.</p>
+                    <p>The Planning Inspectorate:</p>
+                <ul>
+                    <li>publishes the application documents on a dedicated web page</li>
+                    <li>carries out any required consultations</li>
+                    <li>may place a press notice</li>
+                </ul>
+                    <p>The relevant local planning authority displays a site notice and notifies any adjoining owner or occupier if needed.</p>
+                    <p>Statutory consultees and other interested parties can send written representations to the Planning Inspectorate.</p>
+                    <p>Written representations must be sent no less than 21 days from the date the application is accepted. Written representations submitted after this date may not be considered.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
         </div>
 
         <div id="project-stage-procedure-decision">
-            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Procedure decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In progress</strong>
                             </div>
                         </div>
                     </div>
@@ -351,7 +324,7 @@
                         at any point before the decision is issued.</p>
                     <p>The planning inspector will determine how the application should proceed. The possible procedures
                         are:</p>
-                    <ul class="govuk-list govuk-list--bullet">
+                    <ul>
                         <li>written representations</li>
                         <li>hearing</li>
                     </ul>
@@ -369,7 +342,7 @@
                         <div class="summary-content">
                             <span>Reporting and decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
                             </div>
                         </div>
                     </div>
@@ -391,7 +364,7 @@
                         <div class="summary-content">
                             <span>Post-decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
                             </div>
                         </div>
                     </div>
@@ -408,14 +381,17 @@
 
         <br>
         <p class="govuk-body">Get more
-            <a class="govuk-link" href="https://www.gov.uk/guidance/planning-applications-s62a">information about
-                Section 62A applications</a>.
+            <a class="govuk-link" href="https://www.gov.uk/guidance/planning-applications-s62a" rel="noreferrer noopener" target="_blank">information about
+                Section 62A applications (opens in new tab)</a>.
         </p>
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+        <h2 class="govuk-heading-m">Give us feedback</h2>
+
+        <p class="govuk-body">Help us improve this service by <a href="#" class="govuk-link">sharing your feedback</a>.</p>
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
         <h2 class="govuk-heading-m">Contact us</h2>
 
@@ -438,7 +414,7 @@
                 </p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
-                <p class="govuk-body">When writing an email, quote the application reference number S62A/2024/0048 in the subject line.</p>
+                <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
                 <p class="govuk-body">
                     <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
                 </p>
@@ -463,8 +439,9 @@
         </details>
 
         <h3 class="govuk-heading-s">Alternative formats</h3>
-        <p class="govuk-body">Call or email to ask for project documents in alternative formats such as PDF, large
-            print, easy read, audio recording or braille. 
+        <p class="govuk-body">
+            Call or email us if you cannot use a document in the format we've published.
+        </p>
     </div>
 </div>
 

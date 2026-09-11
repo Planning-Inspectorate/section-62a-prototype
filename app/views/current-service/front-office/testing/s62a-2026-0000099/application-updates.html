@@ -1,0 +1,79 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0000099 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/documents">Documents</a>
+                </li>
+   
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/application-updates" aria-current="location">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/written-representations">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+   <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-l">S62A/2026/0000099</span>
+      <h1 class="govuk-heading-l">Application updates</h1>
+
+      <!--timeline starts here -->
+
+<div class="moj-timeline">
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">24 October 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      Representation period has been set to start on 1 November 2026 at 00:00 and end on 22 November 2026 at 23:59.
+    </div>
+  </div>
+
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">19 October 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      First published.
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+  {% endblock %}

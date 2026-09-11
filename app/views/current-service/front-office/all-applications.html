@@ -17,6 +17,10 @@
                     <p style="color:white" class="govuk-body pins-info-body">
                         These applications have been made directly to the Planning Inspectorate instead of a Local Planning Authority (LPA) under a rule called <a href="https://www.gov.uk/guidance/planning-applications-s62a" class="govuk-link govuk-link--inverse" rel="noreferrer noopener" target="_blank">Section 62A (opens in new tab)</a>.
                     </p>
+
+                    <p style="color:white" class="govuk-body pins-info-body">
+                       To view applications submitted before 2026, <a href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures" class="govuk-link govuk-link--inverse">search and view planning applications</a> on the legacy gov.uk service.
+                    </p>
                 </div>
             </div>
         </div>
@@ -35,7 +39,7 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    {% set totalCases = publishedDynamicCount + 4 %}
+    {% set totalCases = publishedDynamicCount + 5 %}
     {# ------------------------------- #}
 
     <style>
@@ -337,14 +341,15 @@
                             {# --- END DYNAMIC CASES LOGIC --- #}
 
                             {# --- STATIC CASES --- #}
+
                             <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
-                                    <a class="govuk-link" href="#">
-                                        S62A/2026/0000032
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000099/app-info">
+                                        S62A/2026/0000099
                                     </a>
                                 </th>
-                                <td class="govuk-table__cell">Andy Merrick</td>
-                                <td class="govuk-table__cell">21 Thatcher Road, BS1 2JL</td>
+                                <td class="govuk-table__cell">Sarah Jenkins</td>
+                                <td class="govuk-table__cell">45 Clifton Suspension Road, Bristol, BS8 4AA</td>
                                 <td class="govuk-table__cell">Bristol City Council</td>
                             </tr>
 
@@ -359,22 +364,59 @@
                                 <td class="govuk-table__cell">St Albans City and District Council</td>
                             </tr>
 
-                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                            <!--<tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
-                                    <a class="govuk-link" href="#">S62A/2026/0000099</a>
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000032/app-info">
+                                        S62A/2026/0000032
+                                    </a>
                                 </th>
-                                <td class="govuk-table__cell">Sarah Jenkins</td>
-                                <td class="govuk-table__cell">45 Clifton Suspension Road, Bristol, BS8 4AA</td>
+                                <td class="govuk-table__cell">Bristol Design Properties Ltd</td>
+                                <td class="govuk-table__cell">26 Sturdon Road, Bristol, Bristol, BS3 2BA</td>
                                 <td class="govuk-table__cell">Bristol City Council</td>
-                            </tr>
+                            </tr>-->
 
-                            <tr class="govuk-table__row case-row" data-lpa="St Albans City and District Council">
+                            <!--<tr class="govuk-table__row case-row" data-lpa="St Albans City and District Council">
                                 <th scope="row" class="govuk-table__header">
-                                    <a class="govuk-link" href="#">S62A/2026/0000105</a>
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000105/app-info">
+                                        S62A/2026/0000105
+                                    </a>
                                 </th>
                                 <td class="govuk-table__cell">Marcus Aurelius</td>
                                 <td class="govuk-table__cell">9 Roman Way, St Albans, AL3 6PQ</td>
                                 <td class="govuk-table__cell">St Albans City and District Council</td>
+                            </tr>-->
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000222/app-info">
+                                        S62A/2026/0000222
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">J Adams, Fairholm Bristol Ltd</td>
+                                <td class="govuk-table__cell">61 Cotmans Walk, Lockleaze, Bristol, BS7 9UG</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000342/app-info">
+                                        S62A/2026/0000342
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">M Lazo</td>
+                                <td class="govuk-table__cell">Ground Floor Flat, 6 Gordon Road, Clifton, Bristol, BS8 1AP</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000417/app-info">
+                                        S62A/2026/0000417
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Martin Thomas</td>
+                                <td class="govuk-table__cell">Land on South West side of Strathmore Road, Horfield, Bristol, BS7 9QQ</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
                             </tr>
 
                         </tbody>

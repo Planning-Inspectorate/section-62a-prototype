@@ -1,0 +1,185 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0000105 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+
+    /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 97%;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 97%;
+            margin-bottom: 15px !important; /* Preserves your custom spacing */
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 97%;
+            padding: 15px !important; /* Preserves your custom padding */
+            font-size: 19px !important; /* Preserves your custom font size */
+            color: #1d70b8 !important; /* Standard GOV.UK blue for inactive links */
+            box-shadow: none !important; /* Clears any legacy bottom lines */
+            border: none !important;
+        }
+
+        /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; /* Teal line on the left */
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; /* Grey line on the left */
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+    }
+
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/documents" aria-current="location">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/application-updates">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000105/written-representations">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+   <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-l">S62A/2026/0000105</span>
+      <h1 class="govuk-heading-l">Application updates</h1>
+
+      <!--timeline starts here -->
+
+<div class="moj-timeline">
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">4 October 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      correction to site address - 9 Roman Way, St Albans, AL3 6PQ
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">30 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      Historic Environment Adviser
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">29 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      Applicant email and schedule of accommodation<br>
+      6 Interested party representations<br>
+      4 Consultee representations
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">20 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      2 Consultees<br>
+      Date by when representations must be made updated to 20 September 2026
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">19 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      Screening direction
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">19 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      23 documents added under Consultees
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">19 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      Design and Access and Justification Statement July 2026 Part 2 of 2<br>
+      Desk Study Report June 2026 Appendix A - Site Walkover Photos<br>
+      Questionnaire & supporting documents added
+    </div>
+  </div>
+
+  <div class="moj-timeline__item">
+    <div class="moj-timeline__header">
+      <h2 class="moj-timeline__title">12 September 2026</h2>
+    </div>
+    <div class="moj-timeline__description">
+      First published.
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+  {% endblock %}

@@ -1,0 +1,203 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2024/0057 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+    /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 97%;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 97%;
+            margin-bottom: 15px !important; /* Preserves your custom spacing */
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 97%;
+            padding: 15px !important; /* Preserves your custom padding */
+            font-size: 19px !important; /* Preserves your custom font size */
+            color: #1d70b8 !important; /* Standard GOV.UK blue for inactive links */
+            box-shadow: none !important; /* Clears any legacy bottom lines */
+            border: none !important;
+        }
+
+        /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; /* Teal line on the left */
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; /* Grey line on the left */
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/documents" aria-current="location">Documents</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/hys">Have your say</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/application-updates">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2024-0057/written-representations">Written representations</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">S62A/2024/0057</span>
+        <h1 class="govuk-heading-l">
+            Have your say on a Section 62A application
+        </h1>
+
+        <p> Use this service to submit a written representation with your views on the proposed development. A written
+            representation includes your comment and any supporting documents.
+        <p>You can:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>make a comment as an individual, organisation or agent</li>
+
+            <li>upload supporting documents (optional)</li>
+        </ul>
+
+        <p>Your comment and any supporting documents will be:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>published on this website along with your name, and the name of your organisation where applicable</li>
+
+            <li>considered by the Planning Inspectors before a decision is made on the application</li>
+        </ul>
+
+        <p>You must submit your comment and any supporting documents by 11:59pm on 12 December 2027.</p>
+
+        {% from "govuk/components/button/macro.njk" import govukButton %}
+
+        <a href="#" class="govuk-button govuk-button--start">Start now<svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+  </svg></a>
+
+
+         {% set details %}
+        <p> At the Planning Inspectorate, we value your privacy. This statement outlines how we process your personal
+            data.</p>
+
+        <p>
+            When you submit a written representation on a Section 62A application, we’ll ask for your
+            name and email address.
+
+        </p>
+
+        <p>Your name and written representation will be published on the <a
+                href="#">Find a Section 62A
+                application service</a>. We will only use your email address to communicate with you about your
+            submission and will not use your data for any other, unrelated purpose. </p>
+
+        <p>We’ll process all of your data in line with our legal obligation under The Town and Country Planning (Section 62A
+            Applications) (Procedure and Written Representations) Order 2025</a>.
+
+        <p> You can read full details of how we process your data in our <a
+                href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice">GOV.UK
+                Customer Privacy Notice</a></p>
+
+
+        <p>You have the right to access and correct your data. To do this, contact the Planning Inspectorate Senior Data
+            Protection Manager at <a
+                href="#">dataprotection@planninginspectorate.gov.uk.</a>
+        </p>
+
+
+        {% endset %}
+
+
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">S62A/2024/0000001</span>
+        <h1 class="govuk-heading-l">
+            Have your say on a Section 62A application
+        </h1>
+
+        <p> Use this service to submit a written representation with your views on the proposed development. A written
+            representation includes your comment and any supporting documents.
+        <p>Your comment and any supporting documents will be:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>published on this website along with your name (and the name of your organisation if applicable)</li>
+
+            <li>considered by the Planning Inspectors before a decision is made on the application</li>
+        </ul>
+
+        <h2 class="govuk-heading-m">
+            Use of automated or generative tools 
+        </h2>
+
+        <p class="govuk-body">
+            You may use drafting tools or software to help prepare your text and supporting documents. However, as the submitter, you remain responsible for the integrity of all submitted evidence.
+        </p>
+
+
+        {{ govukDetails({
+        summaryText: "How we process your data",
+        html: details
+        }) }}
+
+
+        {% from "govuk/components/button/macro.njk" import govukButton %}
+
+         {{ govukInsetText({
+            text: "You must submit your comment and any supporting documents by 11:59pm on 12 December 2027."
+        }) }}
+
+        <a href="#" class="govuk-button govuk-button--start">Start now<svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+  </svg></a>
+
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,451 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0000099 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+{# ========================================================= #}
+{# CUSTOM STYLES                                             #}
+{# ========================================================= #}
+
+<style>
+    .govuk-task-list__summary-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100% !important;
+    }
+
+    .govuk-task-list__name {
+        margin: 0;
+    }
+
+    .govuk-task-list__accordion {
+        margin-bottom: 0;
+        padding: 0.5em 0;
+        border-bottom: none;
+    }
+
+    .summary-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .govuk-details__summary {
+        width: 96%;
+    }
+
+    .pins-modded-summary-full-width {
+        margin: 10px 0;
+    }
+    .govuk-list .govuk-list--bullet {
+        text-indent: 50px;
+    }
+
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+
+    /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 97%;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 97%;
+            margin-bottom: 15px !important; /* Preserves your custom spacing */
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 97%;
+            padding: 15px !important; /* Preserves your custom padding */
+            font-size: 19px !important; /* Preserves your custom font size */
+            color: #1d70b8 !important; /* Standard GOV.UK blue for inactive links */
+            box-shadow: none !important; /* Clears any legacy bottom lines */
+            border: none !important;
+        }
+
+        /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; /* Teal line on the left */
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; /* Grey line on the left */
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+    }
+
+    /* ========================================================= */
+    /* APPLICATION STAGE STATUS TAG STYLING                      */
+    /* ========================================================= */
+    
+   /* 1. Make the summary container span the full width */
+    .pins-modded-summary-full-width .govuk-details__summary {
+        display: flex;
+        justify-content: space-between; /* Pushes the tag to the far right */
+        align-items: center;
+        width: 100%; 
+        box-sizing: border-box; /* Ensures padding doesn't break the 100% width */
+        padding-right: 0; 
+    }
+
+    /* 2. Allow the text to take up the remaining space without forcing a width */
+    .pins-modded-summary-full-width .govuk-details__summary-text {
+        display: block;
+        flex-grow: 1; 
+        /* Remove the width: 93% from here completely */
+    }
+</style>
+
+{# ========================================================= #}
+{# PAGE CONTENT                                              #}
+{# ========================================================= #}
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/app-info" aria-current="location">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/documents">Documents</a>
+                </li>
+              
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/application-updates">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000099/written-representations">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+
+        <span class="govuk-caption-xl">S62A/2026/0000099</span>
+        <h1 class="govuk-heading-xl">Application information</h1>
+
+        <h2 class="govuk-heading-m">About this application</h2>
+        
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Type of application</dt>
+            <dd class="govuk-summary-list__value">Full Planning Application</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Applicant name</dt>
+            <dd class="govuk-summary-list__value">Sarah Jenkins</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Site address</dt>
+            <dd class="govuk-summary-list__value">45 Clifton Suspension Road, Bristol, BS8 4AA</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Description of the proposed development</dt>
+            <dd class="govuk-summary-list__value">Change of ground floor from Class E to 1no. residential flat, including removal of shopfront, partial demolition of rear extension, and erection of a ground floor rear extension.</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Case officer</dt>
+            <dd class="govuk-summary-list__value">Section 62A Applications Team</dd>
+          </div>
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Procedure</dt>
+            <dd class="govuk-summary-list__value">Written Representations</dd>
+          </div>
+        </dl>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+
+        <h2 class="govuk-heading-m">Key dates</h2>
+
+        {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+        {{ govukSummaryList({
+          rows: [
+            { key: { text: "Date application valid" }, value: { text: "19 October 2026" } },
+            { key: { text: "Date by when representations must be made" }, value: { text: "22 November 2026" } }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
+
+        <h2 class="govuk-heading-m">Have your say</h2>
+
+        <p class="govuk-body">
+            You can use this service to have your say on this application when the representation period opens from:
+        </p>
+        <p class="govuk-body">
+            1 Nov 2026 00:00 - 22 Nov 2026 23:59.
+        </p>
+        <p class="govuk-body">
+            We'll ask for your personal details and your comments about this application.
+        </p>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+
+        <h2 class="govuk-heading-m">Application stages</h2>
+        <p class="govuk-body">This application is at the <strong>accepted</strong> stage.</p>
+
+        <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Pre-application</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The pre-application process for Section 62A applications is handled by the Planning Inspectorate.</p>
+                    <p>The applicant sends the notice of intent to PINS with information on:</p>
+                    <ul>
+                        <li>who the applicant is</li>
+                        <li>the site address</li>
+                        <li>the size of the development</li>
+                        <li>expected submission date</li>
+                        <li>Listed Building Consent status</li>
+                        <li>and any likely issues with the development</li>
+                    </ul>
+                    <p>These will be addressed in the application submission.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-acceptance">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Accepted</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In progress</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">The Planning Inspectorate (PINS) checks that the application is complete. For
+                        example, that the right documents and fees have been added.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-consultation">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Consultation</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The Planning Inspectorate:</p>
+                <ul>
+                    <li>publishes the application documents on a dedicated web page</li>
+                    <li>carries out any required consultations</li>
+                    <li>may place a press notice</li>
+                </ul>
+                    <p>The relevant local planning authority displays a site notice and notifies any adjoining owner or occupier if needed.</p>
+                    <p>Statutory consultees and other interested parties can send written representations to the Planning Inspectorate.</p>
+                    <p>Written representations must be sent no less than 21 days from the date the application is accepted. Written representations submitted after this date may not be considered.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-procedure-decision">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Procedure decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The procedure is the method of decision process the Planning Inspectorate will use to make a
+                        decision about the proposed development.</p>
+                    <p>The Planning Inspectorate will keep the procedure choice, including combined procedures, 
+                        under review. Subject to any notification and procedural requirement, the procedure may be changed 
+                        at any point before the decision is issued.</p>
+                    <p>The planning inspector will determine how the application should proceed. The possible procedures
+                        are:</p>
+                    <ul>
+                        <li>written representations</li>
+                        <li>hearing</li>
+                    </ul>
+                    <p>The decision will be communicated to the applicant, relevant Local Planning Authority (LPA) and
+                        anyone who submitted comments during the representations period.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-reporting">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Reporting and decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>The inspector uses the evidence to write a decision report about the outcome of the application.</p>
+                    <p>The Planning Inspectorate (PINS) issues a formal decision notice including a statement with the
+                        reasons for the decision.</p>
+                    <p>If the application is approved, the decision will also list any necessary conditions.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-post-decision">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Post-decision</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>Where permission has been granted on a Section 62A application, the Local Planning
+                        Authority (LPA) is responsible for monitoring the implementation of the permission. The LPA must
+                        ensure that it is carried out in accordance with the plans and any planning conditions.</p>
+                    <p>To challenge a decision on a Section 62A application, an application must be made to the
+                        High Court. This must be made within 6 weeks of the day the decision is issued.</p>
+                </div>
+            </details>
+        </div>
+
+        <br>
+        <p class="govuk-body">Get more
+            <a class="govuk-link" href="https://www.gov.uk/guidance/planning-applications-s62a" rel="noreferrer noopener" target="_blank">information about
+                Section 62A applications (opens in new tab)</a>.
+        </p>
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m">Give us feedback</h2>
+
+        <p class="govuk-body">Help us improve this service by <a href="#" class="govuk-link">sharing your feedback</a>.</p>
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m">Contact us</h2>
+
+        <details class="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    Ways to contact us
+                </span>
+            </summary>
+            
+            <div class="govuk-details__text">
+                
+                <h3 class="govuk-heading-s">Telephone</h3>
+                <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
+                <p class="govuk-body">Telephone: 0303 444 5000</p>
+                <p class="govuk-body">
+                    Open Monday to Friday: 9am to 4pm.
+                    <br>
+                    Closed on weekends and bank holidays.
+                </p>
+
+                <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
+                <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
+                <p class="govuk-body">
+                    <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
+                </p>
+                <p class="govuk-body">We aim to respond within 10 working days.</p>
+
+                <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
+                <p class="govuk-body">
+                    Section 62A Applications Team,
+                    <br>
+                    The Planning Inspectorate,
+                    <br>
+                    3rd Floor,
+                    <br>
+                    Temple Quay House,
+                    <br>
+                    2 The Square, Temple Quay,
+                    <br>
+                    Bristol, BS1 6PN
+                </p>
+
+            </div> 
+        </details>
+
+        <h3 class="govuk-heading-s">Alternative formats</h3>
+        <p class="govuk-body">
+            Call or email us if you cannot use a document in the format we've published.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

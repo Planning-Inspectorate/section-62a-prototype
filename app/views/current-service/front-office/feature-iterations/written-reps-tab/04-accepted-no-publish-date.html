@@ -1,0 +1,354 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0000001 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+        .filter {
+            background-color: #f3f2f1;
+            padding: 8px;
+            border-radius: 5px;
+            margin-left: 10px;
+            border: 1px solid #505a5f;
+            text-decoration: none;
+            color: black;
+        }
+
+        .filters {
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #b1b4b6;
+        }
+
+        .filters .govuk-details__text {
+            border: none;
+            padding-left: 0;
+        }
+
+        .filtersText {
+            text-decoration: none;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1875rem;
+        }
+
+        .filter:visited {
+            color: black;
+        }
+
+        .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            background-color: black;
+            color: black;
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-details[open]>.govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-accordion__section-button {
+            font-size: 19px !important;
+            padding-bottom: 0px !important;
+        }
+
+        /* Target all accordion content padding dynamically */
+        .govuk-accordion__section-content {
+            padding-bottom: 0px !important;
+        }
+
+        .govuk-form-group {
+            margin-bottom: 20px !important;
+        }
+
+        /* ========================================================= */
+        /* MOJ SIDE NAVIGATION OVERRIDES                             */
+        /* ========================================================= */
+        
+        .moj-side-navigation__item a {
+            font-size: 19px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .moj-side-navigation__item {
+            margin-bottom: 15px; 
+        }
+
+        /* floating panel */
+
+        .floating-panel {
+            position: fixed;
+            top: 100px;
+            left: 40px;
+            width: 150px;
+            background: #f3f2f1;
+            border: 1px solid #b1b4b6;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px 16px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .floating-panel h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .govuk-details__summary {
+            width: 96%;
+        }
+
+        .pins-modded-summary-full-width {
+            margin: 10px 0;
+        }
+
+        .floating-panel .govuk-button {
+            width: 100%;
+            margin-bottom: 0;
+        }
+    </style>
+
+<div class="floating-panel">
+
+<h3 class="govuk-heading-m">Written representations empty tab states</h3>
+
+<h4 class="govuk-heading-xs govuk-!-margin-bottom-0">If it reaches the publish date:</h4>
+
+<a href="/current-service/front-office/feature-iterations/written-reps-tab/01-no-reps" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">No reps submitted at all</a>
+<a href="/current-service/front-office/feature-iterations/written-reps-tab/02-submitted-in-review" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Reps submitted but in review</a>
+<a href="/current-service/front-office/feature-iterations/written-reps-tab/05-reps-submitted-but-all-rejected" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Reps submitted but all rejected</a>
+
+<h4 class="govuk-heading-xs govuk-!-margin-bottom-0">If there is no publish date set:</h4>
+<a href="/current-service/front-office/feature-iterations/written-reps-tab/04-accepted-no-publish-date" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Accepted but no publish date set</a>
+
+<h4 class="govuk-heading-xs govuk-!-margin-bottom-0">If the publish date is in the future:</h4>
+<a href="/current-service/front-office/feature-iterations/written-reps-tab/03-reps-accepted-publish-date-in-future" class="govuk-link govuk-button--secondary" style="text-decoration: none;" data-module="govuk-button">Reps accepted</a>
+
+</div>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-one-third">
+            <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="">Documents</a>
+                </li>
+    
+                <li class="moj-side-navigation__item">
+                    <a href="">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="" aria-current="location">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+            <div style="margin-left:12px;">
+
+                <h2 class="govuk-heading-m">Filters</h2>
+
+                <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default" data-remember-expanded="false">
+                    
+                    <!-- 1. Submitted by Section -->
+                    <div class="govuk-accordion__section">
+                        <div class="govuk-accordion__section-header">
+                            <h3 class="govuk-accordion__section-heading">
+                                <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                                    Submitted by
+                                </span>
+                            </h3>
+                        </div>
+                        <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+                            <div style="padding-left:30px;">
+                                <form class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        <div class="govuk-grid-row">
+                                            <div class="">
+                                                <fieldset class="govuk-fieldset">
+                                                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                                                        <div class="govuk-checkboxes__item">
+                                                            <input class="govuk-checkboxes__input" id="submitted-1" name="submitted-by" type="checkbox" value="Consultee">
+                                                            <label class="govuk-label govuk-checkboxes__label" for="submitted-1">
+                                                                Consultee (0)
+                                                            </label>
+                                                        </div>
+                                                        <div class="govuk-checkboxes__item">
+                                                            <input class="govuk-checkboxes__input" id="submitted-2" name="submitted-by" type="checkbox" value="Interested party">
+                                                            <label class="govuk-label govuk-checkboxes__label" for="submitted-2">
+                                                                Interested party (0)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Contains attachments Section -->
+                    <div class="govuk-accordion__section">
+                        <div class="govuk-accordion__section-header">
+                            <h3 class="govuk-accordion__section-heading">
+                                <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+                                    Contains attachments
+                                </span>
+                            </h3>
+                        </div>
+                        <div id="accordion-default-content-2" class="govuk-accordion__section-content">
+                            <div style="padding-left:30px;">
+                                <form class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        <div class="govuk-grid-row">
+                                            <div class="">
+                                                <fieldset class="govuk-fieldset">
+                                                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                                                        <div class="govuk-checkboxes__item">
+                                                            <input class="govuk-checkboxes__input" id="attachments-1" name="attachments" type="checkbox" value="Yes">
+                                                            <label class="govuk-label govuk-checkboxes__label" for="attachments-1">
+                                                                Yes (0)
+                                                            </label>
+                                                        </div>
+                                                        <div class="govuk-checkboxes__item">
+                                                            <input class="govuk-checkboxes__input" id="attachments-2" name="attachments" type="checkbox" value="No">
+                                                            <label class="govuk-label govuk-checkboxes__label" for="attachments-2">
+                                                                No (0)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Date submitted Section -->
+                    <div class="govuk-accordion__section">
+                        <div class="govuk-accordion__section-header">
+                            <h3 class="govuk-accordion__section-heading">
+                                <span class="govuk-accordion__section-button" id="accordion-default-heading-3">
+                                    Date submitted
+                                </span>
+                            </h3>
+                        </div>
+                        <div id="accordion-default-content-3" class="govuk-accordion__section-content">
+                            <div style="padding-left:30px;">
+                                <form class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        
+                                        <!-- From Date -->
+                                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                            <h4 class="govuk-fieldset__heading">
+                                                From
+                                            </h4>
+                                        </legend>
+                                        <div class="govuk-hint">For example, 5 7 2022</div>
+                                        <div class="govuk-date-input">
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-from-day">Day</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-from-day" name="date-from-day" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-from-month">Month</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-from-month" name="date-from-month" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-from-year">Year</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="date-from-year" name="date-from-year" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- To Date -->
+                                        <legend style="margin-top:20px" class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                            <h4 class="govuk-fieldset__heading">
+                                                To
+                                            </h4>
+                                        </legend>
+                                        <div class="govuk-hint">For example, 27 3 2023</div>
+                                        <div class="govuk-date-input">
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-to-day">Day</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-to-day" name="date-to-day" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-to-month">Month</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-to-month" name="date-to-month" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                            <div class="govuk-date-input__item">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label govuk-date-input__label" for="date-to-year">Year</label>
+                                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="date-to-year" name="date-to-year" type="text" inputmode="numeric">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="" class="govuk-button" id="apply-filters" style="margin-bottom:0px;">
+                    Apply filters
+                </a>
+            </div> 
+
+        </div>
+
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">S62A/2025/0000001</span>
+            <h1 class="govuk-heading-l">Written representations</h1>
+            <div style="padding-bottom: 24px;">
+                <div id="search-hint" class="govuk-hint">
+                    Search by keywords or by name of person or organisation who made the submission.</div>
+                <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off" style="width:100%;">
+                    <button class="govuk-button" id="keyword-search-button" type="submit" style="margin-bottom:0px;">Search</button>
+                </form>
+
+            </div>
+           
+
+            <p class="govuk-body">No written representations have been published yet.</p>
+
+             <p class="govuk-body">We'll update this page once the date to publish representations has been set.</p>
+    </div>
+</div>
+
+{% endblock %}
