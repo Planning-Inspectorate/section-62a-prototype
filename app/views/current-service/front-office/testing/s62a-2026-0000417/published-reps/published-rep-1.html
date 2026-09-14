@@ -1,0 +1,166 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  S62A/2026/0000417 - Application information - Find a Section 62A application
+{% endblock %}
+
+{% block content %}
+
+<style>
+        .filter {
+            background-color: #f3f2f1;
+            padding: 8px;
+            border-radius: 5px;
+            margin-left: 10px;
+            border: 1px solid #505a5f;
+            text-decoration: none;
+            color: black;
+        }
+
+        .filters {
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #b1b4b6;
+        }
+
+        .filters .govuk-details__text {
+            border: none;
+            padding-left: 0;
+        }
+
+        .filtersText {
+            text-decoration: none;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1875rem;
+        }
+
+        .filter:visited {
+            color: black;
+        }
+
+        .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            background-color: black;
+            color: black;
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-details[open]>.govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-accordion__section-button {
+            font-size: 19px !important;
+            padding-bottom: 0px !important;
+        }
+
+        /* Target all accordion content padding dynamically */
+        .govuk-accordion__section-content {
+            padding-bottom: 0px !important;
+        }
+
+        .govuk-form-group {
+            margin-bottom: 20px !important;
+        }
+
+        /* ========================================================= */
+        /* MOJ SIDE NAVIGATION OVERRIDES                             */
+        /* ========================================================= */
+        
+        .moj-side-navigation__item a {
+            font-size: 19px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .moj-side-navigation__item {
+            margin-bottom: 15px; 
+        }
+    </style>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-one-third">
+            <nav class="moj-side-navigation" aria-label="Side navigation">
+                <ul class="moj-side-navigation__list">
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000417/app-info">Application information</a>
+                    </li>
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000417/documents">Documents</a>
+                    </li>
+     
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000417/application-updates">Application updates</a>
+                    </li>
+                    <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000417/written-representations" aria-current="location">Written representations (Comments and feedback)</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+             <a href="/current-service/front-office/testing/s62a-2026-0000417/written-representations" class="govuk-back-link">Back to list</a>
+
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">S62A/2026/0000417</span>
+            <h1 class="govuk-heading-xl">Bristol City Council</h1>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Date submitted
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        28 June 2026
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Submitted by
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Consultees
+                    </dd>
+                </div>
+            </dl>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word" style="margin-bottom: 0;">Our ref: 532560</p>
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">Your ref: S62A/2026/0000417</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">Bristol City Council has reviewed the final draft unilateral undertaking. We advise that as it addresses issues that falls within our remit, we have provided an attached response and the
+            relevant documents for your consideration.</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">We would be grateful if you could confirm receipt of this response and the attached documents.</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">For any queries regarding this advice, for new consultations, or to provide further information on this consultation
+                please send your correspondences to consultations@bristolcc.org.uk
+            </p>
+
+            <h2 class="govuk-heading-m">Attachments</h2>
+
+            <ul class="govuk-list document-list">
+                <li>
+                    <a class="govuk-link" href="" target="_blank" rel="noreferrer">
+                        Economic_review-27-06-2026 (PDF, 204 KB) (opens in new window)
+                    </a>
+                </li>
+
+               <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <li>
+                    <a class="govuk-link" href="" target="_blank" rel="noreferrer">
+                        Business_and_risk_assessment-27-06-2026 (PDF, 204 KB) (opens in new window)
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+    
+</div>
+
+{% endblock %}
