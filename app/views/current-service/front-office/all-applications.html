@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block beforeContent %}
-    <div style="width:100vw; margin-left:calc(-50vw + 50%); background:#00847E; padding: 40px 0;">
+    <div class="pins-hero" style="width:100vw; margin-left:calc(-50vw + 50%); background:#00625e; padding-top: 40px; padding-bottom: 40px;">
         <div class="govuk-width-container">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <h1 style="color:white;" class="govuk-heading-xl pins-info-heading govuk-!-margin-bottom-6">
                         Find a local planning application made to the Planning Inspectorate
                     </h1>
-                    <p style="color:white" class="govuk-body pins-info-body">
+                    <p style="color:white; margin-bottom: 20px;" class="govuk-body pins-info-body">
                         These applications have been made directly to the Planning Inspectorate instead of a Local Planning Authority (LPA) under a rule called <a href="https://www.gov.uk/guidance/planning-applications-s62a" class="govuk-link govuk-link--inverse" rel="noreferrer noopener" target="_blank">Section 62A (opens in new tab)</a>.
                     </p>
 
@@ -84,7 +84,6 @@
         .layout-slots__divider { color: #ffffff; }
         a { color: #1d70b8; }
         .grey-box { display: none; }
-        .govuk-main-wrapper { padding-top: 0; }
         
         .govuk-header,
         .govuk-header__container {
@@ -117,6 +116,10 @@
             width: 3px;
             height: 3px;
         }
+
+         .govuk-main-wrapper {
+                padding-top: 40px !important;
+            }
 
         /* filters */
         .selected-filter-tag {
@@ -194,6 +197,104 @@
             height: 3px;
             border-color: inherit;
         }
+
+        /* Prevent horizontal scroll bug caused by 100vw on mobile */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* --- RESPONSIVE SEARCH & FILTERS --- */
+        .search-form-layout {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 0px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            flex-grow: 1; /* Tells the input to take up maximum available space */
+        }
+
+        .search-button {
+            margin-bottom: 0 !important; /* Ensures no extra margin at the bottom */
+        }
+
+        .clear-search-btn {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #505a5f;
+            cursor: pointer;
+            padding: 0;
+        }
+
+       /* GOV.UK Mobile Breakpoint */
+        @media (max-width: 40.0625em) {
+
+            /* 1. Stack the search input and button */
+            .search-form-layout {
+                flex-direction: column;
+                align-items: stretch; /* Forces children to be 100% width */
+                gap: 0; /* Removes gap so input and search button sit flush if desired, or set to 15px if you prefer spacing */
+            }
+
+            /* 2. Make search button full width */
+            .search-button {
+                width: 100%; 
+                margin-top: -2px; /* Pulls it up slightly to sit flush with the input box */
+                margin-bottom: 0 !important; /* Ensures no extra margin at the bottom */
+            }
+
+            /* 4. Style the filter accordion to match the GDS full-width secondary button */
+            .filters .govuk-details__summary {
+                background-color: #f3f2f1;
+                display: block; /* Stretches to full width */
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 15px;
+                text-align: center; /* Centers the text */
+                box-shadow: 0 2px 0 #8c8c8c; /* Classic GDS secondary button edge */
+                border-radius: 0; 
+                margin-left: 0;
+            }
+
+            /* Match the text color to standard GOV.UK black */
+            .filters .govuk-details__summary-text {
+                padding-left: 0;
+                font-size: 1.1875rem;
+                color: #0b0c0c; 
+            }
+
+            /* Hide the chevron entirely on mobile (both open and closed states) */
+            .filters .govuk-details__summary::before,
+            .filters.govuk-details[open] > .govuk-details__summary::before {
+                display: none !important; 
+            }
+            /* --- TABLE RESPONSIVENESS --- */
+        
+            /* 1. Force long reference numbers to wrap onto the next line */
+            .govuk-table__body .govuk-table__header a {
+                word-break: break-all;
+                overflow-wrap: anywhere;
+            }
+
+            /* 2. Override the hardcoded inline column percentages on mobile */
+            .govuk-table__head .govuk-table__header {
+                width: auto !important;
+            }
+            
+            /* (You can also add a little more spacing for tap targets in the table) */
+            .govuk-table__cell, 
+            .govuk-table__header {
+                padding-right: 10px;
+            }
+        }
     </style>
 
     <main class="govuk-main-wrapper" id="main-content">
@@ -209,18 +310,19 @@
                     To find a specific case, search by local authority, reference, first line of an address or postcode.
                 </div>
                 
-                <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center; margin-bottom: 0px;">
+                <form class="govuk-form-group search-form-layout" style="margin-bottom: 0px;">
                     <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
-                    <div style="position: relative; width: 100%;">
+                    
+                    <div class="search-input-wrapper">
                         <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
                             style="margin-bottom: 0; width:100%; padding-right: 40px;">
-                        <button type="button" id="clear-search-icon" aria-label="Clear search" 
-                            style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; color: #505a5f; cursor: pointer; padding: 0;">
+                        
+                        <button type="button" id="clear-search-icon" aria-label="Clear search" class="clear-search-btn">
                             &times;
                         </button>
                     </div>
 
-                    <button class="govuk-button" id="keyword-search-button" type="submit" style="margin-bottom: 0;">Search</button>
+                    <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
                 </form>
 
                 <details class="govuk-details filters" style="margin-top: 20px">
@@ -240,7 +342,7 @@
                                 </legend>
                                 
                                 <!-- JS will inject the dynamic checkboxes in here -->
-                                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes" id="dynamic-lpa-checkboxes">
+                                <div class="govuk-checkboxes govuk-checkboxes--small" id="dynamic-lpa-checkboxes">
                                 </div>
 
                             </fieldset>
@@ -623,5 +725,37 @@
             });
         }
     });
+
+        // ---------------------------------------------------------
+        // Responsive filter text toggle
+        // ---------------------------------------------------------
+        const filterDetails = document.querySelector('.filters');
+        const filterSummaryText = document.querySelector('.filtersText');
+
+        if (filterDetails && filterSummaryText) {
+            
+            function updateFilterText() {
+                if (window.innerWidth <= 640) {
+                    // Mobile view: Swap between Show/Hide
+                    if (filterDetails.open) {
+                        filterSummaryText.innerText = "Hide filters";
+                    } else {
+                        filterSummaryText.innerText = "Show filters";
+                    }
+                } else {
+                    // Desktop view: Always reset to default text
+                    filterSummaryText.innerText = "Filter applications";
+                }
+            }
+
+            // 1. Run on initial load to set correct text
+            updateFilterText();
+
+            // 2. Run whenever the accordion opens or closes
+            filterDetails.addEventListener('toggle', updateFilterText);
+
+            // 3. Run whenever the user resizes the browser window
+            window.addEventListener('resize', updateFilterText);
+        }
 </script>
 {% endblock %}

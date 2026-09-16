@@ -1,11 +1,14 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2026/0048 - Documents - Find a Section 62A application
+  S62A/2026/0048 - Documents - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
 <style>
+    /* ========================================================= */
+    /* GLOBAL & LIST STYLING                                     */
+    /* ========================================================= */
     .document-list li,
     .govuk-\!-padding-bottom-5 {
         padding-bottom: 15px !important;
@@ -13,29 +16,34 @@
 
     .document-list li {
         border-top: 1px solid #b1b4b6;
+        margin: 0 !important;
+        padding-top: 10px !important;
     }
 
+    /* 1. Mobile-first: Stack the metadata vertically on the left */
     .document-list__meta-data {
         color: #505a5f;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 5px; 
         font-size: 1rem;
         line-height: 1.25;
+    }
+
+    /* 2. Desktop Breakpoint: Switch back to the 3-column layout */
+    @media (min-width: 40.0625em) {
+        .document-list__meta-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+        }
     }
 
     .document-list,
     .govuk-list {
         color: #0b0c0c;
-    }
-
-    .document-list,
-    .govuk-list {
         margin-top: 0;
         margin-bottom: 15px;
-    }
-
-    .document-list,
-    .govuk-list {
         padding-left: 0;
         list-style-type: none;
     }
@@ -61,7 +69,6 @@
     }
 
     @media(min-width: 40.0625em) {
-
         .document-list+.govuk-heading-l,
         .govuk-body+.govuk-heading-l,
         .govuk_body-m+.govuk-heading-l,
@@ -90,7 +97,6 @@
     }
 
     @media(min-width: 40.0625em) {
-
         .document-list+.filter-accordion__title,
         .document-list+.govuk-heading-m,
         .document-list+.govuk-heading-s,
@@ -110,97 +116,52 @@
         }
     }
 
-    .document-list,
-    .document-list li,
-    .govuk-\!-margin-0 {
-        margin: 0 !important;
+    /* ========================================================= */
+    /* ACCORDION & BASE FILTER STYLING                           */
+    /* ========================================================= */
+    .govuk-accordion__section-button { font-size: 19px !important; padding-bottom: 0px !important; }
+    .govuk-accordion__section-content { padding-bottom: 0px !important; }
+    .govuk-form-group { margin-bottom: 20px !important; }
+
+    /* Prevent horizontal scroll bug caused by 100vw on mobile */
+    body { overflow-x: hidden; }
+
+    /* ========================================================= */
+    /* SEARCH BAR                                                */
+    /* ========================================================= */
+    .search-form-layout {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 0px;
     }
 
-    .document-list li,
-    .govuk-\!-padding-top-2 {
-        padding-top: 10px !important;
+    .search-input-wrapper {
+        position: relative;
+        width: 100%;
+        flex-grow: 1; 
     }
 
-    .document-list li,
-    .govuk-\!-padding-bottom-5 {
-        padding-bottom: 15px !important;
+    .search-button {
+        margin-bottom: 0 !important; 
     }
 
-    .document-list__meta-data {
-        color: #505a5f;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-    .filter {
-        background-color: #f3f2f1;
-        padding: 8px;
-        border-radius: 5px;
-        margin-left: 10px;
-        border: 1px solid #505a5f;
-        text-decoration: none;
-        color: black;
-    }
-
-    .filters {
-        margin-bottom: 16px;
-        padding-bottom: 14px;
-        border-bottom: 1px solid #b1b4b6;
-    }
-
-    .filters .govuk-details__text {
+    .clear-search-btn {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
         border: none;
-        padding-left: 0;
-    }
-
-    .filtersText {
-        text-decoration: none;
-        color: #000;
-        font-weight: 700;
-        font-size: 1.1875rem;
-    }
-
-    .filter:visited {
-        color: black;
-    }
-
-    .govuk-details__summary::before {
-        clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
-        background-color: black;
-        color: black;
-        width: 3px;
-        height: 3px;
-    }
-
-    .govuk-details[open]>.govuk-details__summary::before {
-        clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
-        width: 3px;
-        height: 3px;
-    }
-
-    .govuk-accordion__section-button {
-        font-size: 19px !important;
-    }
-
-    .govuk-accordion__section-button {
-        padding-bottom: 0px !important;
-    }
-
-    #accordion-default-content-1 {
-        padding-bottom: 0px !important;
-    }
-
-    .govuk-form-group {
-        margin-bottom: 20px !important;
-    }
-
-    .govuk-accordion__section-content {
-        padding-bottom: 0px !important;
+        font-size: 2rem;
+        color: #505a5f;
+        cursor: pointer;
+        padding: 0;
     }
 
     /* ========================================================= */
     /* MOJ SIDE NAVIGATION OVERRIDES                             */
     /* ========================================================= */
-    
     .moj-side-navigation__item a {
         font-size: 19px;
         padding-top: 15px;
@@ -209,6 +170,130 @@
 
     .moj-side-navigation__item {
         margin-bottom: 15px; 
+    }
+
+    /* ========================================================= */
+    /* MODAL FILTER STYLING                                      */
+    /* ========================================================= */
+    
+    /* Hide mobile modal elements on desktop */
+    .mobile-modal-header { display: none !important; }
+    .mobile-filter-trigger-btn { display: none !important; }
+
+    /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 100% !important; 
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 100% !important; 
+            margin-bottom: 15px !important; 
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 100% !important; 
+            box-sizing: border-box !important; 
+            padding-top: 15px !important; 
+            padding-bottom: 15px !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            font-size: 19px !important; 
+            color: #1d70b8 !important; 
+            box-shadow: none !important; 
+            border: none !important;
+            white-space: normal !important; 
+            overflow-wrap: break-word !important;
+        }
+
+        /* 3. Force your CUSTOM active state */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; 
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+        
+        /* 6. GOV.UK standard yellow accessibility focus state */
+        .moj-side-navigation__item a:focus {
+            background-color: #fd0 !important; 
+            color: #0b0c0c !important; 
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important; 
+            outline: none !important; 
+        }
+
+        /* 7. Ensure the active item also gets the yellow state if tabbed into */
+        .moj-side-navigation__item--active a:focus {
+            background-color: #fd0 !important; 
+            color: #0b0c0c !important;
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important;
+        }
+
+        /* Search Form Stacking */
+        .search-form-layout {
+            flex-direction: column;
+            align-items: stretch; 
+            gap: 0; 
+        }
+
+        .search-button {
+            width: 100%; 
+            margin-top: -2px; 
+            margin-bottom: 0 !important; 
+        }
+
+        /* --- MOBILE MODAL OVERRIDES --- */
+        
+        .mobile-filter-trigger-btn { 
+            display: block !important; 
+        }
+
+        .desktop-filter-heading { 
+            display: none !important; 
+        }
+
+        .filter-modal-container { 
+            display: none; 
+        }
+
+        .filter-modal-container.is-open {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+            z-index: 9999;
+            padding: 20px 20px 80px 20px; 
+            margin: 0 !important; 
+            box-sizing: border-box;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .filter-modal-container.is-open .mobile-modal-header {
+            display: block !important; 
+        }
     }
 </style>
 
@@ -236,9 +321,21 @@
         </nav>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-        <div style="margin-left:12px;">
+        
+        <!-- WRAPPED IN MODAL CONTAINER -->
+        <div id="filter-modal-container" class="filter-modal-container">
 
-            <h2 class="govuk-heading-m">Filters</h2>
+            <!-- Mobile Only Header inside Modal -->
+            <div class="mobile-modal-header">
+                <div style="display:flex; justify-content:space-between; align-items: baseline;">
+                    <h2 class="govuk-heading-l" style="margin-bottom: 0;">Filter</h2>
+                    <a href="#" id="close-filter-modal" class="govuk-link" style="font-size: 19px;">Return to results</a>
+                </div>
+                <p class="govuk-body" style="margin-top: 10px; margin-bottom: 15px;">32 documents</p>
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            </div>
+
+            <h2 class="govuk-heading-m desktop-filter-heading">Filters</h2>
 
             <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default" data-remember-expanded="false">
                 
@@ -252,7 +349,7 @@
                         </h3>
                     </div>
                     <div id="accordion-default-content-1" class="govuk-accordion__section-content">
-                        <div style="padding-left:30px;">
+                        <div style="padding-left:15px;">
                             <form class="govuk-form-group">
                                 <fieldset class="govuk-fieldset">
                                     <div class="govuk-grid-row">
@@ -322,7 +419,7 @@
                         </h2>
                     </div>
                     <div id="accordion-default-content-2" class="govuk-accordion__section-content">
-                        <div style="padding-left:30px;">
+                        <div style="padding-left:15px;">
                             <form class="govuk-form-group">
                                 <fieldset class="govuk-fieldset">
                                     
@@ -390,9 +487,9 @@
 
             </div>
 
-            <a href="" class="govuk-button" id="apply-filters" style="margin-bottom:0px;">
+            <button class="govuk-button" id="apply-filters" style="margin-bottom:0px; width: 100%;">
                 Apply filters
-            </a>
+            </button>
         </div> 
 
     </div>
@@ -407,14 +504,26 @@
         <div>
             <div id="search-hint" class="govuk-hint">
                 Search by document name</div>
-            <form class="govuk-form-group" style="display: flex; gap: 8px; align-items: center">
-                <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
-                <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
-                    style="width:100%;">
-                <button class="govuk-button" id="keyword-search-button" type="submit"
-                    style="margin-bottom:0px;">Search</button>
+            <form class="govuk-form-group search-form-layout" style="margin-bottom: 0px;">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    
+                    <div class="search-input-wrapper">
+                        <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
+                            style="margin-bottom: 0; width:100%; padding-right: 40px;">
+                        
+                        <button type="button" id="clear-search-icon" aria-label="Clear search" class="clear-search-btn">
+                            &times;
+                        </button>
+                    </div>
+
+                    <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
             </form>
         </div>
+
+        <!-- Mobile Trigger Button (Hidden on Desktop) -->
+        <button id="open-filter-modal" class="govuk-button govuk-button--secondary mobile-filter-trigger-btn" style="width: 100%; margin-top: 15px;">
+            Show filters
+        </button>
 
         <hr class="govuk-section-break govuk-section-break--l">
 
@@ -722,4 +831,46 @@
 
 </div>
 
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const openBtn = document.getElementById("open-filter-modal");
+        const closeBtn = document.getElementById("close-filter-modal");
+        const applyBtn = document.getElementById("apply-filters");
+        const modal = document.getElementById("filter-modal-container");
+
+        if (openBtn && closeBtn && modal) {
+            
+            // Open modal
+            openBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.add("is-open");
+                // Stop BOTH body and html from scrolling
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden"; 
+            });
+
+            // Close modal (Return link)
+            closeBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.remove("is-open");
+                // Restore background scrolling
+                document.documentElement.style.overflow = "";
+                document.body.style.overflow = ""; 
+            });
+
+            if (applyBtn) {
+                applyBtn.addEventListener("click", function(e) {
+                    if (window.innerWidth <= 640) {
+                        modal.classList.remove("is-open");
+                        document.documentElement.style.overflow = "";
+                        document.body.style.overflow = "";
+                    }
+                });
+            }
+        }
+    });
+</script>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2026/0000417 - Application information - Find a Section 62A application
+  S62A/2026/0000417 - Application information - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -60,32 +60,40 @@
         margin-bottom: 15px; 
     }
 
-    /* Force the navigation into a vertical stack on mobile */
+     /* Force the navigation into a vertical stack on mobile */
     @media (max-width: 40.0625em) {
         
         /* 1. Stack the layout */
         .moj-side-navigation__list {
             display: block !important;
-            width: 97%;
+            width: 100% !important; /* Changed from 97% */
             padding: 0 !important;
             margin: 0 !important;
         }
-        
+
         .moj-side-navigation__item {
             display: block !important;
-            width: 97%;
-            margin-bottom: 15px !important; /* Preserves your custom spacing */
+            width: 100% !important; /* Changed from 97% */
+            margin-bottom: 15px !important; 
         }
 
         /* 2. Format all links as menu blocks */
         .moj-side-navigation__item a {
             display: block !important;
-            width: 97%;
-            padding: 15px !important; /* Preserves your custom padding */
-            font-size: 19px !important; /* Preserves your custom font size */
-            color: #1d70b8 !important; /* Standard GOV.UK blue for inactive links */
-            box-shadow: none !important; /* Clears any legacy bottom lines */
+            width: 100% !important; /* Changed from 97% */
+            box-sizing: border-box !important; /* Keeps padding inside the 100% width! */
+            padding-top: 15px !important; 
+            padding-bottom: 15px !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            font-size: 19px !important; 
+            color: #1d70b8 !important; 
+            box-shadow: none !important; 
             border: none !important;
+            
+            /* The magic rules to force long text to wrap onto the next line */
+            white-space: normal !important; 
+            overflow-wrap: break-word !important;
         }
 
         /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
@@ -105,6 +113,22 @@
         /* 5. Ensure the active item keeps your teal line when hovered */
         .moj-side-navigation__item--active a:hover {
             box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+        /* 6. GOV.UK standard yellow accessibility focus state */
+        .moj-side-navigation__item a:focus {
+            background-color: #fd0 !important; /* GOV.UK Yellow */
+            color: #0b0c0c !important; /* Black text */
+            
+            /* The classic GDS focus outline: yellow on top, black on the bottom */
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important; 
+            outline: none !important; 
+        }
+
+        /* 7. Ensure the active item also gets the yellow state if tabbed into */
+        .moj-side-navigation__item--active a:focus {
+            background-color: #fd0 !important; 
+            color: #0b0c0c !important;
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important;
         }
     }
 

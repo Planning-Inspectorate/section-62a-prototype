@@ -28,12 +28,6 @@
     #logo {
         width: 30%;
     }
-    /* 2. The mobile override */
-    @media (max-width: 40.0625em) {
-        #logo {
-            width: 100%; /* Bumps the size up so it spans most of the mobile screen */
-        }
-    }
 
     .govuk-service-navigation--custom {
         background-color: #F3F2F1;
@@ -50,6 +44,47 @@
 
     .govuk-service-navigation__link {
         color: black !important;
+    }
+
+    @media (max-width: 40.0625em) {
+        #logo {
+            width: 100%; /* Bumps the size up so it spans most of the mobile screen */
+        }
+
+        .govuk-service-navigation__wrapper {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        /* Make the links bigger with larger tap areas */
+        .govuk-service-navigation__link {
+            font-size: 1.1875rem !important; /* 19px - Standard GOV.UK body size */
+            padding-top: 15px !important;
+            padding-bottom: 15px !important;
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box;
+            
+            /* Remove the standard text underline */
+            text-decoration: none !important; 
+            border-bottom: none !important;
+        }
+
+        /* Remove the black bottom border from the list items */
+        .govuk-service-navigation__item {
+            border-bottom: none !important; 
+        }
+
+
+        /* Catch and hide any thick active state borders bleeding over from desktop */
+        .govuk-service-navigation__item--active {
+            border-bottom: none !important;
+        }
+
+        .govuk-service-navigation__item--active::after,
+        .govuk-service-navigation__link::after {
+            display: none !important; 
+        }
     }
 </style>
 
