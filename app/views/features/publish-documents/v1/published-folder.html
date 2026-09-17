@@ -1,0 +1,107 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: published folder
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="folder.html">Manage documents</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Published documents</li>
+  </ol>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+
+<span class="govuk-caption-m">
+  S62A/2026/000001
+</span>
+<H1 class="govuk-heading-l">
+  Published documents</h1>
+
+
+<p class="govuk-body">Showing <strong>1</strong> to <strong>1</strong> of
+  <strong>1</strong> files.
+</p>
+
+<p class="govuk-body"><strong>Results per page</strong>&nbsp;
+
+
+  25 &nbsp;|
+  <a class="govuk-link" href="#">50</a> |
+  <a class="govuk-link" href="#">100</a>
+</p>
+
+
+<a href="unpublish.html" class="govuk-button govuk-button--secondary" type="button">Unpublish selected</a>
+
+<a href="categorise-published.html" class="govuk-button govuk-button--secondary" type="button">Categorise selected</a>
+
+
+<p class="govuk-body">0 files selected.</p>
+<table class="govuk-table" data-module="moj-sortable-table">
+
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox">
+            <label class="govuk-label govuk-checkboxes__label">
+              <strong>All files</strong>
+            </label>
+          </div>
+        </div>
+      </th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="1">File
+          name</button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button" data-index="2">Tags</button>
+      </th>
+      <th scope="col" class="govuk-table__header" aria-sort="none"><button type="button"
+          data-index="3">Published</button></th>
+      <th scope="col" class="govuk-table__header" aria-sort="none">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">
+
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"> <label class="govuk-label govuk-checkboxes__label">
+
+            </label>
+          </div>
+        </div>
+
+      </td>
+      <td class="govuk-table__cell" data-sort-value="site-photo-01.jpg">
+        <p class="govuk-body">
+          <a class="govuk-link" href="#">site-photo-01.jpg</a>
+        </p>
+        <p class="govuk-caption-xs">File type and size: JPG, 1.2 MB</p>
+      </td>
+      <td class="govuk-table__cell" data-sort-value="application plans and documents"><strong
+          class="govuk-tag govuk-tag--blue">
+          Application plans and documents
+        </strong></td>
+      <td class="govuk-table__cell" data-sort-value="2026-07-22">22 July 2026</td>
+      <td class="govuk-table__cell">
+        <ul class="govuk-list">
+          <li><a href="unpublish.html">Unpublish</a></li>
+          <li><a href="categorise-published.html">Categorise</a></li>
+        </ul>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+{% endblock %}

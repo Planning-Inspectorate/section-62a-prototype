@@ -1,0 +1,66 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: Categorise
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="folder.html">Manage documents</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
+  </ol>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+
+<span class="govuk-caption-m">
+  S62A/2026/000001
+</span>
+<H1 class="govuk-heading-l">
+  Categorise selected documents</h1>
+
+<p class="govuk-body">This will be shown in the front office document filters.</p>
+
+<div class="govuk-inset-text">site-photo-01.jpg
+</div>
+
+<h2 class="govuk-heading-m">What category are these documents?</h2>
+
+<div class="govuk-radios" data-module="govuk-radios">
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+    <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
+      Application plans and documents
+    </label>
+  </div>
+  <div class="govuk-radios__item">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" type="radio">
+      <label class="govuk-label govuk-radios__label">
+        Questionnnaire and supporting documents
+      </label>
+    </div>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" type="radio">
+    <label class="govuk-label govuk-radios__label">
+      Planning inspectorate correspondence
+    </label>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" type="radio">
+    <label class="govuk-label govuk-radios__label">
+      Applicant correspondence </label>
+  </div>
+
+  <a href="published-folder.html" class="govuk-!-margin-top-7 govuk-button">Save</a>
+
+  <p class="govuk-body"><a href="published-folder.html">Cancel and return to folder</a></p>
+
+  {% endblock %}

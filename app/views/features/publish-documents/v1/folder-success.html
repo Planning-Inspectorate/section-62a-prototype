@@ -1,0 +1,199 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: Success
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="folder.html">Manage documents</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
+  </ol>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert"
+      aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Success
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">
+          Documents published </h3>
+        <p class="govuk-body">To view or change published files, go to the <a class="govuk-notification-banner__link"
+            href="published-folder">published folder</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <span class="govuk-caption-m">
+      S62A/2026/000001
+    </span>
+    <H1 class="govuk-heading-l">
+      Working documents folder</h1>
+
+    <h2 class="govuk-heading-m">Subfolders</h2>
+    <p class="govuk-body"><strong>7</strong> subfolders containing <strong>35</strong> files</p>
+
+    <style>
+      .hide-controls .govuk-accordion__show-all {
+        display: none !important;
+      }
+
+      .hide-controls .govuk-accordion__section-heading-text {
+        display: none !important;
+      }
+
+      .hide-controls .govuk-accordion__section-button {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    </style>
+    <div class="govuk-accordion hide-controls" data-module="govuk-accordion" id="sub-folders-accordion"
+      data-remember-expanded="false" data-i18n.hide-section="Show subfolders" data-i18n.show-section="Show subfolders">
+      <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button" id="sub-folders-accordion-heading-1"></span>
+          </h2>
+        </div>
+        <div id="sub-folders-accordion-content-1" class="govuk-accordion__section-content">
+          <div class="pins-link-menu">
+            <ul class="govuk-list">
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">File
+                  notes and correspondence</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">EIA</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">Fees</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">Hearings</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">Decisions or recommendations</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">Representations</a>
+              </li>
+              <li class="govuk-!-margin-bottom-4">
+                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0"
+                  href="#">Internal
+                  correspondence</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <h2 class="govuk-heading-m">File actions</h2>
+    <p class="govuk-body">This folder contains <strong>1</strong> files. Showing <strong>1</strong> to
+      <strong>1</strong>
+      of
+      <strong>1</strong> files.
+    </p>
+
+    <p class="govuk-body"><strong>Results per page</strong>&nbsp;
+
+
+      25 &nbsp;|
+      <a class="govuk-link" href="#">50</a> |
+      <a class="govuk-link" href="#">100</a>
+    </p>
+
+    <button class="govuk-button govuk-button--secondary" type="button">Upload files</button>
+
+    <br>
+    <button class="govuk-button govuk-button--secondary" type="button">Move files</button>
+
+
+    <button class="govuk-button govuk-button--secondary" type="button">Download selected</button>
+
+    <button class="govuk-button govuk-button--secondary" type="button">Delete selected</button>
+
+
+    <a href="categorise.html" class="govuk-button govuk-button--secondary" type="button">Publish selected</a>
+
+    <p class="govuk-body">0 files selected.</p>
+    <table class="govuk-table">
+
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" aria-sort="ascending">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" type="checkbox">
+                <label class="govuk-label govuk-checkboxes__label">
+                  <strong>All files</strong>
+                </label>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">File name</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Tags</th>
+          <th scope="col" class="govuk-table__header" aria-sort="ascending">Uploaded</th>
+          <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" type="checkbox"> <label
+                  class="govuk-label govuk-checkboxes__label">
+
+                </label>
+              </div>
+            </div>
+
+          </td>
+          <td class="govuk-table__cell"><a class="govuk-link" href="">site-photo-01.jpg</a><br><br><span
+              class="govuk-caption-xs">File type and size: JPG, 1.2 MB</span></td>
+          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">
+              Published
+            </strong></td>
+          <td class="govuk-table__cell">22 July 2026</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="1897">
+            <ul class="govuk-list">
+              <li><a href="#">Delete</a></li>
+              <li><a href="#">Download</a></li>
+              <li><a href="unpublish.html">Unpublish</a></li>
+
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+{% endblock %}
