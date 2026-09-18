@@ -1,0 +1,44 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: folder
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <a class="govuk-back-link">Back to overview</a>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+<H1 class="govuk-heading-l">
+    S62A/2026/000001
+</h1>
+
+<div class="govuk-form-group">
+        <div id="search-hint" class="govuk-hint">
+          To find a document, search by file name
+        </div>
+        <div style="display: flex; gap: 15px; align-items: flex-start;">
+          <input class="govuk-input govuk-input--width-30" id="search-input" value="" name="fileSearchCriteria" type="text" data-cy="search-input">
+          
+          
+        
+
+<button type="submit" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button" data-govuk-button-init="">
+  Search
+</button>
+
+        </div>
+      </div>
+<hr class="govuk-break">
+
+<ul class="govuk-list">
+  <li><a class="govuk-link" href="published-folder.html">Published files</a></li>
+    <li><a class="govuk-link" href="folder.html">Working documents</a></li>
+
+</ul>
+
+{% endblock %}

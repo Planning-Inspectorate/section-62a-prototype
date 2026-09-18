@@ -1,0 +1,42 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: Delete file
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <a class="govuk-back-link" href="/features/publish-documents/v1/folder.html">Back</a>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-m">
+  S62A/2026/000001
+</span>
+<H1 class="govuk-heading-l">
+  Delete 1 file</h1>
+
+<div class="govuk-inset-text">site-photo-01.jpg
+</div>
+
+  <div class="govuk-warning-text govuk-!-margin-top-8">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+      If files are published, they will also be removed from the front office. This action cannot be undone. </strong>
+  </div>
+
+  <a href="folder.html" class="govuk-button govuk-button--warning">Delete files</a>
+
+  <p class="govuk-body"><a href="folder.html">Cancel and return to folder</a></p>
+
+
+    </div>
+  </div>
+
+{% endblock %}

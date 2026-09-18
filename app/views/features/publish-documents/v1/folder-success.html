@@ -7,8 +7,8 @@ Prototype: Success
 {% block beforeContent %}
 <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
   <ol class="govuk-breadcrumbs__list">
-    <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="folder.html">Manage documents</a>
+<li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="manage-documents.html">Manage documents</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
   </ol>
@@ -29,9 +29,9 @@ Prototype: Success
       </div>
       <div class="govuk-notification-banner__content">
         <h3 class="govuk-notification-banner__heading">
-          Documents published </h3>
-        <p class="govuk-body">To view or change published files, go to the <a class="govuk-notification-banner__link"
-            href="published-folder">published folder</a>.</p>
+          File published </h3>
+        <p class="govuk-body">To view or change published files, view the <a class="govuk-notification-banner__link"
+            href="published-folder">published files page</a>.</p>
       </div>
     </div>
   </div>
@@ -133,7 +133,7 @@ Prototype: Success
 
     <button class="govuk-button govuk-button--secondary" type="button">Download selected</button>
 
-    <button class="govuk-button govuk-button--secondary" type="button">Delete selected</button>
+    <a class="govuk-button govuk-button--secondary" type="button" href="delete-confirmation.html">Delete selected</a>
 
 
     <a href="categorise.html" class="govuk-button govuk-button--secondary" type="button">Publish selected</a>
@@ -181,7 +181,7 @@ Prototype: Success
           <td class="govuk-table__cell">22 July 2026</td>
           <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="1897">
             <ul class="govuk-list">
-              <li><a href="#">Delete</a></li>
+              <li><a href="delete-confirmation.html">Delete</a></li>
               <li><a href="#">Download</a></li>
               <li><a href="unpublish.html">Unpublish</a></li>
 
