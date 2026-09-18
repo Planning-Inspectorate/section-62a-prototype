@@ -1,0 +1,35 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Prototype: Unpublish
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="folder.html">Manage documents</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
+  </ol>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+
+<span class="govuk-caption-m">
+  S62A/2026/000001
+</span>
+<H1 class="govuk-heading-l">
+  Unpublish selected documents</h1>
+
+<div class="govuk-inset-text">site-photo-01.jpg
+</div>
+
+<a href="folder.html" class="govuk-button govuk-button--warning">Unpublish documents</a>
+
+<p class="govuk-body"><a href="published-folder.html">Cancel and return to folder</a></p>
+
+{% endblock %}
