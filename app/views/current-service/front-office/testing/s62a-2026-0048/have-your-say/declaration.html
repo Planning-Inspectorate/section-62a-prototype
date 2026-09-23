@@ -34,7 +34,7 @@
             
             {% set itemConsentPublish = {
                 value: "consent-publish",
-                text: "I consent to my name, comment and supporting attachments being published on this website",
+                text: "By submitting this form, I acknowledge that my name, comment and any supporting attachments will be published on this website",
                 checked: checked("declaration", "consent-publish")
             } %}
             
@@ -58,9 +58,9 @@
 
                 {% set declarationList = [
                     itemConsentPublish, 
+                    itemPrivacy, 
                     itemConsentContact, 
-                    itemAiAccurate, 
-                    itemPrivacy
+                    itemAiAccurate
                 ] %}
 
             {{ govukCheckboxes({

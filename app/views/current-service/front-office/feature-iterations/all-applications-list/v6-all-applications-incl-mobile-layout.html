@@ -1,3 +1,6 @@
+{# is v4 of filter design but includes the mobile responsive layout #}
+
+
 {% extends "layouts/new/front-office.html" %}
 
 {% set activePage = "all-applications" %}
@@ -26,6 +29,7 @@
         </div>
     </div>
 {% endblock %}
+
 
 {% block content %}
 
@@ -90,11 +94,37 @@
             border-bottom: 10px solid #00847f;
         }
 
-        .govuk-main-wrapper {
-            padding-top: 40px !important;
+        .greybg {
+            box-shadow: #f3f2f1 800px 0px, #f3f2f1 -800px 0;
         }
 
-        /* Active filter tags */
+        .listbox {
+            border: 1px solid rgb(147, 147, 147);
+            padding: 16px;
+            margin: 12px;
+            transform: translateY(600px);
+            position: absolute;
+            background-color: white;
+            width: 554px;
+        }
+
+        .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-details[open] > .govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+        }
+
+         .govuk-main-wrapper {
+                padding-top: 40px !important;
+            }
+
+        /* filters */
         .selected-filter-tag {
             display: inline-flex !important;
             width: auto !important;
@@ -126,14 +156,57 @@
             margin-top: 0.5rem;
         }
 
+        /* Front office filters dropdown */
+        .filters .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            width: 3px;
+            height: 3px;
+            border-color: inherit;
+            border-width: 8px 0 4px 12.124px;
+        }
+
+        .filters dl .govuk-details__summary::before {
+            background-color: black;
+            color: black;
+        }
+
+        dl .filters {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #b1b4b6;
+
+            .govuk-details__summary {
+                margin-left: 15px;
+            }
+
+            .govuk-details__text {
+                padding-left: 0px;
+                margin-left: 15px;
+            }
+        }
+
+        .filters .govuk-details__text {
+            border: none;
+            padding: 20px;
+        }
+
+        .filters .govuk-details__summary-text {
+            text-decoration: none;
+        }
+
+        .filters.govuk-details[open]>.govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 12.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 26.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+            border-color: inherit;
+        }
+
         /* Prevent horizontal scroll bug caused by 100vw on mobile */
         body {
             overflow-x: hidden;
         }
 
-        /* ========================================================= */
-        /* RESPONSIVE SEARCH                                         */
-        /* ========================================================= */
+        /* --- RESPONSIVE SEARCH & FILTERS --- */
         .search-form-layout {
             display: flex;
             gap: 8px;
@@ -143,11 +216,11 @@
         .search-input-wrapper {
             position: relative;
             width: 100%;
-            flex-grow: 1; 
+            flex-grow: 1; /* Tells the input to take up maximum available space */
         }
 
         .search-button {
-            margin-bottom: 0 !important; 
+            margin-bottom: 0 !important; /* Ensures no extra margin at the bottom */
         }
 
         .clear-search-btn {
@@ -164,75 +237,62 @@
             padding: 0;
         }
 
-        /* ========================================================= */
-        /* MODAL FILTER STYLING                                      */
-        /* ========================================================= */
-        
-        .mobile-modal-header { display: none !important; }
-        .mobile-filter-trigger-btn { display: none !important; }
-
+       /* GOV.UK Mobile Breakpoint */
         @media (max-width: 40.0625em) {
 
-            /* Stack the search input and button */
+            /* 1. Stack the search input and button */
             .search-form-layout {
                 flex-direction: column;
-                align-items: stretch; 
-                gap: 0; 
+                align-items: stretch; /* Forces children to be 100% width */
+                gap: 0; /* Removes gap so input and search button sit flush if desired, or set to 15px if you prefer spacing */
             }
 
+            /* 2. Make search button full width */
             .search-button {
                 width: 100%; 
-                margin-top: -2px; 
-                margin-bottom: 0 !important; 
+                margin-top: -2px; /* Pulls it up slightly to sit flush with the input box */
+                margin-bottom: 0 !important; /* Ensures no extra margin at the bottom */
             }
 
-            /* --- MOBILE MODAL OVERRIDES --- */
-            
-            .mobile-filter-trigger-btn { 
-                display: block !important; 
+            /* 4. Style the filter accordion to match the GDS full-width secondary button */
+            .filters .govuk-details__summary {
+                background-color: #f3f2f1;
+                display: block; /* Stretches to full width */
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 15px;
+                text-align: center; /* Centers the text */
+                box-shadow: 0 2px 0 #8c8c8c; /* Classic GDS secondary button edge */
+                border-radius: 0; 
+                margin-left: 0;
             }
 
-            .desktop-filter-heading { 
+            /* Match the text color to standard GOV.UK black */
+            .filters .govuk-details__summary-text {
+                padding-left: 0;
+                font-size: 1.1875rem;
+                color: #0b0c0c; 
+            }
+
+            /* Hide the chevron entirely on mobile (both open and closed states) */
+            .filters .govuk-details__summary::before,
+            .filters.govuk-details[open] > .govuk-details__summary::before {
                 display: none !important; 
             }
-
-            .filter-modal-container { 
-                display: none; 
-            }
-
-            .filter-modal-container.is-open {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background-color: white;
-                z-index: 9999;
-                padding: 20px 20px 80px 20px; 
-                margin: 0 !important; 
-                box-sizing: border-box;
-                overflow-y: auto;
-                overscroll-behavior: contain;
-            }
-
-            .filter-modal-container.is-open .mobile-modal-header {
-                display: block !important; 
-            }
-
             /* --- TABLE RESPONSIVENESS --- */
         
-            /* Force long reference numbers to wrap onto the next line */
+            /* 1. Force long reference numbers to wrap onto the next line */
             .govuk-table__body .govuk-table__header a {
                 word-break: break-all;
                 overflow-wrap: anywhere;
             }
 
-            /* Override the hardcoded inline column percentages on mobile */
+            /* 2. Override the hardcoded inline column percentages on mobile */
             .govuk-table__head .govuk-table__header {
                 width: auto !important;
             }
             
+            /* (You can also add a little more spacing for tap targets in the table) */
             .govuk-table__cell, 
             .govuk-table__header {
                 padding-right: 10px;
@@ -243,63 +303,7 @@
     <main class="govuk-main-wrapper" id="main-content">
 
     <div class="govuk-grid-row">
-
-        <!-- LEFT HAND FILTER COLUMN -->
-        <div class="govuk-grid-column-one-third" style="margin-top: -40px;">
-
-            <!-- WRAPPED IN MODAL CONTAINER -->
-            <div id="filter-modal-container" class="filter-modal-container">
-
-                <!-- Mobile Only Header inside Modal -->
-                <div class="mobile-modal-header">
-                    <div style="display:flex; justify-content:space-between; align-items: baseline;">
-                        <h2 class="govuk-heading-l" style="margin-bottom: 0;">Filter</h2>
-                        <a href="#" id="close-filter-modal" class="govuk-link" style="font-size: 19px;">Return to results</a>
-                    </div>
-                    <p class="govuk-body" id="mobile-modal-count" style="margin-top: 10px; margin-bottom: 15px;">{{ totalCases }} applications</p>
-                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                </div>
-
-                <h2 class="govuk-heading-m desktop-filter-heading">Filters</h2>
-
-                <div class="govuk-accordion" data-module="govuk-accordion" id="filter-accordion" data-remember-expanded="false">
-                    <div class="govuk-accordion__section">
-                        <div class="govuk-accordion__section-header">
-                            <h3 class="govuk-accordion__section-heading">
-                                <span class="govuk-accordion__section-button">
-                                    Local planning authority (LPA)
-                                </span>
-                            </h3>
-                        </div>
-                        <div class="govuk-accordion__section-content">
-                            <div style="padding-left:15px;">
-                                <form class="govuk-form-group">
-                                    <fieldset class="govuk-fieldset">
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-full">
-                                                <fieldset class="govuk-fieldset" aria-describedby="type-hint">
-                                                    
-                                                    <!-- JS will inject the dynamic checkboxes in here -->
-                                                    <div class="govuk-checkboxes govuk-checkboxes--small" id="dynamic-lpa-checkboxes">
-                                                    </div>
-
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="govuk-button" id="apply-filters-button" type="button" style="width: 100%;">Apply filters</button>
-
-            </div>
-        </div>
-
-        <!-- RIGHT HAND CONTENT COLUMN -->
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-full">
 
                 <h3 class="govuk-heading-l" style="margin-top: -40px;">
                     All applications
@@ -324,12 +328,34 @@
                     <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
                 </form>
 
-                <!-- Mobile Trigger Button (Hidden on Desktop) -->
-                <button id="open-filter-modal" class="govuk-button govuk-button--secondary mobile-filter-trigger-btn" style="width: 100%; margin-top: 15px;">
-                    Show filters
-                </button>
+                <details class="govuk-details filters" style="margin-top: 20px">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text filtersText">
+                            Filter applications
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text" style="background-color:#F3F2F1;">
+                        
+                        <div class="govuk-form-group">
+                            <fieldset class="govuk-fieldset">
+                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                                    <h4 class="govuk-fieldset__heading">
+                                        Local planning authority (LPA)
+                                    </h4>
+                                </legend>
+                                
+                                <!-- JS will inject the dynamic checkboxes in here -->
+                                <div class="govuk-checkboxes govuk-checkboxes--small" id="dynamic-lpa-checkboxes">
+                                </div>
 
-                <div id="active-filters-section" class="active-filters" style="display: none; margin-top: 16px;">
+                            </fieldset>
+                        </div>
+                        
+                        <button class="govuk-button" id="apply-filters-button" type="button" style="margin-top: 15px;">Apply filters</button>
+                    </div>
+                </details>
+
+                <div id="active-filters-section" class="active-filters" style="display: none;">
                     <h3 class="govuk-heading-s">Active filters</h3>
                     <div id="active-filters-list" class="active-filters__list"></div>
                     <div class="clear-link">
@@ -339,7 +365,7 @@
                     </div>
                 </div>
                 
-                <p class="govuk-body" id="results-count-text" style="margin-top: 20px;">
+                <p class="govuk-body" id="results-count-text" style="margin-top: 50px;">
                     Showing
                     <strong id="count-start">{% if totalCases > 0 %}1{% else %}0{% endif %}</strong>
                     to
@@ -443,6 +469,28 @@
                                 <td class="govuk-table__cell">St Albans City and District Council</td>
                             </tr>
 
+                            <!--<tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000032/app-info">
+                                        S62A/2026/0000032
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Bristol Design Properties Ltd</td>
+                                <td class="govuk-table__cell">26 Sturdon Road, Bristol, Bristol, BS3 2BA</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>-->
+
+                            <!--<tr class="govuk-table__row case-row" data-lpa="St Albans City and District Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000105/app-info">
+                                        S62A/2026/0000105
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Marcus Aurelius</td>
+                                <td class="govuk-table__cell">9 Roman Way, St Albans, AL3 6PQ</td>
+                                <td class="govuk-table__cell">St Albans City and District Council</td>
+                            </tr>-->
+
                             <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
                                 <th scope="row" class="govuk-table__header">
                                     <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000222/app-info">
@@ -479,7 +527,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </main>
@@ -493,11 +540,6 @@
         const activeFiltersSection = document.getElementById("active-filters-section");
         const activeFiltersList = document.getElementById("active-filters-list");
         
-        // Modal elements
-        const openBtn = document.getElementById("open-filter-modal");
-        const closeBtn = document.getElementById("close-filter-modal");
-        const modal = document.getElementById("filter-modal-container");
-
         // search elements
         const searchInput = document.getElementById("keyword-search");
         const searchBtn = document.getElementById("keyword-search-button");
@@ -515,26 +557,6 @@
         
         const paginationContainer = document.querySelector(".govuk-pagination");
         const resultsCountText = document.getElementById("results-count-text");
-        const mobileModalCount = document.getElementById("mobile-modal-count");
-
-        // ---------------------------------------------------------
-        // Modal Open / Close Logic
-        // ---------------------------------------------------------
-        if (openBtn && closeBtn && modal) {
-            openBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                modal.classList.add("is-open");
-                document.documentElement.style.overflow = "hidden";
-                document.body.style.overflow = "hidden"; 
-            });
-
-            closeBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                modal.classList.remove("is-open");
-                document.documentElement.style.overflow = "";
-                document.body.style.overflow = ""; 
-            });
-        }
 
         // ---------------------------------------------------------
         // Build checkboxes dynamically based on the table data
@@ -643,9 +665,6 @@
                 countStart.innerText = count > 0 ? "1" : "0";
                 countVisible.innerText = count;
             }
-            if (mobileModalCount) {
-                mobileModalCount.innerText = count + " applications";
-            }
         }
 
         if (searchForm) {
@@ -665,15 +684,11 @@
         });
 
         if (applyBtn) {
-            applyBtn.addEventListener("click", function(e) {
-                e.preventDefault();
+            applyBtn.addEventListener("click", function() {
                 applyFilters();
-                
-                // Close modal if on mobile
-                if (window.innerWidth <= 640 && modal) {
-                    modal.classList.remove("is-open");
-                    document.documentElement.style.overflow = "";
-                    document.body.style.overflow = "";
+                const detailsContainer = applyBtn.closest('details');
+                if (detailsContainer) {
+                    detailsContainer.removeAttribute('open');
                 }
             });
         }
@@ -713,5 +728,37 @@
             });
         }
     });
+
+        // ---------------------------------------------------------
+        // Responsive filter text toggle
+        // ---------------------------------------------------------
+        const filterDetails = document.querySelector('.filters');
+        const filterSummaryText = document.querySelector('.filtersText');
+
+        if (filterDetails && filterSummaryText) {
+            
+            function updateFilterText() {
+                if (window.innerWidth <= 640) {
+                    // Mobile view: Swap between Show/Hide
+                    if (filterDetails.open) {
+                        filterSummaryText.innerText = "Hide filters";
+                    } else {
+                        filterSummaryText.innerText = "Show filters";
+                    }
+                } else {
+                    // Desktop view: Always reset to default text
+                    filterSummaryText.innerText = "Filter applications";
+                }
+            }
+
+            // 1. Run on initial load to set correct text
+            updateFilterText();
+
+            // 2. Run whenever the accordion opens or closes
+            filterDetails.addEventListener('toggle', updateFilterText);
+
+            // 3. Run whenever the user resizes the browser window
+            window.addEventListener('resize', updateFilterText);
+        }
 </script>
 {% endblock %}

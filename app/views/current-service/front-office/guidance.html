@@ -1,0 +1,122 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set activePage = "guidance" %}
+
+{% block pageTitle %}
+  Guidance - Find a local planning application made to the Planning Inspectorate
+{% endblock %}
+
+{% block beforeContent %}
+  <style>
+    /* Mobile-first grid */
+    .cd-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    /* Desktop grid: 2 columns */
+    @media (min-width: 40.0625em) {
+      .cd-cards-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .cd-card-divider {
+      border: 0;
+      border-top: 1px solid #b1b4b6;
+      margin: 0 0 16px 0;
+    }
+
+    .cd-card-heading {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .pins-chevron-card__link::after {
+      content: "";
+      position: absolute;
+      border-style: solid;
+      border-width: .2rem .2rem 0 0;
+      height: .45rem;
+      width: .45rem;
+      top: 50%;
+      right: 0; 
+      transform: translateY(-50%) rotate(45deg);
+      color: #1d70b8;
+    }
+  </style>
+
+  <div class="pins-hero" style="width:100vw; margin-left:calc(-50vw + 50%); background:#00625e; padding-top: 40px; padding-bottom: 40px;">
+        <div class="govuk-width-container">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 style="color:white;" class="govuk-heading-xl pins-info-heading govuk-!-margin-bottom-6">
+                        Guidance
+                    </h1>
+                    <p style="color:white; margin-bottom: 20px;" class="govuk-body pins-info-body">
+                        Find further legislation and guidance resources. Information on this page may be useful for those applying to use the service and the general public.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="cd-cards-grid" style="padding-top: 40px">
+  
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures/procedural-guidance-for-section-62a-authorities-in-special-measures">Procedural guidance</a>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">Read the rules, fees, and responsibilities for applicants, local councils, and the public under Section 62A.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures#:~:text=Applications%20submitted">Applications made before 2026</a>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">Search and view planning applications submitted before 2026.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.legislation.gov.uk/uksi/2021/746/contents/made">Legislation information</a>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">View the Town and Country Planning Order 2021 to to see the legal framework governing Section 62A applications</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="cd-card-divider">
+    <div class="pins-chevron-card">
+      <div class="pins-chevron-card__wrapper">
+        <h3 class="pins-chevron-card__heading govuk-heading-s cd-card-heading">
+          <a class="govuk-link pins-chevron-card__link" href="https://www.gov.uk/guidance/planning-applications-s62a#:~:text=on%20their%20behalf.-,Current%20designations%20for%20major%20applications,-Cherwell%20District%20Council">Designated authorities</a>
+        </h3>
+        <p class="govuk-body pins-chevron-card__description">View the list of current designated authorities, where eligible planning applications can, if the applicant chooses, be made directly to the Secretary of State.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
