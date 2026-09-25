@@ -480,7 +480,7 @@ router.post('/upload-supporting-attachments-answer', function(req, res) {
 router.post('/attend-hearing-answer', function (req, res) {
     const attendHearing = req.session.data['attend-hearing'];
     if (!attendHearing) {
-        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/19-would-you-like-to-attend-a-hearing', { errorAttendHearing: "Select yes if you would like to be contacted in the future to attend a hearing" });
+        return res.render('current-service/front-office/testing/s62a-2026-0048/have-your-say/19-would-you-like-to-attend-a-hearing', { errorAttendHearing: "Select yes if you want to register interest to attend a hearing" });
     }
     res.redirect('/current-service/front-office/testing/s62a-2026-0048/have-your-say/check-your-answers');
 });

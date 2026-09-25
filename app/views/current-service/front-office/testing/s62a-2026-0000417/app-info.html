@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2026/0000417 - Application information - Find a local planning application made to the Planning Inspectorate
+  Application information - S62A/2026/0000417 - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -198,20 +198,29 @@
         html: bannerHtml
         }) }}
 
-
-        <span class="govuk-caption-xl">S62A/2026/0000417</span>
-        <h1 class="govuk-heading-xl">Application information</h1>
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
+                S62A/2026/0000417
+            </span>
+            Application information
+        </h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
         
         <dl class="govuk-summary-list">
+
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Type of application</dt>
+            <dt class="govuk-summary-list__key">Application type</dt>
             <dd class="govuk-summary-list__value">Full Planning Application</dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Local planning authority</dt>
+            <dd class="govuk-summary-list__value">Bristol City Council</dd>
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Applicant name</dt>
+            <dt class="govuk-summary-list__key">Applicant</dt>
             <dd class="govuk-summary-list__value">Martin Thomas</dd>
           </div>
           
@@ -221,7 +230,7 @@
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Description of the proposed development</dt>
+            <dt class="govuk-summary-list__key">Proposed development</dt>
             <dd class="govuk-summary-list__value">Outline planning permission to make use of this underutilised site by creating a 1 bed 2 person dwelling house</dd>
           </div>
           
@@ -244,25 +253,25 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Date application valid" }, value: { text: "7 November 2026" } },
-            { key: { text: "Date by when representations must be made" }, value: { text: "11 December 2026" } },
-            { key: { text: "Target decision date" }, value: { text: "2 January 2027" } },
-            { key: { text: "Decision date" }, value: { text: "29 December 2026" } }
+            { key: { text: "Application valid" }, value: { text: "7 November 2026" } },
+            { key: { text: "Representation period" }, value: { text: "20 November 2026 at 12:00am to 11 December 2026 at 11:59pm" } },
+            { key: { text: "Target decision" }, value: { text: "2 January 2027" } },
+            { key: { text: "Decision issued" }, value: { text: "29 December 2026" } }
           ]
         }) }}
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
-        <h2 class="govuk-heading-m">Application decision</h2>
+        <h2 class="govuk-heading-m">Decision</h2>
 
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Decision date</dt>
+            <dt class="govuk-summary-list__key">Date</dt>
             <dd class="govuk-summary-list__value">29 December 2026</dd>
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Decision outcome</dt>
+            <dt class="govuk-summary-list__key">Outcome</dt>
             <dd class="govuk-summary-list__value">Approved with conditions</dd>
           </div>
           
@@ -273,10 +282,10 @@
         <h2 class="govuk-heading-m">Have your say</h2>
 
         <p class="govuk-body">
-            The representation period for this application has closed.
+            The written representation period has ended.
         </p>
         <p class="govuk-body">
-            You can view the published representations <a href="/current-service/front-office/testing/s62a-2026-0000417/written-representations" class="govuk-link">here</a>.
+            You can <a href="/current-service/front-office/testing/s62a-2026-0000417/written-representations" class="govuk-link">view the written representations</a> for this application.
         </p>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
@@ -455,15 +464,6 @@
 
         <h2 class="govuk-heading-m">Contact us</h2>
 
-        <details class="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                    Ways to contact us
-                </span>
-            </summary>
-            
-            <div class="govuk-details__text">
-                
                 <h3 class="govuk-heading-s">Telephone</h3>
                 <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
                 <p class="govuk-body">Telephone: 0303 444 5000</p>
@@ -476,31 +476,26 @@
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
                 <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
                 <p class="govuk-body">
-                    <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
+                    <a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.gov.uk</a>
                 </p>
                 <p class="govuk-body">We aim to respond within 10 working days.</p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
-                <p class="govuk-body">
-                    Section 62A Applications Team,
-                    <br>
-                    The Planning Inspectorate,
-                    <br>
-                    3rd Floor,
-                    <br>
-                    Temple Quay House,
-                    <br>
-                    2 The Square, Temple Quay,
-                    <br>
-                    Bristol, BS1 6PN
-                </p>
+                <ul class="govuk-list">
+                    <li>Section 62A Applications Team<br>
+                        Planning Inspectorate, c/o QUADIENT<br>
+                        69 Buckingham Avenue<br>
+                        Slough<br>
+                        SL1 4PN
+                    </li>
+                </ul>
 
-            </div> 
-        </details>
+         
+    
 
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">
-            Call or email us if you cannot use a document in the format we've published.
+            Contact us if you would like this application information in another format.
         </p>
     </div>
 </div>

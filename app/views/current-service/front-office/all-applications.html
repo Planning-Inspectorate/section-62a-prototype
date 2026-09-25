@@ -150,18 +150,13 @@
             margin-bottom: 0 !important; 
         }
 
-        .clear-search-btn {
+        /* New Clear Search Link Styles */
+        .clear-search-link {
             display: none;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: #505a5f;
-            cursor: pointer;
-            padding: 0;
+            margin-top: 10px;
+            font-size: 19px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
         /* ========================================================= */
@@ -306,7 +301,7 @@
                 </h3>
          
                 <div id="search-hint" class="govuk-hint">
-                    To find a specific case, search by local authority, reference, first line of an address or postcode.
+                    Find a case, search by local authority, reference, first line of an address or postcode
                 </div>
                 
                 <form class="govuk-form-group search-form-layout" style="margin-bottom: 0px;">
@@ -314,15 +309,12 @@
                     
                     <div class="search-input-wrapper">
                         <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
-                            style="margin-bottom: 0; width:100%; padding-right: 40px;">
-                        
-                        <button type="button" id="clear-search-icon" aria-label="Clear search" class="clear-search-btn">
-                            &times;
-                        </button>
+                            style="margin-bottom: 0; width:100%;">
                     </div>
 
                     <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
                 </form>
+                <a href="#" id="clear-search-link" class="govuk-link clear-search-link">Clear search</a>
 
                 <!-- Mobile Trigger Button (Hidden on Desktop) -->
                 <button id="open-filter-modal" class="govuk-button govuk-button--secondary mobile-filter-trigger-btn" style="width: 100%; margin-top: 15px;">
@@ -365,8 +357,8 @@
                         </caption>
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header" style="width: 15%;">Application reference</th>
-                                <th scope="col" class="govuk-table__header" style="width: 30%;">Applicant name</th>
+                                <th scope="col" class="govuk-table__header" style="width: 15%;">Reference</th>
+                                <th scope="col" class="govuk-table__header" style="width: 30%;">Applicant</th>
                                 <th scope="col" class="govuk-table__header" style="width: 30%;">Site address</th>
                                 <th scope="col" class="govuk-table__header" style="width: 25%;">LPA</th>
                             </tr>
@@ -502,12 +494,12 @@
         const searchInput = document.getElementById("keyword-search");
         const searchBtn = document.getElementById("keyword-search-button");
         const searchForm = searchBtn.closest("form");
+        const clearSearchLink = document.getElementById("clear-search-link");
 
         // grab table rows
         const rows = document.querySelectorAll(".case-row");
         const checkboxContainer = document.getElementById("dynamic-lpa-checkboxes");
         
-        // Use 'let' instead of 'const' because we will define the checkboxes AFTER we build them
         let checkboxes; 
 
         const tableContainer = document.querySelector(".pins-table__container");
@@ -573,7 +565,6 @@
             checkboxes = document.querySelectorAll(".filter-checkbox");
         }
         
-        // Run it immediately on page load!
         buildFilterCheckboxes();
 
         // ---------------------------------------------------------
@@ -638,10 +629,21 @@
         function updateResultCount(count) {
             const countStart = document.getElementById("count-start");
             const countVisible = document.getElementById("count-visible");
+            const countTotal = document.getElementById("count-total");
+            
+            // Safely pass the Nunjucks variable into a JavaScript number
+            const maxCases = parseInt("{{ totalCases }}", 10) || 0;
             
             if (countStart && countVisible) {
                 countStart.innerText = count > 0 ? "1" : "0";
                 countVisible.innerText = count;
+                
+                // Update total text to match visible if filters applied, else reset to true total
+                if (countTotal && count < maxCases) {
+                    countTotal.innerText = count; 
+                } else if (countTotal) {
+                    countTotal.innerText = maxCases;
+                }
             }
             if (mobileModalCount) {
                 mobileModalCount.innerText = count + " applications";
@@ -686,18 +688,20 @@
             });
         }
 
-        const clearSearchIcon = document.getElementById("clear-search-icon");
-        if (searchInput && clearSearchIcon) {
+        // New Clear Search Link Logic
+        if (searchInput && clearSearchLink) {
             searchInput.addEventListener("input", function() {
                 if (searchInput.value.trim().length > 0) {
-                    clearSearchIcon.style.display = "block";
+                    clearSearchLink.style.display = "inline-block";
                 } else {
-                    clearSearchIcon.style.display = "none";
+                    clearSearchLink.style.display = "none";
                 }
             });
-            clearSearchIcon.addEventListener("click", function() {
+            
+            clearSearchLink.addEventListener("click", function(e) {
+                e.preventDefault();
                 searchInput.value = ""; 
-                clearSearchIcon.style.display = "none";
+                clearSearchLink.style.display = "none";
                 searchInput.focus();
                 applyFilters();
             });
@@ -707,7 +711,10 @@
         if (clearAllLink) {
             clearAllLink.addEventListener("click", function(e) {
                 e.preventDefault();
-                if (searchInput) searchInput.value = "";
+                if (searchInput) {
+                    searchInput.value = "";
+                    if (clearSearchLink) clearSearchLink.style.display = "none";
+                }
                 checkboxes.forEach(cb => cb.checked = false);
                 applyFilters();
             });

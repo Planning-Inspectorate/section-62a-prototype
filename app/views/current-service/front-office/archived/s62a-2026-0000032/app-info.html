@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2026/0000032 - Application information - Find a Section 62A application
+  Application information - S62A/2026/0000032 - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -140,17 +140,17 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000032/app-info" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/archived/s62a-2026-0000032/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000032/documents">Documents</a>
+                    <a href="/current-service/front-office/archived/s62a-2026-0000032/documents">Documents</a>
                 </li>
               
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000032/application-updates">Application updates</a>
+                    <a href="/current-service/front-office/archived/s62a-2026-0000032/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000032/written-representations">Written representations (Comments and feedback)</a>
+                    <a href="/current-service/front-office/archived/s62a-2026-0000032/written-representations">Written representations (Comments and feedback)</a>
                 </li>
             </ul>
         </nav>
@@ -158,19 +158,21 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        <span class="govuk-caption-xl">S62A/2026/0000032</span>
-        <h1 class="govuk-heading-xl">Application information</h1>
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>S62A/2026/0000032</span>
+            Application information
+        </h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
         
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Type of application</dt>
+            <dt class="govuk-summary-list__key">Application type</dt>
             <dd class="govuk-summary-list__value">Full Planning Application</dd>
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Applicant name</dt>
+            <dt class="govuk-summary-list__key">Applicant</dt>
             <dd class="govuk-summary-list__value">Bristol Design Properties Ltd</dd>
           </div>
           
@@ -180,7 +182,7 @@
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Description of the proposed development</dt>
+            <dt class="govuk-summary-list__key">Proposed development</dt>
             <dd class="govuk-summary-list__value">Change of use from a dwellinghouse used by a single person or household (Use Class C3a) to a small dwellinghouse in multiple occupation (Use Class C4), including the erection of a cycle and refuse/recycling stores.</dd>
           </div>
           
@@ -188,11 +190,7 @@
             <dt class="govuk-summary-list__key">Case officer</dt>
             <dd class="govuk-summary-list__value">Section 62A Applications Team</dd>
           </div>
-          
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Procedure</dt>
-            <dd class="govuk-summary-list__value">Written Representations</dd>
-          </div>
+        
         </dl>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
@@ -203,7 +201,7 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Date application valid" }, value: { text: "20 September 2026" } }
+            { key: { text: "Application valid" }, value: { text: "20 September 2026" } }
           ]
         }) }}
 
@@ -397,15 +395,6 @@
 
         <h2 class="govuk-heading-m">Contact us</h2>
 
-        <details class="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                    Ways to contact us
-                </span>
-            </summary>
-            
-            <div class="govuk-details__text">
-                
                 <h3 class="govuk-heading-s">Telephone</h3>
                 <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
                 <p class="govuk-body">Telephone: 0303 444 5000</p>
@@ -418,33 +407,29 @@
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
                 <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
                 <p class="govuk-body">
-                    <a class="govuk-link" href="#">section62anonmajor@planninginspectorate.go.uk</a>
+                    <a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.gov.uk</a>
                 </p>
                 <p class="govuk-body">We aim to respond within 10 working days.</p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
-                <p class="govuk-body">
-                    Section 62A Applications Team,
-                    <br>
-                    The Planning Inspectorate,
-                    <br>
-                    3rd Floor,
-                    <br>
-                    Temple Quay House,
-                    <br>
-                    2 The Square, Temple Quay,
-                    <br>
-                    Bristol, BS1 6PN
-                </p>
+                <ul class="govuk-list">
+                    <li>Section 62A Applications Team<br>
+                        Planning Inspectorate, c/o QUADIENT<br>
+                        69 Buckingham Avenue<br>
+                        Slough<br>
+                        SL1 4PN
+                    </li>
+                </ul>
 
-            </div> 
-        </details>
-
+         
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">
-            Call or email us if you cannot use a document in the format we've published.
+            Contact us if you would like this application information in another format.
         </p>
-    </div>
+
+        </div>
+
+        
 </div>
 
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  S62A/2026/0048 - Application information - Find a local planning application made to the Planning Inspectorate
+  Application information - S62A/2026/0048 - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -200,19 +200,30 @@
         html: bannerHtml
         }) }}
 
-        <span class="govuk-caption-xl">S62A/2026/0048</span>
-        <h1 class="govuk-heading-xl">Application information</h1>
+        
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
+                S62A/2026/0048
+            </span>
+            Application information
+        </h1>
 
         <h2 class="govuk-heading-m">About this application</h2>
         
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Type of application</dt>
+            <dt class="govuk-summary-list__key">Application type</dt>
             <dd class="govuk-summary-list__value">Full Planning Application</dd>
           </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Local planning authority</dt>
+            <dd class="govuk-summary-list__value">St Albans City and District Council</dd>
+          </div>
+          
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Applicant name</dt>
+            <dt class="govuk-summary-list__key">Applicant</dt>
             <dd class="govuk-summary-list__value">Colin Franzmann</dd>
           </div>
           
@@ -222,7 +233,7 @@
           </div>
           
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Description of the proposed development</dt>
+            <dt class="govuk-summary-list__key">Proposed development</dt>
             <dd class="govuk-summary-list__value">Demolition of existing 4 bedroom house and outbuildings. Construction of replacement 4 bedroom house and double garage</dd>
           </div>
           
@@ -245,8 +256,8 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Date application valid" }, value: { text: "12 August 2026" } },
-            { key: { text: "Date by when representations must be made" }, value: { text: "22 September 2026" } },
+            { key: { text: "Application valid" }, value: { text: "12 August 2026" } },
+            { key: { text: "Representation period" }, value: { text: "1 September 2026 at 12:00 am to 22 September 2026 at 11:59pm" } },
             { key: { text: "Target decision" }, value: { text: "15 October 2026" } }
           ]
         }) }}
@@ -286,7 +297,7 @@
                 <h3 class="govuk-heading-s">Email</h3>
 
                 <ul class="govuk-list">
-                    <li><a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.go.uk</a></li>
+                    <li><a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.gov.uk</a></li>
                 </ul>
 
                 <h3 class="govuk-heading-s">Post</h3>
@@ -302,9 +313,7 @@
                 <h3 class="govuk-heading-s">In person</h3>
                 
                 <ul class="govuk-list">
-                    <li>69 Buckingham Avenue, Slough, SL1 4PN</li>
-                    <li>Open Monday to Friday, 9am to 5pm (except public holidays)</li>
-                    <li>Deadline to view in person: 22 September 2026</li>
+                    <li>Contact us to find out how you can have your say in person.</li>
                 </ul>
 
             </div> 
@@ -349,17 +358,17 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The pre-application process for Section 62A applications is handled by the Planning Inspectorate.</p>
-                    <p>The applicant sends the notice of intent to PINS with information on:</p>
+                    <p>The Planning Inspectorate handles the pre-application process for Section 62A applications.</p>
+                    <p>The applicant sends a notice of intent to the Planning Inspectorate. This includes:</p>
                     <ul>
                         <li>who the applicant is</li>
                         <li>the site address</li>
                         <li>the size of the development</li>
-                        <li>expected submission date</li>
-                        <li>Listed Building Consent status</li>
-                        <li>and any likely issues with the development</li>
+                        <li>the expected submission date</li>
+                        <li>the Listed Building Consent status</li>
+                        <li>any likely issues with the development</li>
                     </ul>
-                    <p>These will be addressed in the application submission.</p>
+                    <p>The applicant will address these details in the full application submission.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -378,8 +387,7 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p class="govuk-body">The Planning Inspectorate (PINS) checks that the application is complete. For
-                        example, that the right documents and fees have been added.</p>
+                    <p class="govuk-body">The Planning Inspectorate checks that the application is complete. This includes making sure the right documents and fees have been provided.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -400,13 +408,13 @@
                 <div class="govuk-details__text">
                     <p>The Planning Inspectorate:</p>
                 <ul>
-                    <li>publishes the application documents on a dedicated web page</li>
-                    <li>carries out any required consultations</li>
-                    <li>may place a press notice</li>
+                    <li>publishes the application documents online</li>
+                    <li>carries out consultations</li>
+                    <li>places press notices when required</li>
                 </ul>
-                    <p>The relevant local planning authority displays a site notice and notifies any adjoining owner or occupier if needed.</p>
-                    <p>Statutory consultees and other interested parties can send written representations to the Planning Inspectorate.</p>
-                    <p>Written representations must be sent no less than 21 days from the date the application is accepted. Written representations submitted after this date may not be considered.</p>
+                    <p>The relevant local planning authority displays a site notice and notifies any neighbouring owner or occupier if needed.</p>
+                    <p>Anyone can make a written representation to the Planning Inspectorate.</p>
+                    <p>You must send your comments within the representation period. We will not consider comments submitted after this date.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -425,19 +433,14 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The procedure is the method of decision process the Planning Inspectorate will use to make a
-                        decision about the proposed development.</p>
-                    <p>The Planning Inspectorate will keep the procedure choice, including combined procedures, 
-                        under review. Subject to any notification and procedural requirement, the procedure may be changed 
-                        at any point before the decision is issued.</p>
-                    <p>The planning inspector will determine how the application should proceed. The possible procedures
-                        are:</p>
+                    <p>The procedure is how the Planning Inspectorate will examine the application and make a final decision.</p>
+                    <p>A planning inspector will decide if the application should proceed using:</p>
                     <ul>
                         <li>written representations</li>
-                        <li>hearing</li>
+                        <li>a hearing</li>
                     </ul>
-                    <p>The decision will be communicated to the applicant, relevant Local Planning Authority (LPA) and
-                        anyone who submitted comments during the representations period.</p>
+                    <p>The Planning Inspectorate can review and change this procedure at any time before they issue a decision.</p>
+                    <p>They will tell the applicant, the local planning authority (LPA), and anyone who commented which procedure they have chosen.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -456,10 +459,9 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>The inspector uses the evidence to write a decision report about the outcome of the application.</p>
-                    <p>The Planning Inspectorate (PINS) issues a formal decision notice including a statement with the
-                        reasons for the decision.</p>
-                    <p>If the application is approved, the decision will also list any necessary conditions.</p>
+                    <p>The inspector uses the evidence to write a decision report.</p>
+                    <p>The Planning Inspectorate will then issue a formal decision notice explaining the reasons for the decision.</p>
+                    <p>If the application is approved, the notice will also list any required conditions.</p>
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -478,11 +480,9 @@
                     </div>
                 </summary>
                 <div class="govuk-details__text">
-                    <p>Where permission has been granted on a Section 62A application, the Local Planning
-                        Authority (LPA) is responsible for monitoring the implementation of the permission. The LPA must
-                        ensure that it is carried out in accordance with the plans and any planning conditions.</p>
-                    <p>To challenge a decision on a Section 62A application, an application must be made to the
-                        High Court. This must be made within 6 weeks of the day the decision is issued.</p>
+                    <p>If the application is approved, the local planning authority (LPA) is responsible for monitoring the development. 
+                        They must make sure the work follows the approved plans and any planning conditions.</p>
+                    <p>To challenge a decision, you must apply to the High Court. You must do this within 6 weeks of the day the decision is issued.</p>
                 </div>
             </details>
         </div>
@@ -503,15 +503,6 @@
 
         <h2 class="govuk-heading-m">Contact us</h2>
 
-        <details class="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                    Ways to contact us
-                </span>
-            </summary>
-            
-            <div class="govuk-details__text">
-                
                 <h3 class="govuk-heading-s">Telephone</h3>
                 <p class="govuk-body">If you have a representation reference number, have it with you when you call.</p>
                 <p class="govuk-body">Telephone: 0303 444 5000</p>
@@ -524,31 +515,23 @@
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Email</h3>
                 <p class="govuk-body">When writing an email, quote the application reference number S62A/2026/0048 in the subject line.</p>
                 <p class="govuk-body">
-                    <a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.go.uk</a>
+                    <a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.gov.uk</a>
                 </p>
                 <p class="govuk-body">We aim to respond within 10 working days.</p>
 
                 <h3 class="govuk-heading-s govuk-!-margin-top-6">Address</h3>
-                <p class="govuk-body">
-                    Section 62A Applications Team,
-                    <br>
-                    The Planning Inspectorate,
-                    <br>
-                    3rd Floor,
-                    <br>
-                    Temple Quay House,
-                    <br>
-                    2 The Square, Temple Quay,
-                    <br>
-                    Bristol, BS1 6PN
-                </p>
-
-            </div> 
-        </details>
+                <ul class="govuk-list">
+                    <li>Section 62A Applications Team<br>
+                        Planning Inspectorate, c/o QUADIENT<br>
+                        69 Buckingham Avenue<br>
+                        Slough<br>
+                        SL1 4PN
+                    </li>
+                </ul>
 
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">
-            Contact us if you would like any application information in another format.
+            Contact us if you would like this application information in another format.
         </p>
 
     
