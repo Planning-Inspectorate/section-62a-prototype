@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  Application information - S62A/2026/0048 - Find a local planning application made to the Planning Inspectorate
+  Application information - S62A/2026/0000385 - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -60,7 +60,7 @@
         margin-bottom: 15px; 
     }
 
-     /* Force the navigation into a vertical stack on mobile */
+    /* Force the navigation into a vertical stack on mobile */
     @media (max-width: 40.0625em) {
         
         /* 1. Stack the layout */
@@ -164,19 +164,17 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/app-info" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/documents">Documents</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/documents">Documents</a>
+                </li>
+             
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/hys">Have your say</a>
-                </li>
-                <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/application-updates">Application updates</a>
-                </li>
-                <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0048/written-representations">Written representations (Comments and feedback)</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/written-representations">Written representations (Comments and feedback)</a>
                 </li>
             </ul>
         </nav>
@@ -184,26 +182,9 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {% set bannerHtml %}
-        <p class="govuk-notification-banner__heading">
-            Latest update — 28 August 2026
-        </p>
-        <p>
-            St Albans City and District Council added as a consultee - available to view under the written representations tab
-        </p>
-        <p>
-            <a class="govuk-notification-banner__link" href="/current-service/front-office/testing/s62a-2026-0048/application-updates">View all updates</a>
-        </p>
-        {% endset %}
-
-        {{ govukNotificationBanner({
-        html: bannerHtml
-        }) }}
-
-        
         <h1 class="govuk-heading-xl">
             <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
-                S62A/2026/0048
+                S62A/2026/0000385
             </span>
             Application information
         </h1>
@@ -218,23 +199,22 @@
 
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Local planning authority</dt>
-            <dd class="govuk-summary-list__value">St Albans City and District Council</dd>
+            <dd class="govuk-summary-list__value">Bristol City Council</dd>
           </div>
-          
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant</dt>
-            <dd class="govuk-summary-list__value">Colin Franzmann</dd>
+            <dd class="govuk-summary-list__value">Evory Smith</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
-            <dd class="govuk-summary-list__value">1 Wheatfield Road, Harpenden, AL5 2NY</dd>
+            <dd class="govuk-summary-list__value">Second Floor Flat, 1B Rifter Road, Bristol, BS1 2LP</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Proposed development</dt>
-            <dd class="govuk-summary-list__value">Demolition of existing 4 bedroom house and outbuildings. Construction of replacement 4 bedroom house and double garage</dd>
+            <dd class="govuk-summary-list__value">Extend 1bed unit to 2bed and demolish old tavern behind building</dd>
           </div>
           
           <div class="govuk-summary-list__row">
@@ -244,7 +224,7 @@
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Procedure</dt>
-            <dd class="govuk-summary-list__value">Written Representations</dd>
+            <dd class="govuk-summary-list__value">Hearing</dd>
           </div>
         </dl>
 
@@ -256,77 +236,35 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Application valid" }, value: { text: "12 August 2026" } },
-            { key: { text: "Representation period" }, value: { text: "1 September 2026 at 12:00 am to 22 September 2026 at 11:59pm" } },
-            { key: { text: "Target decision" }, value: { text: "15 October 2026" } }
+            { key: { text: "Application valid" }, value: { text: "6 May 2026" } },
+            { key: { text: "Representation period" }, value: { text: "21 May 2026 at 12:00am to 11 June 2026 at 11:59pm" } },
+            { key: { text: "Target decision" }, value: { text: "29 June 2026" } }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
+
+        <h2 class="govuk-heading-m">Hearing</h2>
+
+        {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+        {{ govukSummaryList({
+          rows: [
+            { key: { text: "Date" }, value: { text: "18 June 2026" } },
+            { key: { text: "Venue" }, value: { text: "Bristol Town Hall" } }
           ]
         }) }}
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
-        <h2 class="govuk-heading-m">Have your say</h2>
+        <h2 class="govuk-heading-m">Have your say</h2> 
 
         <p class="govuk-body">
-            Send us your written representations about this application. 
-        </p>
-
-        <p class="govuk-body">
-            A written representation includes your comment and any attachments. Planning Inspectors will consider these before they make a decision on an application.
-        </p>
-
-        <p class="govuk-body">
-            We will publish your name and comments on this website.
+            The written representations period has closed.
         </p>
         <p class="govuk-body">
-            You must submit your comment by 22 September 2026 at 11:59pm.
+            You can <a href="/current-service/front-office/testing/s62a-2026-0000385/written-representations" class="govuk-link">view the written representations</a> for this application.
         </p>
-
-        <details class="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                    Other ways to submit your comment
-                </span>
-            </summary>
-            
-            <div class="govuk-details__text">
-
-                <p class="govuk-body">You can also submit a written representation by email, post or in person.</p>
-
-                <p class="govuk-body">If you are sending your representation by post or email you must include the application reference number and site address.</p>
-
-                <h3 class="govuk-heading-s">Email</h3>
-
-                <ul class="govuk-list">
-                    <li><a class="govuk-link" href="#" style="overflow-wrap: break-word;">section62anonmajor@planninginspectorate.gov.uk</a></li>
-                </ul>
-
-                <h3 class="govuk-heading-s">Post</h3>
-
-                <ul class="govuk-list">
-                    <li>Section 62A Applications Team<br>
-                        Planning Inspectorate, c/o QUADIENT<br>
-                        69 Buckingham Avenue<br>
-                        Slough<br>
-                        SL1 4PN</li>
-                </ul>
-
-                <h3 class="govuk-heading-s">In person</h3>
-                
-                <ul class="govuk-list">
-                    <li>Contact us to find out how you can have your say in person.</li>
-                </ul>
-
-            </div> 
-        </details>
-
-
-        {% from "govuk/components/button/macro.njk" import govukButton %}
-
-        {{ govukButton({
-          text: "Have your say",
-          href: "/current-service/front-office/testing/s62a-2026-0048/hys"
-        }) }}
-
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
@@ -335,15 +273,7 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
         <h2 class="govuk-heading-m">Application stages</h2>
-        <p class="govuk-body">This application is at the <strong>consultation</strong> stage.</p>
-
-        <p class="govuk-body">At this stage, you can have your say about the application.</p>
-
-        <p class="govuk-body">
-            <a href="/current-service/front-office/testing/s62a-2026-0048/hys">
-                Comment on the proposed development by Tuesday 22 September 2026.
-            </a>
-        </p>
+        <p class="govuk-body">This application is at the <strong>hearing</strong> stage.</p>
 
         <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
             <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
@@ -395,13 +325,13 @@
         </div>
 
         <div id="project-stage-consultation">
-            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Consultation</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In progress</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -428,7 +358,7 @@
                         <div class="summary-content">
                             <span>Procedure decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -442,6 +372,28 @@
                     </ul>
                     <p>The Planning Inspectorate can review and change this procedure at any time before they issue a decision.</p>
                     <p>They will tell the applicant, the local planning authority and anyone who commented which procedure they have chosen.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-written-representations">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Hearing</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In-progress</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>A hearing is a round-table discussion lead by an inspector.</p>
+                    <p>The hearing allows anyone to make oral representations. It also allows the appointed person to ask questions about points of fact or other questions they have.</p>
+                    <p>A hearing is not for parties to test the evidence of others through cross examination or direct questioning.</p>
+            
                 </div>
             </details>
             <hr class="govuk-section-break govuk-section-break--visible">
@@ -533,12 +485,13 @@
                     </li>
                 </ul>
 
+         
+    
+
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">
             Contact us if you would like this application information in another format.
         </p>
-
-    
     </div>
 </div>
 

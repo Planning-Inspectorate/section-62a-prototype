@@ -1,0 +1,244 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Published representation - S62A/2026/0000385 - Find a local planning application made to the Planning Inspectorate
+{% endblock %}
+
+{% block content %}
+
+<style>
+        .filter {
+            background-color: #f3f2f1;
+            padding: 8px;
+            border-radius: 5px;
+            margin-left: 10px;
+            border: 1px solid #505a5f;
+            text-decoration: none;
+            color: black;
+        }
+
+        .filters {
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #b1b4b6;
+        }
+
+        .filters .govuk-details__text {
+            border: none;
+            padding-left: 0;
+        }
+
+        .filtersText {
+            text-decoration: none;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1875rem;
+        }
+
+        .filter:visited {
+            color: black;
+        }
+
+        .govuk-details__summary::before {
+            clip-path: polygon(6.38% 22.63%, 49.5% 65.75%, 92.63% 22.63%, 100% 30%, 50% 80%, 0% 30%);
+            background-color: black;
+            color: black;
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-details[open]>.govuk-details__summary::before {
+            clip-path: polygon(0% 71.88%, 49.5% 22.63%, 98.5% 71.88%, 91.63% 78.71%, 50% 36.88%, 7.37% 79.29%);
+            width: 3px;
+            height: 3px;
+        }
+
+        .govuk-accordion__section-button {
+            font-size: 19px !important;
+            padding-bottom: 0px !important;
+        }
+
+        /* Target all accordion content padding dynamically */
+        .govuk-accordion__section-content {
+            padding-bottom: 0px !important;
+        }
+
+        .govuk-form-group {
+            margin-bottom: 20px !important;
+        }
+
+        /* ========================================================= */
+        /* MOJ SIDE NAVIGATION OVERRIDES                             */
+        /* ========================================================= */
+        
+        .moj-side-navigation__item a {
+            font-size: 19px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .moj-side-navigation__item {
+            margin-bottom: 15px; 
+        }
+
+         /* Force the navigation into a vertical stack on mobile */
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Stack the layout */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 100% !important; /* Changed from 97% */
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 100% !important; /* Changed from 97% */
+            margin-bottom: 15px !important; 
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 100% !important; /* Changed from 97% */
+            box-sizing: border-box !important; /* Keeps padding inside the 100% width! */
+            padding-top: 15px !important; 
+            padding-bottom: 15px !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            font-size: 19px !important; 
+            color: #1d70b8 !important; 
+            box-shadow: none !important; 
+            border: none !important;
+            
+            /* The magic rules to force long text to wrap onto the next line */
+            white-space: normal !important; 
+            overflow-wrap: break-word !important;
+        }
+
+        /* 3. Force your CUSTOM active state (Black text, bold, grey bg, teal left border) */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; /* Teal line on the left */
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; /* Grey line on the left */
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+        /* 6. GOV.UK standard yellow accessibility focus state */
+        .moj-side-navigation__item a:focus {
+            background-color: #fd0 !important; /* GOV.UK Yellow */
+            color: #0b0c0c !important; /* Black text */
+            
+            /* The classic GDS focus outline: yellow on top, black on the bottom */
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important; 
+            outline: none !important; 
+        }
+
+        /* 7. Ensure the active item also gets the yellow state if tabbed into */
+        .moj-side-navigation__item--active a:focus {
+            background-color: #fd0 !important; 
+            color: #0b0c0c !important;
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important;
+        }
+    }
+    </style>
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-one-third">
+            <nav class="moj-side-navigation" aria-label="Side navigation">
+                <ul class="moj-side-navigation__list">
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000385/app-info">Application information</a>
+                    </li>
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000385/documents">Documents</a>
+                    </li>
+     
+                    <li class="moj-side-navigation__item">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000385/application-updates">Application updates</a>
+                    </li>
+                    <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                        <a href="/current-service/front-office/testing/s62a-2026-0000385/written-representations" aria-current="location">Written representations (Comments and feedback)</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+             <a href="/current-service/front-office/testing/s62a-2026-0000385/written-representations" class="govuk-back-link">Back to list</a>
+
+        <div class="govuk-grid-column-two-thirds">
+            
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
+                    S62A/2026/0000385
+                </span>
+                Bristol City Council
+            </h1>
+
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Date submitted
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        11 June 2026
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Submitted by
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        Consultees
+                    </dd>
+                </div>
+            </dl>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word" style="margin-bottom: 0;">Our ref: 532560</p>
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">Your ref: S62A/2026/0000385</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">Bristol City Council has reviewed the final draft unilateral undertaking. We advise that as it addresses issues that falls within our remit, we have provided an attached response and the
+            relevant documents for your consideration.</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">We would be grateful if you could confirm receipt of this response and the attached documents.</p>
+
+            <p class="govuk-body pins-pre-line pins-overflow-break-word">For any queries regarding this advice, for new consultations, or to provide further information on this consultation
+                please send your correspondences to consultations@bristolcc.org.uk
+            </p>
+
+            <h2 class="govuk-heading-m">Attachments</h2>
+
+            <ul class="govuk-list document-list">
+                <li>
+                    <a class="govuk-link" href="" target="_blank" rel="noreferrer">
+                        Economic_review-27-06-2026 (PDF, 204 KB) (opens in new window)
+                    </a>
+                </li>
+
+               <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+                <li>
+                    <a class="govuk-link" href="" target="_blank" rel="noreferrer">
+                        Business_and_risk_assessment-27-06-2026 (PDF, 204 KB) (opens in new window)
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+    
+</div>
+
+{% endblock %}

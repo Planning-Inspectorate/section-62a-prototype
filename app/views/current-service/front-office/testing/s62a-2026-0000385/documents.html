@@ -1,0 +1,852 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% block pageTitle %}
+  Documents - S62A/2026/00000385 - Find a local planning application made to the Planning Inspectorate
+{% endblock %}
+
+{% block content %}
+<style>
+    /* ========================================================= */
+    /* GLOBAL & LIST STYLING                                     */
+    /* ========================================================= */
+    .document-list li,
+    .govuk-\!-padding-bottom-5 {
+        padding-bottom: 15px !important;
+    }
+
+    .document-list li {
+        border-top: 1px solid #b1b4b6;
+        margin: 0 !important;
+        padding-top: 10px !important;
+    }
+
+    /* 1. Mobile-first: Stack the metadata vertically on the left */
+    .document-list__meta-data {
+        color: #505a5f;
+        display: flex;
+        flex-direction: column;
+        gap: 5px; 
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
+    /* 2. Desktop Breakpoint: Switch back to the 3-column layout */
+    @media (min-width: 40.0625em) {
+        .document-list__meta-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+        }
+    }
+
+    .document-list,
+    .govuk-list {
+        color: #0b0c0c;
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-left: 0;
+        list-style-type: none;
+    }
+
+    .document-list .document-list,
+    .document-list .govuk-list,
+    .govuk-list .document-list,
+    .govuk-list .govuk-list {
+        margin-top: 10px
+    }
+
+    .document-list>li,
+    .govuk-list>li {
+        margin-bottom: 5px;
+    }
+
+    .document-list+.govuk-heading-l,
+    .govuk-body+.govuk-heading-l,
+    .govuk-body-m+.govuk-heading-l,
+    .govuk-body-s+.govuk-heading-l,
+    .govuk-list+.govuk-heading-l {
+        padding-top: 15px;
+    }
+
+    @media(min-width: 40.0625em) {
+        .document-list+.govuk-heading-l,
+        .govuk-body+.govuk-heading-l,
+        .govuk_body-m+.govuk-heading-l,
+        .govuk-body-s+.govuk-heading-l,
+        .govuk-list+.govuk-heading-l {
+            padding-top: 20px;
+        }
+    }
+
+    .document-list+.filter-accordion__title,
+    .document-list+.govuk-heading-m,
+    .document-list+.govuk-heading-s,
+    .govuk-body+.filter-accordion__title,
+    .govuk-body+.govuk-heading-m,
+    .govuk-body+.govuk-heading-s,
+    .govuk-body-m+.filter-accordion__title,
+    .govuk-body-m+.govuk-heading-m,
+    .govuk-body-m+.govuk-heading-s,
+    .govuk-body-s+.filter-accordion__title,
+    .govuk-body-s+.govuk-heading-m,
+    .govuk-body-s+.govuk-heading-s,
+    .govuk-list+.filter-accordion__title,
+    .govuk-list+.govuk-heading-m,
+    .govuk-list+.govuk-heading-s {
+        padding-top: 5px;
+    }
+
+    @media(min-width: 40.0625em) {
+        .document-list+.filter-accordion__title,
+        .document-list+.govuk-heading-m,
+        .document-list+.govuk-heading-s,
+        .govuk-body+.filter-accordion__title,
+        .govuk-body+.govuk-heading-m,
+        .govuk-body+.govuk-heading-s,
+        .govuk-body-m+.filter-accordion__title,
+        .govuk-body-m+.govuk-heading-m,
+        .govuk-body-m+.govuk-heading-s,
+        .govuk-body-s+.filter-accordion__title,
+        .govuk-body-s+.govuk-heading-m,
+        .govuk-body-s+.govuk-heading-s,
+        .govuk-list+.filter-accordion__title,
+        .govuk-list+.govuk-heading-m,
+        .govuk-list+.govuk-heading-s {
+            padding-top: 10px;
+        }
+    }
+
+    /* ========================================================= */
+    /* ACCORDION & BASE FILTER STYLING                           */
+    /* ========================================================= */
+    .govuk-accordion__section-button { font-size: 19px !important; padding-bottom: 0px !important; }
+    .govuk-accordion__section-content { padding-bottom: 0px !important; }
+    .govuk-form-group { margin-bottom: 20px !important; }
+
+    /* Prevent horizontal scroll bug caused by 100vw on mobile */
+    body { overflow-x: hidden; }
+
+    /* ========================================================= */
+    /* SEARCH BAR                                                */
+    /* ========================================================= */
+    .search-form-layout {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 0px;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        width: 100%;
+        flex-grow: 1; 
+    }
+
+    .search-button {
+        margin-bottom: 0 !important; 
+    }
+
+    .clear-search-btn {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #505a5f;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    /* ========================================================= */
+    /* MOJ SIDE NAVIGATION OVERRIDES                             */
+    /* ========================================================= */
+    .moj-side-navigation__item a {
+        font-size: 19px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .moj-side-navigation__item {
+        margin-bottom: 15px; 
+    }
+
+    /* ========================================================= */
+    /* MODAL FILTER STYLING                                      */
+    /* ========================================================= */
+    
+    /* Hide mobile modal elements on desktop */
+    .mobile-modal-header { display: none !important; }
+    .mobile-filter-trigger-btn { display: none !important; }
+
+    @media (max-width: 40.0625em) {
+        
+        /* 1. Side Navigation Stack */
+        .moj-side-navigation__list {
+            display: block !important;
+            width: 100% !important; 
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .moj-side-navigation__item {
+            display: block !important;
+            width: 100% !important; 
+            margin-bottom: 15px !important; 
+        }
+
+        /* 2. Format all links as menu blocks */
+        .moj-side-navigation__item a {
+            display: block !important;
+            width: 100% !important; 
+            box-sizing: border-box !important; 
+            padding: 15px !important; 
+            font-size: 19px !important; 
+            color: #1d70b8 !important; 
+            box-shadow: none !important; 
+            border: none !important;
+            white-space: normal !important; 
+            overflow-wrap: break-word !important;
+        }
+
+        /* 3. Force your CUSTOM active state */
+        .moj-side-navigation__item--active a {
+            color: #0b0c0c !important; 
+            font-weight: 700 !important; 
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+
+        /* 4. Force the hover state for inactive links */
+        .moj-side-navigation__item a:hover {
+            background-color: #f3f2f1 !important; 
+            box-shadow: inset 5px 0 0 0 #b1b4b6 !important; 
+        }
+        
+        /* 5. Ensure the active item keeps your teal line when hovered */
+        .moj-side-navigation__item--active a:hover {
+            box-shadow: inset 5px 0 0 0 #29A197 !important; 
+        }
+        
+        /* 6. GOV.UK standard yellow accessibility focus state */
+        .moj-side-navigation__item a:focus,
+        .moj-side-navigation__item--active a:focus {
+            background-color: #fd0 !important; 
+            color: #0b0c0c !important; 
+            box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important; 
+            outline: none !important; 
+        }
+
+        /* Search Form Stacking */
+        .search-form-layout {
+            flex-direction: column;
+            align-items: stretch; 
+            gap: 0; 
+        }
+
+        .search-button {
+            width: 100%; 
+            margin-top: -2px; 
+            margin-bottom: 0 !important; 
+        }
+
+        /* --- MOBILE MODAL OVERRIDES --- */
+        
+        .mobile-filter-trigger-btn { 
+            display: block !important; 
+        }
+
+        .desktop-filter-heading { 
+            display: none !important; 
+        }
+
+        .filter-modal-container { 
+            display: none; 
+        }
+
+        .filter-modal-container.is-open {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+            z-index: 9999;
+            padding: 20px 20px 80px 20px; 
+            margin: 0 !important; 
+            box-sizing: border-box;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .filter-modal-container.is-open .mobile-modal-header {
+            display: block !important; 
+        }
+    }
+</style>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+        <nav class="moj-side-navigation" aria-label="Side navigation">
+            <ul class="moj-side-navigation__list">
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/app-info">Application information</a>
+                </li>
+                <li class="moj-side-navigation__item moj-side-navigation__item--active">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/documents" aria-current="location">Documents</a>
+                </li>
+
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/application-updates">Application updates</a>
+                </li>
+                <li class="moj-side-navigation__item">
+                    <a href="/current-service/front-office/testing/s62a-2026-0000385/written-representations">Written representations (Comments and feedback)</a>
+                </li>
+            </ul>
+        </nav>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        
+        <!-- WRAPPED IN MODAL CONTAINER -->
+        <div id="filter-modal-container" class="filter-modal-container">
+
+            <!-- Mobile Only Header inside Modal -->
+            <div class="mobile-modal-header">
+                <div style="display:flex; justify-content:space-between; align-items: baseline;">
+                    <h2 class="govuk-heading-l" style="margin-bottom: 0;">Filter</h2>
+                    <a href="#" id="close-filter-modal" class="govuk-link" style="font-size: 19px;">Return to results</a>
+                </div>
+                <p class="govuk-body" style="margin-top: 10px; margin-bottom: 15px;">32 documents</p>
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            </div>
+
+            <h2 class="govuk-heading-m desktop-filter-heading">Filters</h2>
+
+            <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default" data-remember-expanded="false">
+                
+                <!-- Category Section -->
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h3 class="govuk-accordion__section-heading">
+                            <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                                Category
+                            </span>
+                        </h3>
+                    </div>
+                    <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+                        <div style="padding-left:15px;">
+                            <form class="govuk-form-group">
+                                <fieldset class="govuk-fieldset">
+                                    <div class="govuk-grid-row">
+                                        <div class="">
+                                            <fieldset class="govuk-fieldset">
+                                                <div class="govuk-checkboxes govuk-checkboxes--small">
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="category-1" name="document-category" type="checkbox" value="Application Plans and Documents">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="category-1">
+                                                            Application Plans and Documents (15)
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="category-2" name="document-category" type="checkbox" value="Questionnaire and supporting documents">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="category-2">
+                                                            Questionnaire and supporting documents (15)
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="category-3" name="document-category" type="checkbox" value="Planning Inspectorate Correspondence">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="category-3">
+                                                            Planning Inspectorate Correspondence (1)
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="category-6" name="document-category" type="checkbox" value="Additional information">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="category-6">
+                                                            Additional information (3)
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Date published Section -->
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h2 class="govuk-accordion__section-heading">
+                            <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+                                Date published
+                            </span>
+                        </h2>
+                    </div>
+                    <div id="accordion-default-content-2" class="govuk-accordion__section-content">
+                        <div style="padding-left:15px;">
+                            <form class="govuk-form-group">
+                                <fieldset class="govuk-fieldset">
+                                    
+                                    <!-- From Date -->
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                        <h4 class="govuk-fieldset__heading">
+                                            From
+                                        </h4>
+                                    </legend>
+                                    <div class="govuk-hint" id="date-from-hint">For example, 5 7 2022</div>
+                                    <div class="govuk-date-input">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-from-day">Day</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-from-day" name="date-from-day" type="text" inputmode="numeric" aria-describedby="date-from-hint">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-from-month">Month</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-from-month" name="date-from-month" type="text" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-from-year">Year</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="date-from-year" name="date-from-year" type="text" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- To Date -->
+                                    <legend style="margin-top:20px" class="govuk-fieldset__legend govuk-fieldset__legend--xs">
+                                        <h4 class="govuk-fieldset__heading">
+                                            To
+                                        </h4>
+                                    </legend>
+                                    <div class="govuk-hint" id="date-to-hint">For example, 27 3 2023</div>
+                                    <div class="govuk-date-input">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-to-day">Day</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-to-day" name="date-to-day" type="text" inputmode="numeric" aria-describedby="date-to-hint">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-to-month">Month</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="date-to-month" name="date-to-month" type="text" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="date-to-year">Year</label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="date-to-year" name="date-to-year" type="text" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="govuk-button" id="apply-filters" style="margin-bottom:0px; width: 100%;">
+                Apply filters
+            </button>
+        </div> 
+
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
+                S62A/2026/00000385
+            </span>
+            Documents
+        </h1>
+        
+        <div>
+            <div id="search-hint" class="govuk-hint">
+                Search by document name</div>
+            <form class="govuk-form-group search-form-layout" style="margin-bottom: 0px;">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    
+                    <div class="search-input-wrapper">
+                        <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
+                            style="margin-bottom: 0; width:100%; padding-right: 40px;">
+                        
+                        <button type="button" id="clear-search-icon" aria-label="Clear search" class="clear-search-btn">
+                            &times;
+                        </button>
+                    </div>
+
+                    <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Mobile Trigger Button (Hidden on Desktop) -->
+        <button id="open-filter-modal" class="govuk-button govuk-button--secondary mobile-filter-trigger-btn" style="width: 100%; margin-top: 15px;">
+            Show filters
+        </button>
+
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <div id="pagination" class="govuk-body">
+            <p class="govuk-body">
+                Showing
+                <strong>1</strong>
+                to
+                <strong>25</strong>
+                of
+                <strong>32</strong>
+                documents, newest first.
+            </p>
+
+            <span>
+                <strong>Results per page</strong>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <span class="govuk-body">25</span>
+
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a class="govuk-link--no-visited-state" href="?itemsPerPage=50" data-pagination="50">50</a>
+
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a class="govuk-link--no-visited-state" href="?itemsPerPage=100" data-pagination="100">100</a>
+
+            <div style="margin-top:20px">
+
+               <ul class="govuk-list document-list">
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">01-230526-0003_Redacted (PDF, 687 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Additional information</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Bat Survey_Redacted (PDF, 2.75 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Design and Access Statement_checked (PDF, 444 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Exisiting Elevations_checked (PDF, 646 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Additional information</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Existing Block Plan_checked (PDF, 76.1 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Existing Plans and Elevations_checked (PDF, 608 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>28 Jun 2026</div>
+                            <div></div>
+                            <div>Additional information</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">External Materials Schedule_checked (PDF, 49.9 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>26 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Howard_20260806_104158 Hard Soft Landscaping Plan levels_Redacted (PDF, 3.39 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>26 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Justification for Development and Sustainability Statement_checked (PDF, 283 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>26 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Location Plan_Redacted (PDF, 505 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>24 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Planning Application - 1 Wheatfield Road_Redacted (PDF, 4.16 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>24 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Proposed Plans and Elevations (2)_Redacted (PDF, 5.56 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>24 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Proposed Plans and Elevations_Redacted (PDF, 4.95 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>24 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Tree Protection Statement_checked (PDF, 306 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>20 Jun 2026</div>
+                            <div></div>
+                            <div>Application Plans and Documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Howard_20260801_145225_Redacted (PDF, 2.4 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>20 Jun 2026</div>
+                            <div></div>
+                            <div>Planning Inspectorate Correspondence</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">S62A Questionnaire (PDF, 118 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>20 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">106 - Nature Conservation (PDF, 20.8 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>20 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">2 - Settlement Strategy (PDF, 74.5 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>20 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">34 - Highways Considerations in Development Control (PDF, 36.8 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>19 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">39 - Parking Standards General Requirements (PDF, 234 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>19 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">4 - New Housing Development in Towns (PDF, 212 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>19 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">40 - Residential Development Parking Standards (PDF, 43.6 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>17 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">69 - General Design and Layout (PDF, 19.3 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>17 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">70 - Design and Layout of New Housing (PDF, 83 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>17 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">74 - Landscaping and Tree Preservation (PDF, 30.4 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>17 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Design Advice Leaflet No 1 (PDF, 5.61 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>14 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Front Sheet SADC Local Plan Review 1994 (PDF, 19.1 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>14 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Harpenden Neighbourhood Plan - version for referendum Nov 2018 Combined (PDF, 4.39 MB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>14 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Planning history 1 Wheatfield Road (PDF, 5.11 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>13 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="govuk-link govuk-link--no-visited-state" href="" rel="noreferrer">Revised Parking Policies and Standards January 2002 (PDF, 949 KB)</a>
+                        <div class="document-list__meta-data" style="padding-top: 15px; padding-bottom: 15px">
+                            <div>12 Jun 2026</div>
+                            <div></div>
+                            <div>Questionnaire and supporting documents</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <nav class="govuk-pagination" aria-label="Pagination">
+            <ul class="govuk-pagination__list">
+                <li class="govuk-pagination__item govuk-pagination__item--current">
+                    <a class="govuk-link govuk-pagination__link" href="?page=1" aria-label="Page 1" aria-current="page">
+                        1
+                    </a>
+                </li>
+                <li class="govuk-pagination__item">
+                    <a class="govuk-link govuk-link--no-visited-state govuk-pagination__link" href="?page=2" aria-label="Page 2">
+                        2
+                    </a>
+                </li>
+            </ul>
+
+            <div class="govuk-pagination__next">
+                <a class="govuk-link govuk-link--no-visited-state govuk-pagination__link" href="?page=2" rel="next">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden">
+                            page</span>
+                    </span>
+                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg"
+                        height="13" width="15" aria-hidden="true" focusable="false" viewbox="0 0 15 13">
+                        <path
+                            d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const openBtn = document.getElementById("open-filter-modal");
+        const closeBtn = document.getElementById("close-filter-modal");
+        const applyBtn = document.getElementById("apply-filters");
+        const modal = document.getElementById("filter-modal-container");
+
+        if (openBtn && closeBtn && modal) {
+            
+            // Open modal
+            openBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.add("is-open");
+                // Stop BOTH body and html from scrolling
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden"; 
+            });
+
+            // Close modal (Return link)
+            closeBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.remove("is-open");
+                // Restore background scrolling
+                document.documentElement.style.overflow = "";
+                document.body.style.overflow = ""; 
+            });
+
+            if (applyBtn) {
+                applyBtn.addEventListener("click", function(e) {
+                    if (window.innerWidth <= 640) {
+                        modal.classList.remove("is-open");
+                        document.documentElement.style.overflow = "";
+                        document.body.style.overflow = "";
+                    }
+                });
+            }
+        }
+    });
+</script>
+{% endblock %}
