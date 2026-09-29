@@ -1,0 +1,242 @@
+{% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+{% block header %}
+
+{{ govukHeader({
+  homepageUrl: "#"
+}) }}
+
+{% endblock %}
+
+{% block pageTitle %}
+ Section 62A Planning Application
+{% endblock %}
+
+{% block beforeContent %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "#"
+    },
+    {
+      text: "Housing, local and community",
+      href: "#"
+    },
+    {
+      text: "Planning and building",
+      href: "#"
+    },
+    {
+      text: "Planning permission and appeals",
+      href: "#"
+    }
+  ]
+}) }}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+        Important
+        </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+        To see cases submitted after 1 January 2026, go to
+        <a class="govuk-notification-banner__link" href="https://pins-app-prototype-s62a.azurewebsites.net/current-service/front-office/all-applications">Find a local planning application made to the Planning Inspectorate</a>.
+        </p>
+    </div>
+    </div>
+
+</div>
+</div>
+
+<style>
+    .govuk-section-title {
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
+    .app-metadata {
+    border-top: 1px solid #b1b4b6;
+    padding-top: 15px;
+    margin-bottom: 30px;
+    }
+    .app-metadata__list {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        column-gap: 20px;
+        row-gap: 10px;
+        margin: 0;
+    }
+    .app-metadata__term,
+    .app-metadata__definition {
+        margin: 0;
+    }
+
+    .app-get-emails {
+        border: 1px solid #0b0c0c;
+        padding: 10px 15px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        margin-bottom: 30px;
+    }
+    
+    .app-get-emails:hover {
+        background-color: #f3f2f1; /* Slight grey hover state for better UX */
+    }
+
+    .app-get-emails__icon {
+        margin-right: 15px;
+        fill: #0b0c0c; /* GOV.UK Black */
+    }
+
+    .app-applies-to {
+        background-color: #f3f2f1; /* Standard GOV.UK light grey */
+        padding: 20px 30px;
+        margin-bottom: 50px;
+    }
+
+    .app-contents-list {
+        margin-bottom: 30px;
+    }
+    
+    .app-contents-list__title {
+        margin-bottom: 10px;
+    }
+    
+    .app-contents-list__list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+    }
+    
+    .app-contents-list__list-item {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 0px; /* Reduced spacing between items */
+    }
+    
+    .app-contents-list__list-item::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: #0b0c0c; 
+    }
+</style>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">Guidance</span>
+        Section 62A Planning Application: S62A/2025/0150 265-267 Church Road, Bristol, BS5 9HU
+    </h1>
+
+    <p class="govuk-section-title govuk-!-margin-bottom-8">Overview of case details, documents, key dates and how to make a representaiton.</p>
+
+    <div class="app-metadata">
+    <dl class="app-metadata__list govuk-body-s">
+        <dt class="app-metadata__term">From:</dt>
+        <dd class="app-metadata__definition">
+          <a href="/government/organisations/planning-inspectorate" class="govuk-link"><strong>Planning Inspectorate</strong></a>
+        </dd>
+        
+        <dt class="app-metadata__term">Published:</dt>
+        <dd class="app-metadata__definition">27 January 2026</dd>
+        
+        <dt class="app-metadata__term">Last updated:</dt>
+        <dd class="app-metadata__definition">
+          9 April 2026 — <a href="#full-publication-update-history" class="govuk-link">See all updates</a>
+        </dd>
+    </dl>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="#" class="app-get-emails">
+        <svg class="app-get-emails__icon" xmlns="http://www.w3.org/2000/svg" height="20" width="18" aria-hidden="true" focusable="false" viewBox="0 0 16 18">
+            <path d="M8 18c1.1 0 2-.9 2-2H6c0 1.1.9 2 2 2zm6-5V8c0-3.07-1.64-5.64-4.5-6.32V1c0-.55-.45-1-1-1s-1 .45-1 1v.68C4.64 2.36 3 4.93 3 8v5l-2 2v1h14v-1l-2-2z"></path>
+        </svg>
+        <span class="govuk-link govuk-link--no-visited-state" style="text-decoration: none;">Get emails about this page</span>
+        </a>
+    </div>
+
+    <div class="app-applies-to">
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Applies to England</p>
+    </div>
+
+    <nav class="app-contents-list" aria-label="Pages in this guide" role="navigation">
+    <p class="govuk-body-s app-contents-list__title govuk-!-margin-bottom-0">Contents</p>
+    
+    <ol class="app-contents-list__list govuk-body-s">
+        <li class="app-contents-list__list-item">
+        <a href="#type-of-application" class="govuk-link govuk-link--no-underline">Type of application</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#applicant-name" class="govuk-link govuk-link--no-underline">Applicant name</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#site-address" class="govuk-link govuk-link--no-underline">Site address</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#description" class="govuk-link govuk-link--no-underline">Description of proposed development</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#case-officer" class="govuk-link govuk-link--no-underline">Case Officer</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#procedure" class="govuk-link govuk-link--no-underline">Procedure:</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#key-dates" class="govuk-link govuk-link--no-underline">Key dates</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#decision" class="govuk-link govuk-link--no-underline">Decision</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#make-representation" class="govuk-link govuk-link--no-underline">Make a representation</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#email-comments" class="govuk-link govuk-link--no-underline">Sending comments by email will enable us to deal with them more quickly.</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#application-plans" class="govuk-link govuk-link--no-underline">Application Plans and Documents</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#questionnaire" class="govuk-link govuk-link--no-underline">Questionnaire and supporting documents</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#comments" class="govuk-link govuk-link--no-underline">Comments</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#consultees" class="govuk-link govuk-link--no-underline">Consultees</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#interested-parties" class="govuk-link govuk-link--no-underline">Interested Parties</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#planning-inspectorate-correspondence" class="govuk-link govuk-link--no-underline">Planning Inspectorate Correspondence</a>
+        </li>
+        <li class="app-contents-list__list-item">
+        <a href="#applicant-correspondence" class="govuk-link govuk-link--no-underline">Applicant Correspondence</a>
+        </li>
+    </ol>
+    </nav>
+
+
+
+
+
+  </div>
+</div>
+{% endblock %}
