@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  {% if errorHaveYouGotAttachments %}Error: {% endif %}Have you got attachments to support your comment? - Find a local planning application made to the Planning Inspectorate
+  {% if errorHaveYouGotAttachments %}Error: {% endif %}Do you want to add supporting attachments before you make a comment? - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block beforeContent %}
@@ -44,10 +44,11 @@
       
       {{ govukRadios({
         idPrefix: "include-attachments",
+        classes: "govuk-radios--inline",
         name: "include-attachments",
         fieldset: {
           legend: { 
-            text: "Have you got attachments to support your comment?", 
+            text: "Do you want to add supporting attachments before you make a comment?", 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
@@ -59,12 +60,12 @@
         items: [
           { 
             value: "Yes",
-            text: "Yes, I have attachments to upload first", 
+            text: "Yes", 
             checked: data['include-attachments'] == 'Yes'
         },
           { 
             value: "No", 
-            text: "No, I do not have attachments to upload", 
+            text: "No", 
             checked: data['include-attachments'] == 'No'
         }
         ]

@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  Application information - S62A/2026/0000099 - Find a local planning application made to the Planning Inspectorate
+  Application information - S62A/2026/0000400 - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block content %}
@@ -164,17 +164,17 @@
         <nav class="moj-side-navigation" aria-label="Side navigation">
             <ul class="moj-side-navigation__list">
                 <li class="moj-side-navigation__item moj-side-navigation__item--active">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000099/app-info" aria-current="location">Application information</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000400/app-info" aria-current="location">Application information</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000099/documents">Documents</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000400/documents">Documents</a>
                 </li>
-              
+             
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000099/application-updates">Application updates</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000400/application-updates">Application updates</a>
                 </li>
                 <li class="moj-side-navigation__item">
-                    <a href="/current-service/front-office/testing/s62a-2026-0000099/written-representations">Written representations (Comments and feedback)</a>
+                    <a href="/current-service/front-office/testing/s62a-2026-0000400/written-representations">Written representations (Comments and feedback)</a>
                 </li>
             </ul>
         </nav>
@@ -184,11 +184,10 @@
 
         <h1 class="govuk-heading-xl">
             <span class="govuk-caption-xl"><span class="govuk-visually-hidden">Application</span>
-                S62A/2026/0000099
+                S62A/2026/0000400
             </span>
             Application information
         </h1>
-        
 
         <h2 class="govuk-heading-m">About this application</h2>
         
@@ -205,24 +204,28 @@
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Applicant</dt>
-            <dd class="govuk-summary-list__value">Sarah Jenkins</dd>
+            <dd class="govuk-summary-list__value">Building Group Limited </dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Site address</dt>
-            <dd class="govuk-summary-list__value">45 Clifton Suspension Road, Bristol, BS8 4AA</dd>
+            <dd class="govuk-summary-list__value">13 Tavern Hope, Bristol, BS2 4MP</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Proposed development</dt>
-            <dd class="govuk-summary-list__value">Change of ground floor from Class E to 1no. residential flat, including removal of shopfront, partial demolition of rear extension, and erection of a ground floor rear extension.</dd>
+            <dd class="govuk-summary-list__value">Removal of retaining wall and tree line, with extension of terrace into garden</dd>
           </div>
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Case officer</dt>
             <dd class="govuk-summary-list__value">Section 62A Applications Team</dd>
           </div>
-        
+          
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Procedure</dt>
+            <dd class="govuk-summary-list__value">Written Representations</dd>
+          </div>
         </dl>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
@@ -233,23 +236,21 @@
 
         {{ govukSummaryList({
           rows: [
-            { key: { text: "Application valid" }, value: { text: "19 October 2026" } },
-            { key: { text: "Representation period" }, value: { text: "1 November 2026 at 12:00am to 22 November 2026 11:59am" } }
+            { key: { text: "Application valid" }, value: { text: "3 April 2026" } },
+            { key: { text: "Representation period" }, value: { text: "19 April 2026 at 12:00am to 10 May 2026 at 11:59pm" } },
+            { key: { text: "Target decision" }, value: { text: "29 May 2026" } }
           ]
         }) }}
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break">
 
-        <h2 class="govuk-heading-m">Have your say</h2>
+        <h2 class="govuk-heading-m">Have your say</h2> 
 
         <p class="govuk-body">
-            You can use this service to have your say on this application when the representation period opens from:
+            The written representations period has closed.
         </p>
         <p class="govuk-body">
-            1 November 2026 12:00am - 22 November 2026 11:59pm
-        </p>
-        <p class="govuk-body">
-            We'll ask for your personal details and your comments about this application.
+            You can <a href="/current-service/front-office/testing/s62a-2026-0000400/written-representations" class="govuk-link">view the written representations</a> for this application.
         </p>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
@@ -259,7 +260,7 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break">
 
         <h2 class="govuk-heading-m">Application stages</h2>
-        <p class="govuk-body">This application is at the <strong>validation</strong> stage.</p>
+        <p class="govuk-body">This application is at the <strong>reporting and decision</strong> stage.</p>
 
         <div id="project-stage-pre-application" class="govuk-!-margin-top-6">
             <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
@@ -290,7 +291,7 @@
         </div>
 
         <div id="project-stage-acceptance">
-            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
@@ -320,7 +321,7 @@
                         <div class="summary-content">
                             <span>Consultation</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -354,7 +355,7 @@
                         <div class="summary-content">
                             <span>Procedure decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
                             </div>
                         </div>
                     </div>
@@ -381,14 +382,33 @@
             <hr class="govuk-section-break govuk-section-break--visible">
         </div>
 
-        <div id="project-stage-reporting">
+        <div id="project-stage-written-representations">
             <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2">
+                <summary class="govuk-details__summary">
+                    <div class="govuk-details__summary-text">
+                        <div class="summary-content">
+                            <span>Written representations</span>
+                            <div>
+                                <strong class="govuk-tag govuk-tag--green -white-space--nowrap">Completed</strong>
+                            </div>
+                        </div>
+                    </div>
+                </summary>
+                <div class="govuk-details__text">
+                    <p>An Inspector or appointed person reviews the written representations (comments and feedback) and usually visits the site.</p>
+                </div>
+            </details>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        </div>
+
+        <div id="project-stage-reporting">
+            <details class="govuk-details pins-modded-summary-full-width govuk-!-margin-bottom-2" open="true">
                 <summary class="govuk-details__summary">
                     <div class="govuk-details__summary-text">
                         <div class="summary-content">
                             <span>Reporting and decision</span>
                             <div>
-                                <strong class="govuk-tag govuk-tag--grey -white-space--nowrap">Not started</strong>
+                                <strong class="govuk-tag govuk-tag--yellow -white-space--nowrap">In progress</strong>
                             </div>
                         </div>
                     </div>
@@ -475,11 +495,12 @@
                 </ul>
 
          
+    
+
         <h3 class="govuk-heading-s">Alternative formats</h3>
         <p class="govuk-body">
             Contact us if you would like this application information in another format.
         </p>
-
     </div>
 </div>
 
