@@ -1,0 +1,108 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Upload files to {{ currentFolder.name }} - {{ currentCase.reference | default('Case') }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+      text: "Back", 
+      href: "/current-service/back-office/manage-documents/folder/" ~ currentFolder.id ~ "?ref=" ~ currentCase.reference
+  }) }}
+{% endblock %}
+ 
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if errorList %}
+          {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+          }) }}
+        {% endif %}
+        
+        <form method="post" action="/current-service/back-office/manage-documents/upload-files/{{ currentFolder.id }}" novalidate>
+            
+            {# Pass context to the POST route #}
+            <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+            
+            <h1 class="govuk-heading-l">
+                Upload files in {{ currentFolder.name }} folder
+            </h1>
+            
+            <p class="govuk-body">Each file must be: </p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>BMP, DBF, DOC, DOCX, DOTX, GIF, HTML, JPEG, JPG, M4V, MOV, MP3, MP4, MPEG, MSG, ODS, ODT, PDF, PNG, PPT, PPTX, PRJ, PUB, RTF, SHP, SHX, TIF, TIFF, TXT, XLS, XLSM, XLSX</li>
+                <li>smaller than 250MB</li>
+            </ul>
+
+            <p class="govuk-body">The total combined size of your uploaded files must be smaller than 1GB.</p>
+            
+            <p class="govuk-body">The file name can only include:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Letters, numbers, hyphens, underscores, brackets, ampersand and single apostrophes</li>
+            </ul>
+            
+            <style>
+              .hide-macro-label > .govuk-form-group > label.govuk-label--m {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                clip: rect(0 0 0 0);
+                clip-path: inset(50%);
+                border: 0;
+                white-space: nowrap;
+              }
+            </style>
+            
+            {% from "components/multi-file-upload.njk" import uploadArea %}
+
+            <div class="hide-macro-label">
+              {{ uploadArea({
+                  dataKey: "folderUploadedFiles",
+                  serverError: errors.folderUploadedFiles if errors.folderUploadedFiles else null,
+                  existingFiles: data['folderUploadedFiles']
+              }) }}
+            </div>
+
+            {# Main button updated to match screenshot exactly #}
+            {{ govukButton({
+                text: "Upload"
+            }) }}
+        </form>
+
+    </div>
+</div>
+
+{# --- NEW: Javascript to rearrange the dropzone text dynamically for this page only --- #}
+<script type="module" nonce="">
+  document.addEventListener('DOMContentLoaded', function() {
+      // Find the flex container inside the dropzone
+      const dropzoneGroup = document.querySelector('.hide-macro-label .multi-file-dropzone .govuk-form-group');
+      
+      if (dropzoneGroup) {
+          const btnLabel = dropzoneGroup.querySelector('label.govuk-button');
+          const textPara = dropzoneGroup.querySelector('p.govuk-body');
+          
+          if (btnLabel && textPara) {
+              // 1. Change the text to match the screenshot
+              btnLabel.textContent = 'Choose files';
+              textPara.textContent = 'Drag and drop files here or ';
+              
+              // 2. Adjust spacing so the text flows into the button smoothly
+              textPara.style.margin = '0 10px 0 0';
+              btnLabel.style.margin = '0';
+              
+              // 3. Swap their order in the DOM (put text before the button)
+              dropzoneGroup.insertBefore(textPara, btnLabel);
+          }
+      }
+  });
+</script>
+{% endblock %}

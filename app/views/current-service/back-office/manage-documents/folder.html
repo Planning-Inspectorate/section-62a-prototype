@@ -10,6 +10,14 @@
       <li class="govuk-breadcrumbs__list-item">
         <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/index?ref={{ currentCase.reference }}">Manage documents</a>
       </li>
+      
+      {# Loop through the dynamic parent breadcrumbs #}
+      {% for crumb in breadcrumbs %}
+        <li class="govuk-breadcrumbs__list-item">
+          <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/folder/{{ crumb.id }}?ref={{ currentCase.reference }}">{{ crumb.name }}</a>
+        </li>
+      {% endfor %}
+
       <li class="govuk-breadcrumbs__list-item" aria-current="page">{{ currentFolder.name }}</li>
     </ol>
   </div>
@@ -35,7 +43,6 @@
 {% if flashMessage %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       {% set successHtml %}
         <h3 class="govuk-notification-banner__heading">
           <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
@@ -43,20 +50,20 @@
           </a> folder {{ flashMessage.action | default("created") }}
         </h3>
       {% endset %}
-
       {{ govukNotificationBanner({
         html: successHtml,
         type: "success"
       }) }}
-
     </div>
   </div>
 {% endif %}
 
+<div id="js-error-container"></div>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
       <span class="govuk-caption-m">{{ currentCase.reference | default('Case not found') }}</span>
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ currentFolder.name }} folder</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ currentFolder.name }}</h1>
   </div>
 </div>
 
@@ -69,7 +76,6 @@
     <p class="govuk-body"><strong>{{ subfolders.length | default(0) }}</strong> subfolders</p>
 
     <div class="govuk-button-group govuk-!-margin-bottom-4">
-        {# Changed to links to hit your routing logic #}
         <a href="/current-service/back-office/manage-documents/create-folder?ref={{ currentCase.reference }}&parentId={{ currentFolder.id }}" class="govuk-button govuk-button--secondary">Create subfolder</a>
         <a href="/current-service/back-office/manage-documents/rename-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Rename this folder</a>
         <a href="/current-service/back-office/manage-documents/delete-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Delete this folder</a>
@@ -92,8 +98,6 @@
         <div id="sub-folders-accordion-content-1" class="govuk-accordion__section-content">
           <div class="pins-link-menu">
             <ul class="govuk-list">
-              
-              {# DYNAMIC SUBFOLDER LOOP #}
               {% for folder in subfolders %}
                 <li class="govuk-!-margin-bottom-4">
                   <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="/current-service/back-office/manage-documents/folder/{{ folder.id }}?ref={{ currentCase.reference }}">
@@ -101,7 +105,6 @@
                   </a>
                 </li>
               {% endfor %}
-
             </ul>
           </div>
         </div>
@@ -114,148 +117,125 @@
   </div>
 </div>
 
+{# --- FILE ACTIONS AREA --- #}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-
-<form method="get" action="#">
-      
-    <div id="pagination" class="govuk-body">
-      <h2 class="govuk-heading">File actions</h2>
-
-      <p class="govuk-body govuk-!-margin-bottom-4">
-        This folder contains 3 file(s). Showing <strong>1</strong> to <strong>3</strong> of <strong>3</strong> files.
-      </p>
-
-      <p class="pins-pagination-options govuk-!-margin-bottom-6">
-        <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
-        <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
-        <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-        <a class="govuk-link--no-visited-state" href="#">100</a>
-      </p>
-
-      <div class="govuk-button-group">
-          <a href="#" class="govuk-button govuk-button--secondary">Upload files</a>
-      </div>
-
-      <div class="govuk-button-group govuk-!-margin-bottom-4">
-          <button type="button" class="govuk-button govuk-button--secondary" id="mock-move-btn">Move selected</button>
-          <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
-          <button type="button" class="govuk-button govuk-button--secondary">Delete selected</button>
-          <button type="button" class="govuk-button govuk-button--secondary">Publish selected</button>
-      </div>
-
-      <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
-
-      <table class="govuk-table" data-module="moj-sortable-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            
-            {# 1. Checkbox column (15%) #}
-            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;">
-              <div class="govuk-checkboxes__item govuk-checkboxes--small" style="margin-bottom: 0;">
-                <input type="checkbox" class="govuk-checkboxes__input" id="checkboxes-all" name="checkboxes-all" value="all">
-                <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold" for="checkboxes-all" style="white-space: nowrap;">
-                  All files
-                </label>
-              </div>
-            </th>
-            
-            {# 2. File name column (50%) #}
-            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 50%;" aria-sort="none">
-              <button type="button" data-index="1">File name</button>
-            </th>
-            
-            {# 3. Uploaded column (20%) #}
-            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 20%;" aria-sort="descending">
-              <button type="button" data-index="2">Uploaded</button>
-            </th>
-            
-            {# 4. Actions column (15% and pushed to the right!) #}
-            <th scope="col" class="govuk-table__header " style="vertical-align: middle; width: 15%;">
-              Actions
-            </th>
-
-          </tr>
-        </thead>
-
-        <tbody class="govuk-table__body">
+    <form method="get" action="#">
+        <div id="pagination" class="govuk-body">
           
-          {# Mock Document 1 #}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
-                <input class="govuk-checkboxes__input" id="select-file-1" name="selectedFiles" type="checkbox" value="1">
-                <label class="govuk-label govuk-checkboxes__label" for="select-file-1"><span class="govuk-visually-hidden">Select Site-plan-v2.pdf</span></label>
-              </div>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="site-plan-v2.pdf" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
-              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">Site-plan-v2.pdf</a>
-              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: PDF, 2.4MB</span>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="2026-07-20" style="vertical-align: top; padding-top: 15px;">20 Jul 2026</td>
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <ul class="govuk-list govuk-!-margin-bottom-0">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
-              </ul>
-            </td>
-          </tr>
+          <h2 class="govuk-heading-m">File actions</h2>
 
-          {# Mock Document 2 #}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
-                <input class="govuk-checkboxes__input" id="select-file-2" name="selectedFiles" type="checkbox" value="2">
-                <label class="govuk-label govuk-checkboxes__label" for="select-file-2"><span class="govuk-visually-hidden">Select application-form.docx</span></label>
-              </div>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="application-form.docx" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
-              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">application-form.docx</a>
-              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: DOCX, 1.1MB</span>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="2026-07-21" style="vertical-align: top; padding-top: 15px;">21 Jul 2026</td>
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <ul class="govuk-list govuk-!-margin-bottom-0">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
-              </ul>
-            </td>
-          </tr>
+          {% if files and files.length > 0 %}
+            <p class="govuk-body govuk-!-margin-bottom-4">
+              This folder contains {{ files.length }} file(s). Showing <strong>1</strong> to <strong>{{ files.length }}</strong> of <strong>{{ files.length }}</strong> file(s).
+            </p>
 
-          {# Mock Document 3 #}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
-                <input class="govuk-checkboxes__input" id="select-file-3" name="selectedFiles" type="checkbox" value="3">
-                <label class="govuk-label govuk-checkboxes__label" for="select-file-3"><span class="govuk-visually-hidden">Select site-photo-01.jpg</span></label>
-              </div>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="site-photo-01.jpg" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
-              <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">site-photo-01.jpg</a>
-              <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: JPG, 4.5MB</span>
-            </td>
-            <td class="govuk-table__cell" data-sort-value="2026-07-22" style="vertical-align: top; padding-top: 15px;">22 Jul 2026</td>
-            <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-              <ul class="govuk-list govuk-!-margin-bottom-0">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
-              </ul>
-            </td>
-          </tr>
+            <p class="pins-pagination-options govuk-!-margin-bottom-6">
+              <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+              <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+              <a class="govuk-link--no-visited-state" href="#">100</a>
+            </p>
+          {% else %}
+            <p class="govuk-body govuk-!-margin-bottom-4">
+              This folder contains 0 files.
+            </p>
+          {% endif %}
 
-        </tbody>
-      </table>
+          <div class="govuk-button-group">
+              <a href="/current-service/back-office/manage-documents/upload-files/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Upload files</a>
+          </div>
 
-    </div>
+          {# Hide the bulk buttons and table if no files exist #}
+          {% if files and files.length > 0 %}
+            <div class="govuk-button-group govuk-!-margin-bottom-4">
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-move-btn">Move selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary">Delete selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary">Publish selected</button>
+            </div>
+
+            <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
+
+            <table class="govuk-table" data-module="moj-sortable-table">
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  {# 1. Checkbox column (Increased to 15% for breathing room) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;">
+                    <div class="govuk-checkboxes__item govuk-checkboxes--small" style="margin-bottom: 0;">
+                      <input type="checkbox" class="govuk-checkboxes__input" id="checkboxes-all" name="checkboxes-all" value="all">
+                      <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold" for="checkboxes-all" style="white-space: nowrap;">
+                        All files
+                      </label>
+                    </div>
+                  </th>
+                  {# 2. File name column (40%) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 40%;" aria-sort="none">
+                    <button type="button" data-index="1">File name</button>
+                  </th>
+                  {# 3. Tags column (15%) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;" aria-sort="none">
+                    <button type="button" data-index="2">Tags</button>
+                  </th>
+                  {# 4. Uploaded column (15%) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-left: 30px;" aria-sort="descending">
+                    <button type="button" data-index="3">Uploaded</button>
+                  </th>
+                  {# 5. Actions column (15% and Right Aligned) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; text-align: right; padding-right: 30px;">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="govuk-table__body">
+                {% for file in files %}
+                  <tr class="govuk-table__row">
+                    
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                      <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                        <input class="govuk-checkboxes__input" id="select-file-{{ file.id }}" name="selectedFiles" type="checkbox" value="{{ file.id }}">
+                        <label class="govuk-label govuk-checkboxes__label" for="select-file-{{ file.id }}"><span class="govuk-visually-hidden">Select {{ file.name }}</span></label>
+                      </div>
+                    </td>
+                    
+                    <td class="govuk-table__cell" data-sort-value="{{ file.name }}" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px;">
+                      <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">{{ file.name }}</a>
+                      <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: {{ file.extension }}, {{ file.sizeMB }}MB</span>
+                    </td>
+                    
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                      <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
+                    </td>
+
+                    <td class="govuk-table__cell" data-sort-value="{{ file.uploadDateSort }}" style="vertical-align: top; padding-top: 15px; padding-left: 30px;">
+                      {{ file.uploadDate }}
+                    </td>
+
+                    {# Actions column cell (Right Aligned) #}
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px; text-align: right;">
+                      <ul class="govuk-list govuk-!-margin-bottom-0">
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a></li>
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Publish</a></li>
+                      </ul>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+
+        </div>
+    </form>
   </div>
 </div>
-</div>
-</form>
 
 <script type="module" nonce="">
   document.addEventListener('DOMContentLoaded', function() {
     
-    // --- 1. SELECT ALL LOGIC & DYNAMIC TEXT COUNTER ---
+    // --- 1. SELECT ALL LOGIC ---
     const selectAll = document.getElementById('checkboxes-all');
     const checkboxes = document.querySelectorAll('input[name="selectedFiles"]');
     const selectedCountText = document.getElementById('selected-files-count');
@@ -296,93 +276,32 @@
           e.preventDefault(); 
           window.scrollTo(0, 0); 
           
-          errorContainer.innerHTML = `
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-error-summary" data-module="govuk-error-summary">
-                  <div role="alert">
-                    <h2 class="govuk-error-summary__title">There is a problem</h2>
-                    <div class="govuk-error-summary__body">
-                      <ul class="govuk-list govuk-error-summary__list">
-                        <li><a href="#checkboxes-all">Select a file or files to move</a></li>
-                      </ul>
+          if (errorContainer) {
+            errorContainer.innerHTML = `
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="govuk-error-summary" data-module="govuk-error-summary">
+                    <div role="alert">
+                      <h2 class="govuk-error-summary__title">There is a problem</h2>
+                      <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                          <li><a href="#checkboxes-all">Select a file or files to move</a></li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          `;
+            `;
+          }
         } else {
-            errorContainer.innerHTML = '';
+            if (errorContainer) {
+              errorContainer.innerHTML = '';
+            }
             alert(`${checkedFiles.length} file(s) selected for move action.`);
         }
       });
     }
-
-    // --- 3. DYNAMIC STATUS TOGGLES (LIVE FILTER COUNTING) ---
-    const updateCounter = (id, change) => {
-      const el = document.getElementById(id);
-      if (el) {
-        let num = parseInt(el.textContent.replace(/[^0-9]/g, ''), 10);
-        if (!isNaN(num)) {
-          num += change;
-          el.textContent = `(${num})`;
-        }
-      }
-    };
-
-    const readToggles = document.querySelectorAll('.js-read-toggle');
-    const flagToggles = document.querySelectorAll('.js-flag-toggle');
-
-    readToggles.forEach(toggle => {
-      toggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        const docId = this.getAttribute('data-doc-id');
-        const statusTag = document.getElementById('status-tag-read-' + docId);
-
-        if (this.textContent.trim() === 'Read') {
-          this.textContent = 'Unread';
-          if (statusTag) {
-            statusTag.textContent = 'Read';
-            statusTag.className = 'govuk-tag govuk-tag--green';
-          }
-          updateCounter('count-read', 1);
-          updateCounter('count-unread', -1);
-        } else {
-          this.textContent = 'Read';
-          if (statusTag) {
-            statusTag.textContent = 'Unread';
-            statusTag.className = 'govuk-tag govuk-tag--blue';
-          }
-          updateCounter('count-read', -1);
-          updateCounter('count-unread', 1);
-        }
-      });
-    });
-
-    flagToggles.forEach(toggle => {
-      toggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        const docId = this.getAttribute('data-doc-id');
-        let flagTag = document.getElementById('status-tag-flag-' + docId);
-
-        if (this.textContent.trim() === 'Flag') {
-          this.textContent = 'Unflag';
-          if (flagTag) {
-            flagTag.style.visibility = 'visible';
-          }
-          updateCounter('count-flagged', 1);
-          updateCounter('count-unflagged', -1);
-        } else {
-          this.textContent = 'Flag';
-          if (flagTag) {
-            flagTag.style.visibility = 'hidden';
-          }
-          updateCounter('count-flagged', -1);
-          updateCounter('count-unflagged', 1);
-        }
-      });
-    });
 
   });
 </script>

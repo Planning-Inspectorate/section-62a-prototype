@@ -32,23 +32,38 @@ router.get('/current-service/back-office/manage-documents/index', function(req, 
 });
 
 
-// find specific folder for correct case
+// GET: Load the specific folder view
 router.get('/current-service/back-office/manage-documents/folder/:folderId', function (req, res) {
     const caseRef = req.query.ref;
     const folderId = req.params.folderId;
     
-    // Find the current folder object so you can display its name in the h1
     const currentFolder = req.session.data.folders.find(f => f.id === folderId);
-    // Find any subfolders that have this folder as their parentId
     const subfolders = req.session.data.folders.filter(f => f.parentId === folderId);
-    // Grab the case data
     const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
 
-    // --- INTERCEPT AND CLEAR FLASH MESSAGE ---
+    if (!req.session.data.files) {
+        req.session.data.files = [];
+    }
+    const files = req.session.data.files.filter(f => f.folderId === folderId);
+
+    // --- NEW: Calculate Breadcrumb Path ---
+    const breadcrumbs = [];
+    let currentBreadcrumbFolder = currentFolder;
+    
+    // Climb up the tree until there are no more parentIds
+    while (currentBreadcrumbFolder && currentBreadcrumbFolder.parentId) {
+        const parent = req.session.data.folders.find(f => f.id === currentBreadcrumbFolder.parentId);
+        if (parent) {
+            breadcrumbs.unshift(parent); // Add to the front of the array so it reads left-to-right
+            currentBreadcrumbFolder = parent;
+        } else {
+            break; // Stop if parent is missing
+        }
+    }
+
     const flashMessage = req.session.data['flashMessage'];
     req.session.data['flashMessage'] = null;
 
-    // --- NEW: Handle delete banner ---
     const deleteBanner = req.session.data['deleteBanner'];
     req.session.data['deleteBanner'] = null;
 
@@ -57,7 +72,9 @@ router.get('/current-service/back-office/manage-documents/folder/:folderId', fun
         currentFolder,
         subfolders,
         flashMessage,
-        deleteBanner
+        deleteBanner,
+        files,
+        breadcrumbs
     });
 });
 

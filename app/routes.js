@@ -42,6 +42,7 @@ import withdrawReinstateRepresentationRouter from './bo-routes/manage-representa
 import manageDocumentsRouter from './bo-routes/manage-documents/examples/main-folder.js';
 import indexDocumentsRouter from './bo-routes/manage-documents/index.js';
 import folderActionsRouter from './bo-routes/manage-documents/folder-actions.js';
+import fileActionsRouter from './bo-routes/manage-documents/file-actions.js';
 
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
@@ -120,6 +121,7 @@ router.use('/', withdrawReinstateRepresentationRouter);
 router.use('/', manageDocumentsRouter);
 router.use('/', indexDocumentsRouter);
 router.use('/', folderActionsRouter);
+router.use('/', fileActionsRouter);
 
 // mount fo-routers
 router.use('/', applicationInformationRouter);
