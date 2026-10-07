@@ -33,7 +33,7 @@
         <h3 class="govuk-notification-banner__heading">
           <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
             {{ flashMessage.name }}
-          </a> folder created
+          </a> folder {{ flashMessage.action | default("created") }}
         </h3>
       {% endset %}
 

@@ -1,0 +1,55 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorRenameFolder %}Error: {% endif %}Rename folder - {{ currentCase.reference | default('Case') }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/current-service/back-office/manage-documents/folder/" ~ currentFolder.id ~ "?ref=" ~ currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errorRenameFolder %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [{ text: errorRenameFolder, href: "#rename-folder" }]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/current-service/back-office/manage-documents/rename-folder/{{ currentFolder.id }}" method="post" novalidate>
+        
+        <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+        {{ govukInput({
+          id: "rename-folder",
+          name: "rename-folder",
+          value: data['rename-folder'] | default(currentFolder.name),
+          label: {
+            html: "<span class='govuk-caption-l'>Rename folder</span>Folder name",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorRenameFolder } if errorRenameFolder else null
+        }) }}
+        
+        {{ govukButton({
+          text: "Save and return"
+        }) }}
+
+      </form>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}">
+          Cancel and return to {{ currentFolder.name }} folder
+        </a>
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

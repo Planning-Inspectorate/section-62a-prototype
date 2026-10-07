@@ -19,10 +19,15 @@ router.get('/current-service/back-office/manage-documents/index', function(req, 
   const flashMessage = req.session.data['flashMessage'];
   req.session.data['flashMessage'] = null;
 
+  // --- NEW: Handle delete banner ---
+  const deleteBanner = req.session.data['deleteBanner'];
+  req.session.data['deleteBanner'] = null;
+
   // Render the page
   res.render('current-service/back-office/manage-documents/index', { 
     currentCase: foundCase,       
-    flashMessage: flashMessage
+    flashMessage: flashMessage,
+    deleteBanner: deleteBanner
   });
 });
 
@@ -43,11 +48,16 @@ router.get('/current-service/back-office/manage-documents/folder/:folderId', fun
     const flashMessage = req.session.data['flashMessage'];
     req.session.data['flashMessage'] = null;
 
+    // --- NEW: Handle delete banner ---
+    const deleteBanner = req.session.data['deleteBanner'];
+    req.session.data['deleteBanner'] = null;
+
     res.render('current-service/back-office/manage-documents/folder', {
         currentCase,
         currentFolder,
         subfolders,
-        flashMessage
+        flashMessage,
+        deleteBanner
     });
 });
 

@@ -1,0 +1,82 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errors %}Error: {% endif %}Delete folder - {{ currentCase.reference | default('Case') }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/current-service/back-office/manage-documents/folder/" ~ currentFolder.id ~ "?ref=" ~ currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {# --- ERROR SUMMARY (Matches specific design) --- #}
+      {% if errors %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                <li><a href="#delete-btn" class="govuk-!-font-weight-bold">This folder cannot be deleted</a></li>
+                <li>
+                  <a href="#delete-btn" class="govuk-!-font-weight-bold">{{ errors.length }} issue{% if errors.length > 1 %}s{% endif %} identified</a>
+                  {# Nested bullet points for the specific issues #}
+                  <ul class="govuk-list govuk-error-summary__list govuk-!-margin-top-2" style="padding-left: 20px; list-style-type: disc;">
+                    {% for error in errors %}
+                      <li><a href="#delete-btn" class="govuk-!-font-weight-bold">{{ error }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-l">Delete folder</h1>
+
+      {# --- FOLDER NAME TABLE --- #}
+      <table class="govuk-table govuk-!-margin-bottom-6">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Folder name</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ currentFolder.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <form action="/current-service/back-office/manage-documents/delete-folder/{{ currentFolder.id }}" method="post" novalidate>
+        
+        <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+        {{ govukWarningText({
+          text: "This action cannot be undone.",
+          iconFallbackText: "Warning"
+        }) }}
+
+        {{ govukButton({
+          text: "Delete folder",
+          classes: "govuk-button--warning",
+          id: "delete-btn"
+        }) }}
+
+      </form>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}">
+          Cancel and return to folder
+        </a>
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

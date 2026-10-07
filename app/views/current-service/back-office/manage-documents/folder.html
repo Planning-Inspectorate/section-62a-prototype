@@ -17,6 +17,42 @@
 
 {% block content %}
 
+{# --- DELETE BANNER --- #}
+{% if deleteBanner %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% set deleteHtml %}
+        <h3 class="govuk-notification-banner__heading">
+          {{ deleteBanner }} folder deleted
+        </h3>
+      {% endset %}
+      {{ govukNotificationBanner({ html: deleteHtml, type: "success" }) }}
+    </div>
+  </div>
+{% endif %}
+
+{# --- SUCCESS BANNER --- #}
+{% if flashMessage %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set successHtml %}
+        <h3 class="govuk-notification-banner__heading">
+          <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
+            {{ flashMessage.name }}
+          </a> folder {{ flashMessage.action | default("created") }}
+        </h3>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        html: successHtml,
+        type: "success"
+      }) }}
+
+    </div>
+  </div>
+{% endif %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
       <span class="govuk-caption-m">{{ currentCase.reference | default('Case not found') }}</span>
@@ -35,8 +71,8 @@
     <div class="govuk-button-group govuk-!-margin-bottom-4">
         {# Changed to links to hit your routing logic #}
         <a href="/current-service/back-office/manage-documents/create-folder?ref={{ currentCase.reference }}&parentId={{ currentFolder.id }}" class="govuk-button govuk-button--secondary">Create subfolder</a>
-        <a href="/current-service/back-office/manage-documents/rename-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Rename folder</a>
-        <a href="/current-service/back-office/manage-documents/delete-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Delete folder</a>
+        <a href="/current-service/back-office/manage-documents/rename-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Rename this folder</a>
+        <a href="/current-service/back-office/manage-documents/delete-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Delete this folder</a>
     </div>
 
     <style>
