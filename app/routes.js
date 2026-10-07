@@ -39,7 +39,9 @@ import viewRepresentationRouter from './bo-routes/manage-representations/view-re
 import withdrawReinstateRepresentationRouter from './bo-routes/manage-representations/withdraw-reinstate-representation.js';
 
 // import manage documents bo-routers
-import manageDocumentsRouter from './bo-routes/manage-documents/main-folder.js';
+import manageDocumentsRouter from './bo-routes/manage-documents/examples/main-folder.js';
+import indexDocumentsRouter from './bo-routes/manage-documents/index.js';
+import folderActionsRouter from './bo-routes/manage-documents/folder-actions.js';
 
 // import fo-routers
 import applicationInformationRouter from './fo-routes/application-information.js';
@@ -67,6 +69,11 @@ import {
   validateOptionalDecimalNumber,
   getRepresentation
 } from './helpers.js';
+
+// import folder helpers
+import {
+  generateInitialFolders,
+} from './folder-helpers.js'
 
 // run initialization fixes
 applyAzureHostingFix();
@@ -111,7 +118,8 @@ router.use('/', withdrawReinstateRepresentationRouter);
 
 // mount manage documents bo-routers
 router.use('/', manageDocumentsRouter);
-
+router.use('/', indexDocumentsRouter);
+router.use('/', folderActionsRouter);
 
 // mount fo-routers
 router.use('/', applicationInformationRouter);

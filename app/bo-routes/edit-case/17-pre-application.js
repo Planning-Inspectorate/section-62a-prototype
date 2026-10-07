@@ -77,6 +77,16 @@ router.get('/pre-app-ref-pins-change', function(req, res) {
         // Trigger success banner
         req.session.data['flashMessage'] = "Pre-application reference updated";
 
+        // Pre-app folder visibility check
+        const hasRequestedAdvice = req.body.preApplicationAdviceRequested === 'Yes - PINS' || req.body.preApplicationAdviceRequested === 'Yes - Council';
+        const hasReference = req.body.preAppRefPins || req.body.preAppRefCouncil;
+
+        // If they did, permanently flip a flag on the case data
+        if (hasRequestedAdvice && hasReference) {
+            currentCase.preAppAdviceFolderVisible = true;
+        }
+        // no else statement, folder permenantly visible
+
         res.redirect('/current-service/back-office/tab-view/17-pre-application'); 
     });
 
@@ -118,6 +128,16 @@ router.get('/pre-app-ref-council-change', function(req, res) {
         }
         // Trigger success banner
         req.session.data['flashMessage'] = "Pre-application reference updated";
+
+         // Pre-app folder visibility check
+        const hasRequestedAdvice = req.body.preApplicationAdviceRequested === 'Yes - PINS' || req.body.preApplicationAdviceRequested === 'Yes - Council';
+        const hasReference = req.body.preAppRefPins || req.body.preAppRefCouncil;
+
+        // If they did, permanently flip a flag on the case data
+        if (hasRequestedAdvice && hasReference) {
+            currentCase.preAppAdviceFolderVisible = true;
+        }
+        // no else statement, folder permenantly visible
 
         res.redirect('/current-service/back-office/tab-view/17-pre-application');
     });

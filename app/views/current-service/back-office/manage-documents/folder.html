@@ -1,59 +1,26 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  Mock file view
+  {{ currentFolder.name }} - Manage Documents
 {% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/main-folder">Manage documents</a>
+        <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/index?ref={{ currentCase.reference }}">Manage documents</a>
       </li>
-      <li class="govuk-breadcrumbs__list-item" aria-current="page">Working documents</li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">{{ currentFolder.name }}</li>
     </ol>
   </div>
 {% endblock %}
 
 {% block content %}
-{%- from "moj/components/filter/macro.njk" import mojFilter -%}
-{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
-{%- from "govuk/components/button/macro.njk" import govukButton -%}
-{%- from "govuk/components/pagination/macro.njk" import govukPagination -%}
-
-<style>
-  /* --- MOJ FILTER & LAYOUT STYLES --- */
-  .moj-filter__header { background-color: #b1b4b6; }
-  .moj-filter__selected { background-color: #f3f2f1; }
-  .moj-filter__heading-action a { font-size: 16px !important; font-weight: normal; }
-  .custom-filter-layout { display: flex; gap: 0; }
-  .custom-filter-column { flex: 0 0 31%; max-width: 31%; padding-right: 0; }
-  .custom-content-column { flex: 0 0 69%; max-width: 69%; padding-left: 30px; }
-
-  .moj-filter { width: 100%; }
-  .moj-filter-layout__filter { border: none !important; }
-  .moj-filter__options { margin-top: -1px; padding: 20px; box-shadow: inset 0 0 0 1px #b1b4b6 }
-  .moj-filter__options > .govuk-button:first-child { display: none !important; }
-
-  /* Pill Icons */
-  .moj-filter__tag::after {
-    content: "" !important;
-    background-image: url("/public/images/icon-tag-remove-cross.svg") !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: 10px !important;
-    display: inline-block !important;
-    width: 20px !important; height: 20px !important; vertical-align: middle !important; margin-left: 5px !important;
-  }
-  .moj-filter__tag:hover::after { background-image: url("/public/images/icon-tag-remove-cross-white.svg") !important; }
-</style>
-
-<div id="js-error-container"></div>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
       <span class="govuk-caption-m">{{ currentCase.reference | default('Case not found') }}</span>
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">Working documents folder</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ currentFolder.name }} folder</h1>
   </div>
 </div>
 
@@ -63,13 +30,22 @@
 
     <h3 class="govuk-heading-m">Subfolders</h3>
 
-    <p class="govuk-body"><strong>7</strong> subfolders containing <strong>27</strong> files</p>
+    <p class="govuk-body"><strong>{{ subfolders.length | default(0) }}</strong> subfolders</p>
+
+    <div class="govuk-button-group govuk-!-margin-bottom-4">
+        {# Changed to links to hit your routing logic #}
+        <a href="/current-service/back-office/manage-documents/create-folder?ref={{ currentCase.reference }}&parentId={{ currentFolder.id }}" class="govuk-button govuk-button--secondary">Create subfolder</a>
+        <a href="/current-service/back-office/manage-documents/rename-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Rename folder</a>
+        <a href="/current-service/back-office/manage-documents/delete-folder/{{ currentFolder.id }}?ref={{ currentCase.reference }}" class="govuk-button govuk-button--secondary">Delete folder</a>
+    </div>
 
     <style>
       .hide-controls .govuk-accordion__show-all { display: none !important; }
       .hide-controls .govuk-accordion__section-heading-text { display: none !important; }
       .hide-controls .govuk-accordion__section-button { padding-top: 10px; padding-bottom: 10px; }
     </style>
+    
+    {% if subfolders and subfolders.length > 0 %}
     <div class="govuk-accordion hide-controls" data-module="govuk-accordion" id="sub-folders-accordion" data-remember-expanded="false"  data-i18n.hide-section="Show subfolders" data-i18n.show-section="Show subfolders">
       <div class="govuk-accordion__section">
         <div class="govuk-accordion__section-header">
@@ -80,32 +56,25 @@
         <div id="sub-folders-accordion-content-1" class="govuk-accordion__section-content">
           <div class="pins-link-menu">
             <ul class="govuk-list">
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">File Notes and Correspondence</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">EIA</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Fees</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Hearings</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Decisions or Recommendations</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Representations</a>
-              </li>
-              <li class="govuk-!-margin-bottom-4">
-                <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">Internal Correspondence</a>
-              </li>
+              
+              {# DYNAMIC SUBFOLDER LOOP #}
+              {% for folder in subfolders %}
+                <li class="govuk-!-margin-bottom-4">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="/current-service/back-office/manage-documents/folder/{{ folder.id }}?ref={{ currentCase.reference }}">
+                    {{ folder.name }}
+                  </a>
+                </li>
+              {% endfor %}
+
             </ul>
           </div>
         </div>
       </div>
     </div>
+    {% else %}
+        <p class="govuk-body govuk-!-margin-bottom-6">There are no subfolders inside this folder.</p>
+    {% endif %}
+
   </div>
 </div>
 
@@ -117,7 +86,6 @@
     <div id="pagination" class="govuk-body">
       <h2 class="govuk-heading">File actions</h2>
 
-      
       <p class="govuk-body govuk-!-margin-bottom-4">
         This folder contains 3 file(s). Showing <strong>1</strong> to <strong>3</strong> of <strong>3</strong> files.
       </p>

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName } from '../../helpers.js';
+import { generateInitialFolders } from '../../folder-helpers.js';
 
 const router = Router();
 
@@ -1056,6 +1057,12 @@ router.post('/case-created-confirmation', function (req, res) {
     finalSiteArea = data['site-area-sq-metres'] + " m²";
   }
 
+  // 1. Evaluate the conditions BEFORE building the object
+  const isPreAppRequested = data['application-stage'] === 'Application' && 
+    (data['pre-application-advice-requested'] === 'Yes - PINS' || data['pre-application-advice-requested'] === 'Yes - Council');
+  
+  const hasPreAppRef = data['pre-app-ref-pins'] || data['pre-app-ref-council'];
+
   // map case object
   const newCase = {
     reference: caseReference,
@@ -1072,6 +1079,9 @@ router.post('/case-created-confirmation', function (req, res) {
     preApplicationReferenceCouncil: (data['application-stage'] === 'Application' && data['pre-application-advice-requested'] === 'Yes - Council') 
       ? data['pre-app-ref-council'] 
       : null,
+
+    // --- NEW: Set the folder visibility flag right at creation! ---
+    preAppAdviceFolderVisible: (isPreAppRequested && hasPreAppRef) ? true : false,
 
     applicationClassification: data['application-classification'],
     applicationType: data['application-type'],
@@ -1141,6 +1151,17 @@ router.post('/case-created-confirmation', function (req, res) {
     publishStatus: "No"
   };
 
+  // --- NEW: ENSURE FOLDERS ARRAY EXISTS IN SESSION ---
+  if (!data.folders) {
+    data.folders = [];
+  }
+
+  // --- NEW: GENERATE FOLDERS FOR PRIMARY CASE ---
+  // Using applicationStage because it holds "Application" or "Pre-application"
+  const primaryFolders = generateInitialFolders(newCase.reference, newCase.applicationStage);
+  data.folders.push(...primaryFolders);
+
+
   // 4. check for Linked Case condition (Only applies to 'Application' stage)
   const isLinkedLBC = isLbcType && data['application-stage'] === 'Application';
 
@@ -1165,6 +1186,10 @@ router.post('/case-created-confirmation', function (req, res) {
     // save both cases to array
     data.cases.push(newCase);
     data.cases.push(lbcCase);
+
+    // --- NEW: GENERATE FOLDERS FOR SECONDARY LBC CASE ---
+    const lbcFolders = generateInitialFolders(lbcCase.reference, lbcCase.applicationStage);
+    data.folders.push(...lbcFolders);
 
     // add audit logs for both
     addAuditLog(req, caseReference, 'Case created');
