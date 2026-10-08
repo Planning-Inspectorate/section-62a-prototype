@@ -113,15 +113,14 @@
 
       <div class="govuk-button-group">
 
-      <form method="post" action="/current-service/back-office/manage-documents/main-folder" novalidate>
       {{ govukButton({
         text: "Manage documents",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        href: "/current-service/back-office/manage-documents/index?ref=" ~ currentCase.reference
       }) }}
-      </form>
 
      {% if currentCase.applicationStage == "Application" %}
-        <form method="post" action="/publish-status-answer-02-details?reference={{ currentCase.reference }}" novalidate>
+        <form method="post" action="/publish-status-answer-01-overview?reference={{ currentCase.reference }}" novalidate style="display: contents;">
           
           {% if currentCase.publishStatus == "Yes" %}
             
