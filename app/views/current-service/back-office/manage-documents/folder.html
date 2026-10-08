@@ -43,17 +43,24 @@
 {% if flashMessage %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
       {% set successHtml %}
         <h3 class="govuk-notification-banner__heading">
-          <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
-            {{ flashMessage.name }}
-          </a> folder {{ flashMessage.action | default("created") }}
+          {% if flashMessage.action == "renamed" %}
+            Folder renamed
+          {% else %}
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
+              {{ flashMessage.name }}
+            </a> folder {{ flashMessage.action | default("created") }}
+          {% endif %}
         </h3>
       {% endset %}
+
       {{ govukNotificationBanner({
         html: successHtml,
         type: "success"
       }) }}
+
     </div>
   </div>
 {% endif %}
