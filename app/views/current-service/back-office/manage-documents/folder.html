@@ -48,6 +48,8 @@
         <h3 class="govuk-notification-banner__heading">
           {% if flashMessage.action == "renamed" %}
             Folder renamed
+          {% elif flashMessage.action == "uploaded successfully" %}
+            {{ flashMessage.name }} uploaded
           {% else %}
             <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
               {{ flashMessage.name }}
