@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName } from '../../helpers.js';
+import { validAuthorities, validatePostcode, validateEmail, validateOptionalPhone, validateNumber, validateOptionalSiteCoords, validateOptionalNumber, validateDate, addAuditLog, validateOptionalDate, validateOptionalDecimalNumber, validateName, validateOptionalEmail } from '../../helpers.js';
 import { generateInitialFolders } from '../../folder-helpers.js';
 
 const router = Router();
@@ -18,7 +18,7 @@ router.get('/create-case-start', function (req, res) {
 router.post('/application-stage-answer', function (req, res) {
   const applicationStage = req.session.data['application-stage'];
   if (!applicationStage) {
-    return res.render('current-service/back-office/create-a-case/01-application-stage', { errorApplicationStage: "Select whether this is a pre-application or application" });
+    return res.render('current-service/back-office/create-a-case/01-application-stage', { errorApplicationStage: "Select whether this is a pre-application or an application" });
   }
   if (applicationStage === "Pre-application") {
     res.redirect('/current-service/back-office/create-a-case/06-application-type');
@@ -35,7 +35,7 @@ router.post('/pre-application-advice-requested-answer', function (req, res) {
   
   if (!preApplicationAdviceRequested) {
     return res.render('current-service/back-office/create-a-case/02-has-pre-application-advice-been-requested-for-this-case', { 
-      errorPreApplicationAdviceRequested: "Select if pre-application advice has been requested for this application" 
+      errorPreApplicationAdviceRequested: "Select if pre-application advice has been requested" 
     });
   }
   
@@ -101,7 +101,7 @@ router.get('/current-service/back-office/create-a-case/03-what-is-the-pre-applic
 
         return res.render('current-service/back-office/create-a-case/03-what-is-the-pre-application-reference-pins', {
           preAppItems: preAppItems,
-          errorPreAppRefPins: "Select a pre-application reference"
+          errorPreAppRefPins: "Enter the pre-application reference"
         });
       }
 
@@ -156,31 +156,15 @@ router.post('/lpa-answer', function(req, res) {
 // 08 - primary lpa contact details
 router.post('/lpa-contact-answer', function (req, res) {
   const data = req.session.data;
-  
-  const lpaContactFirstName = data['lpa-contact-first-name'];
-  const lpaContactLastName = data['lpa-contact-last-name'];
+
   const lpaContactEmail = data['lpa-contact-email'];
   const lpaContactPhone = data['lpa-contact-phone'];
 
   const errors = {};
   const errorList = [];
 
-  // validate first name
-  const firstNameError = validateName(lpaContactFirstName, "LPA contact's first name", "lpa-contact-first-name");
-  if (firstNameError) {
-    errors.firstName = { text: firstNameError.text };
-    errorList.push(firstNameError);
-  }
-
-  // validate last name
-  const lastNameError = validateName(lpaContactLastName, "LPA contact's last name", "lpa-contact-last-name");
-  if (lastNameError) {
-    errors.lastName = { text: lastNameError.text };
-    errorList.push(lastNameError);
-  }
-
   // validate email
-  const emailError = validateEmail(lpaContactEmail, "LPA contact's email address", "lpa-contact-email");
+  const emailError = validateOptionalEmail(lpaContactEmail, "LPA contact's email address", "lpa-contact-email");
   if (emailError) {
     errors.email = { text: emailError.text };
     errorList.push(emailError);
@@ -240,31 +224,16 @@ router.post('/secondary-lpa-answer', function (req, res) {
 // 11 - secondary lpa contact details
 router.post('/secondary-lpa-contact-answer', function (req, res) {
   const data = req.session.data;
-  
-  const secondaryLpaContactFirstName = data['secondary-lpa-contact-first-name'];
-  const secondaryLpaContactLastName = data['secondary-lpa-contact-last-name'];
+
   const secondaryLpaContactEmail = data['secondary-lpa-contact-email'];
   const secondaryLpaContactPhone = data['secondary-lpa-contact-phone'];
 
   const errors = {};
   const errorList = [];
 
-  // validate first name
-  const firstNameError = validateName(secondaryLpaContactFirstName, "Secondary LPA contact's first name", "secondary-lpa-contact-first-name");
-  if (firstNameError) {
-    errors.firstName = { text: firstNameError.text };
-    errorList.push(firstNameError);
-  }
-
-  // validate last name
-  const lastNameError = validateName(secondaryLpaContactLastName, "Secondary LPA contact's last name", "secondary-lpa-contact-last-name");
-  if (lastNameError) {
-    errors.lastName = { text: lastNameError.text };
-    errorList.push(lastNameError);
-  }
 
   // validate email
-  const emailError = validateEmail(secondaryLpaContactEmail, "Secondary LPA contact's email address", "secondary-lpa-contact-email");
+  const emailError = validateOptionalEmail(secondaryLpaContactEmail, "Secondary LPA contact's email address", "secondary-lpa-contact-email");
   if (emailError) {
     errors.email = { text: emailError.text };
     errorList.push(emailError);

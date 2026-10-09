@@ -23,7 +23,7 @@
       <h1 class="govuk-heading-l">What are the local planning authority's contact details?</h1>
 
       {{ govukInput({ 
-        label: { text: "First name" }, 
+        label: { text: "First name (optional)" }, 
         id: "lpa-contact-first-name", 
         name: "lpa-contact-first-name", 
         value: data['lpa-contact-first-name'],
@@ -31,7 +31,7 @@
       }) }}
       
       {{ govukInput({ 
-        label: { text: "Last name" }, 
+        label: { text: "Last name (optional)" }, 
         id: "lpa-contact-last-name", 
         name: "lpa-contact-last-name", 
         value: data['lpa-contact-last-name'],
@@ -39,7 +39,7 @@
       }) }}
       
       {{ govukInput({ 
-        label: { text: "Email address" }, 
+        label: { text: "Email address (optional)" }, 
         id: "lpa-contact-email", 
         name: "lpa-contact-email", 
         type: "email", 

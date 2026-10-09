@@ -23,7 +23,7 @@
       <h1 class="govuk-heading-l">What are the secondary local planning authority's contact details?</h1>
 
       {{ govukInput({ 
-        label: { text: "First name" }, 
+        label: { text: "First name (optional)" }, 
         id: "secondary-lpa-contact-first-name", 
         name: "secondary-lpa-contact-first-name", 
         value: data['secondary-lpa-contact-first-name'],
@@ -31,7 +31,7 @@
       }) }}
       
       {{ govukInput({ 
-        label: { text: "Last name" }, 
+        label: { text: "Last name (optional)" }, 
         id: "secondary-lpa-contact-last-name", 
         name: "secondary-lpa-contact-last-name", 
         value: data['secondary-lpa-contact-last-name'],
@@ -39,7 +39,7 @@
       }) }}
       
       {{ govukInput({ 
-        label: { text: "Email address" }, 
+        label: { text: "Email address (optional)" }, 
         id: "secondary-lpa-contact-email", 
         name: "secondary-lpa-contact-email", 
         type: "email", 
