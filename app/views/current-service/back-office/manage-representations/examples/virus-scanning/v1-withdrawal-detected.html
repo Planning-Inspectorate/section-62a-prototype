@@ -1,0 +1,108 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Upload the withdrawal request
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+ 
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                    <h2 class="govuk-error-summary__title">There is a problem</h2>
+                    <div class="govuk-error-summary__body">
+
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="" class="govuk-!-font-weight-bold">One or more files contain a virus. Remove the files and upload a different version.</a></li>
+                    </ul>
+
+                    </div>
+            </div>
+        </div>
+        
+        <form method="post" action="" novalidate>
+            <input type="hidden" name="_csrf" value="">
+            
+            <h1 class="govuk-heading-l">
+                Upload the withdrawal request
+            </h1>
+            
+            <p class="govuk-body">You can upload the following file types: <br>
+            PDF, PNG, JPG, JPEG, TIF, TIFF, DOC, DOCX, XLS, XLSX</p>
+
+            <p class="govuk-body">Note that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>files must not be compressed (ZIP files will not be accepted)</li>
+                <li>each file must be under 20MB</li>
+                <li>total upload size must be under 1GB</li>
+            </ul>
+
+            <p class="govuk-body">The file name can only include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Letters, numbers, hyphens, underscores, brackets, ampersand and single apostrophes</li>
+            </ul>
+            
+            {% from "components/multi-file-upload.njk" import uploadArea %}
+
+            {{ uploadArea({
+                serverError: errors.uploadedFiles if errors.uploadedFiles else null,
+                existingFiles: data['uploadedFiles']
+            }) }}
+
+            <div class="govuk-form-group" id="documents-files-group" style="display: block;">
+
+                <div class="govuk-form-group--error">
+            
+                <p id="attachments-error" class="govuk-error-message">
+                
+                
+                <label class="govuk-label govuk-label--m" id="documents-files-label" for="documents-files-table" style="display: block;">
+                Attachments added
+                </label>
+
+                <span class="govuk-visually-hidden">Error:</span> One or more files contain a virus. Remove the files and upload a different version.
+                </p>
+
+                <table class="govuk-table" id="documents-files-table" style="table-layout: fixed; width: 100%; margin-bottom: 0;">
+                <colgroup>
+                    <col>
+                    <col style="width: 260px;">
+                    <col style="width: 80px;">
+                </colgroup>
+
+                <tbody class="govuk-table__body"><tr class="govuk-table__row uploading-row" data-file="localhost_3000_current-service_back-office_manage-documents_examples_virus-scanning_v1-awaiting (3).png">
+                        <td class="govuk-table__cell" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word;">
+                            <a href="#" class="govuk-link" style="overflow-wrap: anywhere; word-break: break-word;">example-file-1.pdf</a>
+                        </td>
+                        <td class="govuk-table__cell">
+                            <span class="govuk-visually-hidden" aria-live="polite">example-file-1.pdf</span>
+                            <strong class="govuk-tag govuk-tag--green" aria-hidden="true" style="margin-right: 20px; max-width: none; white-space: nowrap; margin-bottom: 10px;">Uploaded</strong>
+                            <strong class="govuk-tag govuk-tag--red" aria-hidden="true" style="margin-right: 20px; max-width: none; white-space: nowrap;">Virus detected</strong>
+                            
+                        </td>
+                        <td class="govuk-table__cell">
+                            <a href="#" class="govuk-link remove-link">Remove<span class="govuk-visually-hidden"> example-file-1.pdf</span></a>
+                        </td>
+                        </tr></tbody>
+                </table>
+                </div>
+            </div>
+
+            {{ govukButton({
+                text: "Continue"
+            }) }}
+            
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

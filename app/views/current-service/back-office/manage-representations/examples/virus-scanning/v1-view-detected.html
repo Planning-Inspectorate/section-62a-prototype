@@ -1,0 +1,209 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  View representation
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to manage representations", href: "" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+  <div role="alert">
+    <h2 class="govuk-error-summary__title">
+      There is a problem
+    </h2>
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        <li>
+          <a href="#">One or more files contain a virus. Contact the representee to get a new representation.</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-xl">604NB-4734</span>
+      View representation
+    </h1>
+
+    {# ========================================================= #}
+    {# SUMMARY LIST                                              #}
+    {# ========================================================= #}
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Reference</dt>
+        <dd class="govuk-summary-list__value">
+         	604NB-4734
+        </dd>
+      </div>
+
+      {# --- 01: Date received --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">What date was the representation received?</dt>
+        <dd class="govuk-summary-list__value">
+          12 October 2026
+        </dd>
+      </div>
+
+      {# --- 02: How received --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">How was this representation received?</dt>
+        <dd class="govuk-summary-list__value">Email</dd>
+      </div>
+
+      {# --- 04: Type of representation --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Representation type</dt>
+        <dd class="govuk-summary-list__value">Interested party</dd>
+      </div>
+
+      {# --- 05: Source of representation --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Who you are submitting for</dt>
+        <dd class="govuk-summary-list__value">On behalf of another person, an organisation or group of people</dd>
+      </div>
+
+     
+        
+        {# 14: Who are they representing? #}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Who are you representing?</dt>
+            <dd class="govuk-summary-list__value">A person</dd>
+        </div>
+
+
+          <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Are you acting as an agent on behalf of a client?</dt>
+              <dd class="govuk-summary-list__value">No</dd>
+          </div>
+
+         
+
+      {# --- 06: Submitter full name --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your full name</dt>
+          <dd class="govuk-summary-list__value">John Smith</dd>
+      </div>
+
+
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Withhold name?</dt>
+          <dd class="govuk-summary-list__value">No</dd>
+      </div>
+
+
+      {# --- 07: Preferred contact method --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">What is your contact preference?</dt>
+          <dd class="govuk-summary-list__value">Email</dd>
+      </div>
+
+      {# --- 08: Email address (If chosen) --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your email address</dt>
+          <dd class="govuk-summary-list__value">john.smith@example.com</dd>
+      </div>
+
+
+        
+        {# 17: Person #}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Represented person name</dt>
+            <dd class="govuk-summary-list__value">Jane Doe</dd>
+        </div>
+
+
+      {# --- 10: The Representation Comment --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Tell us about application</dt>
+          <dd class="govuk-summary-list__value">
+              <p class="govuk-body">This is a sample comment about the application. It is quite long and requires more space to display fully.</p>
+          </dd>
+      </div>
+
+      {# --- 11: Hearing --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Would you like to be heard at a hearing?</dt>
+          <dd class="govuk-summary-list__value">No</dd>
+      </div>
+
+      {# --- 12: Attachments Included? --- #}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Attachments uploaded?</dt>
+          <dd class="govuk-summary-list__value">Yes</dd>
+      </div>
+
+      {# --- 13: Uploaded Files (If Yes) --- #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Attachments</dt>
+        
+        <dd class="govuk-summary-list__value">
+          <div class="govuk-form-group--error">
+            
+            <p id="attachments-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> One or more files contain a virus. You cannot review this representation.
+            </p>
+
+            <ol class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-bottom-0">
+              <li>example-attachment-1.pdf<strong class="govuk-tag govuk-tag--red" style="margin-left: 10px;">Virus found</strong></li>
+              <li>example-attachment-2.pdf<strong class="govuk-tag govuk-tag--red" style="margin-left: 10px;" >Virus found</strong></li>
+              <li>example-attachment-3.pdf</li>
+            </ol>
+
+          </div>
+        </dd>
+      </div>
+
+    </dl>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Grab all toggle links on the page
+    const toggleLinks = document.querySelectorAll('.js-show-more-toggle');
+
+    toggleLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        // Prevent the link from jumping the page to the top
+        event.preventDefault(); 
+
+        // Find the specific container and content for this exact link
+        const container = link.closest('.js-show-more-container');
+        const content = container.querySelector('.js-show-more-content');
+        
+        // Grab the count we saved in the data attribute earlier
+        const extraCount = container.dataset.extraCount; 
+
+        // Check current state
+        const isExpanded = link.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          // Hide it
+          content.setAttribute('hidden', '');
+          link.setAttribute('aria-expanded', 'false');
+          // use `Show ${extraCount} more` to show number of hidden items
+          link.innerText = `Show more`;
+        } else {
+          // Show it
+          content.removeAttribute('hidden');
+          link.setAttribute('aria-expanded', 'true');
+          link.innerText = 'Hide';
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

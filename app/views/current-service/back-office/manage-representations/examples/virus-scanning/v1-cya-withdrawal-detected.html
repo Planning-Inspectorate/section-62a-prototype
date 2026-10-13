@@ -1,0 +1,121 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Upload the withdrawal request
+{% endblock %}
+ 
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                    <h2 class="govuk-error-summary__title">There is a problem</h2>
+                    <div class="govuk-error-summary__body">
+
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="" class="govuk-!-font-weight-bold">These files contain viruses:</a></li>
+                        <li>
+                        <ul class="govuk-list govuk-error-summary__list govuk-!-margin-top-2" style="padding-left: 20px; list-style-type: disc;">
+                            <li><a href="#Example-file-1.pdf" class="govuk-!-font-weight-bold">localhost_3000_current-service_back-office_manage-representations_examples_virus-scanning_v1-cya-awaiting (2).png</a></li>
+                        </ul>
+                        </li>
+                        <li><a href="" class="govuk-!-font-weight-bold" style="margin-top: 10px; display: block;">Remove the files and upload a different version.</a></li>
+                    </ul>
+
+                    </div>
+            </div>
+        </div>
+
+    <h1 class="govuk-heading-l">Check your answers</h1>
+
+
+    <dl class="govuk-summary-list">
+
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Withdrawal request date</dt>
+        <dd class="govuk-summary-list__value">
+          
+      
+        
+        
+        
+        
+        12 February 2222
+      
+    
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/01-enter-date-of-withdrawal-request">Change<span class="govuk-visually-hidden"> withdrawal date</span></a>
+        </dd>
+      </div>
+
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Why is the representation being withdrawn?</dt>
+        <dd class="govuk-summary-list__value">Change of opinion</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/02-why-is-the-representation-being-withdrawn">Change<span class="govuk-visually-hidden"> why is the representation being withdrawn</span></a>
+        </dd>
+      </div>
+
+      
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Upload the withdrawal request</dt>
+          <dd class="govuk-summary-list__value">
+
+            <div class="govuk-form-group--error">
+            
+                <p id="attachments-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> One or more files contain a virus. Remove the files and upload a different version.
+                </p>
+            
+            
+              
+              <ol class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-bottom-0">
+                
+                  
+                    <li><a class="govuk-link" href="#">localhost_3000_current-service_back-office_manage-representations_examples_virus-scanning_v1-cya-awaiting (2).png</a> <br> <strong class="govuk-tag govuk-tag--red" aria-hidden="true" style="margin-right: 20px; max-width: none; white-space: nowrap; margin-top: 10px;">Virus detected</strong> </li>
+                  
+                
+              </ol>
+            
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/current-service/back-office/manage-representations/withdraw-representation/03-upload-the-withdrawal-request">
+              Change<span class="govuk-visually-hidden"> upload the withdrawal request</span>
+            </a>
+          </dd>
+      </div>
+    </dl>
+
+    <div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-visually-hidden">Warning</span>
+    The representation will be withdrawn
+  </strong>
+</div>
+
+
+    <form action="" method="post" novalidate="">
+      <input type="hidden" name="answers-checked" value="true">
+      
+<button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
+  Accept and submit
+</button>
+
+    </form>
+
+  </div>
+</div>
+
+        </main>
+        
+        
+      </div>
+
+{% endblock %}

@@ -36,8 +36,12 @@
             <ul class="govuk-list govuk-list--bullet">
                 <li>files must not be compressed (ZIP files will not be accepted)</li>
                 <li>each file must be under 20MB</li>
-                <li>only 3 files can be uploaded at a time</li>
                 <li>total upload size must be under 1GB</li>
+            </ul>
+
+            <p class="govuk-body">The file name can only include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Letters, numbers, hyphens, underscores, brackets, ampersand and single apostrophes</li>
             </ul>
             
             {% from "components/multi-file-upload.njk" import uploadArea %}

@@ -1,0 +1,140 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}Upload attachments
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+ 
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                    <h2 class="govuk-error-summary__title">There is a problem</h2>
+                    <div class="govuk-error-summary__body">
+
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="" class="govuk-!-font-weight-bold">Wait for all attachments to be scanned for viruses</a></li>
+                    </ul>
+
+                    </div>
+            </div>
+        </div>
+        
+        <form method="post" action="" novalidate>
+            <input type="hidden" name="_csrf" value="">
+            
+            <h1 class="govuk-heading-l">
+                Upload supporting attachments
+            </h1>
+            
+            <p class="govuk-body">Use this page to upload your supporting attachments. These will be published on the website along with your name and comment.</p>
+            
+            <div class="govuk-inset-text">
+                Do not include in your supporting attachments any personal information that could identify you or another person.
+            </div>
+
+            <p class="govuk-body">You can upload the following attachment types: <br>
+            PDF, PNG, JPG, JPEG, TIF, TIFF, DOC, DOCX, XLS, XLSX</p>
+
+            <p class="govuk-body">Note that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>attachments must not be compressed (ZIP attachments will not be accepted)</li>
+                <li>each attachment must be under 20MB</li>
+                <li>only 3 attachments can be uploaded at a time</li>
+                <li>total upload size must be under 1GB</li>
+            </ul>
+
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        Guidance on what not to include
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">Do not include:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>personal data such as names, addresses, contact details, signatures and photos that could identify you or anyone else</li>
+                        <li>links to third party websites, except GOV.UK or chartered professional websites</li>
+                        <li>sensitive information</li>
+                    </ul>
+                    <p class="govuk-body">Sensitive information refers to information that:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>could identify a child</li>
+                        <li>relates to health</li>
+                        <li>relates to crime</li>
+                    </ul>
+                    <p class="govuk-body">It also means any information relating to an individual's:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>race or ethnic origin</li>
+                        <li>political or religious beliefs</li>
+                        <li>trade union membership</li>
+                        <li>genetic or biometric data</li>
+                        <li>physical characteristics</li>
+                        <li>mental health or sexual health</li>
+                        <li>sexual orientation and sex life</li>
+                    </ul>
+                    <p class="govuk-body">If you include any personal data, third party links or sensitive data in your comment or supporting attachments, this will be redacted and will not be taken into account by the Planning Inspectors.</p>
+                    <p class="govuk-body">If you include any racist, inflammatory or abusive language, your written representation will be rejected.</p>
+                </div>
+            </details>
+            
+            {% from "components/multi-file-upload.njk" import uploadArea %}
+
+            {{ uploadArea({
+                serverError: errors.uploadedFiles if errors.uploadedFiles else null,
+                existingFiles: data['uploadedFiles']
+            }) }}
+
+            
+
+
+            <div class="govuk-form-group" id="documents-files-group" style="display: block;">
+                <label class="govuk-label govuk-label--m" id="documents-files-label" for="documents-files-table" style="display: block;">
+                Attachments added
+                </label>
+
+                <p class="govuk-error-message" id="documents-files-error" style="display: none;">
+                <span class="govuk-visually-hidden">Error:</span>
+                Wait for all attachments to finish uploading
+                </p>
+
+                <table class="govuk-table" id="documents-files-table" style="table-layout: fixed; width: 100%; margin-bottom: 0;">
+                <colgroup>
+                    <col>
+                    <col style="width: 260px;">
+                    <col style="width: 80px;">
+                </colgroup>
+
+                <tbody class="govuk-table__body"><tr class="govuk-table__row uploading-row" data-file="localhost_3000_current-service_back-office_manage-documents_examples_virus-scanning_v1-awaiting (3).png">
+                        <td class="govuk-table__cell" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word;">
+                            <a href="#" class="govuk-link" style="overflow-wrap: anywhere; word-break: break-word;">example-file-1.pdf</a>
+                        </td>
+                        <td class="govuk-table__cell">
+                            <span class="govuk-visually-hidden" aria-live="polite">example-file-1.pdf</span>
+                            <strong class="govuk-tag govuk-tag--green" aria-hidden="true" style="margin-right: 20px; max-width: none; white-space: nowrap; margin-bottom: 10px;">Uploaded</strong>
+                            <strong class="govuk-tag govuk-tag--yellow" aria-hidden="true" style="margin-right: 20px; max-width: none; white-space: nowrap;">Virus scan in progress</strong>
+                        </td>
+                        <td class="govuk-table__cell">
+                            <a href="#" class="govuk-link remove-link">Remove<span class="govuk-visually-hidden"> example-file-1.pdf</span></a>
+                        </td>
+                        </tr></tbody>
+                </table>
+            </div>
+
+            {{ govukButton({
+                text: "Continue"
+            }) }}
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}
