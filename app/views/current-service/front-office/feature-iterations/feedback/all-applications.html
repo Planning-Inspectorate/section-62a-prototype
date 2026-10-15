@@ -1,0 +1,775 @@
+{% extends "layouts/new/front-office.html" %}
+
+{% set activePage = "all-applications" %}
+
+{% block pageTitle %}
+  Find a local planning application made to the Planning Inspectorate - GOV.UK (Prototype)
+{% endblock %}
+
+{% block beforeContent %}
+    <div class="pins-hero" style="width:100vw; margin-left:calc(-50vw + 50%); background:#00625e; padding-top: 40px; padding-bottom: 40px;">
+        <div class="govuk-width-container">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 style="color:white;" class="govuk-heading-xl pins-info-heading govuk-!-margin-bottom-6">
+                        Find a local planning application made to the Planning Inspectorate
+                    </h1>
+                    <p style="color:white; margin-bottom: 20px;" class="govuk-body pins-info-body">
+                        These applications have been made directly to the Planning Inspectorate instead of a Local Planning Authority (LPA) under a rule called <a href="https://www.gov.uk/guidance/planning-applications-s62a" class="govuk-link govuk-link--inverse" rel="noreferrer noopener" target="_blank">Section 62A (opens in new tab)</a>.
+                    </p>
+
+                    <p style="color:white" class="govuk-body pins-info-body">
+                       To view applications submitted before 2026, <a href="https://www.gov.uk/government/publications/planning-applications-process-section-62a-authorities-in-special-measures" class="govuk-link govuk-link--inverse">search and view planning applications</a> on the legacy GOV.UK service.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {# --- CALCULATE TOTAL RESULTS --- #}
+    {% set publishedDynamicCount = 0 %}
+    {% if data.cases %}
+        {% for case in data.cases %}
+            {% if case.applicationStage == "Application" and case.publishStatus == "Yes" %}
+                {% set publishedDynamicCount = publishedDynamicCount + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% set totalCases = publishedDynamicCount + 7 %}
+    {# ------------------------------- #}
+
+    <style>
+        /* Tooltip text */
+        #tooltiptext {
+            visibility: hidden;
+            background-color: white;
+            color: #000;
+            text-align: left;
+            margin: 10px;
+            padding: 16px;
+            border-radius: 4px;
+            left: 48%;
+            position: absolute;
+            z-index: 1;
+        }
+
+        #tooltiptext:after {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 0;
+            z-index: 1;
+            border-style: solid;
+            border-color: #ffffff transparent;
+            border-width: 10px 10px 0;
+            bottom: -10px;
+            left: 50%;
+            margin-left: -10px;
+        }
+
+        #tooltip {
+            background-image: url("https://www.ordnancesurvey.co.uk/img-assets/products/overview-england-wales.x4fa67183.xe4e2d2f0.jpg");
+            background-size: cover;
+            height: 700px;
+            width: 100%;
+            background-color: rgb(188, 214, 188);
+            text-align: center;
+            padding-top: 400px;
+        }
+
+        .layout-slots__divider { color: #ffffff; }
+        a { color: #1d70b8; }
+        .grey-box { display: none; }
+        
+        .govuk-header,
+        .govuk-header__container {
+            background-color: rgb(7, 71, 69);
+            border-bottom: 10px solid #00847f;
+        }
+
+        .govuk-main-wrapper {
+            padding-top: 40px !important;
+        }
+
+        /* Active filter tags */
+        .selected-filter-tag {
+            display: inline-flex !important;
+            width: auto !important;
+            max-width: none !important;
+            margin: 0px;
+            border-radius: 5px;
+            background: #f3f2f1;
+            color: #0b0c0c;
+            border-radius: 4px;
+            padding: 4px 10px !important;
+            border: 1px solid #b1b4b6;
+            box-shadow: none !important;
+        }
+
+        .clear-link {
+            margin-top: 20px;
+            padding: 4px;
+        }
+
+        .active-filters {
+            margin-bottom: 20px;
+        }
+
+        .active-filters__list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Prevent horizontal scroll bug caused by 100vw on mobile */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Apply the background color to the new full-width wrapper */
+        .govuk-feedback{
+        background-color: #F3F2F1; 
+        width: 100vw;
+        margin-left:calc(-50vw + 50%);
+        margin-bottom: -120px;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        border-top: 1px solid #9f9f9f;
+        }
+
+        /* ========================================================= */
+        /* RESPONSIVE SEARCH                                         */
+        /* ========================================================= */
+        .search-form-layout {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 0px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            flex-grow: 1; 
+        }
+
+        .search-button {
+            margin-bottom: 0 !important; 
+        }
+
+        /* New Clear Search Link Styles */
+        .clear-search-link {
+            display: none;
+            margin-top: 10px;
+            font-size: 19px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        /* ========================================================= */
+        /* MODAL FILTER STYLING                                      */
+        /* ========================================================= */
+        
+        .mobile-modal-header { display: none !important; }
+        .mobile-filter-trigger-btn { display: none !important; }
+
+        @media (max-width: 40.0625em) {
+
+            /* Stack the search input and button */
+            .search-form-layout {
+                flex-direction: column;
+                align-items: stretch; 
+                gap: 0; 
+            }
+
+            .search-button {
+                width: 100%; 
+                margin-top: -2px; 
+                margin-bottom: 0 !important; 
+            }
+
+            /* --- MOBILE MODAL OVERRIDES --- */
+            
+            .mobile-filter-trigger-btn { 
+                display: block !important; 
+            }
+
+            .desktop-filter-heading { 
+                display: none !important; 
+            }
+
+            .filter-modal-container { 
+                display: none; 
+            }
+
+            .filter-modal-container.is-open {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: white;
+                z-index: 9999;
+                padding: 20px 20px 80px 20px; 
+                margin: 0 !important; 
+                box-sizing: border-box;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+            }
+
+            .filter-modal-container.is-open .mobile-modal-header {
+                display: block !important; 
+            }
+
+            /* --- TABLE RESPONSIVENESS --- */
+        
+            /* Force long reference numbers to wrap onto the next line */
+            .govuk-table__body .govuk-table__header a {
+                word-break: break-all;
+                overflow-wrap: anywhere;
+            }
+
+            /* Override the hardcoded inline column percentages on mobile */
+            .govuk-table__head .govuk-table__header {
+                width: auto !important;
+            }
+            
+            .govuk-table__cell, 
+            .govuk-table__header {
+                padding-right: 10px;
+            }
+        }
+    </style>
+
+    <main class="govuk-main-wrapper" id="main-content">
+
+    <div class="govuk-grid-row">
+
+        <!-- LEFT HAND FILTER COLUMN -->
+        <div class="govuk-grid-column-one-third" style="margin-top: -40px;">
+
+            <!-- WRAPPED IN MODAL CONTAINER -->
+            <div id="filter-modal-container" class="filter-modal-container">
+
+                <!-- Mobile Only Header inside Modal -->
+                <div class="mobile-modal-header">
+                    <div style="display:flex; justify-content:space-between; align-items: baseline;">
+                        <h2 class="govuk-heading-l" style="margin-bottom: 0;">Filter</h2>
+                        <a href="#" id="close-filter-modal" class="govuk-link" style="font-size: 19px;">Return to results</a>
+                    </div>
+                    <p class="govuk-body" id="mobile-modal-count" style="margin-top: 10px; margin-bottom: 15px;">{{ totalCases }} applications</p>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </div>
+
+                <h2 class="govuk-heading-m desktop-filter-heading">Filters</h2>
+
+                <div class="govuk-accordion" data-module="govuk-accordion" id="filter-accordion" data-remember-expanded="false">
+                    <div class="govuk-accordion__section">
+                        <div class="govuk-accordion__section-header">
+                            <h3 class="govuk-accordion__section-heading">
+                                <span class="govuk-accordion__section-button">
+                                    Local planning authority (LPA)
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="govuk-accordion__section-content">
+                            <div style="padding-left:15px;">
+                                <form class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        <div class="govuk-grid-row">
+                                            <div class="govuk-grid-column-full">
+                                                <fieldset class="govuk-fieldset" aria-describedby="type-hint">
+                                                    
+                                                    <!-- JS will inject the dynamic checkboxes in here -->
+                                                    <div class="govuk-checkboxes govuk-checkboxes--small" id="dynamic-lpa-checkboxes">
+                                                    </div>
+
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="govuk-button" id="apply-filters-button" type="button" style="width: 100%;">Apply filters</button>
+
+            </div>
+        </div>
+
+        <!-- RIGHT HAND CONTENT COLUMN -->
+        <div class="govuk-grid-column-two-thirds">
+
+                <h3 class="govuk-heading-l" style="margin-top: -40px;">
+                    All applications
+                </h3>
+         
+                <div id="search-hint" class="govuk-hint">
+                    Find a case, search by local authority, reference, first line of an address or postcode
+                </div>
+                
+                <form class="govuk-form-group search-form-layout" style="margin-bottom: 0px;">
+                    <label class="govuk-label govuk-visually-hidden" for="keyword-search">Keyword search</label>
+                    
+                    <div class="search-input-wrapper">
+                        <input class="govuk-input" id="keyword-search" name="keyword-search" type="text" autocomplete="off"
+                            style="margin-bottom: 0; width:100%;">
+                    </div>
+
+                    <button class="govuk-button search-button" id="keyword-search-button" type="submit">Search</button>
+                </form>
+                <a href="#" id="clear-search-link" class="govuk-link clear-search-link">Clear search</a>
+
+                <!-- Mobile Trigger Button (Hidden on Desktop) -->
+                <button id="open-filter-modal" class="govuk-button govuk-button--secondary mobile-filter-trigger-btn" style="width: 100%; margin-top: 15px;">
+                    Show filters
+                </button>
+
+                <div id="active-filters-section" class="active-filters" style="display: none; margin-top: 16px;">
+                    <h3 class="govuk-heading-s">Active filters</h3>
+                    <div id="active-filters-list" class="active-filters__list"></div>
+                    <div class="clear-link">
+                        <p class="govuk-body">
+                            <a href="#" id="clear-filters-link" class="govuk-link">Clear filters</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <p class="govuk-body" id="results-count-text" style="margin-top: 20px;">
+                    Showing
+                    <strong id="count-start">{% if totalCases > 0 %}1{% else %}0{% endif %}</strong>
+                    to
+                    <strong id="count-visible">{{ totalCases }}</strong>
+                    of
+                    <strong id="count-total">{{ totalCases }}</strong>
+                    results
+                </p>
+
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+                <div id="no-results-message" style="display: none; margin-top: 20px;">
+                    <h3 class="govuk-heading-m">No results were found.</h3>
+                    <p class="govuk-body">
+                        <a href="#" id="clear-all-link" class="govuk-link">Clear search and filters</a> to view all applications.
+                    </p>
+                </div>
+
+                <div class="pins-table__container" style="overflow-x: auto" tabindex="0">
+                    <table class="govuk-table govuk-table--small-text-until-tablet">
+                        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
+                            List of all published Section 62A applications
+                        </caption>
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header" style="width: 15%;">Reference</th>
+                                <th scope="col" class="govuk-table__header" style="width: 30%;">Applicant</th>
+                                <th scope="col" class="govuk-table__header" style="width: 30%;">Site address</th>
+                                <th scope="col" class="govuk-table__header" style="width: 25%;">LPA</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+
+                            {# --- DYNAMIC CASES LOGIC --- #}
+                            {% if data.cases and data.cases.length > 0 %}
+                                {% for case in data.cases | reverse %}
+                                
+                                    {# Only show if it's an Application AND it has been published #}
+                                    {% if case.applicationStage == "Application" and case.publishStatus == "Yes" %}
+                                    
+                                        {% set displayApplicantName = "Not provided" %}
+
+                                        {% if case.hasAgent == "Yes" %}
+                                          {% if case.agentOrgName %}
+                                            {% set displayApplicantName = case.agentOrgName %}
+                                          {% elif case.agentContacts and case.agentContacts.length > 0 %}
+                                            {% set displayApplicantName = case.agentContacts[0].firstName + " " + case.agentContacts[0].lastName %}
+                                          {% endif %}
+                                        {% elif case.applicantOrgs and case.applicantOrgs.length > 0 %}
+                                          {% set displayApplicantName %}
+                                            {%- for org in case.applicantOrgs -%}
+                                              {{ org.orgName }}{% if not loop.last %}, {% endif %}
+                                            {%- endfor -%}
+                                          {% endset %}
+                                        {% elif case.applicantContacts and case.applicantContacts.length > 0 %}
+                                          {% set displayApplicantName = case.applicantContacts[0].firstName + " " + case.applicantContacts[0].lastName %}
+                                        {% endif %}   
+                                        
+                                        {% set displayAddress = case.siteAddress.line1 %}
+                                        {% if case.siteAddress.postcode %}
+                                            {% set displayAddress = displayAddress + ", " + case.siteAddress.postcode %}
+                                        {% endif %}
+
+                                        <tr class="govuk-table__row case-row" data-lpa="{{ case.lpa }}">
+                                            <th scope="row" class="govuk-table__header">
+                                                <a class="govuk-link" href="application-information?reference={{ case.reference }}">
+                                                    {{ case.reference | default('Reference not set') }}
+                                                </a>
+                                            </th>
+                                            <td class="govuk-table__cell">{{ displayApplicantName | safe }}</td>
+                                            <td class="govuk-table__cell">{{ displayAddress | default('Not provided') }}</td>
+                                            <td class="govuk-table__cell">{{ case.lpa | default('Not provided') }}</td>
+                                        </tr>
+                                        
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {# --- END DYNAMIC CASES LOGIC --- #}
+
+                            {# --- STATIC CASES --- #}
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000099/app-info">
+                                        S62A/2026/0000099
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Sarah Jenkins</td>
+                                <td class="govuk-table__cell">45 Clifton Suspension Road, Bristol, BS8 4AA</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="St Albans City and District Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0048/app-info">
+                                        S62A/2026/0048
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Colin Franzmann</td>
+                                <td class="govuk-table__cell">1 Wheatfield Road, Harpenden, AL5 2NY</td>
+                                <td class="govuk-table__cell">St Albans City and District Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000222/app-info">
+                                        S62A/2026/0000222
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">J Adams, Fairholm Bristol Ltd</td>
+                                <td class="govuk-table__cell">61 Cotmans Walk, Lockleaze, Bristol, BS7 9UG</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000342/app-info">
+                                        S62A/2026/0000342
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">M Lazo</td>
+                                <td class="govuk-table__cell">Ground Floor Flat, 6 Gordon Road, Clifton, Bristol, BS8 1AP</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000385/app-info">
+                                        S62A/2026/0000385
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Evory Smith</td>
+                                <td class="govuk-table__cell">Second Floor Flat, 1B Rifter Road, Bristol, BS1 2LP</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000400/app-info">
+                                        S62A/2026/0000400
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Building Group Limited</td>
+                                <td class="govuk-table__cell">13 Tavern Hope, Bristol, BS2 4MP</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                            <tr class="govuk-table__row case-row" data-lpa="Bristol City Council">
+                                <th scope="row" class="govuk-table__header">
+                                    <a class="govuk-link" href="/current-service/front-office/testing/s62a-2026-0000417/app-info">
+                                        S62A/2026/0000417
+                                    </a>
+                                </th>
+                                <td class="govuk-table__cell">Martin Thomas</td>
+                                <td class="govuk-table__cell">Land on South West side of Strathmore Road, Horfield, Bristol, BS7 9QQ</td>
+                                <td class="govuk-table__cell">Bristol City Council</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+        <div class="govuk-feedback">
+            <div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-feedback__title">
+        Help us improve this service
+      </h2>
+      <div class="govuk-feedback__body">
+        <p class="govuk-body">
+          Tell us about your experience using this service. <br><a href="#" class="govuk-link">Give us your feedback</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const applyBtn = document.getElementById("apply-filters-button");
+        const clearBtn = document.getElementById("clear-filters-link");
+        const activeFiltersSection = document.getElementById("active-filters-section");
+        const activeFiltersList = document.getElementById("active-filters-list");
+        
+        // Modal elements
+        const openBtn = document.getElementById("open-filter-modal");
+        const closeBtn = document.getElementById("close-filter-modal");
+        const modal = document.getElementById("filter-modal-container");
+
+        // search elements
+        const searchInput = document.getElementById("keyword-search");
+        const searchBtn = document.getElementById("keyword-search-button");
+        const searchForm = searchBtn.closest("form");
+        const clearSearchLink = document.getElementById("clear-search-link");
+
+        // grab table rows
+        const rows = document.querySelectorAll(".case-row");
+        const checkboxContainer = document.getElementById("dynamic-lpa-checkboxes");
+        
+        let checkboxes; 
+
+        const tableContainer = document.querySelector(".pins-table__container");
+        const noResultsMessage = document.getElementById("no-results-message");
+        
+        const paginationContainer = document.querySelector(".govuk-pagination");
+        const resultsCountText = document.getElementById("results-count-text");
+        const mobileModalCount = document.getElementById("mobile-modal-count");
+
+        // ---------------------------------------------------------
+        // Modal Open / Close Logic
+        // ---------------------------------------------------------
+        if (openBtn && closeBtn && modal) {
+            openBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.add("is-open");
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden"; 
+            });
+
+            closeBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.classList.remove("is-open");
+                document.documentElement.style.overflow = "";
+                document.body.style.overflow = ""; 
+            });
+        }
+
+        // ---------------------------------------------------------
+        // Build checkboxes dynamically based on the table data
+        // ---------------------------------------------------------
+        function buildFilterCheckboxes() {
+            const lpaCounts = {};
+
+            // 1. Tally up the LPAs from the table rows
+            rows.forEach(row => {
+                let lpa = row.getAttribute("data-lpa");
+                if (lpa && lpa !== "Not provided") {
+                    lpaCounts[lpa] = (lpaCounts[lpa] || 0) + 1;
+                }
+            });
+
+            // 2. Clear out the container just in case
+            checkboxContainer.innerHTML = "";
+
+            // 3. Sort them alphabetically and build the HTML
+            Object.keys(lpaCounts).sort().forEach((lpa, index) => {
+                const count = lpaCounts[lpa];
+                const id = "lpa-" + index;
+                
+                const item = document.createElement("div");
+                item.className = "govuk-checkboxes__item";
+                item.innerHTML = `
+                    <input class="govuk-checkboxes__input filter-checkbox" id="${id}" name="organisation" type="checkbox" value="${lpa}">
+                    <label class="govuk-label govuk-checkboxes__label" for="${id}">
+                        ${lpa} <span>(${count})</span>
+                    </label>
+                `;
+                checkboxContainer.appendChild(item);
+            });
+
+            // 4. Now that they exist in the DOM, grab them for the filtering logic
+            checkboxes = document.querySelectorAll(".filter-checkbox");
+        }
+        
+        buildFilterCheckboxes();
+
+        // ---------------------------------------------------------
+        // Filtering logic
+        // ---------------------------------------------------------
+        function applyFilters() {
+            let selectedLpas = Array.from(checkboxes)
+                                   .filter(cb => cb.checked)
+                                   .map(cb => cb.value);
+
+            let searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let rowLpa = row.getAttribute("data-lpa");
+                let rowText = row.textContent.toLowerCase(); 
+                
+                let matchesLpa = (selectedLpas.length === 0 || selectedLpas.includes(rowLpa));
+                let matchesSearch = (searchTerm === "" || rowText.includes(searchTerm));
+                
+                if (matchesLpa && matchesSearch) {
+                    row.style.display = ""; 
+                    visibleCount++;
+                } else {
+                    row.style.display = "none"; 
+                }
+            });
+
+            if (visibleCount === 0) {
+                tableContainer.style.display = "none";
+                noResultsMessage.style.display = "block";
+                if (resultsCountText) resultsCountText.style.display = "none";
+                if (paginationContainer) paginationContainer.style.display = "none";
+            } else {
+                tableContainer.style.display = "block";
+                noResultsMessage.style.display = "none";
+                if (resultsCountText) resultsCountText.style.display = "block";
+                if (paginationContainer) paginationContainer.style.display = "block";
+            }
+            
+            updateActiveFilters(selectedLpas);
+            updateResultCount(visibleCount);
+        }
+
+        function updateActiveFilters(selectedLpas) {
+            activeFiltersList.innerHTML = "";
+            
+            if (selectedLpas.length > 0) {
+                activeFiltersSection.style.display = "block";
+                
+                selectedLpas.forEach(lpa => {
+                    let tag = document.createElement("span");
+                    tag.className = "selected-filter-tag";
+                    tag.innerHTML = `${lpa} <button type="button" class="remove-filter-btn" data-value="${lpa}" style="margin-left:8px; border:none; background:transparent; font-weight:bold; cursor:pointer;" aria-label="Remove filter">&times;</button>`;
+                    activeFiltersList.appendChild(tag);
+                });
+            } else {
+                activeFiltersSection.style.display = "none";
+            }
+        }
+
+        function updateResultCount(count) {
+            const countStart = document.getElementById("count-start");
+            const countVisible = document.getElementById("count-visible");
+            const countTotal = document.getElementById("count-total");
+            
+            // Safely pass the Nunjucks variable into a JavaScript number
+            const maxCases = parseInt("{{ totalCases }}", 10) || 0;
+            
+            if (countStart && countVisible) {
+                countStart.innerText = count > 0 ? "1" : "0";
+                countVisible.innerText = count;
+                
+                // Update total text to match visible if filters applied, else reset to true total
+                if (countTotal && count < maxCases) {
+                    countTotal.innerText = count; 
+                } else if (countTotal) {
+                    countTotal.innerText = maxCases;
+                }
+            }
+            if (mobileModalCount) {
+                mobileModalCount.innerText = count + " applications";
+            }
+        }
+
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                applyFilters();
+            });
+        }
+
+        activeFiltersList.addEventListener("click", function(e) {
+            if (e.target.classList.contains("remove-filter-btn")) {
+                let valueToRemove = e.target.getAttribute("data-value");
+                let cb = Array.from(checkboxes).find(c => c.value === valueToRemove);
+                if (cb) cb.checked = false;
+                applyFilters();
+            }
+        });
+
+        if (applyBtn) {
+            applyBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                applyFilters();
+                
+                // Close modal if on mobile
+                if (window.innerWidth <= 640 && modal) {
+                    modal.classList.remove("is-open");
+                    document.documentElement.style.overflow = "";
+                    document.body.style.overflow = "";
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener("click", function(e) {
+                e.preventDefault(); 
+                checkboxes.forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
+
+        // New Clear Search Link Logic
+        if (searchInput && clearSearchLink) {
+            searchInput.addEventListener("input", function() {
+                if (searchInput.value.trim().length > 0) {
+                    clearSearchLink.style.display = "inline-block";
+                } else {
+                    clearSearchLink.style.display = "none";
+                }
+            });
+            
+            clearSearchLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                searchInput.value = ""; 
+                clearSearchLink.style.display = "none";
+                searchInput.focus();
+                applyFilters();
+            });
+        }
+
+        const clearAllLink = document.getElementById("clear-all-link");
+        if (clearAllLink) {
+            clearAllLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (searchInput) {
+                    searchInput.value = "";
+                    if (clearSearchLink) clearSearchLink.style.display = "none";
+                }
+                checkboxes.forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
+    });
+</script>
+{% endblock %}
