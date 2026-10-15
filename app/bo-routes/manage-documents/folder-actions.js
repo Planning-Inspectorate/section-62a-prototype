@@ -26,7 +26,7 @@ router.get('/current-service/back-office/manage-documents/create-folder', functi
         delete res.locals.data['create-folder'];
     }
 
-    res.render('current-service/back-office/manage-documents/create.html', {
+    res.render('current-service/back-office/manage-documents/folders/create.html', {
         currentCase,
         parentId,
         parentFolder,
@@ -72,7 +72,7 @@ router.post('/current-service/back-office/manage-documents/create-folder', funct
 
     // If there is an error, re-render the page with the error message
     if (errorCreateFolder) {
-        return res.render('current-service/back-office/manage-documents/create.html', {
+        return res.render('current-service/back-office/manage-documents/folders/create.html', {
             currentCase,
             parentId,
             parentFolder,
@@ -116,7 +116,7 @@ router.get('/current-service/back-office/manage-documents/rename-folder/:folderI
     if (req.session.data) delete req.session.data['rename-folder'];
     if (res.locals.data) delete res.locals.data['rename-folder'];
 
-    res.render('current-service/back-office/manage-documents/rename', {
+    res.render('current-service/back-office/manage-documents/folders/rename.html', {
         currentCase,
         currentFolder,
         errorRenameFolder: null
@@ -157,7 +157,7 @@ router.post('/current-service/back-office/manage-documents/rename-folder/:folder
     }
 
     if (errorRenameFolder) {
-        return res.render('current-service/back-office/manage-documents/rename', {
+        return res.render('current-service/back-office/manage-documents/folders/rename.html', {
             currentCase,
             currentFolder,
             errorRenameFolder
@@ -168,11 +168,10 @@ router.post('/current-service/back-office/manage-documents/rename-folder/:folder
     renameFolder(req.session.data.folders, folderId, folderName);
     delete req.session.data['rename-folder'];
 
-    // Set flash message (adding an "action" property)
+    // --- NEW: Standard text flash message ---
     req.session.data['flashMessage'] = {
-        name: folderName,
-        id: folderId,
-        action: "renamed"
+        isStandardText: true,
+        text: "Folder renamed"
     };
 
     // Redirect back to the folder view
@@ -190,7 +189,7 @@ router.get('/current-service/back-office/manage-documents/delete-folder/:folderI
     const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
     const currentFolder = req.session.data.folders.find(f => f.id === folderId);
 
-    res.render('current-service/back-office/manage-documents/delete', {
+    res.render('current-service/back-office/manage-documents/folders/delete.html', {
         currentCase,
         currentFolder,
         errors: null
@@ -224,7 +223,7 @@ router.post('/current-service/back-office/manage-documents/delete-folder/:folder
 
     // If there are issues, re-render the page with the customized error block
     if (errors.length > 0) {
-        return res.render('current-service/back-office/manage-documents/delete', {
+        return res.render('current-service/back-office/manage-documents/folders/delete.html', {
             currentCase,
             currentFolder,
             errors

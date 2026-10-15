@@ -1,0 +1,112 @@
+{% extends "layouts/new/back-office.html" %}
+{% block pageTitle %}File location - {{ currentCase.reference }}{% endblock %}
+
+{% block beforeContent %}
+  {# FIX: Reverted the href to point to the correct routing URL, removing the '/files/move/' part #}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-documents/move-files/" ~ folderId ~ "?ref=" ~ currentCase.reference }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <h1 class="govuk-heading-l">File location</h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-6">
+      <strong>Current folder:</strong><br>
+      {{ folderPathString }}
+    </p>
+    
+    <form action="/current-service/back-office/manage-documents/move-location/{{ folderId }}" method="post">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios custom-folder-radios" data-module="govuk-radios">
+            {% for root in rootFolders %}
+              
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="folder-{{ root.id }}" name="destinationFolderId" type="radio" value="{{ root.id }}" 
+                  {% if root.hasSubfolders %}data-custom-controls="conditional-{{ root.id }}"{% endif %}
+                  {% if root.id == currentFolder.id %}checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="folder-{{ root.id }}">
+                  {{ root.name }}
+                </label>
+              </div>
+              
+              {% if root.hasSubfolders %}
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ root.id }}">
+                  {# FIX: Removed the 'govuk-radios--small' class so they match the parent size #}
+                  <div class="govuk-radios">
+                    {% for sub in root.subfolders %}
+                      <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="folder-{{ sub.id }}" name="destinationFolderId" type="radio" value="{{ sub.id }}"
+                          {% if sub.id == currentFolder.id %}checked{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="folder-{{ sub.id }}">
+                          {{ sub.name }}
+                        </label>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-6">
+        {{ govukButton({ text: "Select folder" }) }}
+        
+        <button type="button" class="govuk-button govuk-button--secondary" id="remove-selection-btn" data-default-id="{{ currentFolder.id }}">
+          Remove selection
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<script type="module" nonce="">
+  document.addEventListener('DOMContentLoaded', function() {
+      const radios = document.querySelectorAll('input[name="destinationFolderId"]');
+      const conditionals = document.querySelectorAll('.govuk-radios__conditional');
+      
+      function updateReveals() {
+          const checkedRadio = document.querySelector('input[name="destinationFolderId"]:checked');
+          if (!checkedRadio) return;
+          
+          conditionals.forEach(c => c.classList.add('govuk-radios__conditional--hidden'));
+          
+          const controls = checkedRadio.getAttribute('data-custom-controls');
+          if (controls) {
+              const target = document.getElementById(controls);
+              if (target) target.classList.remove('govuk-radios__conditional--hidden');
+          }
+          
+          const parentConditional = checkedRadio.closest('.govuk-radios__conditional');
+          if (parentConditional) {
+              parentConditional.classList.remove('govuk-radios__conditional--hidden');
+          }
+      }
+
+      radios.forEach(r => r.addEventListener('change', updateReveals));
+      updateReveals();
+      
+      const removeBtn = document.getElementById('remove-selection-btn');
+      if (removeBtn) {
+          removeBtn.addEventListener('click', function() {
+              const defaultId = this.getAttribute('data-default-id');
+              const defaultRadio = document.getElementById('folder-' + defaultId);
+              if (defaultRadio) {
+                  defaultRadio.checked = true;
+                  updateReveals();
+              }
+          });
+      }
+  });
+</script>
+{% endblock %}

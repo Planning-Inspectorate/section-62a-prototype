@@ -1,0 +1,65 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Move files - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back to " ~ currentFolder.name ~ " folder", 
+    href: "/current-service/back-office/manage-documents/folder/" ~ folderId ~ "?ref=" ~ currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    {# Dynamic H1: Pluralizes based on file count #}
+    <h1 class="govuk-heading-l">
+      Move {{ filesToMove.length }} file{% if filesToMove.length > 1 %}s{% endif %}
+    </h1>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File name</th>
+          {% if filesToMove.length > 1 %}
+            {# Empty header cell for the remove column to match screenshot #}
+            <th scope="col" class="govuk-table__header" style="text-align: right;"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for file in filesToMove %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ file.name }}</td>
+            {% if filesToMove.length > 1 %}
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a href="/current-service/back-office/manage-documents/move-files/{{ folderId }}/remove/{{ file.id }}?ref={{ currentCase.reference }}" class="govuk-link">Remove<span class="govuk-visually-hidden"> {{ file.name }}</span></a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form action="/current-service/back-office/manage-documents/move-location/{{ folderId }}?ref={{ currentCase.reference }}" method="get">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      
+      {# Dynamic Button Text #}
+      {{ govukButton({ 
+        text: "Move file" if filesToMove.length == 1 else "Move files" 
+      }) }}
+    </form>
+
+    {# Cancel link #}
+    <p class="govuk-body govuk-!-margin-top-2">
+      <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ folderId }}?ref={{ currentCase.reference }}">
+        Cancel and return to folder
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "layouts/new/back-office.html" %}
+{% block pageTitle %}Check details and update file location - {{ currentCase.reference }}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/manage-documents/move-location/" ~ folderId ~ "?ref=" ~ currentCase.reference }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    <h1 class="govuk-heading-l">Check details and update file location</h1>
+
+    {# Dynamic pluralization based on filesCount #}
+    <p class="govuk-body govuk-!-margin-bottom-6">
+      You are moving <strong>{{ filesCount }}</strong> file{% if filesCount > 1 %}s{% endif %}.
+    </p>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "File location" },
+          value: { text: destFolderPathString },
+          actions: {
+            items: [
+              {
+                href: "/current-service/back-office/manage-documents/move-location/" ~ folderId ~ "?ref=" ~ currentCase.reference,
+                text: "Change",
+                visuallyHiddenText: "file location"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <form action="/current-service/back-office/manage-documents/move-submit/{{ folderId }}" method="post">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      
+      {{ govukButton({ text: "Accept & Submit" }) }}
+    </form>
+
+    <p class="govuk-body govuk-!-margin-top-2">
+      <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ folderId }}?ref={{ currentCase.reference }}">
+        Cancel and return to folder
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

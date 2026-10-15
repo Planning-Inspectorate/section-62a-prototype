@@ -67,7 +67,7 @@ router.get('/current-service/back-office/manage-documents/folder/:folderId', fun
     const deleteBanner = req.session.data['deleteBanner'];
     req.session.data['deleteBanner'] = null;
 
-    res.render('current-service/back-office/manage-documents/folder', {
+    res.render('current-service/back-office/manage-documents/folders/folder', {
         currentCase,
         currentFolder,
         subfolders,
