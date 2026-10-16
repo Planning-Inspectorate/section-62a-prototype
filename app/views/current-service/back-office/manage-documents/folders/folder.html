@@ -152,7 +152,7 @@
             <div class="govuk-button-group govuk-!-margin-bottom-4">
                 <button type="button" class="govuk-button govuk-button--secondary" id="mock-move-btn">Move selected</button>
                 <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
-                <button type="button" class="govuk-button govuk-button--secondary">Delete selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-delete-btn">Delete selected</button>
                 <button type="button" class="govuk-button govuk-button--secondary">Publish selected</button>
             </div>
 
@@ -216,7 +216,7 @@
                     {# Actions column cell (Right Aligned) #}
                     <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px; text-align: right;">
                       <ul class="govuk-list govuk-!-margin-bottom-0">
-                        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a></li>
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}/delete-single/{{ file.id }}?ref={{ currentCase.reference }}">Delete</a></li>
                         <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
                         <li><a class="govuk-link govuk-link--no-visited-state" href="#">Publish</a></li>
                       </ul>
@@ -267,6 +267,7 @@
 
     // --- 2. FRONTEND VALIDATION FOR BULK ACTIONS (MOCKED) ---
     const mockMoveBtn = document.getElementById('mock-move-btn');
+    const mockDeleteBtn = document.getElementById('mock-delete-btn');
     const errorContainer = document.getElementById('js-error-container');
     const form = document.getElementById('bulk-action-form');
 
@@ -300,6 +301,41 @@
             actionInput.type = 'hidden';
             actionInput.name = 'bulkAction';
             actionInput.value = 'move';
+            form.appendChild(actionInput);
+            form.submit();
+        }
+      });
+    }
+
+    if (mockDeleteBtn) {
+      mockDeleteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
+        
+        if (checkedFiles.length === 0) {
+          window.scrollTo(0, 0); 
+          if (errorContainer) {
+            errorContainer.innerHTML = `
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="govuk-error-summary" data-module="govuk-error-summary">
+                    <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
+                      <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                          <li><a href="#checkboxes-all">Select a file or files to delete</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'bulkAction';
+            actionInput.value = 'delete';
             form.appendChild(actionInput);
             form.submit();
         }

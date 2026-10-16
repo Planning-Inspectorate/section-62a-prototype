@@ -122,7 +122,14 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/bulk
         req.session.data.moveFilesList = selectedFiles;
         res.redirect(`/current-service/back-office/manage-documents/move-files/${folderId}?ref=${caseRef}`);
     }
+    else if (req.body.bulkAction === 'delete') {
+        req.session.data.deleteFilesList = selectedFiles;
+        res.redirect(`/current-service/back-office/manage-documents/delete-files/${folderId}?ref=${caseRef}`);
+    }
 });
+
+
+
 
 // GET: Step 1 - Review selected files
 router.get('/current-service/back-office/manage-documents/move-files/:folderId', function (req, res) {
@@ -273,6 +280,85 @@ router.post('/current-service/back-office/manage-documents/move-submit/:folderId
 
     res.redirect(`/current-service/back-office/manage-documents/folder/${destFolderId}?ref=${caseRef}`);
 });
+
+
+
+
+// GET: Intercept single file delete action
+router.get('/current-service/back-office/manage-documents/folder/:folderId/delete-single/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileId = req.params.fileId;
+    
+    // Set the delete list to contain only this specific file
+    req.session.data.deleteFilesList = [fileId];
+    
+    res.redirect(`/current-service/back-office/manage-documents/delete-files/${folderId}?ref=${caseRef}`);
+});
+
+
+// GET: Review selected files for deletion
+router.get('/current-service/back-office/manage-documents/delete-files/:folderId', function (req, res) {
+    const caseRef = req.query.ref;
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    const folderId = req.params.folderId;
+    
+    const currentFolder = req.session.data.folders.find(f => f.id === folderId);
+    const fileIds = req.session.data.deleteFilesList || [];
+
+    // Redirect back if empty
+    if (fileIds.length === 0) return res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+
+    const filesToDelete = req.session.data.files.filter(f => fileIds.includes(f.id));
+    
+    // Renders from your new directory structure
+    res.render('current-service/back-office/manage-documents/files/delete/delete-files', { 
+        currentCase, 
+        folderId, 
+        filesToDelete,
+        currentFolder 
+    });
+});
+
+
+// GET: Remove a file from the delete selection
+router.get('/current-service/back-office/manage-documents/delete-files/:folderId/remove/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileIdToRemove = req.params.fileId;
+    
+    req.session.data.deleteFilesList = req.session.data.deleteFilesList.filter(id => id !== fileIdToRemove);
+    res.redirect(`/current-service/back-office/manage-documents/delete-files/${folderId}?ref=${caseRef}`);
+});
+
+// POST: Final Submit - Delete files
+router.post('/current-service/back-office/manage-documents/delete-submit/:folderId', function (req, res) {
+    const caseRef = req.body.ref;
+    const folderId = req.params.folderId;
+    const fileIds = req.session.data.deleteFilesList || [];
+
+    // Remove the files from the global array
+    req.session.data.files = req.session.data.files.filter(f => !fileIds.includes(f.id));
+
+    const fileCount = fileIds.length;
+    const fileWord = fileCount === 1 ? 'file' : 'files';
+
+    // Set standard text flash message
+    req.session.data['flashMessage'] = {
+        isStandardText: true,
+        text: `${fileCount} selected ${fileWord} deleted`
+    };
+
+    // Clean up session
+    delete req.session.data.deleteFilesList;
+
+    res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+});
+
+
+
+
+
 
 
 
