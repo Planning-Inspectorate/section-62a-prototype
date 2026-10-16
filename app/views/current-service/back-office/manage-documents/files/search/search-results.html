@@ -1,0 +1,120 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Search results - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/index?ref={{ currentCase.reference }}">Manage case files</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Search results</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    <h1 class="govuk-heading-l">Search results</h1>
+
+    {# Reusable Search Form #}
+    <form action="/current-service/back-office/manage-documents/files/search" method="get" class="govuk-!-margin-bottom-6">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      
+      <div class="govuk-form-group govuk-!-margin-bottom-2">
+        <label class="govuk-hint" for="search-term">
+          To find a document, search by file name
+        </label>
+        <div class="govuk-input__wrapper" style="display: flex; gap: 10px; max-width: 600px; margin-top: 15px;">
+          <input class="govuk-input" id="search-term" name="searchTerm" type="text" value="{{ searchTerm }}">
+          <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+            Search
+          </button>
+        </div>
+      </div>
+      
+      <p class="govuk-body">
+        <a href="/current-service/back-office/manage-documents/index?ref={{ currentCase.reference }}" class="govuk-link">Clear search</a>
+      </p>
+    </form>
+
+    {# Results Logic #}
+    {% if searchResults.length > 0 %}
+      
+      <div class="govuk-body govuk-!-margin-bottom-6">
+        <p>Showing <strong>1</strong> to <strong>{{ searchResults.length }}</strong> of <strong>{{ searchResults.length }}</strong> results</p>
+        
+        <p class="pins-pagination-options">
+          <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+          <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <a class="govuk-link--no-visited-state" href="#">100</a>
+        </p>
+      </div>
+
+      <table class="govuk-table" data-module="moj-sortable-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {# 1. File name column (55% to fill the space of the missing checkboxes) #}
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 55%;" aria-sort="none">
+              <button type="button" data-index="1">File name</button>
+            </th>
+            {# 2. Status column (15%) #}
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;" aria-sort="none">
+              <button type="button" data-index="2">Status</button>
+            </th>
+            {# 3. Uploaded column (15% with left padding) #}
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-left: 30px;" aria-sort="descending">
+              <button type="button" data-index="3">Uploaded</button>
+            </th>
+            {# 4. Actions column (15% with right alignment and padding) #}
+            <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; text-align: right; padding-right: 30px;">
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+          {% for file in searchResults %}
+            <tr class="govuk-table__row">
+              
+              <td class="govuk-table__cell" data-sort-value="{{ file.name }}" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px; word-break: break-word;">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">{{ file.name }}</a>
+                <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: {{ file.extension }}, {{ file.sizeMB }}MB</span>
+              </td>
+              
+              <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                {% if file.status == 'published' %}
+                  <strong class="govuk-tag govuk-tag--blue">Published</strong>
+                {% else %}
+                  <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
+                {% endif %}
+              </td>
+
+              <td class="govuk-table__cell" data-sort-value="{{ file.uploadDateSort }}" style="vertical-align: top; padding-top: 15px; padding-left: 30px;">
+                {{ file.uploadDate }}
+              </td>
+
+              <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px; text-align: right; padding-right: 30px;">
+                <ul class="govuk-list govuk-!-margin-bottom-0">
+                  <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ file.folderId }}?ref={{ currentCase.reference }}">View folder</a></li>
+                  <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+                </ul>
+              </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    {% else %}
+        <p class="govuk-body">There are no files matching your search.</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

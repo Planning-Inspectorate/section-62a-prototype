@@ -53,22 +53,18 @@
         {{ currentCase.reference | default('Case Not Found') }}
       </h1>
 
-    <form id="search-bar-form" action="" method="GET" data-cy="search-form">
-      
-      {# Hidden input to keep 'ref' securely in the URL #}
+    <form action="/current-service/back-office/manage-documents/files/search" method="get">
       <input type="hidden" name="ref" value="{{ currentCase.reference }}">
-
+      
       <div class="govuk-form-group">
-        <div id="search-hint" class="govuk-hint">
-          Search by file name to find a document
-        </div>
-        <div style="display: flex; gap: 15px; align-items: flex-start;">
-          <input class="govuk-input govuk-input--width-30" id="search-input" value="" name="fileSearchCriteria" type="text" data-cy="search-input">
-          
-          {{ govukButton({
-            text: "Search",
-            classes: "govuk-!-margin-bottom-0"
-          }) }}
+        <label class="govuk-hint" for="search-term">
+          To find a document, search by file name
+        </label>
+        <div class="govuk-input__wrapper" style="display: flex; gap: 10px; max-width: 600px; margin-top: 15px;">
+          <input class="govuk-input" id="search-term" name="searchTerm" type="text">
+          <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+            Search
+          </button>
         </div>
       </div>
     </form>

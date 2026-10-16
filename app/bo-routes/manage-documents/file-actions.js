@@ -357,7 +357,30 @@ router.post('/current-service/back-office/manage-documents/delete-submit/:folder
 
 
 
+// GET: Search files
+router.get('/current-service/back-office/manage-documents/files/search', function (req, res) {
+    const caseRef = req.query.ref;
+    const searchTerm = req.query.searchTerm || '';
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
 
+    // Initialize an empty array for results
+    let searchResults = [];
+
+    // If a search term exists, filter the files for this case
+    if (searchTerm.trim() !== '') {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        searchResults = req.session.data.files.filter(f => 
+            f.caseReference === caseRef && 
+            f.name.toLowerCase().includes(lowerSearchTerm)
+        );
+    }
+
+    res.render('current-service/back-office/manage-documents/files/search/search-results', {
+        currentCase,
+        searchTerm,
+        searchResults
+    });
+});
 
 
 
