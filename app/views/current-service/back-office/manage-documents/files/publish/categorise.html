@@ -1,0 +1,110 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorCategory %}Error: {% endif %}Categorise selected documents - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ 
+        text: "Back", 
+        href: "/current-service/back-office/manage-documents/folder/" ~ folderId ~ "?ref=" ~ currentCase.reference
+    }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    {% if errorCategory %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errorCategory,
+            href: "#documentCategory"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">{{ currentCase.reference }}</span>
+    
+    {# Dynamic pluralization for H1 #}
+    <h1 class="govuk-heading-l">Categorise selected document{% if filesToPublish.length > 1 %}s{% endif %}</h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-2">This will be shown in the front office document filters.</p>
+
+    <h2 class="govuk-heading-m">Document{% if filesToPublish.length > 1 %}s{% endif %} to publish</h2>
+
+    {# Standard table with remove links #}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File name</th>
+          {% if filesToPublish.length > 1 %}
+            <th scope="col" class="govuk-table__header" style="text-align: right;"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for file in filesToPublish %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="word-break: break-word;">{{ file.name }}</td>
+            {% if filesToPublish.length > 1 %}
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a href="/current-service/back-office/manage-documents/publish-files/{{ folderId }}/remove/{{ file.id }}?ref={{ currentCase.reference }}" class="govuk-link">Remove<span class="govuk-visually-hidden"> {{ file.name }}</span></a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form action="/current-service/back-office/manage-documents/publish-submit/{{ folderId }}" method="post" novalidate>
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+      {{ govukRadios({
+        name: "documentCategory",
+        idPrefix: "documentCategory",
+        fieldset: {
+          legend: {
+            text: "What category is this file?" if filesToPublish.length == 1 else "What category are these files?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        errorMessage: {
+          text: errorCategory
+        } if errorCategory,
+        items: [
+          { value: "Application plans and documents", text: "Application plans and documents" },
+          { value: "Questionnaire and supporting documents", text: "Questionnnaire and supporting documents" },
+          { value: "Planning inspectorate correspondence", text: "Planning inspectorate correspondence" },
+          { value: "Applicant correspondence", text: "Applicant correspondence" },
+          { value: "Additional information", text: "Additional information" },
+          { value: "Hearing", text: "Hearing" }
+        ]
+      }) }}
+
+      {{ govukWarningText({
+        text: "This document will be published immediately." if filesToPublish.length == 1 else "These documents will be published immediately.",
+        iconFallbackText: "Warning"
+      }) }}
+
+      <div class="govuk-button-group govuk-!-margin-top-6">
+        {{ govukButton({ 
+            text: "Publish this document" if filesToPublish.length == 1 else "Publish these documents"
+        }) }}
+      </div>
+
+      <p class="govuk-body govuk-!-margin-top-2">
+        <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ folderId }}?ref={{ currentCase.reference }}">
+          Cancel and return to folder
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Unpublish files - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% set backUrl = "/current-service/back-office/manage-documents/published-documents?ref=" ~ currentCase.reference if returnTo == 'published-documents' else "/current-service/back-office/manage-documents/folder/" ~ folderId ~ "?ref=" ~ currentCase.reference %}
+  
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: backUrl 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <h1 class="govuk-heading-l">
+      Unpublish {{ filesToUnpublish.length }} file{% if filesToUnpublish.length > 1 %}s{% endif %}
+    </h1>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File name</th>
+          {% if filesToUnpublish.length > 1 %}
+            <th scope="col" class="govuk-table__header" style="text-align: right;"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for file in filesToUnpublish %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="word-break: break-word;">{{ file.name }}</td>
+            {% if filesToUnpublish.length > 1 %}
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a href="/current-service/back-office/manage-documents/unpublish-files/{{ folderId }}/remove/{{ file.id }}?ref={{ currentCase.reference }}" class="govuk-link">Remove<span class="govuk-visually-hidden"> {{ file.name }}</span></a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form action="/current-service/back-office/manage-documents/unpublish-submit/{{ folderId }}" method="post">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      
+      {{ govukButton({
+        classes: "govuk-button--warning",
+        text: "Unpublish file" if filesToUnpublish.length == 1 else "Unpublish files"
+      }) }}
+    </form>
+
+    <p class="govuk-body govuk-!-margin-top-2">
+        <a class="govuk-link" href="{{ backUrl }}">
+          Cancel and return to {{ "published documents" if returnTo == 'published-documents' else "folder" }}
+        </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

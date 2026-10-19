@@ -15,6 +15,11 @@ router.get('/current-service/back-office/manage-documents/index', function(req, 
     return res.redirect('/current-service/back-office/cases'); 
   }
 
+  // FIXED: Changed caseRef to foundCase.reference
+  const hasPublishedFiles = (req.session.data.files || []).some(f => 
+        f.caseReference === foundCase.reference && f.status === 'published'
+  );
+
   // handle flash messages (green success banners) for case edits
   const flashMessage = req.session.data['flashMessage'];
   req.session.data['flashMessage'] = null;
@@ -27,7 +32,8 @@ router.get('/current-service/back-office/manage-documents/index', function(req, 
   res.render('current-service/back-office/manage-documents/index', { 
     currentCase: foundCase,       
     flashMessage: flashMessage,
-    deleteBanner: deleteBanner
+    deleteBanner: deleteBanner,
+    hasPublishedFiles: hasPublishedFiles
   });
 });
 

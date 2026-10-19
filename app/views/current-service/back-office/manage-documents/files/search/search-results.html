@@ -89,7 +89,8 @@
               
               <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
                 {% if file.status == 'published' %}
-                  <strong class="govuk-tag govuk-tag--blue">Published</strong>
+                  <strong class="govuk-tag govuk-tag--green govuk-!-margin-bottom-2">Published</strong>
+                  <span class="govuk-tag govuk-tag--blue" style="margin-bottom: 5px;">{{ file.category }}</span>
                 {% else %}
                   <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
                 {% endif %}

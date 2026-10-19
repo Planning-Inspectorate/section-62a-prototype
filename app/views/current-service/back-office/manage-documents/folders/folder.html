@@ -45,7 +45,9 @@
     <div class="govuk-grid-column-two-thirds">
       {% set successHtml %}
         <h3 class="govuk-notification-banner__heading">
-          {% if flashMessage.isStandardText %}
+          {% if flashMessage.isPublishText %}
+            {{ flashMessage.text }}
+          {% elif flashMessage.isStandardText %}
             {{ flashMessage.text }}
           {% else %}
             <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
@@ -53,6 +55,9 @@
             </a> folder {{ flashMessage.action | default("created") }}
           {% endif %}
         </h3>
+        {% if flashMessage.isPublishText %}
+          <p class="govuk-body">To view or change published files, <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/published-documents?ref={{ currentCase.reference }}">view the published files page</a>.</p>
+        {% endif %}
       {% endset %}
       {{ govukNotificationBanner({ html: successHtml, type: "success" }) }}
     </div>
@@ -161,7 +166,8 @@
                 <button type="button" class="govuk-button govuk-button--secondary" id="mock-move-btn">Move selected</button>
                 <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
                 <button type="button" class="govuk-button govuk-button--secondary" id="mock-delete-btn">Delete selected</button>
-                <button type="button" class="govuk-button govuk-button--secondary">Publish selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-publish-btn">Publish selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-unpublish-btn">Unpublish selected</button>
             </div>
 
             <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
@@ -182,12 +188,12 @@
                   <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 40%;" aria-sort="none">
                     <button type="button" data-index="1">File name</button>
                   </th>
-                  {# 3. Tags column (15%) #}
-                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;" aria-sort="none">
+                  {# 3. Tags column (20%) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 20%;" aria-sort="none">
                     <button type="button" data-index="2">Tags</button>
                   </th>
-                  {# 4. Uploaded column (15%) #}
-                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-left: 30px;" aria-sort="descending">
+                  {# 4. Uploaded column (10%) #}
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 10%; padding-left: 30px;" aria-sort="descending">
                     <button type="button" data-index="3">Uploaded</button>
                   </th>
                   {# 5. Actions column (15% and Right Aligned) #}
@@ -203,7 +209,8 @@
                     
                     <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
                       <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
-                        <input class="govuk-checkboxes__input" id="select-file-{{ file.id }}" name="selectedFiles" type="checkbox" value="{{ file.id }}">
+                        {# Added data-status here #}
+                        <input class="govuk-checkboxes__input" id="select-file-{{ file.id }}" name="selectedFiles" type="checkbox" value="{{ file.id }}" data-status="{{ file.status | default('unpublished') }}">
                         <label class="govuk-label govuk-checkboxes__label" for="select-file-{{ file.id }}"><span class="govuk-visually-hidden">Select {{ file.name }}</span></label>
                       </div>
                     </td>
@@ -214,7 +221,12 @@
                     </td>
                     
                     <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
-                      <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
+                      {% if file.status == 'published' %}
+                        <strong class="govuk-tag govuk-tag--green govuk-!-margin-bottom-2">Published</strong>
+                        <span class="govuk-tag govuk-tag--blue" style="margin-bottom: 5px;">{{ file.category }}</span>
+                      {% else %}
+                        <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
+                      {% endif %}
                     </td>
 
                     <td class="govuk-table__cell" data-sort-value="{{ file.uploadDateSort }}" style="vertical-align: top; padding-top: 15px; padding-left: 30px;">
@@ -226,7 +238,12 @@
                       <ul class="govuk-list govuk-!-margin-bottom-0">
                         <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}/delete-single/{{ file.id }}?ref={{ currentCase.reference }}">Delete</a></li>
                         <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
-                        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Publish</a></li>
+                        
+                        {% if file.status == 'published' %}
+                          <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}/unpublish-single/{{ file.id }}?ref={{ currentCase.reference }}">Unpublish</a></li>
+                        {% else %}
+                          <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ currentFolder.id }}/publish-single/{{ file.id }}?ref={{ currentCase.reference }}">Publish</a></li>
+                        {% endif %}
                       </ul>
                     </td>
 
@@ -273,79 +290,100 @@
       });
     }
 
-    // --- 2. FRONTEND VALIDATION FOR BULK ACTIONS (MOCKED) ---
-    const mockMoveBtn = document.getElementById('mock-move-btn');
-    const mockDeleteBtn = document.getElementById('mock-delete-btn');
+    // --- 2. FRONTEND VALIDATION FOR BULK ACTIONS ---
     const errorContainer = document.getElementById('js-error-container');
     const form = document.getElementById('bulk-action-form');
 
+    // Helper function to show errors
+    function showError(message) {
+      window.scrollTo(0, 0); 
+      if (errorContainer) {
+        errorContainer.innerHTML = `
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <div class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
+                  <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                      <li><a href="#checkboxes-all">${message}</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Helper function to submit bulk action
+    function submitBulkAction(actionValue) {
+      const actionInput = document.createElement('input');
+      actionInput.type = 'hidden';
+      actionInput.name = 'bulkAction';
+      actionInput.value = actionValue;
+      form.appendChild(actionInput);
+      form.submit();
+    }
+
+    // MOVE FILES
+    const mockMoveBtn = document.getElementById('mock-move-btn');
     if (mockMoveBtn) {
       mockMoveBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
-        
         if (checkedFiles.length === 0) {
-          window.scrollTo(0, 0); 
-          if (errorContainer) {
-            errorContainer.innerHTML = `
-              <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="govuk-error-summary" data-module="govuk-error-summary">
-                    <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
-                      <div class="govuk-error-summary__body">
-                        <ul class="govuk-list govuk-error-summary__list">
-                          <li><a href="#checkboxes-all">Select a file or files to move</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
+          showError("Select a file or files to move");
         } else {
-            // Append hidden input to tell the backend which action was clicked
-            const actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'bulkAction';
-            actionInput.value = 'move';
-            form.appendChild(actionInput);
-            form.submit();
+          submitBulkAction('move');
         }
       });
     }
 
+    // DELETE FILES
+    const mockDeleteBtn = document.getElementById('mock-delete-btn');
     if (mockDeleteBtn) {
       mockDeleteBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
+        if (checkedFiles.length === 0) {
+          showError("Select a file or files to delete");
+        } else {
+          submitBulkAction('delete');
+        }
+      });
+    }
+
+    // PUBLISH FILES
+    const mockPublishBtn = document.getElementById('mock-publish-btn');
+    if (mockPublishBtn) {
+      mockPublishBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkedFiles = Array.from(document.querySelectorAll('input[name="selectedFiles"]:checked'));
         
         if (checkedFiles.length === 0) {
-          window.scrollTo(0, 0); 
-          if (errorContainer) {
-            errorContainer.innerHTML = `
-              <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="govuk-error-summary" data-module="govuk-error-summary">
-                    <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
-                      <div class="govuk-error-summary__body">
-                        <ul class="govuk-list govuk-error-summary__list">
-                          <li><a href="#checkboxes-all">Select a file or files to delete</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
+          showError("Select a file or files to publish");
+        } else if (checkedFiles.some(cb => cb.getAttribute('data-status') === 'published')) {
+          showError("The selected files are already published");
         } else {
-            const actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'bulkAction';
-            actionInput.value = 'delete';
-            form.appendChild(actionInput);
-            form.submit();
+          submitBulkAction('publish');
+        }
+      });
+    }
+
+    // UNPUBLISH FILES
+    const mockUnpublishBtn = document.getElementById('mock-unpublish-btn');
+    if (mockUnpublishBtn) {
+      mockUnpublishBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkedFiles = Array.from(document.querySelectorAll('input[name="selectedFiles"]:checked'));
+        
+        if (checkedFiles.length === 0) {
+          showError("Select a file or files to unpublish");
+        } else if (checkedFiles.some(cb => cb.getAttribute('data-status') !== 'published')) {
+          showError("The selected files are already unpublished");
+        } else {
+          submitBulkAction('unpublish');
         }
       });
     }

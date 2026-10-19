@@ -86,6 +86,15 @@
       
       {# FOLDER LIST #}
       <div class="govuk-!-margin-bottom-6" style="display: flex; flex-direction: column; gap: 15px;">
+
+        {# Only show this folder link if there is at least one published file. 
+           Styled exactly like the standard folders above. #}
+        {% if hasPublishedFiles %}
+          <a class="govuk-link govuk-heading-s govuk-link--no-visited-state govuk-!-margin-bottom-0" 
+             href="/current-service/back-office/manage-documents/published-documents?ref={{ currentCase.reference }}">
+            Published documents
+          </a>
+        {% endif %}
         
         {% for folder in data.folders %}
           {# Look for root folders matching this case #}

@@ -1,0 +1,241 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Published documents - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/current-service/back-office/manage-documents/index?ref={{ currentCase.reference }}">Manage documents</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Published documents</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+{# --- SUCCESS BANNER --- #}
+{% if flashMessage %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% set successHtml %}
+        <h3 class="govuk-notification-banner__heading">
+          {{ flashMessage.text }}
+        </h3>
+      {% endset %}
+      {{ govukNotificationBanner({ html: successHtml, type: "success" }) }}
+    </div>
+  </div>
+{% endif %}
+
+<div id="js-error-container"></div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">{{ currentCase.reference | default('Case not found') }}</span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">Published documents</h1>
+  </div>
+</div>
+
+{# --- FILE ACTIONS AREA --- #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h2 class="govuk-heading-m">File actions</h2>
+    
+    {# Note the form action points to a new published-documents bulk action route #}
+    <form id="bulk-action-form" method="post" action="/current-service/back-office/manage-documents/published-documents/bulk-action?ref={{ currentCase.reference }}" novalidate>
+        <div id="pagination" class="govuk-body">
+
+          {% if publishedFiles and publishedFiles.length > 0 %}
+            <p class="govuk-body govuk-!-margin-bottom-4">
+              There are {{ publishedFiles.length }} published file(s) on this case. Showing <strong>1</strong> to <strong>{{ publishedFiles.length }}</strong> of <strong>{{ publishedFiles.length }}</strong> file(s).
+            </p>
+
+            <p class="pins-pagination-options govuk-!-margin-bottom-6">
+              <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+              <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+              <a class="govuk-link--no-visited-state" href="#">100</a>
+            </p>
+
+            <div class="govuk-button-group govuk-!-margin-bottom-4">
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-unpublish-btn">Unpublish selected</button>
+                <button type="button" class="govuk-button govuk-button--secondary" id="mock-categorise-btn">Categorise selected</button>
+            </div>
+
+            <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
+
+            <table class="govuk-table" data-module="moj-sortable-table">
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-right: 20px;">
+                    <div class="govuk-checkboxes__item govuk-checkboxes--small" style="margin-bottom: 0;">
+                      <input type="checkbox" class="govuk-checkboxes__input" id="checkboxes-all" name="checkboxes-all" value="all">
+                      <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold" for="checkboxes-all" style="white-space: nowrap;">
+                        All files
+                      </label>
+                    </div>
+                  </th>
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 40%;" aria-sort="none">
+                    <button type="button" data-index="1">File name</button>
+                  </th>
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%;" aria-sort="none">
+                    <button type="button" data-index="2">Tags</button>
+                  </th>
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-left: 30px;" aria-sort="descending">
+                    <button type="button" data-index="3">Uploaded</button>
+                  </th>
+                  <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; text-align: right; padding-right: 30px;">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="govuk-table__body">
+                {% for file in publishedFiles %}
+                  <tr class="govuk-table__row">
+                    
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                      <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                        <input class="govuk-checkboxes__input" id="select-file-{{ file.id }}" name="selectedFiles" type="checkbox" value="{{ file.id }}">
+                        <label class="govuk-label govuk-checkboxes__label" for="select-file-{{ file.id }}"><span class="govuk-visually-hidden">Select {{ file.name }}</span></label>
+                      </div>
+                    </td>
+                    
+                    <td class="govuk-table__cell" data-sort-value="{{ file.name }}" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px; word-break: break-word;">
+                      <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">{{ file.name }}</a>
+                      <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: {{ file.extension }}, {{ file.sizeMB }}MB</span>
+                    </td>
+                    
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                      <span class="govuk-tag govuk-tag--blue" style="margin-bottom: 5px;">{{ file.category | default('Uncategorised') }}</span>
+                    </td>
+
+                    <td class="govuk-table__cell" data-sort-value="{{ file.uploadDateSort }}" style="vertical-align: top; padding-top: 15px; padding-left: 30px;">
+                      {{ file.uploadDate }}
+                    </td>
+
+                    <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px; text-align: right;">
+                      <ul class="govuk-list govuk-!-margin-bottom-0">
+                        {# Reuse publish/unpublish interceptors #}
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ file.folderId }}/unpublish-single/{{ file.id }}?ref={{ currentCase.reference }}&origin=published">Unpublish</a></li>
+                        <li><a class="govuk-link govuk-link--no-visited-state" href="/current-service/back-office/manage-documents/folder/{{ file.folderId }}/re-categorise-single/{{ file.id }}?ref={{ currentCase.reference }}">Categorise</a></li>
+                      </ul>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p class="govuk-body govuk-!-margin-bottom-4">
+              There are no published documents for this case.
+            </p>
+          {% endif %}
+
+        </div>
+    </form>
+  </div>
+</div>
+
+<script type="module" nonce="">
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- 1. SELECT ALL LOGIC ---
+    const selectAll = document.getElementById('checkboxes-all');
+    const checkboxes = document.querySelectorAll('input[name="selectedFiles"]');
+    const selectedCountText = document.getElementById('selected-files-count');
+
+    const updateSelectedCount = () => {
+      if (selectedCountText) {
+        const checkedCount = document.querySelectorAll('input[name="selectedFiles"]:checked').length;
+        selectedCountText.textContent = `${checkedCount} file(s) on this page selected.`;
+      }
+    };
+
+    if (selectAll) {
+      selectAll.addEventListener('change', function(e) {
+        checkboxes.forEach(function(cb) {
+          cb.checked = e.target.checked;
+        });
+        updateSelectedCount();
+      });
+
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          const allChecked = Array.from(checkboxes).every(c => c.checked);
+          selectAll.checked = allChecked;
+          updateSelectedCount();
+        });
+      });
+    }
+
+    // --- 2. FRONTEND VALIDATION FOR BULK ACTIONS ---
+    const errorContainer = document.getElementById('js-error-container');
+    const form = document.getElementById('bulk-action-form');
+
+    function showError(message) {
+      window.scrollTo(0, 0); 
+      if (errorContainer) {
+        errorContainer.innerHTML = `
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <div class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
+                  <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                      <li><a href="#checkboxes-all">${message}</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function submitBulkAction(actionValue) {
+      const actionInput = document.createElement('input');
+      actionInput.type = 'hidden';
+      actionInput.name = 'bulkAction';
+      actionInput.value = actionValue;
+      form.appendChild(actionInput);
+      form.submit();
+    }
+
+    // CATEGORISE FILES
+    const mockCategoriseBtn = document.getElementById('mock-categorise-btn');
+    if (mockCategoriseBtn) {
+      mockCategoriseBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
+        if (checkedFiles.length === 0) {
+          showError("Select a file or files to categorise");
+        } else {
+          submitBulkAction('categorise');
+        }
+      });
+    }
+
+    // UNPUBLISH FILES
+    const mockUnpublishBtn = document.getElementById('mock-unpublish-btn');
+    if (mockUnpublishBtn) {
+      mockUnpublishBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkedFiles = document.querySelectorAll('input[name="selectedFiles"]:checked');
+        if (checkedFiles.length === 0) {
+          showError("Select a file or files to unpublish");
+        } else {
+          submitBulkAction('unpublish');
+        }
+      });
+    }
+
+  });
+</script>
+{% endblock %}

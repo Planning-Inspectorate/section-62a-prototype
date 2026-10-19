@@ -1,0 +1,105 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorCategory %}Error: {% endif %}Recategorise selected documents - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/current-service/back-office/manage-documents/published-documents?ref=" ~ currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    {% if errorCategory %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errorCategory,
+            href: "#documentCategory"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">{{ currentCase.reference }}</span>
+    <h1 class="govuk-heading-l">Recategorise selected document{% if filesToRecategorise.length > 1 %}s{% endif %}</h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-2">This will be shown in the front office document filters.</p>
+
+    <h2 class="govuk-heading-m">Document{% if filesToRecategorise.length > 1 %}s{% endif %} to recategorise</h2>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File name</th>
+          {% if filesToRecategorise.length > 1 %}
+            <th scope="col" class="govuk-table__header" style="text-align: right;"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for file in filesToRecategorise %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="word-break: break-word;">
+              {{ file.name }}<br>
+              <span class="govuk-body-s" style="color: #505a5f;">Current category: {{ file.category | default('Uncategorised') }}</span>
+            </td>
+            {% if filesToRecategorise.length > 1 %}
+              <td class="govuk-table__cell" style="text-align: right; vertical-align: middle;">
+                <a href="/current-service/back-office/manage-documents/re-categorise/{{ folderId }}/remove/{{ file.id }}?ref={{ currentCase.reference }}" class="govuk-link">Remove<span class="govuk-visually-hidden"> {{ file.name }}</span></a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form action="/current-service/back-office/manage-documents/re-categorise-submit/{{ folderId }}" method="post" novalidate>
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+
+      {{ govukRadios({
+        name: "documentCategory",
+        idPrefix: "documentCategory",
+        fieldset: {
+          legend: {
+            text: "What category is this document?" if filesToRecategorise.length == 1 else "What category are these documents?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        errorMessage: {
+          text: errorCategory
+        } if errorCategory,
+        items: [
+          { value: "Application plans and documents", text: "Application plans and documents" },
+          { value: "Questionnaire and supporting documents", text: "Questionnnaire and supporting documents" },
+          { value: "Planning inspectorate correspondence", text: "Planning inspectorate correspondence" },
+          { value: "Applicant correspondence", text: "Applicant correspondence" },
+          { value: "Additional information", text: "Additional information" },
+          { value: "Hearing", text: "Hearing" }
+        ]
+      }) }}
+
+      <div class="govuk-button-group govuk-!-margin-top-6">
+        {{ govukButton({ 
+            text: "Save"
+        }) }}
+      </div>
+
+      <p class="govuk-body govuk-!-margin-top-2">
+        <a class="govuk-link" href="/current-service/back-office/manage-documents/published-documents?ref={{ currentCase.reference }}">
+          Cancel and return to published documents
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

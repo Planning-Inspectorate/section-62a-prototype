@@ -126,6 +126,15 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/bulk
         req.session.data.deleteFilesList = selectedFiles;
         res.redirect(`/current-service/back-office/manage-documents/delete-files/${folderId}?ref=${caseRef}`);
     }
+    else if (req.body.bulkAction === 'publish') {
+        req.session.data.publishFilesList = selectedFiles;
+        res.redirect(`/current-service/back-office/manage-documents/publish-files/${folderId}?ref=${caseRef}`);
+    }
+    else if (req.body.bulkAction === 'unpublish') {
+        req.session.data.unpublishFilesList = selectedFiles;
+        req.session.data.unpublishReturnTo = 'folder';
+        res.redirect(`/current-service/back-office/manage-documents/unpublish-files/${folderId}?ref=${caseRef}`);
+    }
 });
 
 
@@ -354,6 +363,298 @@ router.post('/current-service/back-office/manage-documents/delete-submit/:folder
 
     res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
 });
+
+
+
+
+// GET: Intercept single file publish action
+router.get('/current-service/back-office/manage-documents/folder/:folderId/publish-single/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    req.session.data.publishFilesList = [req.params.fileId];
+    res.redirect(`/current-service/back-office/manage-documents/publish-files/${folderId}?ref=${caseRef}`);
+});
+
+// GET: Categorise files before publishing
+router.get('/current-service/back-office/manage-documents/publish-files/:folderId', function (req, res) {
+    const caseRef = req.query.ref;
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    const folderId = req.params.folderId;
+    const currentFolder = req.session.data.folders.find(f => f.id === folderId);
+    
+    const fileIds = req.session.data.publishFilesList || [];
+    if (fileIds.length === 0) return res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+
+    const filesToPublish = req.session.data.files.filter(f => fileIds.includes(f.id));
+    
+    res.render('current-service/back-office/manage-documents/files/publish/categorise', { 
+        currentCase, 
+        folderId, 
+        currentFolder,
+        filesToPublish 
+    });
+});
+
+// GET: Remove a file from the publish selection
+router.get('/current-service/back-office/manage-documents/publish-files/:folderId/remove/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileIdToRemove = req.params.fileId;
+    
+    req.session.data.publishFilesList = req.session.data.publishFilesList.filter(id => id !== fileIdToRemove);
+    res.redirect(`/current-service/back-office/manage-documents/publish-files/${folderId}?ref=${caseRef}`);
+});
+
+// POST: Final Submit - Publish files
+router.post('/current-service/back-office/manage-documents/publish-submit/:folderId', function (req, res) {
+    const caseRef = req.body.ref;
+    const folderId = req.params.folderId;
+    const fileIds = req.session.data.publishFilesList || [];
+    const category = req.body.documentCategory;
+
+    // Validation: Check if a category was selected
+    if (!category) {
+        const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+        const currentFolder = req.session.data.folders.find(f => f.id === folderId);
+        const filesToPublish = req.session.data.files.filter(f => fileIds.includes(f.id));
+
+        return res.render('current-service/back-office/manage-documents/files/publish/categorise', {
+            currentCase,
+            folderId,
+            currentFolder,
+            filesToPublish,
+            errorCategory: "Select a category to publish the files"
+        });
+    }
+
+    // Update the status and category for all selected files
+    req.session.data.files.forEach(f => {
+        if (fileIds.includes(f.id)) {
+            f.status = 'published';
+            f.category = category;
+        }
+    });
+
+    const fileCount = fileIds.length;
+    const fileWord = fileCount === 1 ? 'file' : 'files';
+
+    // Set custom text flash message with link flag
+    req.session.data['flashMessage'] = {
+        isPublishText: true,
+        text: `${fileCount} ${fileWord} published`
+    };
+
+    delete req.session.data.publishFilesList;
+
+    res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+});
+
+
+
+
+// GET: Intercept single file unpublish action
+router.get('/current-service/back-office/manage-documents/folder/:folderId/unpublish-single/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    req.session.data.unpublishFilesList = [req.params.fileId];
+
+    req.session.data.unpublishReturnTo = req.query.origin === 'published' ? 'published-documents' : 'folder';
+
+    res.redirect(`/current-service/back-office/manage-documents/unpublish-files/${folderId}?ref=${caseRef}`);
+});
+
+// GET: Review files for unpublishing
+router.get('/current-service/back-office/manage-documents/unpublish-files/:folderId', function (req, res) {
+    const caseRef = req.query.ref;
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    const folderId = req.params.folderId;
+    
+    const fileIds = req.session.data.unpublishFilesList || [];
+    if (fileIds.length === 0) return res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+
+    const filesToUnpublish = req.session.data.files.filter(f => fileIds.includes(f.id));
+
+    const returnTo = req.session.data.unpublishReturnTo || 'folder';
+    
+    res.render('current-service/back-office/manage-documents/files/unpublish/unpublish', { 
+        currentCase, 
+        folderId, 
+        filesToUnpublish,
+        returnTo
+    });
+});
+
+// GET: Remove a file from the unpublish selection
+router.get('/current-service/back-office/manage-documents/unpublish-files/:folderId/remove/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileIdToRemove = req.params.fileId;
+    
+    req.session.data.unpublishFilesList = req.session.data.unpublishFilesList.filter(id => id !== fileIdToRemove);
+    res.redirect(`/current-service/back-office/manage-documents/unpublish-files/${folderId}?ref=${caseRef}`);
+});
+
+// POST: Final Submit - Unpublish files
+router.post('/current-service/back-office/manage-documents/unpublish-submit/:folderId', function (req, res) {
+    const caseRef = req.body.ref;
+    const folderId = req.params.folderId;
+    const fileIds = req.session.data.unpublishFilesList || [];
+    const returnTo = req.session.data.unpublishReturnTo || 'folder';
+
+    // Revert status to unpublished
+    req.session.data.files.forEach(f => {
+        if (fileIds.includes(f.id)) {
+            f.status = 'unpublished';
+        }
+    });
+
+    const fileCount = fileIds.length;
+    const fileWord = fileCount === 1 ? 'file' : 'files';
+
+    // Set standard text flash message
+    req.session.data['flashMessage'] = {
+        isStandardText: true,
+        text: `${fileCount} ${fileWord} unpublished`
+    };
+
+    delete req.session.data.unpublishFilesList;
+    delete req.session.data.unpublishReturnTo;
+
+    if (returnTo === 'published-documents') {
+        res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
+    } else {
+        res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+    }
+});
+
+
+
+
+// GET: View all published documents
+router.get('/current-service/back-office/manage-documents/published-documents', function (req, res) {
+    const caseRef = req.query.ref;
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    
+    // Grab all files for this case that have status === 'published'
+    const publishedFiles = (req.session.data.files || []).filter(f => 
+        f.caseReference === caseRef && f.status === 'published'
+    );
+
+    const flashMessage = req.session.data.flashMessage;
+    delete req.session.data.flashMessage;
+
+    res.render('current-service/back-office/manage-documents/files/publish/published-documents', {
+        currentCase,
+        publishedFiles,
+        flashMessage
+    });
+});
+
+// POST: Intercept bulk actions from the Published Documents view
+router.post('/current-service/back-office/manage-documents/published-documents/bulk-action', function (req, res) {
+    const caseRef = req.query.ref;
+    let selectedFiles = req.body.selectedFiles || [];
+    if (!Array.isArray(selectedFiles)) selectedFiles = [selectedFiles];
+
+    // Grab the folderId of the first selected file to borrow its routing path
+    // (since our existing routes like categorise/unpublish require a folderId parameter)
+    const firstSelectedFile = req.session.data.files.find(f => f.id === selectedFiles[0]);
+    const folderPathId = firstSelectedFile ? firstSelectedFile.folderId : 'root';
+
+    if (req.body.bulkAction === 'categorise') {
+        req.session.data.recategoriseFilesList = selectedFiles;
+        res.redirect(`/current-service/back-office/manage-documents/re-categorise/${folderPathId}?ref=${caseRef}`);
+    } 
+    else if (req.body.bulkAction === 'unpublish') {
+        req.session.data.unpublishFilesList = selectedFiles;
+        req.session.data.unpublishReturnTo = 'published-documents';
+        res.redirect(`/current-service/back-office/manage-documents/unpublish-files/${folderPathId}?ref=${caseRef}`);
+    }
+});
+
+
+
+
+
+// GET: Intercept single file re-categorise action
+router.get('/current-service/back-office/manage-documents/folder/:folderId/re-categorise-single/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    
+    // Set the recategorise list to contain only this specific file
+    req.session.data.recategoriseFilesList = [req.params.fileId];
+    
+    res.redirect(`/current-service/back-office/manage-documents/re-categorise/${folderId}?ref=${caseRef}`);
+});
+
+// GET: Review files for re-categorisation
+router.get('/current-service/back-office/manage-documents/re-categorise/:folderId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    
+    const fileIds = req.session.data.recategoriseFilesList || [];
+    if (fileIds.length === 0) return res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
+
+    const filesToRecategorise = req.session.data.files.filter(f => fileIds.includes(f.id));
+
+    res.render('current-service/back-office/manage-documents/files/publish/re-categorise', { 
+        currentCase, 
+        folderId,
+        filesToRecategorise
+    });
+});
+
+// GET: Remove a file from the re-categorise selection
+router.get('/current-service/back-office/manage-documents/re-categorise/:folderId/remove/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileIdToRemove = req.params.fileId;
+    
+    req.session.data.recategoriseFilesList = req.session.data.recategoriseFilesList.filter(id => id !== fileIdToRemove);
+    res.redirect(`/current-service/back-office/manage-documents/re-categorise/${folderId}?ref=${caseRef}`);
+});
+
+// POST: Final Submit - Save new categories
+router.post('/current-service/back-office/manage-documents/re-categorise-submit/:folderId', function (req, res) {
+    const caseRef = req.body.ref;
+    const folderId = req.params.folderId;
+    const fileIds = req.session.data.recategoriseFilesList || [];
+    const category = req.body.documentCategory;
+
+    if (!category) {
+        const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+        const filesToRecategorise = req.session.data.files.filter(f => fileIds.includes(f.id));
+        
+        return res.render('current-service/back-office/manage-documents/files/publish/re-categorise', {
+            currentCase,
+            folderId,
+            filesToRecategorise,
+            errorCategory: "Select a category"
+        });
+    }
+
+    // Update category for all selected files
+    req.session.data.files.forEach(f => {
+        if (fileIds.includes(f.id)) {
+            f.category = category;
+        }
+    });
+
+    const fileCount = fileIds.length;
+    const fileWord = fileCount === 1 ? 'file' : 'files';
+
+    // Dynamic success banner using standard text
+    req.session.data['flashMessage'] = {
+        isStandardText: true,
+        text: `${fileCount} selected ${fileWord} recategorised to ${category}`
+    };
+
+    delete req.session.data.recategoriseFilesList;
+
+    res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
+});
+
 
 
 
