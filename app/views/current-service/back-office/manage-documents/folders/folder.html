@@ -74,7 +74,13 @@
 
     <h3 class="govuk-heading-m">Subfolders</h3>
 
-    <p class="govuk-body"><strong>{{ subfolders.length | default(0) }}</strong> subfolders</p>
+    <p class="govuk-body">
+      <strong>{{ subfolders.length | default(0) }}</strong> subfolder{% if subfolders.length != 1 %}s{% endif %}
+      
+      {% if subfolders and subfolders.length > 0 %}
+        containing <strong>{{ descendantFilesCount | default(0) }}</strong> file{% if descendantFilesCount != 1 %}s{% endif %}
+      {% endif %}
+    </p>
 
     <div class="govuk-button-group govuk-!-margin-bottom-4">
         <a href="/current-service/back-office/manage-documents/create-folder?ref={{ currentCase.reference }}&parentId={{ currentFolder.id }}" class="govuk-button govuk-button--secondary">Create subfolder</a>
@@ -113,6 +119,8 @@
     </div>
     {% else %}
         <p class="govuk-body govuk-!-margin-bottom-6">There are no subfolders inside this folder.</p>
+
+        <hr class="govuk-section-break govuk-section-break--l">
     {% endif %}
 
   </div>

@@ -61,6 +61,24 @@ router.get('/current-service/back-office/manage-documents/folder/:folderId', fun
         }
     }
 
+    // --- NEW: Calculate files in all nested subfolders ---
+    const allFolders = req.session.data.folders.filter(f => f.caseReference === caseRef);
+    let descendantFolderIds = [];
+    let queue = [folderId]; // Start looking from the current folder
+
+    // Find all nested folder IDs (children, grandchildren, etc.)
+    while (queue.length > 0) {
+        let currentId = queue.shift();
+        let children = allFolders.filter(f => f.parentId === currentId).map(f => f.id);
+        descendantFolderIds.push(...children);
+        queue.push(...children);
+    }
+
+    // Count how many files belong to any of those descendant folders
+    const allFiles = req.session.data.files || [];
+    const descendantFilesCount = allFiles.filter(f => descendantFolderIds.includes(f.folderId)).length;
+
+    // Render page with banner logic
     const flashMessage = req.session.data['flashMessage'];
     req.session.data['flashMessage'] = null;
 
@@ -74,7 +92,8 @@ router.get('/current-service/back-office/manage-documents/folder/:folderId', fun
         flashMessage,
         deleteBanner,
         files,
-        breadcrumbs
+        breadcrumbs,
+        descendantFilesCount
     });
 });
 
