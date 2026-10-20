@@ -93,12 +93,8 @@ router.post('/current-service/back-office/manage-documents/create-folder', funct
         id: newFolder.id
     };
 
-    // Redirect back to the correct location
-    if (parentId === 'root') {
-        res.redirect(`/current-service/back-office/manage-documents/index?ref=${caseRef}`);
-    } else {
-        res.redirect(`/current-service/back-office/manage-documents/folder/${parentId}?ref=${caseRef}`);
-    }
+    // Redirect straight into the newly created folder
+    res.redirect(`/current-service/back-office/manage-documents/folder/${newFolder.id}?ref=${caseRef}`);
 });
 
 
