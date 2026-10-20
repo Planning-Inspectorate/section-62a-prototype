@@ -28,20 +28,23 @@
 {% if flashMessage %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       {% set successHtml %}
         <h3 class="govuk-notification-banner__heading">
-          <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
-            {{ flashMessage.name }}
-          </a> folder {{ flashMessage.action | default("created") }}
+          {% if flashMessage.isPublishText %}
+            {{ flashMessage.text }}
+          {% elif flashMessage.isStandardText %}
+            {{ flashMessage.text }}
+          {% else %}
+            <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/folder/{{ flashMessage.id }}?ref={{ currentCase.reference }}">
+              {{ flashMessage.name }}
+            </a> folder {{ flashMessage.action | default("created") }}
+          {% endif %}
         </h3>
+        {% if flashMessage.isPublishText %}
+          <p class="govuk-body">To view or change published files, <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/published-documents?ref={{ currentCase.reference }}">view the published documents page</a>.</p>
+        {% endif %}
       {% endset %}
-
-      {{ govukNotificationBanner({
-        html: successHtml,
-        type: "success"
-      }) }}
-
+      {{ govukNotificationBanner({ html: successHtml, type: "success" }) }}
     </div>
   </div>
 {% endif %}

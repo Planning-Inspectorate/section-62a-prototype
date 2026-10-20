@@ -517,9 +517,9 @@ router.post('/current-service/back-office/manage-documents/unpublish-submit/:fol
     const caseRef = req.body.ref;
     const folderId = req.params.folderId;
     const fileIds = req.session.data.unpublishFilesList || [];
-    const returnTo = req.session.data.unpublishReturnTo || 'folder';
+    const returnTo = req.session.data.unpublishReturnTo || 'folder'; 
 
-    // Revert status to unpublished
+    // 1. Revert status to unpublished
     req.session.data.files.forEach(f => {
         if (fileIds.includes(f.id)) {
             f.status = 'unpublished';
@@ -527,19 +527,29 @@ router.post('/current-service/back-office/manage-documents/unpublish-submit/:fol
     });
 
     const fileCount = fileIds.length;
-    const fileWord = fileCount === 1 ? 'file' : 'files';
-
+    
     // Set standard text flash message
     req.session.data['flashMessage'] = {
         isStandardText: true,
-        text: `${fileCount} ${fileWord} unpublished`
+        text: `${fileCount} file${fileCount === 1 ? '' : 's'} unpublished`
     };
 
     delete req.session.data.unpublishFilesList;
-    delete req.session.data.unpublishReturnTo;
+    delete req.session.data.unpublishReturnTo; 
 
+    // --- NEW: Check if there are any published files left for this case ---
+    const remainingPublished = req.session.data.files.some(f => 
+        f.caseReference === caseRef && f.status === 'published'
+    );
+
+    // --- UPDATED CONDITIONAL REDIRECT ---
     if (returnTo === 'published-documents') {
-        res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
+        if (!remainingPublished) {
+            // Kick back to index if that was the last published file
+            res.redirect(`/current-service/back-office/manage-documents/index?ref=${caseRef}`);
+        } else {
+            res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
+        }
     } else {
         res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
     }
