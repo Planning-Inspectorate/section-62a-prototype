@@ -8,7 +8,10 @@ const router = Router();
 // Unique ID generator
 const generateId = () => 'f-' + Math.random().toString(36).substr(2, 9);
 
-// UPLOAD FILES TO A FOLDER
+// =========================
+// upload routes
+// =========================
+
 // GET: Load the upload files page
 router.get('/current-service/back-office/manage-documents/upload-files/:folderId', function (req, res) {
     const caseRef = req.query.ref;
@@ -109,6 +112,9 @@ router.post('/current-service/back-office/manage-documents/upload-files/:folderI
 });
 
 
+// =========================
+// bulk actions for folder.html routes
+// =========================
 
 // POST: Intercept bulk actions
 router.post('/current-service/back-office/manage-documents/folder/:folderId/bulk-action', function (req, res) {
@@ -139,6 +145,9 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/bulk
 
 
 
+// =========================
+// move routes
+// =========================
 
 // GET: Step 1 - Review selected files
 router.get('/current-service/back-office/manage-documents/move-files/:folderId', function (req, res) {
@@ -292,6 +301,9 @@ router.post('/current-service/back-office/manage-documents/move-submit/:folderId
 
 
 
+// =========================
+// delete routes
+// =========================
 
 // GET: Intercept single file delete action
 router.get('/current-service/back-office/manage-documents/folder/:folderId/delete-single/:fileId', function (req, res) {
@@ -366,6 +378,9 @@ router.post('/current-service/back-office/manage-documents/delete-submit/:folder
 
 
 
+// =========================
+// publish routes
+// =========================
 
 // GET: Intercept single file publish action
 router.get('/current-service/back-office/manage-documents/folder/:folderId/publish-single/:fileId', function (req, res) {
@@ -423,7 +438,7 @@ router.post('/current-service/back-office/manage-documents/publish-submit/:folde
             folderId,
             currentFolder,
             filesToPublish,
-            errorCategory: "Select a category to publish the files"
+            errorCategory: "Select a category"
         });
     }
 
@@ -451,6 +466,9 @@ router.post('/current-service/back-office/manage-documents/publish-submit/:folde
 
 
 
+// =========================
+// unpublish routes
+// =========================
 
 // GET: Intercept single file unpublish action
 router.get('/current-service/back-office/manage-documents/folder/:folderId/unpublish-single/:fileId', function (req, res) {
@@ -530,6 +548,10 @@ router.post('/current-service/back-office/manage-documents/unpublish-submit/:fol
 
 
 
+// =========================
+// published documents routes
+// =========================
+
 // GET: View all published documents
 router.get('/current-service/back-office/manage-documents/published-documents', function (req, res) {
     const caseRef = req.query.ref;
@@ -574,7 +596,9 @@ router.post('/current-service/back-office/manage-documents/published-documents/b
 
 
 
-
+// =========================
+// recategorise routes
+// =========================
 
 // GET: Intercept single file re-categorise action
 router.get('/current-service/back-office/manage-documents/folder/:folderId/re-categorise-single/:fileId', function (req, res) {
@@ -657,6 +681,9 @@ router.post('/current-service/back-office/manage-documents/re-categorise-submit/
 
 
 
+// =========================
+// search routes
+// =========================
 
 // GET: Search files
 router.get('/current-service/back-office/manage-documents/files/search', function (req, res) {
