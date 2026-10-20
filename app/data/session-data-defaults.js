@@ -158,3 +158,40 @@ export const cases = [
       "lastModifiedBy": "User Account"
     }
 ];
+
+export const folders = [
+  // =================================================================
+  // CASE 1: S62A/2026/0048 (Application Stage)
+  // =================================================================
+  
+  // --- Root 1: The planning application ---
+  { id: "c1-root-1", caseReference: "S62A/2026/0048", name: "The planning application", parentId: null },
+      { id: "c1-sub-1", caseReference: "S62A/2026/0048", name: "Application documents (originals)", parentId: "c1-root-1" },
+      { id: "c1-sub-2", caseReference: "S62A/2026/0048", name: "Application documents (redacted)", parentId: "c1-root-1" },
+
+  // --- Root 2: Working documents ---
+  { id: "c1-root-2", caseReference: "S62A/2026/0048", name: "Working documents", parentId: null },
+      { id: "c1-sub-3", caseReference: "S62A/2026/0048", name: "File notes and correspondence", parentId: "c1-root-2" },
+      { id: "c1-sub-4", caseReference: "S62A/2026/0048", name: "EIA", parentId: "c1-root-2" },
+      { id: "c1-sub-5", caseReference: "S62A/2026/0048", name: "Fees", parentId: "c1-root-2" },
+      { id: "c1-sub-6", caseReference: "S62A/2026/0048", name: "Hearings", parentId: "c1-root-2" },
+      { id: "c1-sub-7", caseReference: "S62A/2026/0048", name: "Decisions or recommendations", parentId: "c1-root-2" },
+      { id: "c1-sub-8", caseReference: "S62A/2026/0048", name: "Representations", parentId: "c1-root-2" },
+      { id: "c1-sub-9", caseReference: "S62A/2026/0048", name: "Internal correspondence", parentId: "c1-root-2" },
+
+  // --- Root 3: Pre-application advice ---
+  { id: "c1-root-3", caseReference: "S62A/2026/0048", name: "Pre-application advice", parentId: null },
+
+
+  // =================================================================
+  // CASE 2: S62A/2026/0000049/PRE (Pre-application Stage)
+  // =================================================================
+  
+  // --- Root 1: Pre-application ---
+  { id: "c2-root-1", caseReference: "S62A/2026/0000049/PRE", name: "Pre-application", parentId: null },
+      { id: "c2-sub-1", caseReference: "S62A/2026/0000049/PRE", name: "Applicant's documents", parentId: "c2-root-1" },
+      { id: "c2-sub-2", caseReference: "S62A/2026/0000049/PRE", name: "LPA documents", parentId: "c2-root-1" },
+      { id: "c2-sub-3", caseReference: "S62A/2026/0000049/PRE", name: "Other", parentId: "c2-root-1" },
+      { id: "c2-sub-4", caseReference: "S62A/2026/0000049/PRE", name: "PINS documents", parentId: "c2-root-1" },
+      { id: "c2-sub-5", caseReference: "S62A/2026/0000049/PRE", name: "Policy", parentId: "c2-root-1" }
+];
