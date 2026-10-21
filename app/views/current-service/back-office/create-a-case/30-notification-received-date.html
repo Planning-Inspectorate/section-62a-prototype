@@ -56,6 +56,11 @@
         ]
       }) }}
 
+      {{ govukWarningText({
+        text: "Adding a date will send a notification to the applicant/agent.",
+        iconFallbackText: "Warning"
+      }) }}
+
       {{ govukButton({
         text: "Continue"
       }) }}

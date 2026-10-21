@@ -1,0 +1,101 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}When was the application confirmed as valid?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/tab-view/05-dates" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/application-valid-answer" method="post" novalidate>
+
+        <h1 class="govuk-heading-l">
+            When was the application confirmed as valid?
+        </h1>
+
+        <p class="govuk-body">You must first:</p>
+        <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-6">
+        <li>add the site address or site coordinates</li>
+        <li>add the representation period end date</li>
+        <li>add the EIA details</li>
+        <li>add the statutory consultees with email addresses</li>
+        <li>publish the case</li>
+        </ul>
+
+        <!-- Conditional error class for the main form group -->
+        <div class="govuk-form-group {% if errors.applicationValidDate %}govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" role="group">
+
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">
+        When was the application confirmed as valid?
+        </legend>
+
+        <!-- Conditional error message block -->
+        {% if errors.applicationValidDate %}
+        <p id="application-valid-date-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{ errors.applicationValidDate.text }}
+        </p>
+        {% endif %}
+
+        <div class="govuk-date-input" id="application-valid-date">
+
+        <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="application-valid-date-day">
+            Day
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors.day %}govuk-input--error{% endif %}" id="application-valid-date-day" name="application-valid-date-day" type="text" inputmode="numeric" value="{{ data['application-valid-date-day'] }}">
+        </div>
+        </div>
+
+        <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="application-valid-date-month">
+            Month
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors.month %}govuk-input--error{% endif %}" id="application-valid-date-month" name="application-valid-date-month" type="text" inputmode="numeric" value="{{ data['application-valid-date-month'] }}">
+        </div>
+        </div>
+
+        <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="application-valid-date-year">
+            Year
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors.year %}govuk-input--error{% endif %}" id="application-valid-date-year" name="application-valid-date-year" type="text" inputmode="numeric" value="{{ data['application-valid-date-year'] }}">
+        </div>
+        </div>
+
+        </div>
+        </fieldset>
+        </div>
+
+      {{ govukWarningText({
+        text: "Adding a date will send a notification to the applicant/agent and statutory consultees.",
+        iconFallbackText: "Warning"
+      }) }}
+
+      {{ govukButton({
+        text: "Save"
+      }) }}
+
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

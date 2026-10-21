@@ -1,7 +1,7 @@
 {% extends "layouts/new/back-office.html" %}
 
 {% block pageTitle %}
-  When is the hearing? - Manage Planning Applications
+  When is the hearing date? - Manage Planning Applications
 {% endblock %}
 
 {% block beforeContent %}
@@ -19,13 +19,13 @@
   namePrefix: "currentCase[hearingDate]",
   fieldset: {
     legend: {
-      text: "When is the hearing?",
+      text: "When is the hearing date?",
       isPageHeading: true,
       classes: "govuk-fieldset__legend--l"
     }
   },
   hint: {
-    text: "For example, 27 3 2007"
+    text: "You must first add the hearing venue and the appointed inspector, and publish the case"
     },
   items: [
     { name: "day", classes: "govuk-input--width-2" },
@@ -62,6 +62,7 @@
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="hearing-date-ampm">am or pm</label>
           <select class="govuk-select" id="hearing-date-ampm" name="currentCase[hearingDate][ampm]">
+            <option value=""></option>
             <option value="am">am</option>
             <option value="pm">pm</option>
           </select>
@@ -71,5 +72,22 @@
     </div>
   </fieldset>
 </div>
+
+{{ govukWarningText({
+  text: "Adding a date will send a notification to all parties.",
+  iconFallbackText: "Warning"
+}) }}
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Save"
+      }) }}
+
+      {{ govukButton({
+        classes: "govuk-button--secondary",  
+        text: "Remove and save"
+      }) }}
+
+    </div>
 
 {% endblock %}

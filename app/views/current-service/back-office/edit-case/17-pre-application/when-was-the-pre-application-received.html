@@ -1,0 +1,80 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorList %}Error: {% endif %}When was the pre-application received?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/current-service/back-office/tab-view/17-pre-application" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form class="form" action="/when-was-the-pre-application-received-answer" method="post" novalidate>
+
+      {{ govukDateInput({
+        id: "pre-application-received-date",
+        namePrefix: "pre-application-received-date",
+        fieldset: {
+          legend: {
+            text: "When was the pre-application received?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "For example, 27 3 2007"
+        },
+        errorMessage: { text: errors.preApplicationReceivedDate.text } if errors.preApplicationReceivedDate else null,
+        
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
+            value: data['pre-application-received-date-day']
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
+            value: data['pre-application-received-date-month']
+          },
+          {
+            name: "year",
+            classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
+            value: data['pre-application-received-date-year']
+          }
+        ]
+      }) }}
+
+      {{ govukWarningText({
+        text: "Adding a date will send a notification to the applicant/agent.",
+        iconFallbackText: "Warning"
+      }) }}
+
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save"
+            }) }}
+
+            {{ govukButton({
+                text: "Remove and save",
+                classes: "govuk-button--secondary"
+            }) }}
+        </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
