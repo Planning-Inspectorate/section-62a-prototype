@@ -1,0 +1,51 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorAddCaseNote %}Error: {% endif %}Add a case note
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/current-service/back-office/tab-view/18-case-notes"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      {% if errorAddCaseNote %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: [{ text: errorAddCaseNote, href: "#add-case-note" }]
+            }) }}
+
+            </div>
+        </div>
+      {% endif %}
+
+      <form class="form" action="/edit-add-case-note" method="post" novalidate>
+
+        {{ govukCharacterCount({
+          id: "add-case-note",
+          name: "add-case-note",
+          maxlength: 500,
+          label: {
+            text: "Add a case note",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: { text: errorAddCaseNote } if errorAddCaseNote else null
+        }) }}
+
+        {{ govukButton({ text: "Save" }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

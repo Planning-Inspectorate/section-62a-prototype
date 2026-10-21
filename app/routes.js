@@ -9,6 +9,7 @@ import caseDetailsRouter from './bo-routes/archived/case-details.js';
 // import edit case bo-routers
 import editOverview from './bo-routes/edit-case/01-overview.js';
 import editPreApplication from './bo-routes/edit-case/17-pre-application.js';
+import editCaseNotes from './bo-routes/edit-case/18-case-notes.js';
 import editCaseHistory from './bo-routes/edit-case/19-case-audit-log.js';
 
 // import tab-view case bo-routers
@@ -29,6 +30,7 @@ import nonResidentialTabRouter from './bo-routes/tab-view/14-non-residential.js'
 import vehicleParkingTabRouter from './bo-routes/tab-view/15-vehicle-parking.js';
 import wasteTabRouter from './bo-routes/tab-view/16-waste.js';
 import preApplicationTabRouter from './bo-routes/tab-view/17-pre-application.js';
+import caseNotesTabRouter from './bo-routes/tab-view/18-case-notes.js';
 import caseAuditLogRouter from './bo-routes/tab-view/19-case-audit-log.js';
 
 // import manage representations bo-routers
@@ -89,6 +91,7 @@ router.use('/', caseDetailsRouter);
 // mount edit case bo-routers
 router.use('/', editOverview);
 router.use('/', editPreApplication);
+router.use('/', editCaseNotes);
 router.use('/', editCaseHistory);
 
 // mount tab-view bo-routes
@@ -109,6 +112,7 @@ router.use('/', nonResidentialTabRouter);
 router.use('/', vehicleParkingTabRouter);
 router.use('/', wasteTabRouter);
 router.use('/', preApplicationTabRouter);
+router.use('/', caseNotesTabRouter);
 router.use('/', caseAuditLogRouter);
 
 // mount manage representations bo-routers

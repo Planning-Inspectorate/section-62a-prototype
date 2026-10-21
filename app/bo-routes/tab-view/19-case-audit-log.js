@@ -49,7 +49,7 @@ router.post('/publish-status-answer-19-case-audit-log', function (req, res) {
 
     // block the publish if neither exists and re-render the page with an error
     if (!hasAddress && !hasCoords) {
-      return res.render('current-service/back-office/tab-view/01-overview', {
+      return res.render('current-service/back-office/tab-view/19-case-audit-log', {
         currentCase: foundCase,
         errorPublishValidation: "You must enter site coordinates or postcode within the site address"
       });
