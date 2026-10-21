@@ -47,13 +47,13 @@
 
 
 {% block pageTitle %}
-  {{ currentCase.reference }} - Case history
+  {{ currentCase.reference }} - View application history
 {% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back to case details",
-    href: "/current-service/back-office/case-details"
+    href: "/current-service/back-office/tab-view/19-case-audit-log?reference=" + currentCase.reference
   }) }}
 {% endblock %}
 
@@ -61,10 +61,11 @@
 
   {# --- ROW 1: HEADER --- #}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
-      <span class="govuk-caption-m">{{ currentCase.reference }}</span>
+    <div class="govuk-grid-column-full">
+
       <h1 class="govuk-heading-l">
-        Case history
+        <span class="govuk-caption-l">{{ currentCase.reference }}</span>
+        View application history
       </h1>
     </div>
   </div>

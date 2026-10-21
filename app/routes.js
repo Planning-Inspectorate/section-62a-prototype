@@ -5,11 +5,11 @@ import { applyAzureHostingFix } from "./azure-hosting-fix.js";
 // import bo-routers
 import createCaseRouter from './bo-routes/create-a-case/create-a-case.js';
 import caseDetailsRouter from './bo-routes/archived/case-details.js';
-import caseAuditLogRouter from './bo-routes/archived/case-audit-log.js';
 
 // import edit case bo-routers
 import editOverview from './bo-routes/edit-case/01-overview.js';
 import editPreApplication from './bo-routes/edit-case/17-pre-application.js';
+import editCaseHistory from './bo-routes/edit-case/19-case-audit-log.js';
 
 // import tab-view case bo-routers
 import overviewTabRouter from './bo-routes/tab-view/01-overview.js';
@@ -29,6 +29,7 @@ import nonResidentialTabRouter from './bo-routes/tab-view/14-non-residential.js'
 import vehicleParkingTabRouter from './bo-routes/tab-view/15-vehicle-parking.js';
 import wasteTabRouter from './bo-routes/tab-view/16-waste.js';
 import preApplicationTabRouter from './bo-routes/tab-view/17-pre-application.js';
+import caseAuditLogRouter from './bo-routes/tab-view/19-case-audit-log.js';
 
 // import manage representations bo-routers
 import manageRepresentationsRouter from './bo-routes/manage-representations/manage-representations.js';
@@ -84,11 +85,11 @@ const router = govukPrototypeKit.requests.setupRouter();
 // mount bo-routers
 router.use('/', createCaseRouter);
 router.use('/', caseDetailsRouter);
-router.use('/', caseAuditLogRouter);
 
 // mount edit case bo-routers
 router.use('/', editOverview);
 router.use('/', editPreApplication);
+router.use('/', editCaseHistory);
 
 // mount tab-view bo-routes
 router.use('/', overviewTabRouter);
@@ -108,6 +109,7 @@ router.use('/', nonResidentialTabRouter);
 router.use('/', vehicleParkingTabRouter);
 router.use('/', wasteTabRouter);
 router.use('/', preApplicationTabRouter);
+router.use('/', caseAuditLogRouter);
 
 // mount manage representations bo-routers
 router.use('/', manageRepresentationsRouter);

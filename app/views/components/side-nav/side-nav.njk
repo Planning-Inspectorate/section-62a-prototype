@@ -23,10 +23,6 @@
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/02-details?reference={{ currentCase.reference }}" {% if currentPage == 'details' %} aria-current="page" {% endif %}>Details</a>
         </li>
 
-        <li class="moj-sub-navigation__item {% if currentPage == 'updates' %}moj-sub-navigation__item--active{% endif %}">
-            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/03-updates?reference={{ currentCase.reference }}" {% if currentPage == 'updates' %} aria-current="page" {% endif %}>Updates</a>
-        </li>
-
         <li class="moj-sub-navigation__item {% if currentPage == 'contacts' %}moj-sub-navigation__item--active{% endif %}">
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/04-contacts?reference={{ currentCase.reference }}" {% if currentPage == 'contacts' %} aria-current="page" {% endif %}>Contacts</a>
         </li>
@@ -87,11 +83,13 @@
 
         {% endif %}
 
-        {% if currentPage == 'hearing' %}
-        <li class="moj-sub-navigation__item {% if currentPage == 'hearing' %}moj-sub-navigation__item--active{% endif %}">
-            <a class="moj-sub-navigation__link" href="/features/bo-redesign/v3/back-office/manage/hearing?reference={{ currentCase.reference }}" {% if currentPage == 'hearing' %} aria-current="page" {% endif %}>Hearing</a>
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-notes' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/18-case-notes?reference={{ currentCase.reference }}" {% if currentPage == 'case-notes' %} aria-current="page" {% endif %}>Case notes</a>
         </li>
-        {% endif %}
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-audit-log' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/19-case-audit-log?reference={{ currentCase.reference }}" {% if currentPage == 'case-audit-log' %} aria-current="page" {% endif %}>Case audit log</a>
+        </li>
 
     </ul>
 
@@ -109,10 +107,6 @@
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/02-details?reference={{ currentCase.reference }}" {% if currentPage == 'details' %} aria-current="page" {% endif %}>Details</a>
         </li>
 
-        <li class="moj-sub-navigation__item {% if currentPage == 'updates' %}moj-sub-navigation__item--active{% endif %}">
-            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/03-updates?reference={{ currentCase.reference }}" {% if currentPage == 'updates' %} aria-current="page" {% endif %}>Updates</a>
-        </li>
-
         <li class="moj-sub-navigation__item {% if currentPage == 'contacts' %}moj-sub-navigation__item--active{% endif %}">
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/04-contacts?reference={{ currentCase.reference }}" {% if currentPage == 'contacts' %} aria-current="page" {% endif %}>Contacts</a>
         </li>
@@ -121,16 +115,28 @@
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/05-dates?reference={{ currentCase.reference }}" {% if currentPage == 'dates' %} aria-current="page" {% endif %}>Dates</a>
         </li>
 
-        <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
-            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/17-pre-application?reference={{ currentCase.reference }}" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
-        </li>
-
         <li class="moj-sub-navigation__item {% if currentPage == 'case-team' %}moj-sub-navigation__item--active{% endif %}">
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/07-case-team?reference={{ currentCase.reference }}" {% if currentPage == 'case-team' %} aria-current="page" {% endif %}>Case team</a>
         </li>
 
+        <li class="moj-sub-navigation__item {% if currentPage == 'event' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/08-event?reference={{ currentCase.reference }}" {% if currentPage == 'event' %} aria-current="page" {% endif %}>Event</a>
+        </li>
+
         <li class="moj-sub-navigation__item {% if currentPage == 'fee' %}moj-sub-navigation__item--active{% endif %}">
             <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/11-fee?reference={{ currentCase.reference }}" {% if currentPage == 'fee' %} aria-current="page" {% endif %}>Fee</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/17-pre-application?reference={{ currentCase.reference }}" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-notes' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/18-case-notes?reference={{ currentCase.reference }}" {% if currentPage == 'case-notes' %} aria-current="page" {% endif %}>Case notes</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-audit-log' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="/current-service/back-office/tab-view/19-case-audit-log?reference={{ currentCase.reference }}" {% if currentPage == 'case-audit-log' %} aria-current="page" {% endif %}>Case audit log</a>
         </li>
 
     </ul>
