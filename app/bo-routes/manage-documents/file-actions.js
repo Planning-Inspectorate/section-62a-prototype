@@ -606,6 +606,7 @@ router.post('/current-service/back-office/manage-documents/published-documents/b
 
 
 
+
 // =========================
 // recategorise routes
 // =========================
@@ -688,6 +689,106 @@ router.post('/current-service/back-office/manage-documents/re-categorise-submit/
 
     res.redirect(`/current-service/back-office/manage-documents/published-documents?ref=${caseRef}`);
 });
+
+
+
+
+// =========================
+// rename routes
+// =========================
+
+// GET: Rename file page
+router.get('/current-service/back-office/manage-documents/folder/:folderId/rename-file/:fileId', function (req, res) {
+    const caseRef = req.query.ref;
+    const folderId = req.params.folderId;
+    const fileId = req.params.fileId;
+    
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    const fileToRename = req.session.data.files.find(f => f.id === fileId);
+
+    if (!fileToRename) return res.redirect(`/current-service/back-office/manage-documents/folders/folder/${folderId}?ref=${caseRef}`);
+
+    // Extract base name and extension for the input field and suffix
+    const lastDotIndex = fileToRename.name.lastIndexOf('.');
+    let baseName = fileToRename.name;
+    let fileExtension = fileToRename.extension || '';
+    
+    if (lastDotIndex !== -1) {
+        baseName = fileToRename.name.substring(0, lastDotIndex);
+        fileExtension = fileToRename.name.substring(lastDotIndex); // keeps the dot, e.g., ".pdf"
+    } else if (fileExtension && !fileExtension.startsWith('.')) {
+        fileExtension = '.' + fileExtension.toLowerCase();
+    }
+
+    res.render('current-service/back-office/manage-documents/files/rename/rename-file', {
+        currentCase,
+        folderId,
+        file: fileToRename,
+        baseName,
+        fileExtension
+    });
+});
+
+// POST: Submit renamed file
+router.post('/current-service/back-office/manage-documents/folder/:folderId/rename-submit/:fileId', function (req, res) {
+    const caseRef = req.body.ref;
+    const folderId = req.params.folderId;
+    const fileId = req.params.fileId;
+    const newBaseName = (req.body.fileName || '').trim();
+    const fileExtension = req.body.fileExtension || ''; // Passed via hidden input
+    
+    const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
+    const fileToRename = req.session.data.files.find(f => f.id === fileId);
+
+    let errorFileName = null;
+    const proposedFullName = newBaseName + fileExtension;
+
+    // Validation 1: Empty check
+    if (!newBaseName) {
+        errorFileName = "File name is required";
+    }
+    // Validation 2: Special characters
+    else if (!/^[a-zA-Z0-9 .\-_()&']+$/.test(newBaseName)) {
+        errorFileName = "File name can only include letters, numbers, spaces, dots, hyphens, underscores, brackets, ampersands and single apostrophes.";
+    }
+    // Validation 3: Duplicate check (excluding the file itself)
+    else {
+        const isDuplicate = req.session.data.files.some(f => 
+            f.folderId === folderId && 
+            f.id !== fileId && 
+            f.name.toLowerCase() === proposedFullName.toLowerCase()
+        );
+
+        if (isDuplicate) {
+            errorFileName = "A file with this name already exists in this folder";
+        }
+    }
+
+    if (errorFileName) {
+        return res.render('current-service/back-office/manage-documents/files/rename/rename-file', {
+            currentCase,
+            folderId,
+            file: fileToRename,
+            baseName: newBaseName,
+            fileExtension,
+            errorFileName
+        });
+    }
+
+    // Success: Update the file name
+    if (fileToRename) {
+        fileToRename.name = proposedFullName;
+    }
+
+    // Set flash message
+    req.session.data['flashMessage'] = {
+        isStandardText: true,
+        text: `File renamed to ${proposedFullName}`
+    };
+
+    res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
+});
+
 
 
 

@@ -1,0 +1,67 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  {% if errorFileName %}Error: {% endif %}Rename file - {{ currentCase.reference }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ 
+    text: "Back", 
+    href: "/current-service/back-office/manage-documents/folder/" ~ folderId ~ "?ref=" ~ currentCase.reference 
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    {% if errorFileName %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errorFileName,
+            href: "#fileName"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">Rename file</span>
+
+    <form action="/current-service/back-office/manage-documents/folder/{{ folderId }}/rename-submit/{{ file.id }}" method="post" novalidate>
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      <input type="hidden" name="fileExtension" value="{{ fileExtension }}">
+
+      {{ govukInput({
+        id: "fileName",
+        name: "fileName",
+        value: baseName,
+        label: {
+          text: "File name",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        errorMessage: {
+          text: errorFileName
+        } if errorFileName else null,
+        suffix: {
+          text: fileExtension
+        }
+      }) }}
+
+      <div class="govuk-button-group govuk-!-margin-top-6">
+        {{ govukButton({ text: "Save" }) }}
+      </div>
+
+      <p class="govuk-body govuk-!-margin-top-2">
+        <a class="govuk-link" href="/current-service/back-office/manage-documents/folder/{{ folderId }}?ref={{ currentCase.reference }}">
+          Cancel and return to folder
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}
