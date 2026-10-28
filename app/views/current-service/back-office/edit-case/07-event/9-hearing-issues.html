@@ -1,0 +1,62 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  When was the hearing issues report published?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#hearing-issues-date"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+        {{ govukDateInput({
+          id: "hearing-issues-date",
+          namePrefix: "hearing-issues-date",
+          fieldset: {
+            legend: {
+              text: "When was the hearing issues report published?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+
+          hint: {
+            text: "For example, 27 3 2007"
+          },
+          errorMessage: error,
+          value: data['hearing-issues-date']
+        }) }}
+
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What is the local planning authority reference for this application?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+               {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#lpaReference"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/next-page-url" method="post" novalidate>
+
+        {{ govukInput({
+          name: "lpa-reference",
+          id: "lpa-reference",
+          label: {
+            text: "What is the local planning authority reference for this application?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          errorMessage: error,
+          value: data['lpa-reference']
+        
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+        {{ govukButton({
+            classes: "govuk-button--secondary",
+          text: "Remove and Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

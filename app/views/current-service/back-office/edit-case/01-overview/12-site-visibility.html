@@ -1,7 +1,7 @@
 {% extends "layouts/back-office.html" %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  Is this visible from Public Land?
 {% endblock %}
 
 {% block containerStart %}
@@ -28,7 +28,7 @@
       {% endif %}
 
       
-      <form class="form" action="/next-page-url" method="post">
+      <form class="form" action="/next-page-url" method="post" novalidate>
 
         <h4 class="govuk-heading-l">Is this visible from Public Land?</h4>
        

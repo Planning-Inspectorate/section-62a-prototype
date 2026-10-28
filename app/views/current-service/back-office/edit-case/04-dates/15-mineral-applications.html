@@ -1,0 +1,61 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+When was the notification of mineral application received?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#mineral-applications"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+        {{ govukDateInput({
+          id: "mineral-applications",
+          namePrefix: "mineral-applications",
+          fieldset: {
+            legend: {
+              text: "When was the notification of mineral application received?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          value: data['mineral-applications']
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+          {{ govukButton({
+            text: "Remove and save",
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

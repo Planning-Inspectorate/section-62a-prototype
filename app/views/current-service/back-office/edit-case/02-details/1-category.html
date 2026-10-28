@@ -1,0 +1,142 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Which category does the application sit under?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#category"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      
+      <form class="form" action="/next-page-url" method="post" novalidate>
+              
+        {{ govukRadios({
+          idPrefix: "category",
+          name: "category",
+          fieldset: {
+            legend: {
+              text: "Which category does the application sit under?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          items: [
+            {
+              value: "Major Development Buildings over 1000 square metres",
+              text: "Major Development Buildings over 1000 square metres",
+              checked: data['category'] == 'Major Development Buildings over 1000 square metres'
+            },
+            {
+              value: "Major Development Development of a site above 1 hectare",
+              text: "Major Development Development of a site above 1 hectare",
+              checked: data['category'] == 'Major Development Development of a site above 1 hectare'
+            },
+            {
+              value:"Major Development Dwellings numbering 10 or more",
+              text: "Major Development Dwellings numbering 10 or more",
+              checked: data['category'] == 'Major Development Dwellings numbering 10 or more'
+            },
+            {
+              value:"Major Development Dwellings of 0.5 hectare or more",
+              text: "Major Development Dwellings of 0.5 hectare or more",
+              checked: data['category'] == 'Major Development Dwellings of 0.5 hectare or more'
+            },
+            {
+              value:"Major Development Minerals",
+              text: "Major Development Minerals",
+              checked: data['category'] == 'Major Development Minerals'
+            },
+            {
+              value:"Major Development Waste",
+              text: "Major Development Waste",
+              checked: data['category'] == 'Major Development Waste'
+            },
+            {
+              value:"Major Development Other",
+              text: "Tree preservation order",
+              checked: data['category'] == 'Tree preservation order'
+            },
+            {
+              value:"Non-Major Development Buildings less than 1000 square metres",
+              text: "Non-Major Development Buildings less than 1000 square metres",
+              checked: data['category'] == 'Non-Major Development Buildings less than 1000 square metres'
+            },
+             {
+              value:"Non-Major Development Development of a site less than 1 hectare",
+              text: "Non-Major Development Development of a site less than 1 hectare",
+              checked: data['category'] == 'Non-Major Development Development of a site less than 1 hectare'
+            },
+            {
+            value:"Non-Major Development Dwellings numbering between 1 and 9",
+            text: "Non-Major Development Dwellings numbering between 1 and 9",
+            checked: data['category'] == 'Non-Major Development Dwellings numbering between 1 and 9'
+            },
+            {
+            value:"Non-Major Development Dwellings of less than 0.5 hectare",
+            text: "Non-Major Development Dwellings of less than 0.5 hectare",
+            checked: data['category'] == 'Non-Major Development Dwellings of less than 0.5 hectare'
+            },
+            {
+            value:"Non-Major Development Change of use",
+            text: "Non-Major Development Change of use",
+            checked: data['category'] == 'Non-Major Development Change of use'
+            },
+            {
+            value:"Non-Major Development  Relevant demolition",
+            text: "Non-Major Development  Relevant demolition",
+            checked: data['category'] == 'Non-Major Development  Relevant demolition'
+            },
+            {
+            value:"Non-Major Development Other",
+            text: "Non-Major Development Other",
+            checked: data['category'] == 'Non-Major Development Other'
+            },
+            {
+            value:"Non-Major Development Listed building consent to alter/extend",
+            text: "Non-Major Development Listed building consent to alter/extend",
+            checked: data['category'] == 'Non-Major Development Listed building consent to alter/extend'
+            },
+            {
+            value:"Non-Major Development Listed building consent to demolish",
+            text: "Non-Major Development Listed building consent to demolish",
+            checked: data['category'] == 'Non-Major Development Listed building consent to demolish'
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

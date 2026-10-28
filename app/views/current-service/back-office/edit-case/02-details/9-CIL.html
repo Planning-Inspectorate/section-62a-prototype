@@ -1,0 +1,81 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Is the application liable for the Community Infrastructure Levy (CIL)?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,",
+              href: "#cilAmount"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/path-to-next-page" method="post">
+
+      {% set cilAmountHtml %}
+          {{ govukInput({
+            id: "cil-amount",
+            name: "cil-amount",
+            label: {
+              text: "What is the Community Infrastructure Levy (CIL) amount?"
+            },
+            prefix: {
+              text: "£"
+            },
+            classes: "govuk-input--width-10",
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+       
+        {{ govukRadios({
+          name: "isCilLiable",
+          fieldset: {
+            legend: {
+              text: "Is the application liable for the Community Infrastructure Levy (CIL)?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          items: [
+            {
+              value: "yes",
+              text: "Yes",
+              conditional: {
+                html: cilAmountHtml
+              }
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

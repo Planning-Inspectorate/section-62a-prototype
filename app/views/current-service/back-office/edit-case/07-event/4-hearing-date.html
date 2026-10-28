@@ -1,0 +1,75 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  When is the hearing? - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "#"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+{# 1. Standard Date Input #}
+{{ govukDateInput({
+  id: "hearing-date",
+  namePrefix: "currentCase[hearingDate]",
+  fieldset: {
+    legend: {
+      text: "When is the hearing?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: "For example, 27 3 2007"
+    },
+  items: [
+    { name: "day", classes: "govuk-input--width-2" },
+    { name: "month", classes: "govuk-input--width-2" },
+    { name: "year", classes: "govuk-input--width-4" }
+  ]
+}) }}
+
+{# 2. Custom Time Input (Matching your screenshot) #}
+<div class="govuk-form-group govuk-!-margin-top-6">
+  <fieldset class="govuk-fieldset" role="group">
+    <div class="govuk-hint">For example, 9:30am or 2:55pm</div>
+    
+    <div class="govuk-date-input">
+      
+      {# Hour Input #}
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="hearing-date-hour">Hour</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="hearing-date-hour" name="currentCase[hearingDate][hour]" type="text" inputmode="numeric">
+        </div>
+      </div>
+      
+      {# Minute Input #}
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="hearing-date-minute">Minute</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="hearing-date-minute" name="currentCase[hearingDate][minute]" type="text" inputmode="numeric">
+        </div>
+      </div>
+      
+      {# AM/PM Dropdown #}
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="hearing-date-ampm">am or pm</label>
+          <select class="govuk-select" id="hearing-date-ampm" name="currentCase[hearingDate][ampm]">
+            <option value="am">am</option>
+            <option value="pm">pm</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </fieldset>
+</div>
+
+{% endblock %}

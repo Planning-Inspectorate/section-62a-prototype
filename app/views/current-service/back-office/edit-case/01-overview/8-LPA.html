@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  Select the local planning authority
 {% endblock %}
 
 {% block containerStart %}
@@ -40,7 +40,7 @@
 
       
 
-      <form class="form" action="/2-planning-authority-answer" method="post">
+      <form class="form" action="/2-planning-authority-answer" method="post" novalidate>
 
         <!-- We set up a variable for the inline error -->
         {% set radioError = null %}

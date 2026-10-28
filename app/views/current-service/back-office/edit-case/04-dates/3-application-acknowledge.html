@@ -1,0 +1,62 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ When was the application acknowledgement letter sent to the application/agent?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#application-acknowledge"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+       
+        {{ govukDateInput({
+          id: "application-acknowledge",
+          namePrefix: "application-acknowledge",
+          fieldset: {
+            legend: {
+              text: "When was the application acknowledgement letter sent to the application/agent?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          value: data['application-acknowledge']
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+          {{ govukButton({
+            text: "Remove and save",
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What is the total capacity of the void?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#total-capacity"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+
+      <form class="form" action="" method="post" novalidate>
+
+        {# Conditional inputs with suffixes #}
+        {% set cubicMetresHtml %}
+          {{ govukInput({
+            id: "capacity-cubic-metres",
+            name: "capacityCubicMetres",
+            classes: "govuk-input--width-10",
+            value: data['capacityCubicMetres'],
+            suffix: {
+              html: "m³"
+            },
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+        {% set litresHtml %}
+          {{ govukInput({
+            id: "capacity-litres",
+            name: "capacityLitres",
+            classes: "govuk-input--width-10",
+            value: data['capacityLitres'],
+            suffix: {
+              text: "l"
+            },
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+        {% set tonnesHtml %}
+          {{ govukInput({
+            id: "capacity-tonnes",
+            name: "capacityTonnes",
+            classes: "govuk-input--width-10",
+            value: data['capacityTonnes'],
+            suffix: {
+              text: "t"
+            },
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+        {{ govukRadios({
+          name: "capacityType",
+          value: data['capacityType'],
+          fieldset: {
+            legend: {
+              text: "What is the total capacity of the void?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "This includes engineering surcharge and making no allowance for cover or restoration material in cubic metres. For solid waste use tonnes or litres for liquid waste. e.g. 100.25
+
+"
+          },
+          items: [
+            {
+              value: "cubic-metres",
+              text: "Cubic metres",
+              conditional: {
+                html: cubicMetresHtml
+              }
+            },
+            {
+              value: "litres",
+              text: "Litres for liquid waste",
+              conditional: {
+                html: litresHtml
+              }
+            },
+            {
+              value: "tonnes",
+              text: "Tonnes for solid waste",
+              conditional: {
+                html: tonnesHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

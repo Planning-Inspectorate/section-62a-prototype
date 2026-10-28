@@ -1,0 +1,121 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  How many units per number of bedrooms are there for proposed housing?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:history.go(-1)"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: error,
+            href: "#cost"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="" method="post" novalidate>
+
+      {% call govukFieldset({
+          legend: {
+            text: "How many units per number of bedrooms are there for proposed housing?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        }) %}
+
+          {{ govukInput({
+            id: "units-unknown",
+            name: "units-unknown",
+            label: {
+              text: "Unknown number of bedrooms"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "units"
+            },
+            inputmode: "numeric",
+            value: data['units-unknown']
+          }) }}
+
+          {{ govukInput({
+            id: "units-1-bedroom",
+            name: "units-1-bedroom",
+            label: {
+              text: "1 bedroom"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "units"
+            },
+            inputmode: "numeric",
+            value: data['units-1-bedroom']
+          }) }}
+
+          {{ govukInput({
+            id: "units-2-bedrooms",
+            name: "units-2-bedrooms",
+            label: {
+              text: "2 bedrooms"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "units"
+            },
+            inputmode: "numeric",
+            value: data['units-2-bedrooms']
+          }) }}
+
+          {{ govukInput({
+            id: "units-3-bedrooms",
+            name: "units-3-bedrooms",
+            label: {
+              text: "3 bedrooms"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "units"
+            },
+            inputmode: "numeric",
+            value: data['units-3-bedrooms']
+          }) }}
+
+          {{ govukInput({
+            id: "units-4-plus-bedrooms",
+            name: "units-4-plus-bedrooms",
+            label: {
+              text: "4+ bedrooms"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "units"
+            },
+            inputmode: "numeric",
+            value: data['units-4-plus-bedrooms']
+          }) }}
+
+      {% endcall %}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save"
+        }) }}
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

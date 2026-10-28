@@ -1,0 +1,103 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What is the maximum annual operational throughput in tonnes (or litres if liquid waste)?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#total-capacity"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+
+      <form class="form" action="" method="post" novalidate>
+
+     
+        {% set litresHtml %}
+          {{ govukInput({
+            id: "capacity-litres",
+            name: "capacityLitres",
+            classes: "govuk-input--width-10",
+            value: data['capacityLitres'],
+            suffix: {
+              text: "l"
+            },
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+        {% set tonnesHtml %}
+          {{ govukInput({
+            id: "capacity-tonnes",
+            name: "capacityTonnes",
+            classes: "govuk-input--width-10",
+            value: data['capacityTonnes'],
+            suffix: {
+              text: "t"
+            },
+            spellcheck: false
+          }) }}
+        {% endset %}
+
+        {{ govukRadios({
+          name: "capacityType",
+          value: data['capacityType'],
+          fieldset: {
+            legend: {
+              text: "What is the maximum annual operational throughput in tonnes (or litres if liquid waste)?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "e.g. 10.25"
+
+
+          },
+          items: [
+            {
+              value: "litres",
+              text: "Litres for liquid waste",
+              conditional: {
+                html: litresHtml
+              }
+            },
+            {
+              value: "tonnes",
+              text: "Tonnes for solid waste",
+              conditional: {
+                html: tonnesHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

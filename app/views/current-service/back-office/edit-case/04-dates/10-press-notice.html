@@ -1,0 +1,61 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+When was the press notice published?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#press-notice-published"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+        {{ govukDateInput({
+          id: "press-notice-published",
+          namePrefix: "press-notice-published",
+          fieldset: {
+            legend: {
+              text: "When was the press notice published?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          value: data['press-notice-published']
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+          {{ govukButton({
+            text: "Remove and save",
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

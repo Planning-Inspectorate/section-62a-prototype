@@ -1,0 +1,72 @@
+
+{% block pageTitle %}
+Is the proposal a waste management development?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#waste-management-development"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "waste-management-development",
+        name: "waste-management-development",
+        fieldset: {
+          legend: { 
+            text: "Is the proposal a waste management development?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['waste-management-development'],
+        items: [
+          { 
+            value: "yes", 
+            text: "Yes", 
+            checked: data['waste-management-development'] == 'yes' 
+          },
+          { 
+            value: "no", 
+            text: "No", 
+            checked: data['waste-management-development'] == 'no' 
+          }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }},
+            
+            {{ govukButton({
+                text: "Remove and save",
+                classes: "govuk-button--secondary"
+            }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

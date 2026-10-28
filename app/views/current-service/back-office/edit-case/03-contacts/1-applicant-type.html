@@ -1,0 +1,64 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Is the applicant an organisation or an individual?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,",
+              href: "#applicantType"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form class="form" action="/path-to-next-page" method="post" novalidate>
+       
+        {{ govukRadios({
+          name: "applicant-type",
+          fieldset: {
+            legend: {
+              text: "Is the applicant an organisation or an individual?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+        errorMessage: error,
+          items: [
+            {
+              value: "organisation",
+              text: "Organisation",
+              checked: data['applicant-type'] == 'organisation'
+            },
+            {
+              value: "individual",
+              text: "Individual",
+              checked: data['applicant-type'] == 'individual'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

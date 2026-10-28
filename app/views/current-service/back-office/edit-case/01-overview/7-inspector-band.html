@@ -1,7 +1,7 @@
 {% extends "layouts/back-office.html" %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  Which level of inspector is required? (optional)
 {% endblock %}
 
 {% block containerStart %}
@@ -28,7 +28,7 @@
       {% endif %}
 
       
-      <form class="form" action="/next-page-url" method="post">
+      <form class="form" action="/next-page-url" method="post" novalidate>
 
         <h3 class="govuk-heading-l">Which level of inspector is required? (optional)</h3>
        

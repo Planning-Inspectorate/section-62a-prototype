@@ -1,0 +1,74 @@
+
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What are the updated reconsultation details?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#reconsultation-details"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+        <h1 class="govuk-heading-l">
+        What are the updated reconsultation details?
+      </h1>
+
+        {{ govukDateInput({
+          id: "reconsultation-details",
+          namePrefix: "reconsultation-details",
+          fieldset: {
+            legend: {
+              text: "Sent"
+            }
+          },
+
+          errorMessage: error,
+          value: data['reconsultation-details']
+        }) }}
+
+         {{ govukDateInput({
+          id: "reconsultation-details",
+          namePrefix: "reconsultation-details",
+          fieldset: {
+            legend: {
+              text: "Deadline"
+            }
+          },
+          errorMessage: error,
+          value: data['reconsultation-details']
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

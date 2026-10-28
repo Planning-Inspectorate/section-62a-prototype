@@ -1,0 +1,73 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Was the outcome of the case a decision or a recommendation?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#outcome-type"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "outcome-type",
+        name: "outcome-type",
+        fieldset: {
+          legend: { 
+            text: "Was the outcome of the case a decision or a recommendation?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['outcome-type'],
+        items: [
+          { 
+            value: "Decision", 
+            text: "Decision", 
+            checked: data['outcome-type'] == 'Decision' 
+          },
+          { 
+            value: "Recommendation", 
+            text: "Recommendation", 
+            checked: data['outcome-type'] == 'Recommendation' 
+          }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+        {{ govukButton({
+            classes: "govuk-button--secondary",
+          text: "Remove and Save"
+        }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

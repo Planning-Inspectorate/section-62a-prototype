@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  What is the site address? (optional)
 {% endblock %}
 
 {% block containerStart %}
@@ -23,7 +23,7 @@
   <div class="govuk-grid-column-two-thirds">
     
 
-    <form method="post" action="/add-contact-handler">
+    <form method="post" action="/add-contact-handler" novalidate>
       <h1 class="govuk-heading-l">What is the site address? (optional)</h1>
       
 
@@ -59,6 +59,7 @@
       
        {{ govukInput({
         label: { text: "Postcode (optional)" },
+        classes: "govuk-input--width-10",
         id: "postcode",
         name: "postcode",
         value: data['postcode']

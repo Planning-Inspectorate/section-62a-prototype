@@ -1,0 +1,96 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Which is the application stage?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+         {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#stage"
+            }
+          ]
+        }) }}
+      {% endif %}
+      
+      <form class="form" action="/next-page-url" method="post" novalidate>
+       
+        {{ govukRadios({
+          idPrefix: "stage",
+          name: "stage",
+          fieldset: {
+            legend: {
+              text: "Which is the application stage?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          items: [
+        
+            {
+              value:"Validation",
+              text: "Validation",
+              checked: data['status'] == 'Validation'
+            },
+            {
+              value:"Consultation",
+              text: "Consultation",
+              checked: data['status'] == 'Consultation'
+            },
+            {
+              value:"Procedure decision",
+              text: "Procedure decision",
+              checked: data['status'] == 'Procedure decision'
+            },
+            {
+              value:"Written representations",
+              text: "Written representations",
+              checked: data['status'] == 'Written representations'
+            },
+             {
+              value:"Hearing",
+              text: "Hearing",
+              checked: data['status'] == 'Hearing'
+            },
+            {
+            value:"Decision",
+            text: "Decision",
+            checked: data['status'] == 'Decision'
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+
+        {{ govukButton({
+            classes: "govuk-button--secondary",
+          text: "Remove and Save"
+        }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

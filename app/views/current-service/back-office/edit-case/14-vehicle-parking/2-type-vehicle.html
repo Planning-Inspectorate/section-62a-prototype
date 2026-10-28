@@ -1,0 +1,105 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What is the type of vehicle for the proposed on-site parking spaces?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#type-vehicle"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+
+        {# Define the conditionally revealed input field for 'Other' #}
+        {% set otherUseClassHtml %}
+          {{ govukInput({
+            id: "other-vehicle-type",
+            name: "other-vehicle-type",
+            type: "text",
+            label: {
+              text: "List the type of vehicle",
+              classes: "govuk-visually-hidden"
+            },
+            value: data['other-vehicle-type']
+          }) }}
+        {% endset %}
+      
+      {{ govukRadios({
+        idPrefix: "type-vehicle",
+        name: "type-vehicle",
+        fieldset: {
+          legend: { 
+            text: "What is the type of vehicle for the proposed on-site parking spaces?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['type-vehicle'],
+        items: [
+          { 
+            value: "Cars", 
+            text: "Cars", 
+            checked: data['type-vehicle'] == 'Cars' 
+          },
+          { 
+            value: "Light goods vehicles / public carrier vehicles", 
+            text: "Light goods vehicles / public carrier vehicles", 
+            checked: data['type-vehicle'] == 'Light goods vehicles / public carrier vehicles' 
+          },
+          { 
+          value: "Motorcycles", 
+            text: "Motorcycles", 
+            checked: data['type-vehicle'] == 'Motorcycles' 
+          },
+          { 
+            value: "Disability spaces", 
+            text: "Disability spaces", 
+            checked: data['type-vehicle'] == 'Disability spaces' 
+          },
+          { 
+            value: "Cycle spaces", 
+            text: "Cycle spaces", 
+            checked: data['type-vehicle'] == 'Cycle spaces' 
+          },
+          { 
+            value: "Other", 
+            text: "Other", 
+            checked: data['type-vehicle'] == 'Other', 
+            conditional: {
+            html: otherUseClassHtml
+           }
+        }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

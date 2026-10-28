@@ -1,0 +1,82 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Which application procedure applies?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+           {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#procedure"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      
+
+      <form class="form" action="/next-page-url" method="post" novalidate>
+
+  
+       
+        {{ govukRadios({
+          idPrefix: "procedure",
+          name: "procedure",
+          fieldset: {
+            legend: {
+              text: "Which application procedure applies?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          items: [
+            {
+              value: "Hearing",
+              text: "Hearing",
+              checked: data['procedure'] == 'Hearing'
+            },
+            {
+              value: "Written representations",
+              text: "Written representations",
+              checked: data['procedure'] == 'Written representations'
+            }
+          ]
+        }) }}
+
+          
+        {{ govukButton({
+          text: "Save"
+        }) }}
+     
+  
+          {{ govukButton({
+            classes: "govuk-button--secondary",
+          text: "Remove and Save"
+        }) }}
+      
+           </form>
+
+        
+
+  </div>
+  </div>
+
+
+{% endblock %}

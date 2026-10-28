@@ -1,7 +1,7 @@
 {% extends "layouts/back-office.html" %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  What type of application is this pre-application advice for?
 {% endblock %}
 
 {% block containerStart %}
@@ -36,7 +36,7 @@
 
       
 
-      <form class="form" action="/next-page-url" method="post">
+      <form class="form" action="/next-page-url" method="post" novalidate>
        
         <!-- We set up a variable for the inline error -->
         {% set radioError = null %}

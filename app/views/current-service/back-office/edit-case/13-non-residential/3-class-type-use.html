@@ -1,0 +1,120 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What is the use class or type of use for this non-residential floorspace?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#class-type-use"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+
+        {# Define the conditionally revealed input field for 'Other' #}
+        {% set otherUseClassHtml %}
+          {{ govukTextarea({
+            id: "other-use-class",
+            name: "other-use-class",
+            type: "text",
+            label: {
+              text: "List the use class or type of use",
+              classes: "govuk-visually-hidden"
+            },
+            value: data['other-use-class']
+          }) }}
+        {% endset %}
+      
+      {{ govukRadios({
+        idPrefix: "class-type-use",
+        name: "class-type-use",
+        fieldset: {
+          legend: { 
+            text: "What is the use class or type of use for this non-residential floorspace?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['class-type-use'],
+        items: [
+          { 
+            value: "B2 - General industrial", 
+            text: "B2 - General industrial", 
+            checked: data['class-type-use'] == 'B2 - General industrial' 
+          },
+          { 
+            value: "B8 - Storage or distribution", 
+            text: "B8 - Storage or distribution", 
+            checked: data['class-type-use'] == 'B8 - Storage or distribution' 
+          },
+          { 
+          value: "C1 - Hotels", 
+            text: "C1 - Hotels", 
+            checked: data['class-type-use'] == 'C1 - Hotels' 
+          },
+          { 
+            value: "C2 - Residential institutions", 
+            text: "C2 - Residential institutions", 
+            checked: data['class-type-use'] == 'C2 - Residential institutions' 
+          },
+          { 
+            value: "C2A - Secure residential institutions", 
+            text: "C2A - Secure residential institutions", 
+            checked: data['class-type-use'] == 'C2A - Secure residential institutions' 
+          },
+          { 
+            value: "E - Commercial, business and service", 
+            text: "E - Commercial, business and service", 
+            checked: data['class-type-use'] == 'E - Commercial, business and service' 
+          },
+          { 
+            value: "F1 - Learning and non-residential institutions", 
+            text: "F1 - Learning and non-residential institutions", 
+            checked: data['class-type-use'] == 'F1 - Learning and non-residential institutions' 
+          },
+          { 
+          value: "F2 - Local community", 
+            text: "F2 - Local community", 
+            checked: data['class-type-use'] == 'F2 - Local community' 
+          },
+          { 
+            value: "Other", 
+            text: "Other", 
+            checked: data['class-type-use'] == 'Other', 
+            conditional: {
+            html: otherUseClassHtml
+           }
+        }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Does the proposal involve loss or gain from non-residential floorspace?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#non-residential-floorspace"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "non-residential-floorspace",
+        name: "non-residential-floorspace",
+        fieldset: {
+          legend: { 
+            text: "Does the proposal involve loss or gain from non-residential floorspace?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['non-residential-floorspace'],
+        items: [
+          { 
+            value: "yes", 
+            text: "Yes", 
+            checked: data['non-residential-floorspace'] == 'yes' 
+          },
+          { 
+            value: "no", 
+            text: "No", 
+            checked: data['non-residential-floorspace'] == 'no' 
+          }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

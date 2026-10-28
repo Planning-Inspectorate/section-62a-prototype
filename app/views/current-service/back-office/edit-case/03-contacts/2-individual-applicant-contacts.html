@@ -1,0 +1,91 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What are the applicant's contact details?
+{% endblock %}
+
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <!-- If "error" is passed from the router, show the summary box -->
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: "Enter a name",
+            href: "#contactFirstName"
+          },
+          {
+            text: "Enter a name",
+            href: "#contactLastName"
+          },
+          {
+            text: "Enter an email address",
+            href: "#contactEmail"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <form method="post" action="/add-contact-handler" novalidate>
+      <h1 class="govuk-heading-l">What are the applicant's contact details?</h1>
+
+      <!-- Name Input -->
+      {{ govukInput({
+        label: { text: "First name" },
+        id: "contact-first-name",
+        name: "contact-first-name",
+        value: data['contact-first-name'],
+        errorMessage: {
+          text: "Enter a name"
+        } if error else null
+      }) }}
+
+      <!-- Last Name Input -->
+      {{ govukInput({
+        label: { text: "Last name" },
+        id: "contact-last-name",
+        name: "contact-last-name",
+        value: data['contact-last-name'],
+        errorMessage: {
+          text: "Enter a name"
+        } if error else null
+      }) }}
+
+      <!-- Email Input -->
+      {{ govukInput({
+        label: { text: "Email address" },
+        id: "contact-email",
+        name: "contact-email",
+        value: data['contact-email'],
+        errorMessage: {
+          text: "Enter an email address"
+        } if error else null
+      }) }}
+
+      <!-- Phone number Input -->
+      {{ govukInput({
+        label: { text: "Phone number (optional)" },
+        id: "contact-phone",
+        name: "contact-phone",
+        value: data['contact-phone'],
+      }) }}
+
+      {{ govukButton({ text: "Save" }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

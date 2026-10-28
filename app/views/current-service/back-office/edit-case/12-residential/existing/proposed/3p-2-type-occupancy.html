@@ -1,0 +1,83 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Which is the type of occupancy for existing housing?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#type-housing"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "type-housing",
+        name: "type-housing",
+        fieldset: {
+          legend: { 
+            text: "Which is the type of occupancy for existing housing?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['type-housing'],
+        items: [
+          { 
+            value: "Market housing", 
+            text: "Market housing", 
+            checked: data['type-housing'] == 'Market housing' 
+          },
+          { 
+            value: "Social, affordable or intermediate rent", 
+            text: "Social, affordable or intermediate rent", 
+            checked: data['type-housing'] == 'Social, affordable or intermediate rent' 
+          },
+          { 
+            value: "Affordable home ownership", 
+            text: "Affordable home ownership", 
+            checked: data['type-housing'] == 'Affordable home ownership' 
+          },
+          { 
+            value: "Starter homes", 
+            text: "Starter homes", 
+            checked: data['type-housing'] == 'Starter homes' 
+          },
+          { 
+            value: "Self-build and custom build", 
+            text: "Self-build and custom build", 
+            checked: data['type-housing'] == 'Self-build and custom build' 
+          }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

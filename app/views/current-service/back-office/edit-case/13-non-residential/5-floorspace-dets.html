@@ -1,0 +1,107 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What are the floorspace details?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:history.go(-1)"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: error,
+            href: "#floorspace-dets"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="" method="post" novalidate>
+
+      {% call govukFieldset({
+          legend: {
+            text: "What are the floorspace details?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        }) %}
+
+          {{ govukInput({
+            id: "existing-gross",
+            name: "existing-gross",
+            label: {
+              text: "Existing gross internal floorspace"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "m²"
+            },
+            inputmode: "numeric",
+            value: data['existing-gross']
+          }) }}
+
+          {{ govukInput({
+            id: "gross-loss-demolition",
+            name: "gross-loss-demolition",
+            label: {
+              text: "Gross internal floorspace to be lost by change of use or demolition"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "m²"
+            },
+            inputmode: "numeric",
+            value: data['gross-loss-demolition']
+          }) }}
+
+          {{ govukInput({
+            id: "gross-floorspace-proposed",
+            name: "gross-floorspace-proposed",
+            label: {
+              text: "Total gross internal floorspace proposed (including change of use)"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "m²"
+            },
+            inputmode: "numeric",
+            value: data['gross-floorspace-proposed']
+          }) }}
+
+          {{ govukInput({
+            id: "net-add-floorspace",
+            name: "net-add-floorspace",
+            label: {
+              text: "Net additional gross internal floorspace following development"
+            },
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "m²"
+            },
+            inputmode: "numeric",
+            value: data['net-add-floorspace']
+          }) }}
+
+      {% endcall %}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

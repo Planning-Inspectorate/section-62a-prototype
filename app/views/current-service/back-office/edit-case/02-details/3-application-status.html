@@ -1,0 +1,141 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Which is the application status?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+           {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#status"
+            }
+          ]
+        }) }}
+      {% endif %}
+      
+      <form class="form" action="/next-page-url" method="post" novalidate>
+
+     
+        {{ govukRadios({
+          idPrefix: "status",
+          name: "status",
+          fieldset: {
+            legend: {
+              text: "Which is the application status?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: error,
+          items: [
+            {
+              value: "In progress",
+              text: "In progress",
+              checked: data['status'] == 'In progress'
+            },
+            {
+              value: "Redetermined (Applies to original cases only, not redetermined)",
+              text: "Redetermined (Applies to original cases only, not redetermined)",
+              checked: data['status'] == 'Redetermined (Applies to original cases only, not redetermined)'
+            },
+            {
+              value:"New",
+              text: "New",
+              checked: data['status'] == 'New'
+            },
+            {
+              value:"Validation",
+              text: "Validation",
+              checked: data['status'] == 'Validation'
+            },
+            {
+              value:"Invalid",
+              text: "Invalid",
+              checked: data['status'] == 'Invalid'
+            },
+            {
+              value:"Consultation period open",
+              text: "Consultation period open",
+              checked: data['status'] == 'Consultation period open'
+            },
+            {
+              value:"Hearing date set",
+              text: "Hearing date set",
+              checked: data['status'] == 'Hearing date set'
+            },
+            {
+              value:"Application on hold awaiting further information",
+              text: "Application on hold awaiting further information",
+              checked: data['status'] == 'Application on hold awaiting further information'
+            },
+             {
+              value:"Report awaited",
+              text: "Report awaited",
+              checked: data['status'] == 'Report awaited'
+            },
+            {
+            value:"Report sent to decision branch",
+            text: "Report sent to decision branch",
+            checked: data['status'] == 'Report sent to decision branch'
+            },
+            {
+            value:"Decision awaited",
+            text: "Decision awaited",
+            checked: data['status'] == 'Decision awaited'
+            },
+            {
+            value:"Decided",
+            text: "Decided",
+            checked: data['status'] == 'Decided'
+            },
+            {
+            value:"Withdrawn",
+            text: "Withdrawn",
+            checked: data['status'] == 'Withdrawn'
+            },
+            {
+            value:"Declined to determine",
+            text: "Declined to determine",
+            checked: data['status'] == 'Declined to determine'
+            },
+            {
+            value:"Closed - invalid",
+            text: "Closed - invalid",
+            checked: data['status'] == 'Closed - invalid'
+            },
+            {
+            value:"Closed - opened in error",
+            text: "Closed - opened in error",
+            checked: data['status'] == 'Closed - opened in error'
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+  
+        {{ govukButton({
+            text: "Save"
+        }) }}
+    
+        </form>
+
+  </div>
+  </div>
+
+
+{% endblock %}

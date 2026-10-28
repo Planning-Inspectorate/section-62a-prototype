@@ -1,0 +1,64 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What is the total number of existing spaces for this vehicle type?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:history.go(-1)"
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: error,
+            href: "#floorspace-dets"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <form class="form" action="" method="post" novalidate>
+
+      {% call govukFieldset({
+          legend: {
+            text: "What is the total number of existing spaces for this vehicle type?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        }) %}
+
+          {{ govukInput({
+            id: "existing-spaces ",
+            name: "existing-spaces",
+          
+            classes: "govuk-input--width-5",
+            suffix: {
+              text: "spaces"
+            },
+            inputmode: "numeric",
+            value: data['existing-spaces']
+          }) }}
+
+
+      {% endcall %}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save"
+        }) }}
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

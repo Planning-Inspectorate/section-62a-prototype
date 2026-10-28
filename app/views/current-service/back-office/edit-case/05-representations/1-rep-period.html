@@ -1,0 +1,73 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+What is the representation period?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#representation-period"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="#" method="post" novalidate>
+
+        <h1 class="govuk-heading-l">
+        What is the representations period?
+      </h1>
+
+        {{ govukDateInput({
+          id: "representation-period",
+          namePrefix: "representation-period",
+          fieldset: {
+            legend: {
+              text: "Start Date"
+            }
+          },
+
+          errorMessage: error,
+          value: data['representation-period']
+        }) }}
+
+         {{ govukDateInput({
+          id: "representation-period",
+          namePrefix: "representation-period",
+          fieldset: {
+            legend: {
+              text: "End Date"
+            }
+          },
+          errorMessage: error,
+          value: data['representation-period']
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

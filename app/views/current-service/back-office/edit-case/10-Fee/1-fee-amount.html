@@ -1,0 +1,66 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Does the application have a fee?
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#fee-amount"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+      
+      {{ govukRadios({
+        idPrefix: "fee-amount",
+        name: "fee-amount",
+        fieldset: {
+          legend: { 
+            text: "Does the application have a fee?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['fee-amount'],
+        items: [
+          { 
+            value: "Yes", 
+            text: "Yes", 
+            checked: data['fee-amount'] == 'Yes' 
+          },
+          { 
+            value: "No", 
+            text: "No", 
+            checked: data['fee-amount'] == 'No' 
+          }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

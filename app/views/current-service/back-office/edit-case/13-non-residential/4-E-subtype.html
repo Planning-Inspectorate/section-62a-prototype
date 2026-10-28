@@ -1,0 +1,114 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Which is the 'Commercial business and service' subtype?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#e-subtype"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+
+      
+      {{ govukRadios({
+        idPrefix: "e-subtype",
+        name: "e-subtype",
+        fieldset: {
+          legend: { 
+            text: "Which is the 'Commercial business and service' subtype?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['e-subtype'],
+        items: [
+          { 
+            value: "(a) Retail (other than hot food)", 
+            text: "(a) Retail (other than hot food)", 
+            checked: data['e-subtype'] == '(a) Retail (other than hot food)' 
+          },
+          { 
+            value: "(a) Sale of food and drink", 
+            text: "(a) Sale of food and drink", 
+            checked: data['e-subtype'] == '(a) Sale of food and drink' 
+          },
+          { 
+          value: "(c)(i) Financial services", 
+            text: "(c)(i) Financial services", 
+            checked: data['e-subtype'] == '(c)(i) Financial services' 
+          },
+          { 
+            value: "(c)(ii) Professional services (other than health or medical)", 
+            text: "(c)(ii) Professional services (other than health or medical)", 
+            checked: data['e-subtype'] == '(c)(ii) Professional services (other than health or medical)' 
+          },
+          { 
+            value: "(c)(iii) Any other services", 
+            text: "(c)(iii) Any other services", 
+            checked: data['e-subtype'] == '(c)(iii) Any other services' 
+          },
+          { 
+            value: "(d) Indoor sports, recreation or fitness", 
+            text: "(d) Indoor sports, recreation or fitness", 
+            checked: data['e-subtype'] == '(d) Indoor sports, recreation or fitness' 
+          },
+          { 
+            value: "(e) Medical or health services", 
+            text: "(e) Medical or health services", 
+            checked: data['e-subtype'] == '(e) Medical or health services' 
+          },
+          { 
+          value: "(f) Crèche, day nursery ", 
+            text: "(f) Crèche, day nursery ", 
+            checked: data['e-subtype'] == '(f) Crèche, day nursery' 
+          },
+          { 
+            value: "(g)(i) Office", 
+            text: "(g)(i) Office", 
+            checked: data['e-subtype'] == '(g)(i) Office' 
+           },
+           {
+            value: "(g)(ii) Research and development of products or processes", 
+            text: "(g)(ii) Research and development of products or processes", 
+            checked: data['e-subtype'] == '(g)(ii) Research and development of products or processes'
+           }.
+           {
+            value: "(g)(iii) Industrial processes (that can be carried out within a residential area)", 
+            text: "(g)(iii) Industrial processes (that can be carried out within a residential area)", 
+            checked: data['e-subtype'] == '(g)(iii) Industrial processes (that can be carried out within a residential area)'
+            }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

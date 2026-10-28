@@ -1,0 +1,184 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+Which types of waste are applicable to this development?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+     {% if error %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: error,
+              href: "#types-waste"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+
+    <form class="form" action="" method="post" novalidate>
+
+      
+      {{ govukRadios({
+        idPrefix: "types-waste",
+        name: "types-waste",
+        fieldset: {
+          legend: { 
+            text: "Which types of waste are applicable to this development?",
+            isPageHeading: true, 
+            classes: "govuk-fieldset__legend--l" 
+          }
+        },
+        errorMessage: error,
+        value: data['types-waste'],
+        items: [
+          { 
+            value: "Inert landfill", 
+            text: "Inert landfill", 
+            checked: data['types-waste'] == 'Inert landfill' 
+          },
+          { 
+            value: "Non-hazardous landfill", 
+            text: "Non-hazardous landfill", 
+            checked: data['types-waste'] == 'Non-hazardous landfill' 
+          },
+          { 
+          value: "Hazardous landfill", 
+            text: "Hazardous landfill", 
+            checked: data['types-waste'] == "Hazardous landfill" 
+          },
+          { 
+            value: "Energy from waste incineration", 
+            text: "Energy from waste incineration", 
+            checked: data['types-waste'] == "Energy from waste incineration" 
+          },
+          { 
+            value: "Other incineration", 
+            text: "Other incineration", 
+            checked: data['types-waste'] == 'Other incineration' 
+          },
+          { 
+            value: "Landfill gas generation plant", 
+            text: "Landfill gas generation plant", 
+            checked: data['types-waste'] == 'Landfill gas generation plant' 
+          },
+          { 
+            value: "Pyrolysis/gasification", 
+            text: "Pyrolysis/gasification", 
+            checked: data['types-waste'] == 'Pyrolysis/gasification' 
+          },
+          { 
+          value: "Metal recycling site", 
+            text: "Metal recycling site", 
+            checked: data['types-waste'] == 'Metal recycling site' 
+          },
+          { 
+            value: "Transfer stations", 
+            text: "Transfer stations", 
+            checked: data['types-waste'] == 'Transfer stations' 
+           },
+           {
+            value: "Material recovery/recycling facilities (MRFs)", 
+            text: "Material recovery/recycling facilities (MRFs)", 
+            checked: data['types-waste'] == 'Material recovery/recycling facilities (MRFs)'
+           },
+           {
+            value: "Household civic amenity sites", 
+            text: "Household civic amenity sites", 
+            checked: data['types-waste'] == 'Household civic amenity sites'
+            },
+            {
+            value: "Open windrow composting", 
+            text: "Open windrow composting", 
+            checked: data['types-waste'] == 'Open windrow composting'
+            },
+            {
+            value: "In-vessel composting", 
+            text: "In-vessel composting", 
+            checked: data['types-waste'] == 'In-vessel composting'
+            },
+            {
+            value: "Anaerobic digestion", 
+            text: "Anaerobic digestion", 
+            checked: data['types-waste'] == 'Anaerobic digestion'
+            },
+            {
+            value: "Any combined mechanical, biological and/ or thermal treatment (MBT)",
+            text: "Any combined mechanical, biological and/ or thermal treatment (MBT)",
+            checked: data['types-waste'] == 'Any combined mechanical, biological and/ or thermal treatment (MBT)'
+            },
+            {
+            value: "Sewage treatment works",
+            text: "Sewage treatment works",
+            checked: data['types-waste'] == 'Sewage treatment works'
+            },
+            {
+            value: "Other treatment",
+            text: "Other treatment",
+            checked: data['types-waste'] == 'Other treatment'
+            },
+            {
+            value: "Recycling facilities construction, demolition and excavation waste",
+            text: "Recycling facilities construction, demolition and excavation waste",
+            checked: data['types-waste'] == 'Recycling facilities construction, demolition and excavation waste'
+            },
+            {
+            value: "Storage of waste",
+            text: "Storage of waste",
+            checked: data['types-waste'] == 'Storage of waste'
+            },
+            {
+            value: "Othern waste management",
+            text: "Other waste management",
+            checked: data['types-waste'] == 'Other waste management'
+            },
+            {
+            value: "Other development",
+            text: "Other development",
+            checked: data['types-waste'] == 'Other development'
+            },
+            {   
+            value: "Municipal",
+            text: "Municipal",
+            checked: data['types-waste'] == 'Municipal'
+            },
+            {
+            value: "Consttruction, demolition and excavation",
+            text: "Construction, demolition and excavation",
+            checked: data['types-waste'] == 'Construction, demolition and excavation'
+            },
+            {
+            value: "Commercial and industrial",
+            text: "Commercial and industrial",
+            checked: data['types-waste'] == 'Commercial and industrial'
+            },
+            {
+            value: "Hazardous",
+            text: "Hazardous",
+            checked: data['types-waste'] == 'Hazardous'
+            }
+        ] 
+      }) }}
+      
+    <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save"
+          }) }}
+        </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

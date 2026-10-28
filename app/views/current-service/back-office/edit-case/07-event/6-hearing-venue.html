@@ -1,0 +1,40 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+ What is the venue of the hearing?
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: ""
+  }) }}
+{% endblock %}
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="" method="post" novalidate>
+
+        {{ govukInput({
+          name: "hearingVenue",
+          id: "hearingVenue",
+          label: {
+            text: "What is the venue of the hearing?",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          value: data['hearingVenue']
+        }) }}
+
+        {{ govukButton({
+          text: "Save"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
