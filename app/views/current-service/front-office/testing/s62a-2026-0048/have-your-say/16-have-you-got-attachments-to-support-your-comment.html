@@ -1,7 +1,7 @@
 {% extends "layouts/new/front-office.html" %}
 
 {% block pageTitle %}
-  {% if errorHaveYouGotAttachments %}Error: {% endif %}Do you want to add supporting attachments before you make a comment? - Find a local planning application made to the Planning Inspectorate
+  {% if errorHaveYouGotAttachments %}Error: {% endif %}Have you got attachments to support your comment? - Find a local planning application made to the Planning Inspectorate
 {% endblock %}
 
 {% block beforeContent %}
@@ -48,7 +48,7 @@
         name: "include-attachments",
         fieldset: {
           legend: { 
-            text: "Do you want to add supporting attachments before you make a comment?", 
+            text: "Have you got attachments to support your comment?", 
             isPageHeading: true, 
             classes: "govuk-fieldset__legend--l" 
           }
@@ -60,12 +60,12 @@
         items: [
           { 
             value: "Yes",
-            text: "Yes", 
+            text: "Yes, I have attachments to upload first", 
             checked: data['include-attachments'] == 'Yes'
         },
           { 
             value: "No", 
-            text: "No", 
+            text: "No, I do not have attachments to upload", 
             checked: data['include-attachments'] == 'No'
         }
         ]
