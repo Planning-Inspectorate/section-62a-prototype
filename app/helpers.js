@@ -480,3 +480,35 @@ export function getRepresentation(req) {
   
   return null; // Not found
 }
+
+
+// ================================================================================
+// 18. GENERATE FILE AUDIT LOG HELPER --- helper to generate audit log entries for file operations
+// ================================================================================ 
+export function generateFileAuditLog(files, actionText, folderName = null) {
+    const folderSuffix = folderName ? ` to ${folderName}` : '';
+
+    if (files.length === 1) {
+        // e.g. "image.png was uploaded to The planning application"
+        return `${files[0].name} was ${actionText}${folderSuffix}`;
+    } else {
+        // e.g. "Files were uploaded to The planning application" with expandable list
+        let html = `Files were ${actionText}${folderSuffix}`;
+        html += `
+        <details class="govuk-details govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Show files</span>
+          </summary>
+          <div class="govuk-details__text" style="padding-bottom: 10px;">
+            <ul class="govuk-list govuk-!-margin-bottom-0" style="list-style-type: none; padding-left: 0;">`;
+        
+        files.forEach(f => {
+            html += `<li class="govuk-!-margin-bottom-1">${f.name}</li>`;
+        });
+        
+        html += `</ul>
+          </div>
+        </details>`;
+        return html;
+    }
+}

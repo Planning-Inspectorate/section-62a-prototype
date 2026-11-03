@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCase } from '../../helpers.js';
+import { getCase, addAuditLog, generateFileAuditLog } from '../../helpers.js';
 
 const router = Router();
 
@@ -75,6 +75,9 @@ router.post('/current-service/back-office/manage-documents/upload-files/:folderI
     const dateFormatted = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     const sortDate = today.toISOString().split('T')[0]; // "2026-07-20" for sorting
 
+    // --- NEW: Track just the files uploaded in this action ---
+    const newFiles = []; 
+
     // Create a file object for each one and push to the global array
     fileNames.forEach(name => {
         
@@ -82,7 +85,7 @@ router.post('/current-service/back-office/manage-documents/upload-files/:folderI
         const extension = name.includes('.') ? name.split('.').pop().toUpperCase() : 'UNKNOWN';
         const mockSize = (Math.random() * (5 - 0.5) + 0.5).toFixed(1); // Random size between 0.5MB and 5MB
 
-        req.session.data.files.push({
+        const newFileObj = {
             id: generateId(),
             caseReference: caseRef,
             folderId: folderId,
@@ -91,13 +94,22 @@ router.post('/current-service/back-office/manage-documents/upload-files/:folderI
             sizeMB: mockSize,
             uploadDate: dateFormatted,
             uploadDateSort: sortDate
-        });
+        };
+
+        req.session.data.files.push(newFileObj);
+        newFiles.push(newFileObj); // Add to our tracking array
     });
+
+    // --- NEW: Generate and add the audit log ---
+    if (newFiles.length > 0) {
+        const logDetails = generateFileAuditLog(newFiles, 'uploaded', currentFolder.name);
+        addAuditLog(req, caseRef, logDetails);
+    }
 
     // Clear the input field from session
     delete req.session.data['folderUploadedFiles'];
 
-    // --- NEW: Dynamic pluralization and standard text ---
+    // --- Dynamic pluralization and standard text ---
     const fileCount = fileNames.length;
     const fileWord = fileCount === 1 ? 'file' : 'files';
 
@@ -271,9 +283,15 @@ router.get('/current-service/back-office/manage-documents/check-location/:folder
 // POST: Final Submit - Move files
 router.post('/current-service/back-office/manage-documents/move-submit/:folderId', function (req, res) {
     const caseRef = req.body.ref; // Grabbing from the hidden input
+    const sourceFolderId = req.params.folderId; // The folder they are moving out of
     const fileIds = req.session.data.moveFilesList || [];
     const destFolderId = req.session.data.moveDestinationId;
+    
+    const sourceFolder = req.session.data.folders.find(f => f.id === sourceFolderId);
     const destFolder = req.session.data.folders.find(f => f.id === destFolderId);
+
+    // --- NEW: Grab the actual file objects being moved ---
+    const filesMoved = req.session.data.files.filter(f => fileIds.includes(f.id));
 
     // Update the folderId for all selected files
     req.session.data.files.forEach(f => {
@@ -282,7 +300,15 @@ router.post('/current-service/back-office/manage-documents/move-submit/:folderId
         }
     });
 
-    // --- NEW: Dynamic pluralization and updated phrasing ---
+    // --- NEW: Generate and add the audit log ---
+    if (filesMoved.length > 0) {
+        const sourceName = sourceFolder ? sourceFolder.name : 'folder';
+        // cleverly passes "moved from X" so the helper outputs "moved from X to Y"
+        const logDetails = generateFileAuditLog(filesMoved, `moved from ${sourceName}`, destFolder.name);
+        addAuditLog(req, caseRef, logDetails);
+    }
+
+    // --- Dynamic pluralization and updated phrasing ---
     const fileCount = fileIds.length;
     const fileWord = fileCount === 1 ? 'file' : 'files';
 
@@ -358,8 +384,18 @@ router.post('/current-service/back-office/manage-documents/delete-submit/:folder
     const folderId = req.params.folderId;
     const fileIds = req.session.data.deleteFilesList || [];
 
+    // --- NEW: Grab the file objects BEFORE deleting them so we can log their names ---
+    const filesDeleted = req.session.data.files.filter(f => fileIds.includes(f.id));
+
     // Remove the files from the global array
     req.session.data.files = req.session.data.files.filter(f => !fileIds.includes(f.id));
+
+    // --- NEW: Generate and add the audit log ---
+    if (filesDeleted.length > 0) {
+        // Using 'removed' to match the design screenshot
+        const logDetails = generateFileAuditLog(filesDeleted, 'removed');
+        addAuditLog(req, caseRef, logDetails);
+    }
 
     const fileCount = fileIds.length;
     const fileWord = fileCount === 1 ? 'file' : 'files';
@@ -426,11 +462,13 @@ router.post('/current-service/back-office/manage-documents/publish-submit/:folde
     const folderId = req.params.folderId;
     const fileIds = req.session.data.publishFilesList || [];
     const category = req.body.documentCategory;
+    
+    // Define currentFolder here so it's available for validation
+    const currentFolder = req.session.data.folders.find(f => f.id === folderId);
 
     // Validation: Check if a category was selected
     if (!category) {
         const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
-        const currentFolder = req.session.data.folders.find(f => f.id === folderId);
         const filesToPublish = req.session.data.files.filter(f => fileIds.includes(f.id));
 
         return res.render('current-service/back-office/manage-documents/files/publish/categorise', {
@@ -442,6 +480,9 @@ router.post('/current-service/back-office/manage-documents/publish-submit/:folde
         });
     }
 
+    // Grab the files being published
+    const filesPublished = req.session.data.files.filter(f => fileIds.includes(f.id));
+
     // Update the status and category for all selected files
     req.session.data.files.forEach(f => {
         if (fileIds.includes(f.id)) {
@@ -449,6 +490,13 @@ router.post('/current-service/back-office/manage-documents/publish-submit/:folde
             f.category = category;
         }
     });
+
+    // --- NEW: Generate and add the audit log with CATEGORY ---
+    if (filesPublished.length > 0) {
+        // This will output: "[File/Files] were published to [Category Name]"
+        const logDetails = generateFileAuditLog(filesPublished, 'published', category);
+        addAuditLog(req, caseRef, logDetails);
+    }
 
     const fileCount = fileIds.length;
     const fileWord = fileCount === 1 ? 'file' : 'files';
@@ -519,12 +567,22 @@ router.post('/current-service/back-office/manage-documents/unpublish-submit/:fol
     const fileIds = req.session.data.unpublishFilesList || [];
     const returnTo = req.session.data.unpublishReturnTo || 'folder'; 
 
+    // --- NEW: Grab the files being unpublished ---
+    const filesUnpublished = req.session.data.files.filter(f => fileIds.includes(f.id));
+
     // 1. Revert status to unpublished
     req.session.data.files.forEach(f => {
         if (fileIds.includes(f.id)) {
             f.status = 'unpublished';
         }
     });
+
+    // --- NEW: Generate and add the audit log ---
+    if (filesUnpublished.length > 0) {
+        // Omitting the 3rd parameter so it just outputs "Files were unpublished"
+        const logDetails = generateFileAuditLog(filesUnpublished, 'unpublished');
+        addAuditLog(req, caseRef, logDetails);
+    }
 
     const fileCount = fileIds.length;
     
@@ -537,12 +595,12 @@ router.post('/current-service/back-office/manage-documents/unpublish-submit/:fol
     delete req.session.data.unpublishFilesList;
     delete req.session.data.unpublishReturnTo; 
 
-    // --- NEW: Check if there are any published files left for this case ---
+    // Check if there are any published files left for this case
     const remainingPublished = req.session.data.files.some(f => 
         f.caseReference === caseRef && f.status === 'published'
     );
 
-    // --- UPDATED CONDITIONAL REDIRECT ---
+    // CONDITIONAL REDIRECT
     if (returnTo === 'published-documents') {
         if (!remainingPublished) {
             // Kick back to index if that was the last published file
@@ -657,9 +715,11 @@ router.post('/current-service/back-office/manage-documents/re-categorise-submit/
     const fileIds = req.session.data.recategoriseFilesList || [];
     const category = req.body.documentCategory;
 
+    // --- NEW: Grab the files being recategorised BEFORE we change them ---
+    const filesToRecategorise = req.session.data.files.filter(f => fileIds.includes(f.id));
+
     if (!category) {
         const currentCase = req.session.data.cases.find(c => c.reference === caseRef);
-        const filesToRecategorise = req.session.data.files.filter(f => fileIds.includes(f.id));
         
         return res.render('current-service/back-office/manage-documents/files/publish/re-categorise', {
             currentCase,
@@ -667,6 +727,17 @@ router.post('/current-service/back-office/manage-documents/re-categorise-submit/
             filesToRecategorise,
             errorCategory: "Select a category"
         });
+    }
+
+    // --- NEW: Generate and add the audit log ---
+    if (filesToRecategorise.length > 0) {
+        // Check if all selected files had the exact same previous category
+        const uniqueCategories = [...new Set(filesToRecategorise.map(f => f.category || 'Uncategorised'))];
+        const previousCategory = uniqueCategories.length === 1 ? uniqueCategories[0] : 'various categories';
+        
+        // Output: "Files were recategorised from [Prev Category] to [New Category]"
+        const logDetails = generateFileAuditLog(filesToRecategorise, `recategorised from ${previousCategory}`, category);
+        addAuditLog(req, caseRef, logDetails);
     }
 
     // Update category for all selected files
@@ -747,11 +818,15 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/rena
     if (!newBaseName) {
         errorFileName = "File name is required";
     }
-    // Validation 2: Special characters
+    // Validation 2: Length check
+    else if (newBaseName.length < 3 || newBaseName.length > 255){
+        errorFileName = "File name must be between 3 and 255 characters including the file type";
+    }
+    // Validation 3: Special characters
     else if (!/^[a-zA-Z0-9 .\-_()&']+$/.test(newBaseName)) {
         errorFileName = "File name can only include letters, numbers, spaces, dots, hyphens, underscores, brackets, ampersands and single apostrophes.";
     }
-    // Validation 3: Duplicate check (excluding the file itself)
+    // Validation 4: Duplicate check (excluding the file itself)
     else {
         const isDuplicate = req.session.data.files.some(f => 
             f.folderId === folderId && 
@@ -777,6 +852,12 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/rena
 
     // Success: Update the file name
     if (fileToRename) {
+        // --- NEW: Generate and add the audit log BEFORE changing the name ---
+        // Passing the new name as the 3rd parameter outputs: "[Old Name] was renamed to [New Name]"
+        const logDetails = generateFileAuditLog([fileToRename], 'renamed', proposedFullName);
+        addAuditLog(req, caseRef, logDetails);
+
+        // Update the file name
         fileToRename.name = proposedFullName;
     }
 
@@ -788,7 +869,6 @@ router.post('/current-service/back-office/manage-documents/folder/:folderId/rena
 
     res.redirect(`/current-service/back-office/manage-documents/folder/${folderId}?ref=${caseRef}`);
 });
-
 
 
 

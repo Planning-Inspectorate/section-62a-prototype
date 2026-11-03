@@ -108,7 +108,7 @@
       <table class="govuk-table" data-cy="case-history-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header" style="width: 15%; margin-right: 10px;">Date and time</th>
+            <th scope="col" class="govuk-table__header" style="width: 20%; margin-right: 10px;">Date and time</th>
             <th scope="col" class="govuk-table__header" style="width: 60%;">Details</th>
             <th scope="col" class="govuk-table__header" style="width: 20%;">User</th>
           </tr>
@@ -121,11 +121,13 @@
               <tr class="govuk-table__row">
                 
                 <td class="govuk-table__cell" data-cy="history-date-{{ loop.index0 }}">
-                  {{ log.date | replace("<br>", " ") | replace("<br/>", " ") | replace("<br />", " ") | safe }}
+                  {# Removed the replace filters so the <br> stacks the time correctly #}
+                  {{ log.date | safe }}
                 </td>
                 
                 <td class="govuk-table__cell" data-cy="history-details-{{ loop.index0 }}">
-                  {{ log.details | default(log.action) }}
+                  {# Added 'safe' filter to render the HTML accordion #}
+                  {{ log.details | default(log.action) | safe }}
                 </td>
                 
                 <td class="govuk-table__cell" data-cy="history-user-{{ loop.index0 }}">
