@@ -55,10 +55,23 @@
             </a> folder {{ flashMessage.action | default("created") }}
           {% endif %}
         </h3>
+        
         {% if flashMessage.isPublishText %}
           <p class="govuk-body">To view or change published files, <a class="govuk-notification-banner__link" href="/current-service/back-office/manage-documents/published-documents?ref={{ currentCase.reference }}">view the published files page</a>.</p>
         {% endif %}
+
+        {# Show front office warning with dynamic count if published files were deleted #}
+        {% if flashMessage.hasPublishedDeleted %}
+          <p class="govuk-body">
+            {% if flashMessage.publishedCount == 1 %}
+              1 file has been unpublished from the front office.
+            {% else %}
+              {{ flashMessage.publishedCount }} files have been unpublished from the front office.
+            {% endif %}
+          </p>
+        {% endif %}
       {% endset %}
+      
       {{ govukNotificationBanner({ html: successHtml, type: "success" }) }}
     </div>
   </div>

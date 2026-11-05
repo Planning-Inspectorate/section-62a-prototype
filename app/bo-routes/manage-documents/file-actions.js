@@ -384,26 +384,41 @@ router.post('/current-service/back-office/manage-documents/delete-submit/:folder
     const folderId = req.params.folderId;
     const fileIds = req.session.data.deleteFilesList || [];
 
-    // --- NEW: Grab the file objects BEFORE deleting them so we can log their names ---
+    // Grab the file objects BEFORE deleting them
     const filesDeleted = req.session.data.files.filter(f => fileIds.includes(f.id));
+
+    // Separate files based on publish status
+    const publishedFiles = filesDeleted.filter(f => f.status === 'published');
+    const unpublishedFiles = filesDeleted.filter(f => f.status !== 'published');
 
     // Remove the files from the global array
     req.session.data.files = req.session.data.files.filter(f => !fileIds.includes(f.id));
 
-    // --- NEW: Generate and add the audit log ---
-    if (filesDeleted.length > 0) {
-        // Using 'removed' to match the design screenshot
-        const logDetails = generateFileAuditLog(filesDeleted, 'removed');
-        addAuditLog(req, caseRef, logDetails);
+    // Generate and add the audit logs
+    let combinedLogDetails = [];
+
+    if (unpublishedFiles.length > 0) {
+        combinedLogDetails.push(generateFileAuditLog(unpublishedFiles, 'removed'));
+    }
+
+    if (publishedFiles.length > 0) {
+        combinedLogDetails.push(generateFileAuditLog(publishedFiles, 'removed and unpublished from the front office'));
+    }
+
+    // If both types were deleted, join them with a break for a clean stacked view in the log
+    if (combinedLogDetails.length > 0) {
+        addAuditLog(req, caseRef, combinedLogDetails.join('<br><br>'));
     }
 
     const fileCount = fileIds.length;
     const fileWord = fileCount === 1 ? 'file' : 'files';
 
-    // Set standard text flash message
+    // Set standard text flash message with flags for the published warning
     req.session.data['flashMessage'] = {
         isStandardText: true,
-        text: `${fileCount} selected ${fileWord} deleted`
+        text: `${fileCount} selected ${fileWord} deleted`,
+        hasPublishedDeleted: publishedFiles.length > 0,
+        publishedCount: publishedFiles.length
     };
 
     // Clean up session
