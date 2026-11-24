@@ -1,0 +1,235 @@
+{% extends "layouts/new/back-office.html" %}
+{% set currentPage = "details" %}
+
+{% set currentCase = {
+  reference: "S62A/2026/0000001",
+  applicationStage: "Application"
+} %}
+
+{% block pageTitle %}
+  S62A/2026/0000001 - Case Details - Manage Planning Applications
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to all cases",
+    href: ""
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+{% set navigationBar %}
+
+<style>
+    .external::after {}
+
+    .moj-sub-navigation__item--active .moj-sub-navigation__link {
+        font-weight: bold;
+        border-bottom: #11A19A 5px solid;
+    }
+
+    .moj-sub-navigation__link[aria-current=page]::before {
+        background-color: #ffffff;
+    }
+</style>
+
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+    <ul class="moj-sub-navigation__list">
+         <li class="moj-sub-navigation__item {% if currentPage == 'overview' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'overview' %} aria-current="page" {% endif %}>Overview</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'details' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'details' %} aria-current="page" {% endif %}>Details</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'contacts' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'contacts' %} aria-current="page" {% endif %}>Contacts</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'dates' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'dates' %} aria-current="page" {% endif %}>Dates</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'representations' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'representations' %} aria-current="page" {% endif %}>Representations</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-team' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'case-team' %} aria-current="page" {% endif %}>Case team</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'event' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'event' %} aria-current="page" {% endif %}>Event</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'outcome' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'outcome' %} aria-current="page" {% endif %}>Outcome</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'eia' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'eia' %} aria-current="page" {% endif %}>EIA</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'fee' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'fee' %} aria-current="page" {% endif %}>Fee</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'press-notice' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'press-notice' %} aria-current="page" {% endif %}>Press notice</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'residential' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'residential' %} aria-current="page" {% endif %}>Residential</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'non-residential' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'non-residential' %} aria-current="page" {% endif %}>Non-residential</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'vehicle-parking' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'vehicle-parking' %} aria-current="page" {% endif %}>Vehicle parking</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'waste' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'waste' %} aria-current="page" {% endif %}>Waste</a>
+        </li>
+
+        {% if currentCase.preApplicationRequested in ['Yes - PINS', 'Yes - Council'] %}
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'pre-application' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'pre-application' %} aria-current="page" {% endif %}>Pre-application</a>
+        </li>
+
+        {% endif %}
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-notes' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'case-notes' %} aria-current="page" {% endif %}>Case notes</a>
+        </li>
+
+        <li class="moj-sub-navigation__item {% if currentPage == 'case-audit-log' %}moj-sub-navigation__item--active{% endif %}">
+            <a class="moj-sub-navigation__link" href="" {% if currentPage == 'case-audit-log' %} aria-current="page" {% endif %}>Case audit log</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+{% endset %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Success
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+                <ul class="govuk-list govuk-list--bullet"><li><p class="govuk-body">Application has been updated.</p></li><li><p class="govuk-body">Any updates made to this case will be automatically published.</p></li></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    <h1 class="govuk-heading-l">
+      S62A/2026/0000001
+    </h1>
+
+      <div class="govuk-button-group">
+
+      {{ govukButton({
+        text: "Manage documents",
+        classes: "govuk-button--secondary"
+      }) }}
+          
+            
+      {{ govukButton({
+        id: "publish-button",
+        text: "Unpublish application",
+        classes: "govuk-button--warning"
+      }) }}
+
+      {{ govukButton({
+        id: "redetermine-button",
+        text: "Redetermine application",
+        classes: "govuk-button--secondary",
+        href: "/features/redetermined/bo-flow/03-redetermination-warning"
+      }) }}
+
+      </div>
+
+  </div>
+</div>
+
+{{ navigationBar | safe }}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Category</dt>
+            <dd class="govuk-summary-list__value">-</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Add</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Procedure</dt>
+            <dd class="govuk-summary-list__value">Written representations</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value">Under High Court Team</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Stage</dt>
+            <dd class="govuk-summary-list__value">Decision</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">LPA reference</dt>
+            <dd class="govuk-summary-list__value">BCC210005</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Green belt</dt>
+            <dd class="govuk-summary-list__value">No</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Health and safety issues</dt>
+            <dd class="govuk-summary-list__value">-</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Add</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CIL liable</dt>
+            <dd class="govuk-summary-list__value">No</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">BNG exempt</dt>
+            <dd class="govuk-summary-list__value">No</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change</a></dd>
+          </div>
+
+        </dl>
+
+  </div>
+</div>
+
+{% endblock %}

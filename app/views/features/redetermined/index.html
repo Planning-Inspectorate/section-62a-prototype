@@ -1,0 +1,106 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}
+ Redetermined cases
+{% endblock %}
+
+{% block beforeContent %}
+
+{{ govukBackLink({
+    text: "Back to upcoming features",
+    href: "/index#features"
+}) }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+  <h1 class="govuk-heading-l">Feature: Redetermined cases</h1>
+
+  <p class="govuk-body">
+    <a href="https://app.mural.co/t/allpins6990/m/allpins6990/1778077962144/14f49df571a9a64f59d41d88d237dab2f664e4e5?wid=2-1795450874668" target="_blank">Mural link</a>
+    <br>
+    <a href="https://pins-ds.atlassian.net.mcas.ms/browse/PEAS-744" target="_blank">Jira ticket</a>
+  </p>
+
+  <p class="govuk-body">This feature allows back office users to redetermine a case. <br><br>Once a case officer updates the case status to 'Under High Court Team',
+    and clicks the redetermined button, the system will automatically:
+  </p>
+
+  <ol class="govuk-list govuk-list--bullet">
+    <li>create a new case with the same case reference, appended with '/RD'</li>
+    <li>set the new case's status to 'New' and copy the original case details</li>
+    <li>lock the original case, mark its decision as quashed, and set its status to 'Redetermined'</li>
+    <li>show the original case's decision as quashed on the original front office page, with interim text saying a redetermined case is pending</li>
+  </ol> 
+
+
+    {{ govukButton({
+      text: "Redetermination flow",
+      href: "/features/redetermined/bo-flow/01-status-change"
+    }) }}
+
+    <h2 class="govuk-heading-m">Pages in this feature</h2>
+
+    <h3 class="govuk-heading-s">Back office screens</h3>
+
+    <ol class="govuk-list govuk-list--number">
+
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/01-status-change">Changing the status to Under High Court Team</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/02-redetermination-button-on-case-details">Redetermination button on case details</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/03-redetermination-warning">Redetermination warning page</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/04-case-redetermined">Case redetermined</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/05-view-documents">View documents on redetermined case</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/06-published-documents">Published documents on redetermined case</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/07-planning-application-folder">Planning application folder</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/bo-flow/08-rd-case">View the new case</a>
+      </li>
+
+    </ol>
+
+    <h3 class="govuk-heading-s">Front office screens</h3>
+
+    <ol class="govuk-list govuk-list--number">
+
+      <li>
+        <p class="govuk-body govuk-!-margin-bottom-0">Redetermination pending</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>
+              <a class="govuk-body" href="/features/redetermined/fo-flow/01-redetermination-pending/v1">Version 1</a>
+            </li>
+            <li>
+              <a class="govuk-body" href="/features/redetermined/fo-flow/01-redetermination-pending/v2">Version 2</a>
+            </li>
+          </ul>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/fo-flow/02-redetermination-done">Redetermination complete for original case</a>
+      </li>
+      <li>
+        <a class="govuk-body" href="/features/redetermined/fo-flow/03-new-case">New case created</a>
+      </li>
+
+
+    </ol>
+
+
+
+{% endblock %}

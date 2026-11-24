@@ -1,0 +1,68 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Manage Documents - S62A/2026/0000001
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to details", href: "/features/redetermined/bo-flow/04-case-redetermined" }) }}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+    
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
+        S62A/2026/0000001
+      </h1>
+
+    <form action="" method="get">
+      <input type="hidden" name="ref" value="{{ currentCase.reference }}">
+      
+      <div class="govuk-form-group">
+        <label class="govuk-hint" for="search-term">
+          To find a document, search by file name
+        </label>
+        <div class="govuk-input__wrapper" style="display: flex; gap: 10px; max-width: 600px; margin-top: 15px;">
+          <input class="govuk-input" id="search-term" name="searchTerm" type="text">
+          <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="pins-link-menu" data-cy="folder-list">
+      
+      {# FOLDER LIST #}
+      <div class="govuk-!-margin-bottom-6" style="display: flex; flex-direction: column; gap: 15px;">
+
+          <a class="govuk-link govuk-heading-s govuk-link--no-visited-state govuk-!-margin-bottom-0" 
+             href="/features/redetermined/bo-flow/06-published-documents">
+                Published documents
+          </a>
+
+          <a class="govuk-link govuk-heading-s govuk-link--no-visited-state govuk-!-margin-bottom-0" 
+             href="/features/redetermined/bo-flow/07-planning-application-folder">
+                The planning application
+          </a>
+        
+          <a class="govuk-link govuk-heading-s govuk-link--no-visited-state govuk-!-margin-bottom-0" 
+             href="">
+                Working documents
+          </a>
+            
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

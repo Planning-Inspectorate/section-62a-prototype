@@ -1,0 +1,47 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  Redetermine case - S62A/2026/0000001
+{% endblock %}
+
+{% block beforeContent %}
+
+{{ govukBackLink({
+    text: "Back",
+    href: "/features/redetermined/bo-flow/02-redetermination-button-on-case-details"
+}) }}
+
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">S62A/2026/0000001</span>
+        Redetermine application
+    </h1>
+
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span> Redetermining will lock this case and the system will automatically:
+            
+            <ul class="govuk-list govuk-list--bullet govuk-list--spaced" style="margin-top: 12px;">
+                <li>create a new case with the case reference S62A/2026/0000001/RD</li>
+                <li>set the new case's status to 'New' and copy the original case details</li>
+                <li>lock this case, mark its decision as quashed, and set its status to 'Redetermined'</li>
+                <li>show this case's decision as quashed on the original front office page, with interim text saying a redetermined case is pending</li>
+            </ul>
+
+        </strong>
+    </div>
+
+      {{ govukButton({
+        text: "Redetermine case",
+        href: "/features/redetermined/bo-flow/04-case-redetermined"
+      }) }}
+
+  </div>
+</div>
+{% endblock %}

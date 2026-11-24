@@ -1,0 +1,261 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% set currentCase = {
+  reference: "S62A/2026/0000001"
+} %}
+
+{% set subfolders = [
+  "File Notes and Correspondence",
+  "EIA",
+  "Fees",
+  "Hearings",
+  "Decisions or Recommendations",
+  "Representations",
+  "Internal Correspondence"
+] %}
+
+{% set files = [
+  {
+    id: "1",
+    name: "Site-plan-v2.pdf",
+    extension: "PDF",
+    sizeMB: "2.4",
+    status: "unpublished",
+    uploadDate: "20 Jul 2026",
+    uploadDateSort: "2026-07-20"
+  },
+  {
+    id: "2",
+    name: "application-form.docx",
+    extension: "DOCX",
+    sizeMB: "1.1",
+    status: "unpublished",
+    uploadDate: "21 Jul 2026",
+    uploadDateSort: "2026-07-21"
+  },
+  {
+    id: "3",
+    name: "site-photo-01.jpg",
+    extension: "JPG",
+    sizeMB: "4.5",
+    status: "published",
+    category: "Application plans and documents",
+    uploadDate: "22 Jul 2026",
+    uploadDateSort: "2026-07-22"
+  },
+  {
+    id: "4",
+    name: "Planning-photo-01.jpg",
+    extension: "JPG",
+    sizeMB: "4.5",
+    status: "published",
+    category: "Application plans and documents",
+    uploadDate: "19 Jul 2026",
+    uploadDateSort: "2026-07-19"
+  }
+] %}
+
+{% block pageTitle %}
+  The planning application - View case files
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/features/redetermined/bo-flow/05-view-documents">View case files</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">The planning application</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<div id="js-error-container"></div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+      <span class="govuk-caption-m">{{ currentCase.reference }}</span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-4">The planning application folder</h1>
+  </div>
+</div>
+
+{# --- ACCORDION FOR SUBFOLDERS --- #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h3 class="govuk-heading-m">Subfolders</h3>
+
+    <p class="govuk-body">
+      <strong>{{ subfolders.length }}</strong> subfolders containing <strong>27</strong> files
+    </p>
+
+    <style>
+      .hide-controls .govuk-accordion__show-all { display: none !important; }
+      .hide-controls .govuk-accordion__section-heading-text { display: none !important; }
+      .hide-controls .govuk-accordion__section-button { padding-top: 10px; padding-bottom: 10px; }
+    </style>
+
+    <div class="govuk-accordion hide-controls" data-module="govuk-accordion" id="sub-folders-accordion" data-remember-expanded="false" data-i18n.hide-section="Show subfolders" data-i18n.show-section="Show subfolders">
+      <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button" id="sub-folders-accordion-heading-1"></span>
+          </h2>
+        </div>
+        <div id="sub-folders-accordion-content-1" class="govuk-accordion__section-content">
+          <div class="pins-link-menu">
+            <ul class="govuk-list">
+              {% for folderName in subfolders %}
+                <li class="govuk-!-margin-bottom-4">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-heading-s govuk-!-margin-bottom-0" href="#">
+                    {{ folderName }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{# --- FILE ACTIONS AREA --- #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <form id="bulk-action-form" method="get" action="#" novalidate>
+      <div id="pagination" class="govuk-body">
+
+        <h2 class="govuk-heading-m">File actions</h2>
+
+        <p class="govuk-body govuk-!-margin-bottom-4">
+          This folder contains {{ files.length }} file(s). Showing <strong>1</strong> to <strong>{{ files.length }}</strong> of <strong>{{ files.length }}</strong> file(s).
+        </p>
+
+        <p class="pins-pagination-options govuk-!-margin-bottom-6">
+          <span><strong>Results per page</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+          <span class="govuk-body">25</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <a class="govuk-link--no-visited-state" href="#">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <a class="govuk-link--no-visited-state" href="#">100</a>
+        </p>
+
+        <div class="govuk-button-group govuk-!-margin-bottom-4">
+          <button type="button" class="govuk-button govuk-button--secondary">Download selected</button>
+        </div>
+
+        <p class="govuk-body govuk-!-margin-bottom-4" id="selected-files-count">0 file(s) on this page selected.</p>
+
+        <table class="govuk-table" data-module="moj-sortable-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              {# 1. Checkbox column (15%) #}
+              <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; padding-right: 20px;">
+                <div class="govuk-checkboxes__item govuk-checkboxes--small" style="margin-bottom: 0;">
+                  <input type="checkbox" class="govuk-checkboxes__input" id="checkboxes-all" name="checkboxes-all" value="all">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold" for="checkboxes-all" style="white-space: nowrap;">
+                    All files
+                  </label>
+                </div>
+              </th>
+              {# 2. File name column (40%) #}
+              <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 40%;" aria-sort="none">
+                <button type="button" data-index="1">File name</button>
+              </th>
+              {# 3. Tags column (20%) #}
+              <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 20%;" aria-sort="none">
+                <button type="button" data-index="2">Tags</button>
+              </th>
+              {# 4. Uploaded column (10%) #}
+              <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 10%; padding-left: 30px;" aria-sort="descending">
+                <button type="button" data-index="3">Uploaded</button>
+              </th>
+              {# 5. Actions column (15% and Right Aligned) #}
+              <th scope="col" class="govuk-table__header" style="vertical-align: middle; width: 15%; text-align: right; padding-right: 30px;">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="govuk-table__body">
+            {% for file in files %}
+              <tr class="govuk-table__row">
+                
+                <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px;">
+                  <div class="govuk-checkboxes__item govuk-checkboxes--small mo-checkbox-table-cell">
+                    <input class="govuk-checkboxes__input" id="select-file-{{ file.id }}" name="selectedFiles" type="checkbox" value="{{ file.id }}" data-status="{{ file.status }}">
+                    <label class="govuk-label govuk-checkboxes__label" for="select-file-{{ file.id }}"><span class="govuk-visually-hidden">Select {{ file.name }}</span></label>
+                  </div>
+                </td>
+                
+                <td class="govuk-table__cell" data-sort-value="{{ file.name }}" style="vertical-align: top; padding-top: 15px; padding-bottom: 15px; word-break: break-word;">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="#">{{ file.name }}</a>
+                  <span class="govuk-body-s govuk-!-display-block govuk-!-margin-top-2 govuk-!-margin-bottom-0" style="color: #505a5f;">File type and size: {{ file.extension }}, {{ file.sizeMB }}MB</span>
+                </td>
+                
+                <td class="govuk-table__cell" data-sort-value="{{ file.status }}" style="vertical-align: top; padding-top: 15px;">
+                {% if file.status == 'published' %}
+                    <strong class="govuk-tag govuk-tag--green govuk-!-margin-bottom-2">Published</strong>
+                    <span class="govuk-tag govuk-tag--blue" style="margin-bottom: 5px;">{{ file.category }}</span>
+                {% else %}
+                    <strong class="govuk-tag govuk-tag--grey">Unpublished</strong>
+                {% endif %}
+                </td>
+
+                <td class="govuk-table__cell" data-sort-value="{{ file.uploadDateSort }}" style="vertical-align: top; padding-top: 15px; padding-left: 30px;">
+                  {{ file.uploadDate }}
+                </td>
+
+                <td class="govuk-table__cell" style="vertical-align: top; padding-top: 15px; text-align: right;">
+                  <ul class="govuk-list govuk-!-margin-bottom-0">
+                    <li><a class="govuk-link govuk-link--no-visited-state" href="#">Download</a></li>
+                  </ul>
+                </td>
+
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module" nonce="">
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- SELECT ALL LOGIC ---
+    const selectAll = document.getElementById('checkboxes-all');
+    const checkboxes = document.querySelectorAll('input[name="selectedFiles"]');
+    const selectedCountText = document.getElementById('selected-files-count');
+
+    const updateSelectedCount = () => {
+      if (selectedCountText) {
+        const checkedCount = document.querySelectorAll('input[name="selectedFiles"]:checked').length;
+        selectedCountText.textContent = `${checkedCount} file(s) on this page selected.`;
+      }
+    };
+
+    if (selectAll) {
+      selectAll.addEventListener('change', function(e) {
+        checkboxes.forEach(function(cb) {
+          cb.checked = e.target.checked;
+        });
+        updateSelectedCount();
+      });
+
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          const allChecked = Array.from(checkboxes).every(c => c.checked);
+          selectAll.checked = allChecked;
+          updateSelectedCount();
+        });
+      });
+    }
+
+  });
+</script>
+{% endblock %}
