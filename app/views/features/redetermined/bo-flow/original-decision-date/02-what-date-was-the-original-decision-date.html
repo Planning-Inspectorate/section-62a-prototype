@@ -1,0 +1,74 @@
+{% extends "layouts/new/back-office.html" %}
+
+{% block pageTitle %}
+  What date was the original decision date?
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/features/redetermined/bo-flow/original-decision-date/01-navigate-to-outcome-tab" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+      }) }}
+    {% endif %}
+
+    <form class="form" action="" method="post" novalidate>
+
+      {{ govukDateInput({
+        id: "original-decision-date",
+        namePrefix: "original-decision-date",
+        fieldset: {
+          legend: {
+            text: "What date was the original decision date?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "For example, 27 3 2007"
+        },
+        errorMessage: { text: errors.originalDecisionDate.text } if errors.originalDecisionDate else null,
+        
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.day else ""),
+            value: data['original-decision-date-day']
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2" + (" govuk-input--error" if errors.month else ""),
+            value: data['original-decision-date-month']
+          },
+          {
+            name: "year",
+            classes: "govuk-input--width-4" + (" govuk-input--error" if errors.year else ""),
+            value: data['original-decision-date-year']
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save",
+        href: "/features/redetermined/bo-flow/original-decision-date/03-original-decision-date-added"
+      }) }}
+
+      {{ govukButton({
+        classes: "govuk-button--secondary",
+        text: "Remove and save"
+      }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
